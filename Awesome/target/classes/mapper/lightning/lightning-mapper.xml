@@ -4,6 +4,26 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="lightning">
+	<resultMap type="map" id="matchManagerMap">
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+		<result column="match_no" property="matchNo"/>
+	</resultMap>
+	
 	<select id="selectLightningList" resultType="matchManager">
 		select * from match_manager where matching_type = #{matchingType}
 	</select>
