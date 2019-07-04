@@ -1,6 +1,7 @@
 package com.kh.awesome.lightning.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.awesome.lightning.model.service.LightningService;
-import com.kh.awesome.matchManager.model.vo.MatchManager;
 
 @Controller
 @RequestMapping("/lightning")
@@ -25,7 +25,7 @@ public class LightningController {
 	public void selectlightningList(Model model) {
 		char matchingType = 'L';
 		
-		List<MatchManager> lightningList = lightningService.selectLightningList(matchingType);
+		List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType);
 		model.addAttribute("lightningList", lightningList);
 		logger.info("lightningList@Controller="+lightningList);
 	}

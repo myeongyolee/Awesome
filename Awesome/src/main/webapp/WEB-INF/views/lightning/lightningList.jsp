@@ -48,10 +48,10 @@
 			</div>
 			<ul class="list-group list-group-flush">
 				<li class="list-group-item"> 
-					${matching.interestingCode} | ${matching.localCode} | ${matching.placeName} |  
-					<fmt:formatDate value="${matching.matchEndDate}" type="date" pattern="yy/MM/dd(E) hh:mm"/>
+					${matching.interestingName} | ${matching.localName} | ${matching.placeName} |  
+					<fmt:formatDate value="${matching.matchEndDate}" type="date" pattern="yyyy/MM/dd(E) hh:mm"/>
 				</li>
-				<li class="list-group-item"> 작성회원 | 참여회원수 </li>
+				<li class="list-group-item"> ${matching.memberId} | ${matching.memberCount}</li>
 			</ul>
 			<div id="${matching.matchNo}-body" class="collapse" aria-labelledby="${matching.matchNo}-head" data-parent="#lightning">
 				<div class="card-body">
@@ -60,6 +60,9 @@
 			</div>
 		</div>
 		</c:forEach>
+	</div>
+	<div id="search-container">
+		
 	</div>
 </body>
 </html>

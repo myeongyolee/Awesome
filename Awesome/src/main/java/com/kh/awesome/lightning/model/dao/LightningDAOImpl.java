@@ -1,6 +1,7 @@
 package com.kh.awesome.lightning.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class LightningDAOImpl implements LightningDAO {
 	private SqlSession sqlSession;
 
 	@Override
-	public List<MatchManager> selectLightningList(char matchingType) {
+	public List<Map<String, String>> selectLightningList(char matchingType) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("selectLightningList", matchingType);
 	}
