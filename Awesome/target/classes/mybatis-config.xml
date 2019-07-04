@@ -11,7 +11,7 @@
   </settings>
   
   <typeAliases>
-
+	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
   </typeAliases>
   
 </configuration>
