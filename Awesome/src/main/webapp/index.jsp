@@ -8,5 +8,12 @@
 </head>
 <body>
 TEST
+
+<button type="button" class="btn btn-outline-success"
+ onclick="location.href='${pageContext.request.contextPath}/questionBoard/boardForm.do'">질문 작성</button>
+ <button type="button" class="btn btn-outline-success"
+ onclick="location.href='${pageContext.request.contextPath}/questionBoard/questionBoard.do'">질문 게시판 보기</button>
+			 
+
 </body>
 </html>

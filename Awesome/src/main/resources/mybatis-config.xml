@@ -11,7 +11,7 @@
   </settings>
   
   <typeAliases>
-
+	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
   </typeAliases>
   
 </configuration>

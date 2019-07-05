@@ -1,11 +1,11 @@
-package com.kh.awesome.board.model.service;
+package com.kh.awesome.board.model.dao;
 
 import java.util.List;
 import java.util.Map;
 
 import com.kh.awesome.board.model.vo.QuestionBoard;
 
-public interface BoardService {
+public interface BoardDAO {
 
 	List<Map<String, String>> selectBoardList(int cPage, int numPerPage);
 
