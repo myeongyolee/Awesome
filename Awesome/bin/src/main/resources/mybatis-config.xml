@@ -11,11 +11,11 @@
   </settings>
   
   <typeAliases>
-<<<<<<< HEAD
+
 	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
-=======
+
 	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
->>>>>>> refs/remotes/origin/sora
+
   </typeAliases>
   
 </configuration>

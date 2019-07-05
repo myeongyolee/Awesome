@@ -9,21 +9,13 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- #6.1. myBatis(JDBC)설정 연결 설정하기 -->
-<<<<<<< HEAD
     <bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
         <property name="url" value="jdbc:oracle:thin:@khawesome.crmafdao2ovt.ap-northeast-2.rds.amazonaws.com:1521:awesome"/>
         <property name="username" value="khawesome"/>
         <property name="password" value="khawesome"/>
     </bean>
-=======
-     <bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="khawesome.crmafdao2ovt.ap-northeast-2.rds.amazonaws.com" />
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:awesome"/>
-        <property name="username" value="khawesome"/>
-        <property name="password" value="khawesome"/>
-    </bean> 
->>>>>>> refs/remotes/origin/sora
+
     
     <!-- log4jdbc 처리를 위한 dataSource Proxy처리 -->
     <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
@@ -37,37 +29,21 @@
     </bean>
     
     <!-- #6.2. myBatis(JDBC)설정 : SqlSessionFactory -->
-<<<<<<< HEAD
+
     <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
         <!-- name=dataSource => 빈객체sqlSessionFactoryBean의  property명 dataSource임(setter)
-=======
-     <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-       <!--  name=dataSource => 빈객체sqlSessionFactoryBean의  property명 dataSource임(setter)
->>>>>>> refs/remotes/origin/sora
-        ref의 dataSource는 위에서 선언한 datasource 빈객체를 의미함. -->
+       ref의 dataSource는 위에서 선언한 datasource 빈객체를 의미함. -->
         <property name="dataSource" ref="dataSource"/>
         
-<<<<<<< HEAD
-        <!-- 앞으로 생성할 모든 mapper파일을 한번에 읽어오도록하자.
-        	여기서 classpath는 target/classes를 의미한다.
-=======
        <!--  앞으로 생성할 모든 mapper파일을 한번에 읽어오도록하자.
         여기서 classpath는 target/classes를 의미한다.
->>>>>>> refs/remotes/origin/sora
         src/main/resources 디렉토리에서 작성된 파일들은 classpath로 이동함. -->
         <property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
         
-<<<<<<< HEAD
-        <!-- mybatis-config.xml파일 위치를 명시함. -->
-=======
        <!--  mybatis-config.xml파일 위치를 명시함. -->
->>>>>>> refs/remotes/origin/sora
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
-<<<<<<< HEAD
     </bean>
-=======
-    </bean> 
->>>>>>> refs/remotes/origin/sora
+
     
     <!-- #6.3. SqlSessionTemplate 마이바티스 스프링 연동모듈의 핵심기능. -->
     <!-- SqlSessionTemplate : SqlSession 인터페이스를 구현클래스-->
@@ -77,17 +53,11 @@
     </bean>
     
     <!-- #11. 트랜잭션 처리를 위한 트랜잭션매니저 설정해야 한다. -->
-<<<<<<< HEAD
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-=======
+
      <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
->>>>>>> refs/remotes/origin/sora
-        <property name="dataSource" ref="dataSource" />
-<<<<<<< HEAD
+     <property name="dataSource" ref="dataSource" />
     </bean>
-=======
-    </bean> 
->>>>>>> refs/remotes/origin/sora
+
     <!-- #11.1. @Transactional이 붙은 메소드를 대상으로 Transaction Advice를 적용함. ++++어노테이션방식++++ -->
 	 <tx:annotation-driven transaction-manager="transactionManager" />
 	
