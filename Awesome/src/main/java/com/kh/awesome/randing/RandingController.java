@@ -10,4 +10,9 @@ public class RandingController {
 	public String index() {
 		return "/common/randing";
 	}
+	
+	@RequestMapping("/indexAfter")
+	public String indexAfter() {
+		return "/common/loginAfter";
+	}
 }
