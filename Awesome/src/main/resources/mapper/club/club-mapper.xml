@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mapper.xml 유효성 검사 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club">
+	<select id="selectClubList" resultMap="clubMap">
+	
+	</select>
+	
+	<select id="totalclubCount" resultType="_int">
+	select count(*) from club
+	</select>
+	
+</mapper>
