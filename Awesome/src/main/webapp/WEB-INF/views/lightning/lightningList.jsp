@@ -13,15 +13,18 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <style>
-#lightningList-content{width:500px;}
+#lightningList-content{width:500px; }
 #lightning{width:400px;}
+#search-container{
+	width:300px;
+	position: fixed;
+	right: 0;
+	top: 50px;
+}
 </style>
 <title>번개팅</title>
 </head>
 <body>
-	<div id="search-container">
-		
-	</div>
 	<div id="lightningList-content">
 		<div id="lightning" class="card">
 			<div id="lightningTest-head" class="card-header">
@@ -63,6 +66,20 @@
 			</div>
 		</div>
 		</c:forEach>
+		<div id="search-container" class="card shadow p-4 mb-4 bg-white">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+				<input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="button">Button</button>
+				</div>
+				</li>
+				<li class="list-group-item">Dapibus ac facilisis in</li>
+				<li class="list-group-item">
+					<button class="btn" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningWrite.do'">신규작성</button>
+				</li>
+			</ul>
+		</div>
 	</div>
 	
 </body>

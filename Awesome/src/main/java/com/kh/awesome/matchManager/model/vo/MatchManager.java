@@ -14,13 +14,16 @@ public class MatchManager {
 	private int placeLng;
 	private char matchingType;
 	private String matchContent;
+	private String matchOriginalImg;
+	private String matchRenamedImg;
+	private Date matchWriteDate;
 	private Date matchEndDate;
 	
 	public MatchManager() {}
 
 	public MatchManager(int matchNo, String matchTitle, int memberCode, int interestingCode, int localCode,
 			String placeId, String placeName, int placeLat, int placeLng, char matchingType, String matchContent,
-			Date matchEndDate) {
+			String matchOriginalImg, String matchRenamedImg, Date matchWriteDate, Date matchEndDate) {
 		super();
 		this.matchNo = matchNo;
 		this.matchTitle = matchTitle;
@@ -33,6 +36,9 @@ public class MatchManager {
 		this.placeLng = placeLng;
 		this.matchingType = matchingType;
 		this.matchContent = matchContent;
+		this.matchOriginalImg = matchOriginalImg;
+		this.matchRenamedImg = matchRenamedImg;
+		this.matchWriteDate = matchWriteDate;
 		this.matchEndDate = matchEndDate;
 	}
 
@@ -124,6 +130,30 @@ public class MatchManager {
 		this.matchContent = matchContent;
 	}
 
+	public String getMatchOriginalImg() {
+		return matchOriginalImg;
+	}
+
+	public void setMatchOriginalImg(String matchOriginalImg) {
+		this.matchOriginalImg = matchOriginalImg;
+	}
+
+	public String getMatchRenamedImg() {
+		return matchRenamedImg;
+	}
+
+	public void setMatchRenamedImg(String matchRenamedImg) {
+		this.matchRenamedImg = matchRenamedImg;
+	}
+
+	public Date getMatchWriteDate() {
+		return matchWriteDate;
+	}
+
+	public void setMatchWriteDate(Date matchWriteDate) {
+		this.matchWriteDate = matchWriteDate;
+	}
+
 	public Date getMatchEndDate() {
 		return matchEndDate;
 	}
@@ -137,8 +167,9 @@ public class MatchManager {
 		return "MatchManager [matchNo=" + matchNo + ", matchTitle=" + matchTitle + ", memberCode=" + memberCode
 				+ ", interestingCode=" + interestingCode + ", localCode=" + localCode + ", placeId=" + placeId
 				+ ", placeName=" + placeName + ", placeLat=" + placeLat + ", placeLng=" + placeLng + ", matchingType="
-				+ matchingType + ", matchContent=" + matchContent + ", matchEndDate=" + matchEndDate + "]";
+				+ matchingType + ", matchContent=" + matchContent + ", matchOriginalImg=" + matchOriginalImg
+				+ ", matchRenamedImg=" + matchRenamedImg + ", matchWriteDate=" + matchWriteDate + ", matchEndDate="
+				+ matchEndDate + "]";
 	}
-	
 	
 }

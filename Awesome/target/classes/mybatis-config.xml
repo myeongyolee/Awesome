@@ -18,4 +18,9 @@
 
   </typeAliases>
   
+	<typeHandlers>
+		<typeHandler handler="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" javaType="String" 
+					jdbcType="LONGVARCHAR"/>
+	</typeHandlers>
+  
 </configuration>
