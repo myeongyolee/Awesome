@@ -42,7 +42,7 @@ public class LightningController {
 	@RequestMapping("lightningWriteEnd.do")
 	public String insertLightning(MatchManager matchManager, @RequestParam String lightningEndDate, @RequestParam String lightningEndTime,
 								  HttpSession session) {
-		
+		logger.info("matchManager@Controller="+matchManager);
 		
 		
 		return "";
