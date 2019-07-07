@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mapper.xml 유효성 검사 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="lightning">
+	<resultMap type="map" id="matchManagerMap">
+		<result column="match_no" property="matchNo"/>
+		<result column="match_title" property="matchTitle"/>
+		<result column="member_code" property="memberCode"/>
+		<result column="interesting_code" property="interestingCode"/>
+		<result column="local_code" property="localCode"/>
+		<result column="place_id" property="placeId"/>
+		<result column="place_name" property="placeName"/>
+		<result column="place_lat" property="placeLat"/>
+		<result column="place_lng" property="placeLng"/>
+		<result column="matching_type" property="matchingType"/>
+		<result column="match_end_date" property="matchEndDate"/>
+		<result column="member_id" property="memberId"/>
+		<result column="local_name" property="matchNo"/>
+		<result column="interesting_name" property="matchNo"/>
+		<result column="member_count" property="memberCount"/>
+		<result column="match_content" property="matchContent" typeHandler="stringToLongTypeHandler"/>
+	</resultMap>
+	
+	<select id="selectLightningList" resultMap="matchManagerMap">
+		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_id, M.place_name, M.place_lat, 
+			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date,
+			   A.member_id, 
+			   I.interesting_name, 
+			   L.local_name ,
+			   (select count(*) from matching_join_member where match_no = M.match_no) member_count, 
+			   M.match_content
+		from match_manager M 
+	        left join member A on M.member_code = A.member_code
+	        left join interesting I on M.interesting_code = I.interesting_code
+	        left join local L on M.local_code = L.local_code
+		where matching_type = #{matchingType}
+		order by match_no desc
+	</select>
+	
+	<insert id="insertLightning">
+		insert into match_manager 
+		values(#{matchNo}, #{matchTitle}, #{memberCode}, #{interestingCode}, #{localCode}, 
+				#{placeId}, #{placeName}, #{placeLat}, #{placeLng}, #{matchingType}, 
+				#{matchContent}, #{matchOriginalImg}, #{matchRenamedImg}, sysdate, to_date(#{matchEndDate}, 'yyyy-mm-dd hh24:mi'))
+	</insert>
+	
+</mapper>

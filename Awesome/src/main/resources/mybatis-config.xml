@@ -12,6 +12,15 @@
   
   <typeAliases>
 
+	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
+
+	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
+	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="stringToLongTypeHandler"/>  
   </typeAliases>
+  
+	<!-- <typeHandlers>
+		<typeHandler handler="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" javaType="String" 
+					jdbcType="LONGVARCHAR" />
+	</typeHandlers> -->
   
 </configuration>
