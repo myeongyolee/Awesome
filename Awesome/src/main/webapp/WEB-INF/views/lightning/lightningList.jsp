@@ -22,6 +22,38 @@
 	top: 50px;
 }
 </style>
+<script>
+var cPage = 1;
+
+$(function(){  //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+    getLightningList(cPage);
+    cPage++;
+});
+
+$(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+	if($(window).scrollTop() >= $(document).height() - $(window).height()){
+		getLightningList(cPage);
+		cPage++;   
+	} 
+});
+
+function getLightningList(cPage){
+
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/lightningListPage/cPage/'+cPage,
+		dataType: "json",
+		type : 'get',
+		success : function(data) {
+			console.log(data);
+			for(data.length)
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	}); 
+}
+
+</script>
 <title>번개팅</title>
 </head>
 <body>
@@ -65,20 +97,20 @@
 			</div>
 		</div>
 		</c:forEach>
-		<div id="search-container" class="card shadow p-4 mb-4 bg-white">
-			<ul class="list-group list-group-flush">
-				<li class="list-group-item">
-				<input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary" type="button">Button</button>
-				</div>
-				</li>
-				<li class="list-group-item">Dapibus ac facilisis in</li>
-				<li class="list-group-item">
-					<button class="btn" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningWrite.do'">신규작성</button>
-				</li>
-			</ul>
-		</div>
+	</div>
+	<div id="search-container" class="card shadow p-4 mb-4 bg-white">
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item">
+			<input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+			<div class="input-group-append">
+				<button class="btn btn-outline-secondary" type="button">Button</button>
+			</div>
+			</li>
+			<li class="list-group-item">Dapibus ac facilisis in</li>
+			<li class="list-group-item">
+				<button class="btn" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningWrite.do'">신규작성</button>
+			</li>
+		</ul>
 	</div>
 	
 </body>

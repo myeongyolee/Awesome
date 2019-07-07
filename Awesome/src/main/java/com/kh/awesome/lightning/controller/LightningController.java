@@ -15,14 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.awesome.lightning.model.service.LightningService;
 import com.kh.awesome.matchManager.model.vo.MatchManager;
-import com.sun.xml.internal.ws.api.message.Attachment;
 
 @Controller
 @RequestMapping("/lightning")
@@ -34,12 +34,24 @@ public class LightningController {
 	private LightningService lightningService;
 	
 	@RequestMapping("/lightningList.do")
-	public void selectlightningList(Model model) {
-		char matchingType = 'L';
+	public void selectlightningList() {
+		/*char matchingType = 'L';*/
 		
-		List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType);
+		/*List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType);
 		model.addAttribute("lightningList", lightningList);
-		logger.info("lightningList@Controller="+lightningList);
+		logger.info("lightningList@Controller="+lightningList);*/
+	}
+	
+	@RequestMapping("/lightningListPage/cPage/{cPage}")
+	@ResponseBody
+	public List<Map<String,String>> lightningListPage(@PathVariable("cPage") int cPage){
+		logger.info("cPage="+cPage);
+		char matchingType = 'L';
+		int numPerPage = 5;
+		List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
+		logger.info("lightningList={}", lightningList);
+		
+		return lightningList;
 	}
 	
 	@RequestMapping("/lightningWrite.do")

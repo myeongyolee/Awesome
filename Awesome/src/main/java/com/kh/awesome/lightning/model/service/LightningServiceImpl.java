@@ -16,9 +16,9 @@ public class LightningServiceImpl implements LightningService {
 	private LightningDAO lightningDAO;
 	
 	@Override
-	public List<Map<String, String>> selectLightningList(char matchingType) {
+	public List<Map<String, String>> selectLightningList(char matchingType, int cPage, int numPerPage) {
 		// TODO Auto-generated method stub
-		return lightningDAO.selectLightningList(matchingType);
+		return lightningDAO.selectLightningList(matchingType, cPage, numPerPage);
 	}
 
 	@Override
