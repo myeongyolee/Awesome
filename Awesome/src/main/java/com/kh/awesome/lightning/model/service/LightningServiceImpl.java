@@ -21,4 +21,10 @@ public class LightningServiceImpl implements LightningService {
 		return lightningDAO.selectLightningList(matchingType);
 	}
 
+	@Override
+	public int insertLightning(MatchManager matchManager) {
+		// TODO Auto-generated method stub
+		return lightningDAO.insertLightning(matchManager);
+	}
+
 }

@@ -54,8 +54,7 @@
 			</div>
 			<ul class="list-group list-group-flush">
 				<li class="list-group-item"> 
-					${matching.interestingName} | ${matching.localName} | ${matching.placeName} |  
-					<fmt:formatDate value="${matching.matchEndDate}" type="date" pattern="yyyy/MM/dd(E) hh:mm"/>
+					${matching.interestingName} | ${matching.localName} | ${matching.placeName} | ${matching.matchEndDate}
 				</li>
 				<li class="list-group-item"> ${matching.memberId} | ${matching.memberCount}</li>
 			</ul>

@@ -9,4 +9,6 @@ public interface LightningDAO {
 
 	List<Map<String, String>> selectLightningList(char matchingType);
 
+	int insertLightning(MatchManager matchManager);
+
 }

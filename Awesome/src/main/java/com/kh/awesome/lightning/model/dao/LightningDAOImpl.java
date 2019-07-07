@@ -21,4 +21,10 @@ public class LightningDAOImpl implements LightningDAO {
 		return sqlSession.selectList("selectLightningList", matchingType);
 	}
 
+	@Override
+	public int insertLightning(MatchManager matchManager) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("insertLightning", matchManager);
+	}
+
 }

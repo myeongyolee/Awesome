@@ -9,4 +9,6 @@ public interface LightningService {
 
 	List<Map<String, String>> selectLightningList(char matchingType);
 
+	int insertLightning(MatchManager matchManager);
+
 }
