@@ -2,11 +2,14 @@ package com.kh.awesome.lightning.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,12 +47,39 @@ public class LightningController {
 	
 	@RequestMapping("/lightningListPage/cPage/{cPage}")
 	@ResponseBody
-	public List<Map<String,String>> lightningListPage(@PathVariable("cPage") int cPage){
+	public List<Map<String, Object>> lightningListPage(@PathVariable("cPage") int cPage){
 		logger.info("cPage="+cPage);
 		char matchingType = 'L';
 		int numPerPage = 5;
-		List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
+		List<Map<String, Object>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
 		logger.info("lightningList={}", lightningList);
+		
+		Map<String, Map<String, Object>> map = new HashMap();
+		List<Map<String, Object>> resultList = new ArrayList();
+		
+		//참여회원 리스트 만들기
+		if(lightningList.size() > numPerPage) {
+			for(Map<String, Object> resultMap : lightningList) {
+				String matchNo = (String)resultMap.get("matchNo");
+				logger.info("matchNo ["+matchNo+"]");
+				
+				if(map.isEmpty()) {
+					map.put(matchNo, resultMap);
+				}else {
+					if(map.containsKey(matchNo)) {
+						String joinMemberId = (String)map.get(matchNo).get("joinMemberId");
+						joinMemberId += ","+(String)resultMap.get("joinMemberId");
+						map.get(matchNo).put("joinMemberId", joinMemberId);
+					}else {
+						map.put(matchNo, resultMap);
+					}
+				}
+			}
+			
+			for(int i=0; i<map.size(); i++) {
+				
+			}
+		}
 		
 		return lightningList;
 	}
@@ -64,10 +94,9 @@ public class LightningController {
 								  HttpSession session, @RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
 		//세션에서 memberCode가져오기
 //		session.getAttribute("memberLoggedIn");
-		matchManager.setMemberCode(1);
+		matchManager.setMemberCode(63);
 		
 //		test용 
-		matchManager.setMatchNo(0);
 		matchManager.setPlaceName(null);;
 		matchManager.setPlaceId(null);;
 		
@@ -98,18 +127,15 @@ public class LightningController {
 		}
 		
 		logger.info("lightningEndDate={}, lightningEndTime={}", lightningEndDate, lightningEndTime);
-		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기
+		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기		
 		String matchEndDate = lightningEndDate+" "+lightningEndTime;
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		java.util.Date date = sdf.parse(matchEndDate);
-		logger.info("date="+date);
-		Date sqlDate = new Date(date.getTime());
-		logger.info("sqlDate"+sqlDate);
-		matchManager.setMatchEndDate(sqlDate);
+		Map<String, Object> map = new HashMap();
+		map.put("matchManager", matchManager);
+		map.put("matchEndDate" ,matchEndDate);
 		
 		logger.info("matchManager="+matchManager);
-		int result = lightningService.insertLightning(matchManager);
+		int result = lightningService.insertLightning(map);
 		logger.info("result="+result);
 		
 		String msg = result>0?"게시물 등록 성공":"게시물 등록 오류";

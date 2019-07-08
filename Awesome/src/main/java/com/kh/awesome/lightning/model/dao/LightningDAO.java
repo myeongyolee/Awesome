@@ -7,8 +7,8 @@ import com.kh.awesome.matchManager.model.vo.MatchManager;
 
 public interface LightningDAO {
 
-	List<Map<String, String>> selectLightningList(char matchingType, int cPage, int numPerPage);
+	List<Map<String, Object>> selectLightningList(char matchingType, int cPage, int numPerPage);
 
-	int insertLightning(MatchManager matchManager);
+	int insertLightning(Map<String, Object> map);
 
 }

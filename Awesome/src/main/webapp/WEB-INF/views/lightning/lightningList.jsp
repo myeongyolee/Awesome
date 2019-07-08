@@ -14,13 +14,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <style>
 #lightningList-content{width:500px; }
-#lightning{width:400px;}
+#lightning{width:400px; margin-bottom: 10px;}
 #search-container{
 	width:300px;
 	position: fixed;
 	right: 0;
 	top: 50px;
 }
+
 </style>
 <script>
 var cPage = 1;
@@ -45,7 +46,48 @@ function getLightningList(cPage){
 		type : 'get',
 		success : function(data) {
 			console.log(data);
-			for(data.length)
+			for(var i=0; i<data.length; i++){
+				var j = 0;
+				var html = "";
+				html +=	'<div id="lightning" class="card">';
+				html +=	'<div id="lightningTest-head" class="card-header">';
+				html +=	'<img class="card-img-top" src="" alt="Card image cap">';
+				html +=	'<div class="card-body" data-toggle="collapse" data-target="#'+data[i].matchNo+'" aria-expanded="true" aria-controls="lightningTest-body">';
+				html +=	'<h5 class="card-title"> '+data[i].matchTitle+' </h5></div></div>';
+				html +=	'<ul class="list-group list-group-flush">';
+				html +=	'<li class="list-group-item"> '+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+'</li>';
+				html +=	'<li class="list-group-item"> 작성자:'+data[i].memberId+' | 참여회원수: '+(Number(data[i].memberCount)+1)+' </li></ul>';
+				html +=	'<div id="'+data[i].matchNo+'" class="collapse container" aria-labelledby="lightningTest-head" data-parent="#lightning">';
+				html +=	'<div id="carousel" class="carousel slide bg-secondary mb-3" data-ride="carousel">';
+				html +=	'<ol id="indicators" class="carousel-indicators">';
+				html +=	'<li data-target="#carousel" data-slide-to="'+j+'" class="active"></li></ol>';
+				html +=	'<div class="carousel-inner">';
+				html +=	'<div class="carousel-item active p-5">';
+				html +=	'<div class="card">';
+				html +=	'<div id="memberList" class="card-header">'+data[i].matchContent+'</div></div></div>';
+				if(data[i].memberCount>=1){
+					j++;
+					html +=	'<div class="carousel-item p-5">';
+					html +=	'<div class="card">';
+					html +=	'<div id="memberList" class="card-header">'+memberList+'</div></div></div>';					
+					$("#indicators").append('<li data-target="#carousel" data-slide-to="'+j+'"></li>');
+				}
+				if(data[i].placeId!=null){
+					j++;
+					html +=	'<div class="carousel-item p-5">';
+					html +=	'<div class="card">';
+					html +=	'<div id="memberList" class="card-header">'+data[i].placeName+'</div></div></div>';
+					$("#indicators").append('<li data-target="#carousel" data-slide-to="'+j+'"></li>');
+				}
+				html +=	'<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">';
+				html +=	'<span class="carousel-control-prev-icon" aria-hidden="false"></span>';
+				html +=	'<span class="sr-only">Previous</span></a>';
+				html +=	'<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">';
+				html +=	'<span class="carousel-control-next-icon" aria-hidden="false"></span>';
+				html +=	'<span class="sr-only">Next</span></a></div></div>';
+				html +=	'<button type="button" class="btn btn-primary">Primary</button></div>';
+				$("#lightningList-content").append(html);
+			}
 		},
 		error:function(jqxhr, textStatus, errorThrown){
 			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
@@ -57,47 +99,7 @@ function getLightningList(cPage){
 <title>번개팅</title>
 </head>
 <body>
-	<div id="lightningList-content">
-		<div id="lightning" class="card">
-			<div id="lightningTest-head" class="card-header">
-				<img class="card-img-top" src="" alt="Card image cap">
-				<div class="card-body" data-toggle="collapse" data-target="#lightningTest-body" aria-expanded="true" aria-controls="lightningTest-body">
-					<h5 class="card-title"> 매칭타이틀 </h5>
-				</div>
-			</div>
-			<ul class="list-group list-group-flush">
-				<li class="list-group-item"> 분류 | 지역 | 장소이름 | 마감시간 </li>
-				<li class="list-group-item"> 작성회원 | 참여회원수 </li>
-			</ul>
-			<div id="lightningTest-body" class="collapse" aria-labelledby="lightningTest-head" data-parent="#lightning">
-				<div class="card-body">
-					<p class="card-text">매칭내용</p>
-				</div>		
-			</div>
-		</div>
-		
-		<c:forEach items="${lightningList}" var="matching">
-		<div id="lightning" class="card">
-			<div id="${matching.matchNo}-head" class="card-header">
-				<img class="card-img-top" src="" alt="Card image cap">
-				<div class="card-body" data-toggle="collapse" data-target="#${matching.matchNo}-body" aria-expanded="true" aria-controls="${matching.matchNo}-body">
-					<h5 class="card-title"> ${matching.matchTitle} </h5>
-				</div>
-			</div>
-			<ul class="list-group list-group-flush">
-				<li class="list-group-item"> 
-					${matching.interestingName} | ${matching.localName} | ${matching.placeName} | ${matching.matchEndDate}
-				</li>
-				<li class="list-group-item"> ${matching.memberId} | ${matching.memberCount}</li>
-			</ul>
-			<div id="${matching.matchNo}-body" class="collapse" aria-labelledby="${matching.matchNo}-head" data-parent="#lightning">
-				<div class="card-body">
-					<p class="card-text">매칭내용</p>
-				</div>		
-			</div>
-		</div>
-		</c:forEach>
-	</div>
+	<div id="lightningList-content"></div>
 	<div id="search-container" class="card shadow p-4 mb-4 bg-white">
 		<ul class="list-group list-group-flush">
 			<li class="list-group-item">
@@ -112,6 +114,6 @@ function getLightningList(cPage){
 			</li>
 		</ul>
 	</div>
-	
+
 </body>
 </html>

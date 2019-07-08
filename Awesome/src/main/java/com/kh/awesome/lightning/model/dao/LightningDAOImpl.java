@@ -17,7 +17,7 @@ public class LightningDAOImpl implements LightningDAO {
 	private SqlSession sqlSession;
 
 	@Override
-	public List<Map<String, String>> selectLightningList(char matchingType, int cPage, int numPerPage) {
+	public List<Map<String, Object>> selectLightningList(char matchingType, int cPage, int numPerPage) {
 		// TODO Auto-generated method stub
 		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
 		
@@ -25,9 +25,9 @@ public class LightningDAOImpl implements LightningDAO {
 	}
 
 	@Override
-	public int insertLightning(MatchManager matchManager) {
+	public int insertLightning(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return sqlSession.insert("insertLightning", matchManager);
+		return sqlSession.insert("insertLightning", map);
 	}
 
 }
