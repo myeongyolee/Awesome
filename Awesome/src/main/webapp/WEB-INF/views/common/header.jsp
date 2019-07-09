@@ -20,6 +20,6 @@
 <body>
 <div id="container">
 	<header>
-		<a href="${pageContext.request.contextPath }/club/clubList">소모임가기</a>
+		<a href="${pageContext.request.contextPath }/club/clubList.do">소모임가기</a>
 	</header>
 	<section id="content">

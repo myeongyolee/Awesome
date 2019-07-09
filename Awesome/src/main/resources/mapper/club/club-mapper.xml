@@ -4,12 +4,47 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="club">
-	<select id="selectClubList" resultMap="clubMap">
 	
+		<resultMap type="map" id="clubListMap">
+		<result column="CLUB_CODE" property="clubCode"/>
+		<result column="INTERESTING_CODE" property="interestingCode"/>
+		<result column="MEMBER_CODE" property="memberCode"/>
+		<result column="LOCAL_CODE" property="localCode"/>
+		<result column="CLUB_NAME" property="clubName"/>
+		<result column="CLUB_SIMPLE_INFO" property="clubsimpleInfo"/>
+		<result column="CLUB_INFO" property="clubInfo"/>
+		<result column="MAIN_ORIGINAL_FILENAME" property="mainoriginalFilename"/>
+		<result column="MAIN_RENAMED_FILENAME" property="mainrenamedFilename"/>
+		<result column="CLUB_MEMBER_COUNT" property="clubmemberCount"/>
+		<result column="CLUB_ADMIN" property="clubAdmin"/>
+		</resultMap>
+		
+		
+	<select id="selectClubList" resultMap="clubListMap">
+	select C.*,(select count(*) from club_member where CLUB_CODE = C.CLUB_CODE AND CLUB_JOIN_CHECK ='Y') CLUB_MEMBER_COUNT,(select NICKNAME FROM MEMBER WHERE MEMBER_CODE = C.MEMBER_CODE) CLUB_ADMIN
+	from club C 
+	order by CLUB_CODE DESC
 	</select>
 	
 	<select id="totalclubCount" resultType="_int">
 	select count(*) from club
 	</select>
+	
+	<insert id="insertClub" >
+		insert into club values(seq_club.nextval,#{interestingCode},#{memberCode},seq_local_code.nextval,#{clubName},#{clubsimpleInfo},#{clubInfo},#{mainoriginalFilename},#{mainrenamedFilename})
+		<selectKey keyProperty="clubCode" resultType="Integer" order="AFTER"> 
+			SELECT seq_club.currval FROM dual 
+		</selectKey>
+	</insert>
+	
+
+	<insert id="insertClubAdmin" >
+		insert into club_member values(#{clubCode},#{memberCode},2,'Y')
+	</insert>
+	
+	<select id="selectOneClub">
+		select * from club
+	</select>
+	
 	
 </mapper>
