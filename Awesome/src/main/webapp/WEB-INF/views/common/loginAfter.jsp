@@ -21,7 +21,7 @@
     <!-- 구글 폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
     <style>
-        body{margin: 0 0; height: 100%}
+         body{margin: 0 0; height: 100%}
         html{ height: 100%;}
         #rational-friend{height: 100%;}
         #parent-div{height: 100%;}
@@ -42,15 +42,26 @@
         #chat{padding:10px; display:none;}
         #char div{border-bottom: 1px solid gray;}
         #chat img{margin-left:10px; margin-right: 30px;}
-        #rational-switch{width: 70%; display: inline-block; text-align: center; padding-top:30px;}
-        #rational-switch img{border-radius: 30px; margin-bottom:10px;}
-        #rational-switch div{position: relative; display: inline-block;}
-        #rational-switch div img{border-radius: 25px;}
+        #rational-switch{width: 70%; display: inline-block; text-align: center; padding-top:30px; position: relative;}
+        #rational-switch>img{border-radius: 30px; margin-bottom:10px; position: absolute;}
+        #rational-switch div{position: relative; display: inline-block; width: 300px; height: 504px;}
+        #rational-switch div.user-id-addr{border-radius: 40px; }
+        #rational-switch div.user_profile img{border-radius: 40px; left: 0px;}
         #rational-switch div p#userId{position: absolute; top:378px; left:30px;}
+        #rational-switch div#like-can-box{width: 300px; height: 150px;}
+        #rational-switch div.maching-info img{border-radius:40px}
+        #rational-switch #selectBox{position: realtivce;     bottom: 478px;}
         #address{position:absolute; top:430px; left: 30px;}
+        #cancel-icon{left: 210px;}
+        
+        /* ----------- 소개팅 페이지 끝 -------------------------------*/
+        
+        /* --------------- 동네친구 페이지 시작 ----------------------------*/
         #tablet{width:800px; height: 600px; background: black; margin:0 auto; border-radius: 40px; padding:10px 37px;}
         #vicinage-friend{background:aliceblue; padding-top:50px ;}
         #naver-map{width: 700px; height: 575px; background: white;}
+        
+        /* ----------- 번개팅  페이지 시작 -------------------------------*/
         #lighting-box{width: 100%; height: 100%; }
         #lighting{width: 70%; }
         #lighting-list{margin: 10px 20px;}
@@ -60,6 +71,8 @@
         .card-body{display: inline-block;}
         .card-title{font-size:20px;}
         #search-container{border-radius: 20px; background: white; height: 98%; padding: 30px 10px;}
+        /* ----------- 번개팅 페이지 끝 -------------------------------*/
+        
         /* button slide*/
         .switch {position: relative;display: block; width: 100px;height: 30px;padding: 3px;margin: 0 auto;background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
       border-radius: 18px;box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);cursor: pointer;}
@@ -90,6 +103,7 @@
     #meeting-text{display: inline-block; margin-left:30px;}
     .meeting-title{font-size: 30px;}
     .meeting-div{margin-bottom: 30px;   }
+    .user-id-addr{position: absolute; width: 0px; height: 0px; top:-504px; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); border-radius: 30px}
     </style>
 </head>
 <body>  
@@ -134,26 +148,30 @@
                             </div>
                         </section>
                     </div>
-
+	
 
                     <div id="rational-switch" class="flex-shrink-1 bd-highlight"> 
-                        <div>
+                        <div class="maching-info">
                             <img src="${pageContext.request.contextPath }/resources/images/blue-2564660_1280.jpg" alt="" width="300px" height="504px">
-                            <p id="userId">ID</p>
-                            <p id="address">address</p>
+                            <div class="user-id-addr">
+                            	<input type="hidden" id="memberCode" name="memberCode" value="" />
+                            	<input type="hidden" name="receiveMemberCode" id="receiveMemberCode" value=""/>
+                                <p id="userId">ID</p>
+                                <p id="address">address</p>
+                            </div>
                         </div>
-                        <!--
-
-                        -->
+                        <!-- 아이콘 상자 -->
                         <br>
-                        <img src="${pageContext.request.contextPath }/resources/images/like.png" alt="" width="80px" > &nbsp;&nbsp;&nbsp;&nbsp;
-                        <img src="${pageContext.request.contextPath }/resources/images/cancel.png" alt="" width="80px" >
+                        <div id="selectBox">
+	                        <img id="like" src="${pageContext.request.contextPath }/resources/images/like.png" alt="" width="80px" > &nbsp;&nbsp;&nbsp;&nbsp;
+	                        <img id="non-like" src="${pageContext.request.contextPath }/resources/images/cancel.png" alt="" width="80px" >
+                        </div>
                     </div>
                   </div>
                 </div>
-            
+            <%-- ########################################## 소개팅 페이징 끝 ################################################### --%>
 
-            <div id="vicinage-friend" stlye="background:blue;" class="section">
+            <div id="vicinage-friend" class="section">
                 <div id="tablet">
                     <div id="naver-map">
                         
@@ -161,7 +179,7 @@
                 </div>
             </div>
 
-
+		<%-- ########################################## 동네친구 페이징 끝 ################################################### --%>
             <div id="3rd-lighting" class="section">
                 <div id="lighting-box" class="d-flex flex-row">
                     <div id="lighting" class="p-2 card" style="background:#e9ebee" >
@@ -204,6 +222,8 @@
                     </div>
                   </div>
             </div>
+
+			<%-- ########################################## 번개팅 페이징 끝 ################################################### --%>
 
             <div id="meeting-page" class="section">
                 <div id="flex-container" class="d-flex flex-row">
@@ -324,8 +344,49 @@
                     $("#chat").css("display","block");
                     $("#LikeMe div").css("display","none");
                 }
-
             }
+            
+            //소개팅 페이지 ajax
+            function changeUser(selectLike){
+            	var memberCode = $("#memberCode").val();
+            	var receiveMemberCode = $("#receiveMemberCode").val();
+            	var like = selectLike;
+            	$.ajax({
+            		url: "${pageContext.request.contextpath}/meeting/changeUser?memberCode="+memberCode+"&receiveMemberCode="+receiveMemberCode
+            					+"&like="+like,
+            		type: "post",
+            		data: memberCode,
+            		success:function(data){
+            			$(".maching-info").children().remove();
+            			
+                    	$(".maching-info").append(data.html);
+            		},error: function(jqxhr, textStatus, errorThrown){
+            			console.log("ajax 처리 실패:"+jqxhr.status);
+    					console.log(errorThrown);
+            		}
+            		
+            	})
+            })
+            
+            $("#like").on("click",function(){
+            	changeUser("Y");
+            });
+            $("#non-like").on("click",function(){
+            	changeUser("N");
+            });
+            
+            function likeMeUser(){
+            	$.ajax({
+            		url:"${pageContext.request.contextPath}/meeting/likeMeMember",
+            		type:"post",
+            		success: function(data){
+            			
+            		},error(jqxhr, textStatus, errorThrown){
+            			
+            		}
+            	})
+            }
+            
     
         </script>
 </body>

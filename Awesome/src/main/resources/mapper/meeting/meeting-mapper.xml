@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mapper.xml 유효성 검사 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="meeting">
+	<select id="selectRandomUser" resultType="map">
+		select receive_member_code from blind_date_like
+		where member_code = #{memberCode}
+	</select>
+	<select id="selectRandomUserEnd" resultType="map">
+		select *
+		from(select rownum as rnum, V.*
+			from(select m.member_code as mCode, member_name, renamed_profile, introduce, birthday, road_address
+				from member m left join address a on m.member_code = a.member_code
+				where 1=1
+				<if test="gender = 'M'">
+					and gedner = 'F'
+				</if>
+				<if test="gender = 'F'">
+					and gender = 'M'
+				</if>
+					and blind_date_open = 'Y'
+					and verify = 'M'
+					and not m.member_code on( ${showMember} )
+					order by enroll_date)V)V
+		 where rnum = #{rownum}
+	</select>
+	
+	
+	<insert id="insertBlindDate">
+		insert into blind_date_like 
+		values(#{mebmerCode}, #{receiveMemberCode}, #{like})
+	</insert>
+	
+	<select id="selectLikeMe">
+		select receive_member_code from blind_date_like
+		where member_code = #{memberCode}
+	</select>
+	
+	<select id="selectLikeMeInfo">
+		select *
+		from member
+		where member_code on (${user})
+	</select>
+	
+	
+</mapper>
