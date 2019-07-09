@@ -27,4 +27,10 @@ public class LightningServiceImpl implements LightningService {
 		return lightningDAO.insertLightning(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectJoinMemberList(Map<String, List<String>> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectJoinMemberList(param);
+	}
+
 }

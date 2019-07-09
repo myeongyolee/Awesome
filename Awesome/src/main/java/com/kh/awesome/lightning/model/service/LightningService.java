@@ -11,4 +11,6 @@ public interface LightningService {
 
 	int insertLightning(Map<String, Object> map);
 
+	List<Map<String, Object>> selectJoinMemberList(Map<String, List<String>> param);
+
 }

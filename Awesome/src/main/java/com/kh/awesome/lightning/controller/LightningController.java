@@ -6,10 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,47 +35,53 @@ public class LightningController {
 	private LightningService lightningService;
 	
 	@RequestMapping("/lightningList.do")
-	public void selectlightningList() {
-		/*char matchingType = 'L';*/
-		
-		/*List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType);
-		model.addAttribute("lightningList", lightningList);
-		logger.info("lightningList@Controller="+lightningList);*/
-	}
+	public void selectlightningList() {}
 	
-	@RequestMapping("/lightningListPage/cPage/{cPage}")
+	@RequestMapping("/lightningListPage.do")
 	@ResponseBody
-	public List<Map<String, Object>> lightningListPage(@PathVariable("cPage") int cPage){
+	public List<Map<String, Object>> lightningListPage(@RequestBody Map requestMap){
+		int cPage = Integer.parseInt((String)requestMap.get("cPage"));
 		logger.info("cPage="+cPage);
 		char matchingType = 'L';
 		int numPerPage = 5;
 		List<Map<String, Object>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
 		logger.info("lightningList={}", lightningList);
+		logger.info("lightningList.size="+lightningList.size());
 		
-		Map<String, Map<String, Object>> map = new HashMap();
-		List<Map<String, Object>> resultList = new ArrayList();
+		Map<String,List<String>> param = new HashMap();
+		List<String> matchNo = new ArrayList();
+		for(Map<String, Object> map : lightningList) {
+			String no = String.valueOf(map.get("matchNo"));
+			matchNo.add(no);
+		}
+		param.put("matchNo", matchNo);
 		
-		//참여회원 리스트 만들기
-		if(lightningList.size() > numPerPage) {
-			for(Map<String, Object> resultMap : lightningList) {
-				String matchNo = (String)resultMap.get("matchNo");
-				logger.info("matchNo ["+matchNo+"]");
-				
-				if(map.isEmpty()) {
-					map.put(matchNo, resultMap);
-				}else {
-					if(map.containsKey(matchNo)) {
-						String joinMemberId = (String)map.get(matchNo).get("joinMemberId");
-						joinMemberId += ","+(String)resultMap.get("joinMemberId");
-						map.get(matchNo).put("joinMemberId", joinMemberId);
-					}else {
-						map.put(matchNo, resultMap);
-					}
-				}
+		List<Map<String, Object>> joinMemberList = lightningService.selectJoinMemberList(param);
+		logger.info("joinMemberList={}",joinMemberList);
+		
+		Map<String, String> joinMemberMap = new HashMap();
+		List<String> key = new ArrayList();
+		
+		for(Map<String, Object> map : joinMemberList) {
+			String k = String.valueOf(map.get("matchNo"));
+			if(joinMemberMap.isEmpty() || !joinMemberMap.containsKey(k)) {
+				joinMemberMap.put(k, String.valueOf(map.get("nickName")));
+				key.add(k);
+			}else if(joinMemberMap.containsKey(k)) {
+				String value = joinMemberMap.get(k);
+				value += ", "+String.valueOf(map.get("nickName"));
+				joinMemberMap.put(k, value);
 			}
-			
-			for(int i=0; i<map.size(); i++) {
-				
+		}
+		
+		logger.info("joinMemberMap={}",joinMemberMap);
+		logger.info("key="+key);
+		
+		for(String k : key) {
+			for(Map<String,Object> map : lightningList) {
+				if(String.valueOf(map.get("matchNo")).equals(k)) {
+					map.put("joinMemberNickName", joinMemberMap.get(k));
+				}
 			}
 		}
 		
