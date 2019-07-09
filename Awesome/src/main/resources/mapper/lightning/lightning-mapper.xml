@@ -16,20 +16,25 @@
 		<result column="place_lng" property="placeLng"/>
 		<result column="matching_type" property="matchingType"/>
 		<result column="match_end_date" property="matchEndDate"/>
-		<result column="member_id" property="memberId"/>
-		<result column="local_name" property="matchNo"/>
-		<result column="interesting_name" property="matchNo"/>
+		<result column="nickname" property="nickName"/>
+		<result column="local_name" property="localName"/>
+		<result column="interesting_name" property="interestingName"/>
 		<result column="member_count" property="memberCount"/>
 		<result column="match_content" property="matchContent" typeHandler="stringToLongTypeHandler"/>
+	</resultMap>
+	
+	<resultMap type="map" id="joinMember">
+		<result column="match_no" property="matchNo"/>
+		<result column="nickname" property="nickName"/>	
 	</resultMap>
 	
 	<select id="selectLightningList" resultMap="matchManagerMap">
 		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_id, M.place_name, M.place_lat, 
 			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date,
-			   A.member_id, 
+			   A.nickname, 
 			   I.interesting_name, 
 			   L.local_name ,
-			   (select count(*) from matching_join_member where match_no = M.match_no) member_count, 
+			   (select count(*) from matching_join_member where match_no = M.match_no) member_count,
 			   M.match_content
 		from match_manager M 
 	        left join member A on M.member_code = A.member_code
@@ -41,9 +46,18 @@
 	
 	<insert id="insertLightning">
 		insert into match_manager 
-		values(#{matchNo}, #{matchTitle}, #{memberCode}, #{interestingCode}, #{localCode}, 
-				#{placeId}, #{placeName}, #{placeLat}, #{placeLng}, #{matchingType}, 
-				#{matchContent}, #{matchOriginalImg}, #{matchRenamedImg}, sysdate, to_date(#{matchEndDate}, 'yyyy-mm-dd hh24:mi'))
+		values(seq_match_no.nextval, #{matchManager.matchTitle}, #{matchManager.memberCode}, #{matchManager.interestingCode}, #{matchManager.localCode}, 
+				#{matchManager.placeId}, #{matchManager.placeName}, #{matchManager.placeLat}, #{matchManager.placeLng}, #{matchManager.matchingType}, 
+				#{matchManager.matchContent}, #{matchManager.matchOriginalImg}, #{matchManager.matchRenamedImg}, sysdate, to_date(#{matchEndDate}, 'yyyy-mm-dd hh24:mi'))
 	</insert>
+	
+	<select id="selectJoinMemberList" resultMap="joinMember">
+		select J.match_no, M.nickname
+		from matching_join_member J left join member M on J.member_code = M.member_code
+		where J.permit_check = 'Y' and J.join_check = 'Y' and J.match_no in 
+		<foreach collection="matchNo" item="e" open="(" close=")" separator=",">
+		#{e}
+		</foreach>
+	</select>
 	
 </mapper>

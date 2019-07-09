@@ -2,9 +2,10 @@ package com.kh.awesome.lightning.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,22 +35,55 @@ public class LightningController {
 	private LightningService lightningService;
 	
 	@RequestMapping("/lightningList.do")
-	public void selectlightningList() {
-		/*char matchingType = 'L';*/
-		
-		/*List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType);
-		model.addAttribute("lightningList", lightningList);
-		logger.info("lightningList@Controller="+lightningList);*/
-	}
+	public void selectlightningList() {}
 	
-	@RequestMapping("/lightningListPage/cPage/{cPage}")
+	@RequestMapping("/lightningListPage.do")
 	@ResponseBody
-	public List<Map<String,String>> lightningListPage(@PathVariable("cPage") int cPage){
+	public List<Map<String, Object>> lightningListPage(@RequestBody Map requestMap){
+		int cPage = Integer.parseInt((String)requestMap.get("cPage"));
 		logger.info("cPage="+cPage);
 		char matchingType = 'L';
 		int numPerPage = 5;
-		List<Map<String, String>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
+		List<Map<String, Object>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
 		logger.info("lightningList={}", lightningList);
+		logger.info("lightningList.size="+lightningList.size());
+		
+		Map<String,List<String>> param = new HashMap();
+		List<String> matchNo = new ArrayList();
+		for(Map<String, Object> map : lightningList) {
+			String no = String.valueOf(map.get("matchNo"));
+			matchNo.add(no);
+		}
+		param.put("matchNo", matchNo);
+		
+		List<Map<String, Object>> joinMemberList = lightningService.selectJoinMemberList(param);
+		logger.info("joinMemberList={}",joinMemberList);
+		
+		Map<String, String> joinMemberMap = new HashMap();
+		List<String> key = new ArrayList();
+		
+		for(Map<String, Object> map : joinMemberList) {
+			String k = String.valueOf(map.get("matchNo"));
+			if(joinMemberMap.isEmpty() || !joinMemberMap.containsKey(k)) {
+				joinMemberMap.put(k, String.valueOf(map.get("nickName")));
+				key.add(k);
+			}else if(joinMemberMap.containsKey(k)) {
+				String value = joinMemberMap.get(k);
+				value += ", "+String.valueOf(map.get("nickName"));
+				joinMemberMap.put(k, value);
+			}
+		}
+		
+		logger.info("joinMemberMap={}",joinMemberMap);
+		logger.info("key="+key);
+		
+		for(String k : key) {
+			for(Map<String,Object> map : lightningList) {
+				if(String.valueOf(map.get("matchNo")).equals(k)) {
+					map.put("joinMemberNickName", joinMemberMap.get(k));
+				}
+			}
+		}
 		
 		return lightningList;
 	}
@@ -64,10 +98,9 @@ public class LightningController {
 								  HttpSession session, @RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
 		//세션에서 memberCode가져오기
 //		session.getAttribute("memberLoggedIn");
-		matchManager.setMemberCode(1);
+		matchManager.setMemberCode(63);
 		
 //		test용 
-		matchManager.setMatchNo(0);
 		matchManager.setPlaceName(null);;
 		matchManager.setPlaceId(null);;
 		
@@ -98,18 +131,15 @@ public class LightningController {
 		}
 		
 		logger.info("lightningEndDate={}, lightningEndTime={}", lightningEndDate, lightningEndTime);
-		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기
+		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기		
 		String matchEndDate = lightningEndDate+" "+lightningEndTime;
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		java.util.Date date = sdf.parse(matchEndDate);
-		logger.info("date="+date);
-		Date sqlDate = new Date(date.getTime());
-		logger.info("sqlDate"+sqlDate);
-		matchManager.setMatchEndDate(sqlDate);
+		Map<String, Object> map = new HashMap();
+		map.put("matchManager", matchManager);
+		map.put("matchEndDate" ,matchEndDate);
 		
 		logger.info("matchManager="+matchManager);
-		int result = lightningService.insertLightning(matchManager);
+		int result = lightningService.insertLightning(map);
 		logger.info("result="+result);
 		
 		String msg = result>0?"게시물 등록 성공":"게시물 등록 오류";

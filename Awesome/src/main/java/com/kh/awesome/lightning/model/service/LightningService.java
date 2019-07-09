@@ -7,8 +7,10 @@ import com.kh.awesome.matchManager.model.vo.MatchManager;
 
 public interface LightningService {
 
-	List<Map<String, String>> selectLightningList(char matchingType, int cPage, int numPerPage);
+	List<Map<String, Object>> selectLightningList(char matchingType, int cPage, int numPerPage);
 
-	int insertLightning(MatchManager matchManager);
+	int insertLightning(Map<String, Object> map);
+
+	List<Map<String, Object>> selectJoinMemberList(Map<String, List<String>> param);
 
 }
