@@ -17,11 +17,11 @@ public class LightningDAOImpl implements LightningDAO {
 	private SqlSession sqlSession;
 
 	@Override
-	public List<Map<String, Object>> selectLightningList(char matchingType, int cPage, int numPerPage) {
+	public List<Map<String, Object>> selectLightningList(Map<String, String> search, int cPage, int numPerPage) {
 		// TODO Auto-generated method stub
 		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
 		
-		return sqlSession.selectList("selectLightningList", matchingType, rowBounds);
+		return sqlSession.selectList("selectLightningList", search, rowBounds);
 	}
 
 	@Override
@@ -34,6 +34,24 @@ public class LightningDAOImpl implements LightningDAO {
 	public List<Map<String, Object>> selectJoinMemberList(Map<String, List<String>> param) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("selectJoinMemberList", param);
+	}
+
+	@Override
+	public List<String> selectCityList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("selectCityList");
+	}
+
+	@Override
+	public List<Map<String, Object>> selectLocalList(int city) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("selectLocalList", city);
+	}
+
+	@Override
+	public List<String> selectInterestingList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("selectInterestingList");
 	}
 
 }

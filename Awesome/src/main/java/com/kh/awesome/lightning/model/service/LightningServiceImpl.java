@@ -16,9 +16,9 @@ public class LightningServiceImpl implements LightningService {
 	private LightningDAO lightningDAO;
 	
 	@Override
-	public List<Map<String, Object>> selectLightningList(char matchingType, int cPage, int numPerPage) {
+	public List<Map<String, Object>> selectLightningList(Map<String, String> search, int cPage, int numPerPage) {
 		// TODO Auto-generated method stub
-		return lightningDAO.selectLightningList(matchingType, cPage, numPerPage);
+		return lightningDAO.selectLightningList(search, cPage, numPerPage);
 	}
 
 	@Override
@@ -31,6 +31,24 @@ public class LightningServiceImpl implements LightningService {
 	public List<Map<String, Object>> selectJoinMemberList(Map<String, List<String>> param) {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectJoinMemberList(param);
+	}
+
+	@Override
+	public List<String> selectCityList() {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectCityList();
+	}
+
+	@Override
+	public List<Map<String, Object>> selectLocalList(int city) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectLocalList(city);
+	}
+
+	@Override
+	public List<String> selectInterestingList() {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectInterestingList();
 	}
 
 }

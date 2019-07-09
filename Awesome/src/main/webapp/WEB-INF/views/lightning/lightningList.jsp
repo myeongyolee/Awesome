@@ -40,6 +40,29 @@ $(function(){  //페이지가 로드되면 데이터를 가져오고 page를 증
 		}
 	});
 	
+	$("#city>option:selected").not("#defaultCity").change(function(){
+		var param = {local: $("#city>option:selected").val()}
+		var city = JSON.stringify(param);
+		$.ajax({
+			url : '${pageContext.request.contextPath}/lightning/localList.do',
+			dataType: "json",
+			type : 'POST',
+			data : city,
+			contentType: "application/json; charset=UTF-8",
+			success : function(data){
+				$("#local").html("");
+				var html = "";
+				html += '<option id="defaultLocal" disabled selected>지역을 선택해주세요</option>';
+				for(var i=0; i<data.length; i++){
+					html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
+				}
+			},
+			error:function(jqxhr, textStatus, errorThrown){
+				console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+			}
+		});
+	});
+	
 });
 
 $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
@@ -56,8 +79,8 @@ function serchAjax(){
 function getLightningList(){
 	console.log($("#cPage").val());
 	var param = {cPage: $("#cPage").val()};
-	var check = $(":checkbox:checked");
 	
+	var check = $(":checkbox:checked");
 	if(check!=null){
 		for(var i=0; i<check.length; i++){
 			var id = $(check[i]).attr('name');
@@ -66,18 +89,16 @@ function getLightningList(){
 				case "title" : 
 					param.title = $(":text#"+id).val(); 
 					break;
-				case "local" : 
-					param.local = $(":text#"+id).val(); 
-					break;
-				case "memberId" : 
-					param.memberId = $(":text#"+id).val(); 
-					break;
-				case "interesting" : 
-					param.interesting = $(":text#"+id).val(); 
+				case "nickName" : 
+					param.nickName = $(":text#"+id).val(); 
 					break;
 			}
 		}
 	}
+	
+	if($("#city>option:selected").not("#defaultCity")) param.city = $("#city>option:selected").val();
+	if($("#local>option:selected").not("#defaultLocal")) param.local = $("#local>option:selected").val();
+	if($("#interesting>option:selected").not("#defaultInteresting")) param.interesting = $("#interesting>option:selected").val();
 	
 	var str = JSON.stringify(param);
 	console.log(str);
@@ -166,37 +187,39 @@ function getLightningList(){
 				</div>
 			</li>
 			<li class="list-group-item">
+				<label for="local-search">도시검색</label>
+				<select class="form-control" id="city">
+					<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
+					<c:forEach items="${cityList}" var="city">
+					<option value=${city.cityCode }>${city.cityName }</option>						
+					</c:forEach>
+				</select>
+			</li>
+			<li class="list-group-item">
 				<label for="local-search">지역검색</label>
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<div class="input-group-text">
-							<input type="checkbox" name="local">
-						</div>
-					</div>
-					<input type="text" class="form-control" id="local">
-				</div>
+				<select class="form-control" id="local">
+					<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
+				</select>
 			</li>
 			<li class="list-group-item">
 				<label for="memberId-search">작성자검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
-							<input type="checkbox" name="memberId">
+							<input type="checkbox" name="nickName">
 						</div>
 					</div>
-					<input type="text" class="form-control" id="memberId">
+					<input type="text" class="form-control" id="nickName">
 				</div>
 			</li>
 			<li class="list-group-item">
 				<label for="interesting-search">분류검색</label>
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<div class="input-group-text">
-							<input type="checkbox" name="interesting">
-						</div>
-					</div>
-					<input type="text" class="form-control" id="interesting">
-				</div>
+				<select class="form-control" id="interesting">
+					<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
+					<c:forEach items="${interestingList}" var="interesting">
+					<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
+					</c:forEach>
+				</select>
 			</li>
 			
 			<li class="list-group-item">
