@@ -1,7 +1,12 @@
 package com.kh.awesome.lightning.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,10 +57,11 @@ public class LightningController {
 	@RequestMapping("localList.do")
 	@ResponseBody
 	public List<Map<String, Object>> selectlocalList(@RequestBody Map cityMap){
-		int city = Integer.parseInt((String)cityMap.get("local"));
+		int city = Integer.parseInt((String)cityMap.get("city"));
 		List<Map<String, Object>> localList = lightningService.selectLocalList(city);
+		logger.info("localList={}",localList);
 		
-		return null;
+		return localList;
 	}
 	
 	@RequestMapping("/lightningListPage.do")
@@ -158,10 +165,6 @@ public class LightningController {
 //		session.getAttribute("memberLoggedIn");
 		matchManager.setMemberCode(63);
 		
-//		test용 
-		matchManager.setPlaceName(null);;
-		matchManager.setPlaceId(null);;
-		
 		logger.info("uploadProfile="+uploadProfile);
 //		file
 		if(!uploadProfile.isEmpty()) {
@@ -211,4 +214,39 @@ public class LightningController {
 		return "/common/msg";
 	}
 	
+	@RequestMapping(value="/map/findPosition", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public String findPosition(@RequestParam("param") String position) throws Exception {
+		
+        String clientId = "l3bRNMshRGqHPXuqlMvs";//애플리케이션 클라이언트 아이디값";
+        String clientSecret = "tFz7TI8MjF";//애플리케이션 클라이언트 시크릿값";
+      
+		String text = URLEncoder.encode(position, "UTF-8");
+		String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text; // json 결과
+		// String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text;
+		// // xml 결과
+		URL url = new URL(apiURL);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestMethod("GET");
+		con.setRequestProperty("X-Naver-Client-Id", clientId);
+		con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+		int responseCode = con.getResponseCode();
+
+		BufferedReader br;
+		if (responseCode == 200) { // 정상 호출
+			br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		} else { // 에러 발생
+			br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+		}
+
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+		while ((inputLine = br.readLine()) != null) {
+			response.append(inputLine);
+		}
+		br.close();
+		logger.info(response.toString());
+		
+		return response.toString();
+	}
 }

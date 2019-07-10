@@ -10,7 +10,6 @@
 		<result column="member_code" property="memberCode"/>
 		<result column="interesting_code" property="interestingCode"/>
 		<result column="local_code" property="localCode"/>
-		<result column="place_id" property="placeId"/>
 		<result column="place_name" property="placeName"/>
 		<result column="place_lat" property="placeLat"/>
 		<result column="place_lng" property="placeLng"/>
@@ -45,7 +44,7 @@
 	</resultMap>
 	
 	<select id="selectLightningList" resultMap="matchManagerMap">
-		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_id, M.place_name, M.place_lat, 
+		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_name, M.place_lat, 
 			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date,
 			   A.nickname, 
 			   I.interesting_name, 
@@ -80,7 +79,7 @@
 	<insert id="insertLightning">
 		insert into match_manager 
 		values(seq_match_no.nextval, #{matchManager.matchTitle}, #{matchManager.memberCode}, #{matchManager.interestingCode}, #{matchManager.localCode}, 
-				#{matchManager.placeId}, #{matchManager.placeName}, #{matchManager.placeLat}, #{matchManager.placeLng}, #{matchManager.matchingType}, 
+				#{matchManager.placeName}, #{matchManager.placeLat}, #{matchManager.placeLng}, #{matchManager.matchingType}, 
 				#{matchManager.matchContent}, #{matchManager.matchOriginalImg}, #{matchManager.matchRenamedImg}, sysdate, to_date(#{matchEndDate}, 'yyyy-mm-dd hh24:mi'))
 	</insert>
 	
@@ -102,7 +101,9 @@
 	</select>
 	
 	<select id="selectLocalList" resultMap="localMap">
-		select interesting_code, interesting_name from interesting where city_code = #{city}
+		select L.local_code, L.local_name 
+		from local L left join city C on L.city_code = C.city_code
+		where C.city_code = #{city}
 	</select>
 	
 </mapper>
