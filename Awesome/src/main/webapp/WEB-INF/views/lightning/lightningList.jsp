@@ -12,17 +12,20 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
+
 <style>
-#lightningList-content{width:500px; }
-#lightning{width:400px; margin-bottom: 10px;}
+#lightningList-content{width:600px; }
+#lightning{width:500px; margin-bottom: 10px;}
 #search-container{
 	width:300px;
 	position: fixed;
 	right: 0;
 	top: 50px;
 }
-#ContentView{height: 200px;}
-
+#ContentView{height: 300px;}
+.myMap{width:334px; height:250px; position: relative;}
 </style>
 <script>
 
@@ -144,12 +147,12 @@ function getLightningList(){
 				if(data[i].memberCount>=1){
 					html +=	'<div class="carousel-item p-5">';
 					html +=	'<div class="card">';
-					html +=	'<div id="ContentView" class="card-header">'+data[i].joinMemberNickName+'<div id="map"></div></div></div></div>';
+					html +=	'<div id="ContentView" class="card-header">'+data[i].joinMemberNickName+'</div></div></div>';
 				}
 				if(data[i].placeName!=null){
 					html +=	'<div class="carousel-item p-5">';
 					html +=	'<div class="card">';
-					html +=	'<div id="ContentView" class="card-header">'+data[i].placeName+'</div></div></div>';
+					html +=	'<div id="ContentView" class="card-header">'+data[i].placeName+'<div id="map'+i+'" class="myMap"></div></div></div></div>';
 				}
 				html +=	'<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">';
 				html +=	'<span class="carousel-control-prev-icon" aria-hidden="false"></span>';
@@ -159,7 +162,7 @@ function getLightningList(){
 				html +=	'<span class="sr-only">Next</span></a></div></div>';
 				html +=	'<button type="button" class="btn btn-primary float-right">참가신청</button></div>';
 				$("#lightningList-content").append(html);
-				if(data[i].placeName!=null) insertMap(data[i].placeLat, data[i].placeLng);
+				if(data[i].placeName!=null) insertMap(i, data[i].placeLat, data[i].placeLng);
 			}
 			$("#cPage").val(Number($("#cPage").val())+1);
 			console.log(cPage);
@@ -169,20 +172,18 @@ function getLightningList(){
 		}
 	}); 
 }
-function insertMap(mapx, mapy){
-	$.ajax({
-		url:"${pageContext.request.contextPath}/map/findPosition",
-		success:function(data){
-			var map = new naver.maps.Map("map", {
-		        center: new naver.maps.Point(mapx, mapy),
-		        zoom: 11
-			});
-				var marker = new naver.maps.Marker({
-		        position: new naver.maps.Point(mapx, mapy),
-		        map: map
-	    	});
-		}
-}
+function insertMap(i, mapx, mapy){
+	
+	var map = new naver.maps.Map("map"+i, {
+	       center: new naver.maps.Point(mapx, mapy),
+	       zoom: 10
+	});
+	var marker = new naver.maps.Marker({
+       position: new naver.maps.Point(mapx, mapy),
+       map: map
+  	});
+
+};
 </script>
 <title>번개팅</title>
 </head>
