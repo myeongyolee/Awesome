@@ -35,16 +35,65 @@ public class LightningController {
 	private LightningService lightningService;
 	
 	@RequestMapping("/lightningList.do")
-	public void selectlightningList() {}
+	public void selectlightningList(HttpServletRequest request) {
+		//도시목록 가져오기
+		List<String> cityList = lightningService.selectCityList();
+		//분류목록 가져오기
+		List<String> interestingList = lightningService.selectInterestingList();
+		
+		logger.info("cityList={}",cityList);
+		logger.info("interestingList={}",interestingList);
+		
+		request.setAttribute("cityList", cityList);
+		request.setAttribute("interestingList", interestingList);
+	}
+	
+	@RequestMapping("localList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectlocalList(@RequestBody Map cityMap){
+		int city = Integer.parseInt((String)cityMap.get("local"));
+		List<Map<String, Object>> localList = lightningService.selectLocalList(city);
+		
+		return null;
+	}
 	
 	@RequestMapping("/lightningListPage.do")
 	@ResponseBody
 	public List<Map<String, Object>> lightningListPage(@RequestBody Map requestMap){
+		//RequestBody 파라미터 핸들링
+		logger.info("requestMap={}", requestMap);
 		int cPage = Integer.parseInt((String)requestMap.get("cPage"));
-		logger.info("cPage="+cPage);
-		char matchingType = 'L';
+		String title = "";
+		String city = "";
+		String local = "";
+		String nickName = "";
+		String interesting = "";
+		
+		if(requestMap.get("title")!=null) title = (String)requestMap.get("title");
+		
+		if(requestMap.get("city")!=null || !((String)requestMap.get("city")).equals("0")) 
+			city = (String)requestMap.get("city");
+		
+		if(requestMap.get("local")!=null || !((String)requestMap.get("local")).equals("0")) 
+			local = (String)requestMap.get("local");
+		
+		if(requestMap.get("memberId")!=null) nickName = (String)requestMap.get("nickName");
+		
+		if(requestMap.get("interesting")!=null || !((String)requestMap.get("interesting")).equals("0")) 
+			interesting = (String)requestMap.get("interesting");
+		
+		String matchingType = "L";
+		Map<String, String> search = new HashMap();
+		search.put("title", title);
+		search.put("city", city);
+		search.put("local", local);
+		search.put("nickName", nickName);
+		search.put("interesting", interesting);
+		search.put("matchingType", matchingType);
+		//파라미터 핸들링 종료
+		
 		int numPerPage = 5;
-		List<Map<String, Object>> lightningList = lightningService.selectLightningList(matchingType, cPage, numPerPage);
+		List<Map<String, Object>> lightningList = lightningService.selectLightningList(search, cPage, numPerPage);
 		logger.info("lightningList={}", lightningList);
 		logger.info("lightningList.size="+lightningList.size());
 		
@@ -89,13 +138,22 @@ public class LightningController {
 	}
 	
 	@RequestMapping("/lightningWrite.do")
-	public void lightningWrite() {
+	public void lightningWrite(HttpServletRequest request) {
+		//도시목록 가져오기
+		List<String> cityList = lightningService.selectCityList();
+		//분류목록 가져오기
+		List<String> interestingList = lightningService.selectInterestingList();
 		
+		logger.info("cityList={}",cityList);
+		logger.info("interestingList={}",interestingList);
+		
+		request.setAttribute("cityList", cityList);
+		request.setAttribute("interestingList", interestingList);
 	}
 	
 	@RequestMapping("/lightningWriteEnd.do")
-	public String insertLightning(MatchManager matchManager, @RequestParam String lightningEndDate, @RequestParam String lightningEndTime,
-								  HttpSession session, @RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
+	public String insertLightning(MatchManager matchManager, HttpSession session, 
+								@RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
 		//세션에서 memberCode가져오기
 //		session.getAttribute("memberLoggedIn");
 		matchManager.setMemberCode(63);
@@ -130,8 +188,11 @@ public class LightningController {
 			
 		}
 		
+		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기	
+		String lightningEndDate = request.getParameter("lightningEndDate");
+		String lightningEndTime = request.getParameter("lightningEndTime");
 		logger.info("lightningEndDate={}, lightningEndTime={}", lightningEndDate, lightningEndTime);
-		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기		
+		
 		String matchEndDate = lightningEndDate+" "+lightningEndTime;
 		
 		Map<String, Object> map = new HashMap();
