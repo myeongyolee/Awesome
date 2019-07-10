@@ -40,29 +40,6 @@ $(function(){  //페이지가 로드되면 데이터를 가져오고 page를 증
 		}
 	});
 	
-	$("#city>option:selected").not("#defaultCity").change(function(){
-		var param = {local: $("#city>option:selected").val()}
-		var city = JSON.stringify(param);
-		$.ajax({
-			url : '${pageContext.request.contextPath}/lightning/localList.do',
-			dataType: "json",
-			type : 'POST',
-			data : city,
-			contentType: "application/json; charset=UTF-8",
-			success : function(data){
-				$("#local").html("");
-				var html = "";
-				html += '<option id="defaultLocal" disabled selected>지역을 선택해주세요</option>';
-				for(var i=0; i<data.length; i++){
-					html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
-				}
-			},
-			error:function(jqxhr, textStatus, errorThrown){
-				console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
-			}
-		});
-	});
-	
 });
 
 $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
@@ -70,6 +47,31 @@ $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리�
 		getLightningList();
 	}
 });
+
+function selectLocalList(){
+	var param = {city: $("#city>option:selected").val()}
+	var city = JSON.stringify(param);
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/localList.do',
+		dataType: "json",
+		type : 'POST',
+		data : city,
+		contentType: "application/json; charset=UTF-8",
+		success : function(data){
+			$("#local").html("");
+			var html = "";
+			html += '<option id="defaultLocal" disabled selected>지역을 선택해주세요</option>';
+			for(var i=0; i<data.length; i++){
+				html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
+			}
+			$("#local").append(html);
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+};
+
 function serchAjax(){
 	$("#lightningList-content").html("");
 	$("#cPage").val(1);
@@ -130,7 +132,7 @@ function getLightningList(){
 					j++;
 					html += '<li data-target="#carousel" data-slide-to="'+j+'"></li>';
 				}
-				if(data[i].placeId!=null){
+				if(data[i].placeName!=null){
 					j++;
 					html += '<li data-target="#carousel" data-slide-to="'+j+'"></li>';					
 				}
@@ -142,9 +144,9 @@ function getLightningList(){
 				if(data[i].memberCount>=1){
 					html +=	'<div class="carousel-item p-5">';
 					html +=	'<div class="card">';
-					html +=	'<div id="ContentView" class="card-header">'+data[i].joinMemberNickName+'</div></div></div>';
+					html +=	'<div id="ContentView" class="card-header">'+data[i].joinMemberNickName+'<div id="map"></div></div></div></div>';
 				}
-				if(data[i].placeId!=null){
+				if(data[i].placeName!=null){
 					html +=	'<div class="carousel-item p-5">';
 					html +=	'<div class="card">';
 					html +=	'<div id="ContentView" class="card-header">'+data[i].placeName+'</div></div></div>';
@@ -157,6 +159,7 @@ function getLightningList(){
 				html +=	'<span class="sr-only">Next</span></a></div></div>';
 				html +=	'<button type="button" class="btn btn-primary float-right">참가신청</button></div>';
 				$("#lightningList-content").append(html);
+				if(data[i].placeName!=null) insertMap(data[i].placeLat, data[i].placeLng);
 			}
 			$("#cPage").val(Number($("#cPage").val())+1);
 			console.log(cPage);
@@ -166,7 +169,20 @@ function getLightningList(){
 		}
 	}); 
 }
-
+function insertMap(mapx, mapy){
+	$.ajax({
+		url:"${pageContext.request.contextPath}/map/findPosition",
+		success:function(data){
+			var map = new naver.maps.Map("map", {
+		        center: new naver.maps.Point(mapx, mapy),
+		        zoom: 11
+			});
+				var marker = new naver.maps.Marker({
+		        position: new naver.maps.Point(mapx, mapy),
+		        map: map
+	    	});
+		}
+}
 </script>
 <title>번개팅</title>
 </head>
@@ -176,7 +192,7 @@ function getLightningList(){
 	<div id="search-container" class="card p-4 mb-4 bg-white">
 		<ul class="list-group list-group-flush">
 			<li class="list-group-item">
-				<label for="title-search">제목검색</label>
+				<label for="title">제목검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
@@ -187,8 +203,8 @@ function getLightningList(){
 				</div>
 			</li>
 			<li class="list-group-item">
-				<label for="local-search">도시검색</label>
-				<select class="form-control" id="city">
+				<label for="city">도시검색</label>
+				<select class="form-control" id="city" onchange="selectLocalList();">
 					<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
 					<c:forEach items="${cityList}" var="city">
 					<option value=${city.cityCode }>${city.cityName }</option>						
@@ -196,13 +212,13 @@ function getLightningList(){
 				</select>
 			</li>
 			<li class="list-group-item">
-				<label for="local-search">지역검색</label>
+				<label for="local">지역검색</label>
 				<select class="form-control" id="local">
 					<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
 				</select>
 			</li>
 			<li class="list-group-item">
-				<label for="memberId-search">작성자검색</label>
+				<label for="nickName">작성자검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
