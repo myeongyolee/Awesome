@@ -63,5 +63,23 @@ public class MapServiceImpl implements MapService {
 		return mapDAO.checkInfo(memberCode);
 	}
 
+	@Override
+	public int sendFriend(Map<String, String> param) {
+		int result;
+		//친구목록테이블에 입력
+		result = mapDAO.sendFriend(param);
+
+		if(result>0) {
+			String a = param.get("memberCode");
+			param.put("type", "동네친구");
+			param.put("content", a+"님이 동네친구요청을 보냈습니다.");
+			//메세지테이블입력
+			//ex)user(memberCode)님이 누구누구에게(friendCode) 친구요청을 보냈습니다
+			result = mapDAO.sendMessage(param);
+		}
+	
+		return result;
+	}
+
 
 }

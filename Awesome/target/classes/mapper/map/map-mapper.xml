@@ -29,4 +29,13 @@
 	<select id="checkInfo" resultType="string">
 		select friend_open from member where member_code=#{memberCode}
 	</select>
+	
+	<insert id="sendFriend">
+		insert into friend values(#{memberCode}, #{friendCode}, default)
+	</insert>
+	
+	<insert id="sendMessage">
+		insert into ALARM_LOG values(#{memberCode}, #{friendCode}, #{type}, #{content}, sysdate)
+	</insert>
+	
 </mapper>

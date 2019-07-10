@@ -18,5 +18,9 @@ public interface MapDAO {
 
 	String checkInfo(String memberCode);
 
+	int sendFriend(Map<String, String> param);
+
+	int sendMessage(Map<String, String> param);
+
 
 }

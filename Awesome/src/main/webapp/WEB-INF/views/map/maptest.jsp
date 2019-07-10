@@ -18,7 +18,6 @@
 <div id="map" style="width:700px;height:700px;"></div>
 <input type="text" name="memberLoggedIn" value="123" />
 
-
 <script type="text/javascript">
 
 function initMap() {
@@ -65,6 +64,7 @@ function initMap() {
 		    	          '<p>성별:'+data[i].GENDER+'</p>',
 		    	          '<p>자기소개:'+data[i].INTRODUCE+'</p>',
 		    	          '<p>관심분야:'+data[i].INTERESTING_CODE+'</p>',
+		    	          '<button type="button" onclick="sendFriend('+data[i].MEMBER_CODE+','+param+');">친구요청</button>',
 		    	          '</div>'
 		    	      ].join('');
 		    	        
@@ -115,6 +115,13 @@ function initMap() {
 	
 };
 </script>
+
+<script>
+function sendFriend(friend, user){
+	location.href="${pageContext.request.contextPath}/map/sendFriend?memberCode="+user+"&friendCode="+friend;
+}
+</script>
+
 
 </body>
 </html>

@@ -22,9 +22,20 @@ div.primary-div{
 	border:1px solid black;
 	min-height:30px;
 }
-
 button.modal{
 	display: none;
+}
+textarea{
+	border: 5px solid red;
+	border-radius: 10px;
+}
+input#agree{
+	position: relative;
+	left: 400px;
+}
+label[for="agree"]{
+	position: relative;
+	left: 400px;
 }
 </style>
 
@@ -53,8 +64,9 @@ button.modal{
           <div class="modal-body"> 
 			
 			<div class="">
-				<textarea name="" id="" cols="65" rows="3">해당 서비스를 이용하기 위해서는 사용자정보 공개를 허용해야 합니다. 사용 하시겠습니까?</textarea>
-				<input type="radio" name="infocheck" id="agree" value="Y" />
+				<textarea name="" id="" cols="60" rows="3" readonly>해당 서비스를 이용하기 위해서는 사용자정보 공개를 허용해야 합니다. 사용 하시겠습니까?</textarea>
+				<br />
+				<input type="checkbox" name="infocheck" id="agree" value="Y" style="display:inline-block" />
 				<label for="agree">수락</label>
 			</div>
 			
@@ -249,6 +261,7 @@ function findPosition(){
 			
 			var markers = [];
 			var infowindows = [];
+			var HTMLS = [];
 			
 			for(var i=0; i<data.items.length; i++){
 					 
@@ -256,6 +269,7 @@ function findPosition(){
 				 HTML += "<input type='text' name='test"+i+"' value='"+data.items[i].title+"'>";
 				 HTML += "<input type='text' name='test_"+i+"' value='"+data.items[i].roadAddress+"'>";
 				 $("div#infotest").append(HTML);
+				 console.log(HTML);
 				 
 	    	     var marker = new naver.maps.Marker({
 	    	         position: new naver.maps.Point(data.items[i].mapx, data.items[i].mapy),
@@ -283,7 +297,8 @@ function findPosition(){
 	    	    });
 	    	        
 	    	    markers.push(marker);
-	    	    infowindows.push(infowindow);    
+	    	    infowindows.push(infowindow);  
+	    	    HTMLS.push(HTML);
 			}
 			
 			function getClickHandler(seq){
@@ -301,10 +316,9 @@ function findPosition(){
 	        	}
 	        }
 	        
-			for(var i=0; i<markers.length; i++){
+  			for(var i=0; i<markers.length; i++){
     	        naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
-			}
-				
+			} 		
 			
 		},error:function(jqxhr, textStatus, errorThrown){
 			console.log("ajax처리실패"+jqxhr.status);

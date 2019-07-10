@@ -92,6 +92,17 @@ public class MapController {
 		return result;
 	}
 	
+	@RequestMapping("/map/sendFriend")
+	public String sendFriend(@RequestParam("memberCode") String memberCode, @RequestParam("friendCode") String friendCode) {
+		logger.info("sendFriend들어옴");
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("memberCode", memberCode);
+		param.put("friendCode", friendCode);
+		
+		int result = mapService.sendFriend(param);
+		
+		return "/map/maptest";
+	}
 	
 	
 	

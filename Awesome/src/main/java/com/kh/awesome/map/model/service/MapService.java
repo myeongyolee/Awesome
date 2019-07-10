@@ -16,5 +16,7 @@ public interface MapService {
 
 	String checkInfo(String memberCode);
 
+	int sendFriend(Map<String, String> param);
+
 
 }
