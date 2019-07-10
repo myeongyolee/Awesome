@@ -13,6 +13,7 @@
     <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
     <script src="${pageContext.request.contextPath }/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/fullpage.js"></script>
+    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
     
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
@@ -154,8 +155,8 @@
                         <div class="maching-info">
                             <img src="${pageContext.request.contextPath }/resources/images/blue-2564660_1280.jpg" alt="" width="300px" height="504px">
                             <div class="user-id-addr">
-                            	<input type="hidden" id="memberCode" name="memberCode" value="" />
-                            	<input type="hidden" name="receiveMemberCode" id="receiveMemberCode" value=""/>
+                            	<input type="hidden" id="memberCode" name="memberCode" value="1" />
+                            	<input type="hidden" name="receiveMemberCode" id="receiveMemberCode" value="2"/>
                                 <p id="userId">ID</p>
                                 <p id="address">address</p>
                             </div>
@@ -352,25 +353,28 @@
             	var receiveMemberCode = $("#receiveMemberCode").val();
             	var like = selectLike;
             	$.ajax({
-            		url: "${pageContext.request.contextpath}/meeting/changeUser?memberCode="+memberCode+"&receiveMemberCode="+receiveMemberCode
-            					+"&like="+like,
-            		type: "post",
-            		data: memberCode,
+            		url: "${pageContext.request.contextPath}/meeting/changeUser?memberCode="+memberCode+"&receiveMemberCode="+receiveMemberCode+"&like="+like,
+            		type: "get",
             		success:function(data){
+            			console.log(data.html);
             			$(".maching-info").children().remove();
             			
                     	$(".maching-info").append(data.html);
+                    	
+                    	
             		},error: function(jqxhr, textStatus, errorThrown){
             			console.log("ajax 처리 실패:"+jqxhr.status);
     					console.log(errorThrown);
-            		}
+   					}
+           		})
             		
-            	})
-            })
+            	 
+            }
             
             $("#like").on("click",function(){
             	changeUser("Y");
             });
+            
             $("#non-like").on("click",function(){
             	changeUser("N");
             });

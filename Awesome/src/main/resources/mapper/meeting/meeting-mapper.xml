@@ -14,15 +14,17 @@
 			from(select m.member_code as mCode, member_name, renamed_profile, introduce, birthday, road_address
 				from member m left join address a on m.member_code = a.member_code
 				where 1=1
-				<if test="gender = 'M'">
+				<if test="gender == 'M'">
 					and gedner = 'F'
 				</if>
-				<if test="gender = 'F'">
+				<if test="gender == 'F'">
 					and gender = 'M'
 				</if>
 					and blind_date_open = 'Y'
 					and verify = 'M'
-					and not m.member_code on( ${showMember} )
+					<if test="showMember != null and showMember !=''">
+					
+					</if>
 					order by enroll_date)V)V
 		 where rnum = #{rownum}
 	</select>
