@@ -9,6 +9,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- 20190706 23:48  -->
+    <!-- google login 김용빈 -->
+	<meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="620340826519-n25olunhj7rerh7f6fde1umslcfvgquf.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    
     <title>AweSome</title>
     <script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
@@ -26,6 +34,11 @@
 		#top-bar img{display: inline-block; margin:0 14px; left: -50px;}
 		#top-bar span{font-family: 'Nanum Pen Script', cursive; font-size:35px; margin-left:10px;}
 		#login{margin: 9px 0; padding: 7px 15px; font-size: 16px; position: fixed; right: 50px; width:90px;  z-index: 999; display: none;}
+		#loginAfter{margin: 9px 0; padding: 7px 15px; font-size: 16px; position: fixed; right: 100px; width:90px;  z-index: 999; display: none;
+					display : flex; 
+               		flex-direction : row;
+            		justify-content : space-between; 
+					}
 		header #content-container{min-height: 500px;  display: none; }
 		header #content-container #index-image{position: relative; text-align: center; background-color: rgb(250, 232, 234); }
 		header #content-container #index-image img{opacity: 0.8; width:1024px; height: 660px;}
@@ -49,7 +62,19 @@
 </head>
 <body>
     <header>
-        <button type="button" class="btn btn-primary" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</button>
+    
+    <!-- 20190708 로그인 분기처리 :김용빈-->
+    	<c:if test="${sessionScope.memberLoggedIn==null }">
+        	<button type="button" class="btn btn-primary" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</button>
+        </c:if>
+   <!-- 20190711 09:32 로그아웃,내정보 :김용빈-->
+        <c:if test="${sessionScope.memberLoggedIn!=null }">
+        	<div id="loginAfter">
+	        	<button type="button" class="btn btn-primary" id="myInfo">My Info</button>
+	        	<button type="button" class="btn btn-primary" id="logOut">LogOut</button>
+        	</div>	
+        </c:if>
+        
         <div class="video">
             <video autoplay loop muted >
                 <source src="${pageContext.request.contextPath}/resources/video/Circle - 17445.mp4" type="video/mp4" />
@@ -72,8 +97,22 @@
                     <img src="${pageContext.request.contextPath}/resources/images/workplace-1245776_1280.jpg" >
                 </div>
                 <div id="pTag">
-                    <p> &nbsp;&nbsp;&nbsp;Awesome</p>
-                    <button type="button" class="btn btn-primary mybutton-css" id="signUp" >Sign up</button>
+                    <p> &nbsp;&nbsp;&nbsp;Awesome ${OAuth}</p>
+                    
+                   <!-- 20190705 12:53 김용빈  -->
+                   <!-- 회원가입 모달 추가 -->
+                       <!-- 20190708 로그인 분기처리 :김용빈-->
+                    <c:if test="${param.OAuth eq 'NoMember'}">
+            			<script>$(function(){
+            							alert("${param.msg}");
+            							$("#signUp").trigger("click");
+            							});</script>
+            		</c:if>
+    				<c:if test="${sessionScope.memberLoggedIn==null }">
+                    <button type="button" class="btn btn-primary mybutton-css" id="signUp" 
+                    			data-toggle="modal"
+	    						data-target="#memberEnrollModal">Sign up</button>
+	    			</c:if>
                 </div>
             </div>
 
@@ -128,7 +167,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="" method="post">
+            <form action="${pageContext.request.contextPath}/member/memberLogin.do" method="post">
             <div class="modal-body">
                 <span>아이디</span>
                 <input type="text" class="form-control" name="memberId" id="memberId" required>  <br>
@@ -136,28 +175,140 @@
                 <input type="password" class="form-control" name="password" id="password" required>  <br>
                 <a href="#">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br>
                 <button type="button">nav</button> 
-                <button type="button">gog+</button>
-
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary">로그인</button>
+                <button type="submit" class="btn btn-primary">로그인</button>
             </div>
         </form>
+                <!-- 20190706 23:48  -->
+                <!-- google login 김용빈 -->
+  				<a href="${google_url}"><button id="btnJoinGoogle" class="btn btn-primary btn-round"
+                                style="width: 100%">
+                                <i class="fa fa-google" aria-hidden="true"></i>Google Login
+                            </button></a>
+                <!-- 20190709 09:36  -->
+                <!-- naver login 김용빈 -->             
+	                <div id="naver_id_login" style="text-align:center"><a href="${naver_url}">
+					<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a></div>
+					<br>   
+                            
+<!--                 <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">Sign in</div>
+                <div class="g-signin2" data-onsuccess="signOut" data-theme="dark">Sign Out</div>
+                
+                <a href="#" onclick="signOut();">Sign out</a> -->
           </div>
         </div>
       </div>
             
-            
-            
-            
-            
+        <!-- 20190705 12:54 김용빈  -->
+		<!-- 회원가입 모달 추가 -->
+		    <style>
+				#modalBody{ 
+					display : flex; 
+					flex-direction : row;
+					justify-content : space-between; 
+					align-items : center;      
+					align-content : center;       
+					max-width : 100%;     
+				}
+				
+					#modalBody #modalList{
+						flex : 1 1 0; 
+						margin : auto; 
+						
+						display : flex; 
+						flex-direction : column;
+						justify-content : space-between; 
+					}
+						#modalBody #modalList .btn{
+							flex : 1 1 0; 
+							margin : auto;
+							margin-top : 1%; 
+							width:100%;
+						}
+					
+					
+					
+					#modalBody .modal-body{
+						flex : 1 1 0; 
+						margin : auto; 
+					}
+			</style> 
+			
+	    <div class="modal fade" id="memberEnrollModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	      <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	        
+	          
+	        </div>
+	      </div>
+	    </div>
+	 <!-- 회원가입 모달 끝 -->
             
     </header>
 
-
-
     <script>
+
+    //20190708 12:48
+    //구글 인증 인,아웃
+/*     function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+    };
+    
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
+        auth2.disconnect();
+      } */
+    
+    <!-- 20190705 12:54 김용빈  -->
+	<!-- 회원가입 모달 추가 -->
+		$("#signUp").on("click",function(){
+			$.ajax({ 
+				 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
+				 data:"memberId=${param.memberId}",
+				success : function(data){
+					$("#memberEnrollModal .modal-content").empty();
+					$("#memberEnrollModal .modal-content").append(data);
+				},
+				error: function(jqxhr, textStatus, errorThrown){
+					console.log("ajax처리실패! : "+jqxhr.status);
+					console.log(jqxhr);
+					console.log(textStatus);
+					console.log(errorThrown);
+				}
+			});
+	    });
+	    
+	<!--20190711 09:34 김용빈-->
+		$("#logOut").on("click",function(){
+			
+			var logout=confirm("정말로 로그아웃?");
+			
+			if(logout){
+				location.href='${pageContext.request.contextPath}/member/memberLogout.do';
+			}
+	    });
+	    
+	    
+	    
+	    
+	    
             $(function(){
                 $('.bxslider').bxSlider({
                     auto: true,
@@ -180,10 +331,11 @@
                     .css("left",$("video").innerWidth()/2 -95)
                     .fadeIn(3000,function(){
                         $("div.video").remove();
-                        $("#top-bar").css("display","inline-block")
-                        $("#content-container").fadeIn(1500)
-                        $("#login").css("top","0px").css("display","block")
-                        $("html").css("overflow-y","auto")
+                        $("#top-bar").css("display","inline-block");
+                        $("#content-container").fadeIn(1500);
+                        $("#login").css("top","0px").css("display","block");
+                        $("#loginAfter").css("top","0px").css("display");
+                        $("html").css("overflow-y","auto");
                     })
                 
                     

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="member">
+  
+  	<insert id="insertMember" parameterType="member">
+		insert into member
+		 values(
+				member_seq.nextval, 
+				#{memberId},
+				#{nickName}, 
+				#{password},
+				#{memberName},
+				#{birthday},
+                #{phone},
+                #{gender},
+                #{profile},
+                #{renamedProfile},
+				#{blindDateOpen},
+                #{friendOpen},
+				#{searchOpen},
+				#{introduce},
+				#{verify},
+				sysdate
+			)
+			
+		<selectKey keyProperty="memberCode" resultType="_int"
+					order="AFTER">
+			select member_seq.currval from dual
+		</selectKey>
+  	</insert>
+  	
+	  <select id="selectOneMember" parameterType="member" resultType="member">
+	  	select * from member
+	  	<trim prefix="where" suffixOverrides="and">
+	  		<if test="memberId != null and memberId != ''">
+				member_id = #{memberId}
+			</if>
+			<if test="nickName != null and nickName != ''">
+				nickname = #{nickName}
+			</if>
+		</trim>
+	  </select>
+	  
+	  <select id="selectSms" parameterType="map" resultType="_int">
+	  	select count(*) from smsauth where smsauth_jsessionid=#{jsessionid}
+	  </select>
+	  
+	  <insert id="insertSms" parameterType="map">
+	  	insert into smsauth values(seq_smsauth.nextval,#{jsessionid},#{sms})
+	  </insert>
+	  
+	  <update id="updateSms" parameterType="map">
+	  	update smsauth set smsauth_sms=#{sms} where smsauth_jsessionid=#{jsessionid}
+	  </update>
+	  
+	  <update id="deleteSms" parameterType="map">
+	  	delete from smsauth where smsauth_jsessionid=#{jsessionid}
+	  </update>
+	  
+  	<select id="chkSms" parameterType="map" resultType="_int">
+	  	select count(*) from smsauth where smsauth_jsessionid=#{jsessionid} and smsauth_sms=#{sms}
+	  </select>
+  
+  </mapper>
