@@ -118,23 +118,23 @@ function getLightningList(){
 				var html = "";
 				html +=	'<div id="lightning" class="card">';
 				html +=	'<div id="lightningTest-head" class="card-header">';
-				html +=	'<img class="card-img-top" src="" alt="Card image cap">';
+				html +=	'<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/match/'+data[i].matchRenamedImg+'" alt="Card image cap">';
 				html +=	'<div class="card-body" data-toggle="collapse" data-target="#'+data[i].matchNo+'" aria-expanded="true" aria-controls="lightningTest-body">';
 				html +=	'<h5 class="card-title"> '+data[i].matchTitle+' </h5></div></div>';
 				html +=	'<ul class="list-group list-group-flush">';
 				html +=	'<li class="list-group-item"> '+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+'</li>';
 				html +=	'<li class="list-group-item"> 작성자:'+data[i].nickName+' | 참여회원수: '+(Number(data[i].memberCount)+1)+' </li></ul>';
 				html +=	'<div id="'+data[i].matchNo+'" class="collapse container" aria-labelledby="lightningTest-head" data-parent="#lightning">';
-				html +=	'<div id="carousel" class="carousel slide bg-secondary mb-3" data-ride="carousel">';
+				html +=	'<div id="carousel'+data[i].matchNo+'" class="carousel slide bg-secondary mb-3" data-ride="carousel">';
 				html +=	'<ol id="indicators" class="carousel-indicators">';
-				html +=	'<li data-target="#carousel" data-slide-to="'+j+'" class="active"></li>';
+				html +=	'<li data-target="#carousel'+data[i].matchNo+'" data-slide-to="'+j+'" class="active"></li>';
 				if(data[i].memberCount>=1){
 					j++;
-					html += '<li data-target="#carousel" data-slide-to="'+j+'"></li>';
+					html += '<li data-target="#carousel'+data[i].matchNo+'" data-slide-to="'+j+'"></li>';
 				}
 				if(data[i].placeName!=null){
 					j++;
-					html += '<li data-target="#carousel" data-slide-to="'+j+'"></li>';					
+					html += '<li data-target="#carousel'+data[i].matchNo+'" data-slide-to="'+j+'"></li>';					
 				}
 				html += '</ol>'
 				html +=	'<div class="carousel-inner">';
@@ -149,12 +149,13 @@ function getLightningList(){
 				if(data[i].placeName!=null){
 					html +=	'<div class="carousel-item p-5">';
 					html +=	'<div class="card">';
-					html +=	'<div id="ContentView" class="card-header">'+data[i].placeName+'<div id="map'+i+'" class="myMap"></div></div></div></div>';
+					html +=	'<div id="ContentView" class="card-header">'+data[i].placeName+'<div id="map_'+i+'" class="myMap"></div></div></div></div>';
+					console.log(i);
 				}
-				html +=	'<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">';
+				html +=	'<a class="carousel-control-prev" href="#carousel'+data[i].matchNo+'" role="button" data-slide="prev">';
 				html +=	'<span class="carousel-control-prev-icon" aria-hidden="false"></span>';
 				html +=	'<span class="sr-only">Previous</span></a>';
-				html +=	'<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">';
+				html +=	'<a class="carousel-control-next" href="#carousel'+data[i].matchNo+'" role="button" data-slide="next">';
 				html +=	'<span class="carousel-control-next-icon" aria-hidden="false"></span>';
 				html +=	'<span class="sr-only">Next</span></a></div></div>';
 				html +=	'<button type="button" class="btn btn-primary float-right">참가신청</button></div>';
@@ -169,7 +170,7 @@ function getLightningList(){
 	}); 
 }
 function insertMap(i, mapx, mapy){
-	var id = $("#map"+i).attr('id');
+	var id = $("#map_"+i).attr('id');
 	console.log(mapx,mapy);
 	var map = new naver.maps.Map(id, {
         center: new naver.maps.Point(mapx, mapy),
