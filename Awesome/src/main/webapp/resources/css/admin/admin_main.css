@@ -1,15 +1,15 @@
 @charset "UTF-8";
-
+/* 
 div#admin-board{ border: solid red 3px;
 position: relative;
 background:/resources/images/board_image/beach.jpg cover;
 
-}
+} */
 
 div#main_board{
 	/* border: solid green 5px; */
 	/* position: relative; */
-	width:1000px;
+	width:900px;
 	margin-left:30px;
 	float:left;
 }
@@ -22,6 +22,7 @@ body {font-family: "Lato", sans-serif;}
   width: 5%;
   height: 300px;
   margin-left:0;
+  padding:0;
   position:relative; 
 }
 
@@ -72,14 +73,14 @@ body {font-family: "Lato", sans-serif;}
 	display:flex-box;	
 }
 /* Change background color of buttons on hover */
-.tab button.tablinks:hover{
+/* .tab button.tablinks:hover{
   background-color: #ddd;
   width:200%;
 }
 
 .tab button.tablinks:hover .text_{
   display:inline-block; 
-} 
+}  */
 
 /* Create an active/current "tab button" class */
 .tab button.active {

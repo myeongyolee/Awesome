@@ -57,11 +57,10 @@ public class BoardController {
 	//업무로직처리
 	//1. 현재페이지 컨텐츠 구하기
 	List<Map<String,String>> list = boardService.selectBoardList(cPage, numPerPage);
-	logger.info("list@Controller===" + list);
+	
 	
 	//2. 전체컨텐츠수 구하기
 	int totalContents = boardService.selectBoardTotalContents();
-	logger.info("전체 컨텐츠 수 구하기@Controller===" + totalContents);
 	
 	mav.addObject("list",list);
 	mav.addObject("totalContents",totalContents);

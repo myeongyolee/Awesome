@@ -45,14 +45,18 @@
 	<div id="Home" class="tabcontent">
 		
 		<div id="today_count">
-	  <h3>오늘의 접속자 수입니다.</h3>
-	  <p>접속자 통계.</p>
+	  <h3>통계</h3>
+	  <p>오늘의 통계</p> 
 		</div>
 	</div>
-	
   </div>
-
  </div>
 	<script>
+	/* $(function(){
+		$(".tab button.tablinks").hover(function(){
+			$(".tab button.tablinks").css({"background-color":"white", "width":"200%"});			
+			$("_text").css({"display":"inline-block")}.toggle();
+		});
+	}); */
 </script>
    

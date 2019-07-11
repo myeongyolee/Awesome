@@ -25,23 +25,24 @@ public class AdminController {
 	//MainPage 요청
 	@RequestMapping("/adminMain.do")
 	public void adminMain() {
-		if(logger.isDebugEnabled())
-			logger.debug("메인 페이지 요청");
+		
 	}
 	
-	//회원 정보 모두 보기 
-	@RequestMapping("/manageMembers")
-	public void manageMembers() {
+	/*public void manageMembers() {
 		if(logger.isDebugEnabled())
 			logger.debug("멤버 페이지 요청");
 	}
-	/*public ModelAndView selectAllMembers(
+*/	
+	//회원 정보 모두 보기 
+	@RequestMapping("/manageMembers")
+	public ModelAndView selectAllMembers(
 			@RequestParam(value = "cPage", required=false
 			, defaultValue = "1") int cPage) {
 		if(logger.isDebugEnabled())
-			logger.debug("멤버관리 페이지 요청");*/
-		/*ModelAndView mav = new ModelAndView();
-		//한페이지당 10명 데리고 오기
+			logger.debug("멤버관리 페이지 요청");
+		
+		ModelAndView mav = new ModelAndView();
+		//한페이지당 10명씩 데리고 오기
 		int numPerPage = 10;
 		
 		List<Map<String, String>> list =
@@ -58,8 +59,5 @@ public class AdminController {
 		mav.addObject("cPage", cPage);
 		
 		return mav;
-	}*/
-	
-	
-	
+	}
 }

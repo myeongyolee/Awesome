@@ -64,15 +64,28 @@
       <th scope="col">검색공개</th>
       <th scope="col">자기소개</th>
       <th scope="col">가입일</th>
+      <th scope="col">별명</th>
     </tr>
   </thead>
   <tbody>
-    <tr id="member_body">
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+    <c:if test="not empty list">
+    	<c:forEach items="list" var="l">
+		    <tr id="member_body">
+		      <td>${l.memberCode }</td>
+		      <td>${l.memberId }</td>
+		      <td>${l.memberName }</td>
+		      <td>${l.birthday }</td>
+		      <td>${l.phone }</td>
+		      <td>${l.gender }</td>
+		      <td>${l.blindDateOpen }</td>
+		      <td>${l.friendOpen }</td>
+		      <td>${l.searchOpen }</td>
+		      <td>${l.introduce }</td>
+		      <td>${l.enrollDate }</td>
+		      <td>${l.email }</td>
+		    </tr>
+		 </c:forEach>
+    </c:if>
   </tbody>
 </table>
 		</div>

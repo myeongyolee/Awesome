@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
 #qBoard_body:hover{
-	background-color:red;
+	background-color:#fbe3fc;
+}
+#locked{
+	width:13px;
+	height:13px;
 }
