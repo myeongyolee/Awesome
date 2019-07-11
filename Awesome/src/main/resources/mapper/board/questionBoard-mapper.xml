@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="qBoard">
+	 <resultMap type = "map" id="qBoard">
+	</resultMap> 
+	<select id="selectBoardList" resultType = "qBoard">
+		select question_no, member_code, question_title, question_original_filename, question_renamed_filename, question_date,
+		 question_open from question_board order by question_no
+		
+	</select>
+
+	<select id="selectBoardTotalContents" resultType = "_int">
+		select count(*) from question_board
+	</select>
+	
+	<select id="selectOneQuestion" resultType= "qBoard">
+		select * from question_board 
+		where question_no = #{question_no} 
+	</select>
+	
+	<insert id="insertBoard" parameterType = "qBoard">
+	insert into question_board(question_no, member_code, 
+	question_title, question_content, question_original_filename, question_renamed_filename
+	, question_date)
+	values(seq_question_board.nextval, #{memberCode}, #{questionTitle}, #{questionContent}, #{questionOriginalFilename}, #{questionRenamedFilename}
+	, sysdate)
+	</insert>
+	
+	
+</mapper>

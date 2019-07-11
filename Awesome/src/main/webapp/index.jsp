@@ -17,7 +17,7 @@
  onclick="location.href='${pageContext.request.contextPath}/questionBoard/questionBoard.do'">질문 게시판 보기</button>
 			 
  <button type="button" class="btn btn-outline-success"
- onclick="location.href='${pageContext.request.contextPath}/admin/adminMain.do'">보기</button>
+ onclick="location.href='${pageContext.request.contextPath}/admin/adminMain.do'">관리자 메인 페이지</button>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 
