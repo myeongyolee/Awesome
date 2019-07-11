@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<<<<<<< HEAD
 
 
 <%
@@ -32,5 +33,33 @@
 		<a href="${pageContext.request.contextPath }">Home</a>
 	</div>
 	
+=======
+<%
+	//Httpstatus 에러코드로 넘어온 경우, ex)404
+	//exception 내장객체가 null이다.
+	String status = String.valueOf(response.getStatus());
+
+	String msg = exception != null?exception.getMessage():status;
+%>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Error - spring</title>
+	
+<style>
+#error-container{
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<div id="error-container">
+		<h1>Error</h1>
+		
+		<h2 style="color:red;"><%=msg %></h2>
+		<a href="${pageContext.request.contextPath }">Home</a>
+	</div>
+>>>>>>> refs/remotes/origin/jinwoo
 </body>
 </html>
