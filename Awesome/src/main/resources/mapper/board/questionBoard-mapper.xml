@@ -21,9 +21,13 @@
 	<insert id="insertBoard" parameterType = "qBoard">
 	insert into question_board(question_no, member_code, 
 	question_title, question_content, question_original_filename, question_renamed_filename
-	, question_date)
+	, question_date, question_open)
 	values(seq_question_board.nextval, #{memberCode}, #{questionTitle}, #{questionContent}, #{questionOriginalFilename}, #{questionRenamedFilename}
-	, sysdate)
+	, sysdate, #{questionOpen})
+	<selectKey keyProperty = "questionNo" resultType = "_int" order ="AFTER">
+	 select seq_question_board.currval from dual
+	 
+	</selectKey>
 	</insert>
 	
 	

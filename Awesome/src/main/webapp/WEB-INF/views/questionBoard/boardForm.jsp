@@ -41,9 +41,9 @@ $(function(){
 	$("p1").html("공개 질문입니다. ");		
 	$("#openCheck").on("click", function(){
 		$("p1").html("비공개 질문입니다. ");		
-			$("#openCheck").on("click", function(){
-				$("p1").html("공개 질문입니다. ");		
-			});	
+			/* $("#openCheck").on("click", function(){
+				$("p1").toggle("공개 질문입니다. ");		
+			}); */	
 		});	
 });
 </script>
@@ -77,7 +77,7 @@ $(function(){
 	        <input class="form-check-input" type="checkbox" value='Y'
 	         id="openCheck"
 	        name="questionOpen">
-	        <label class="form-check-label" for="gridCheck1">
+	        <label class="form-check-label" for="openCheck">
 	          	<p1></p1>
 	        </label>
 	      </div>
