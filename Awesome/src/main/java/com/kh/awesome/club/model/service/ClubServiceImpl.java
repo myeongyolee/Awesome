@@ -46,6 +46,11 @@ public class ClubServiceImpl implements ClubService{
 		return clubDAO.selectOneClub(clubCode);
 	}
 
+	@Override
+	public String searchClubAdmin(int memberCode) {
+		return clubDAO.searchClubAdmin(memberCode);
+	}
+
 	
 	
 

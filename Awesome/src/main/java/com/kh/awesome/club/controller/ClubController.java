@@ -3,8 +3,8 @@ package com.kh.awesome.club.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,13 +22,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.club.model.service.ClubService;
 import com.kh.awesome.club.model.vo.Club;
-import com.kh.awesome.club.model.vo.Clubmember;
 
 
 @Controller
 @RequestMapping("/club")
 public class ClubController {
 	Logger logger = LoggerFactory.getLogger(getClass());
+	
+	//세션에서 memberCode가져오기
+//	session.getAttribute("memberLoggedIn");
 	
 	@Autowired
 	private ClubService clubService;
@@ -62,10 +64,9 @@ public class ClubController {
 	@RequestMapping("/clubMakeEnd.do")
 	@Transactional
 	public String clubMakeEnd(Club club,HttpServletRequest request,HttpSession session, @RequestParam("uploadProfile") MultipartFile uploadProfile) {
-		//세션에서 memberCode가져오기
-//		session.getAttribute("memberLoggedIn");
-		
-		
+	
+		//세션에서 memberCode가져온거써야함
+//		session.getAttribute("memberLoggedIn");	
 		club.setInterestingCode(Integer.parseInt(request.getParameter("interestingCode")));
 		club.setMemberCode(1);
 		club.setClubName(request.getParameter("clubName"));
@@ -98,7 +99,6 @@ public class ClubController {
 		
 		int result = clubService.insertClub(club);
 		
-		
 		if(result==1) {
 			result = clubService.insertClubAdmin(club);
 		}
@@ -120,10 +120,28 @@ public class ClubController {
 		logger.debug("클럽 상세보기 요청!");
 		System.out.println("클럽상세보기페이지");
 		
+		//club테이블+club_member테이블
 		Club club = clubService.selectOneClub(clubCode);
+		int clubmembercount = club.getClubMember().size();
+		String clubadmin= clubService.searchClubAdmin(club.getMemberCode());
+		System.out.println("^^^^^^"+clubmembercount+" "+clubadmin);
+		
+		//club_content테이블
+		
+		
+		//meeting_photo테이블
 		
 		model.addAttribute("club",club);
+		model.addAttribute("clubadmin",clubadmin);
+		model.addAttribute("clubmembercount",clubmembercount);
 		
-		//model.addAttribute("board",b);
+		
 	} 
+	
+	
+	@RequestMapping("/clubcontentMake.do")
+	public void clubcontentEnroll() {
+	
+	} 
+	
 }

@@ -20,4 +20,6 @@ public interface ClubDAO {
 
 	Club selectOneClub(int clubCode);
 
+	String searchClubAdmin(int memberCode);
+
 }

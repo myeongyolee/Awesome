@@ -38,14 +38,14 @@ function loadProfile(f){
 
 
 
-
+<section>
 
 	<h2>클럽개설</h2>
 		<div id="form-container" class="card mx-auto">
 		<form action="${pageContext.request.contextPath}/club/clubMakeEnd.do" method="post" enctype="multipart/form-data">
 			<div class="form-row">
 				<div class="form-group col-md-6">
-					<img src="${pageContext.request.contextPath}/resources/images/log.jpg" id="img-viewer" class="img-thumbnail" >
+					<img src="${pageContext.request.contextPath}/resources/images/log.jpg" id="img-viewer" class="img-thumbnail" style="cursor:pointer">
 					<input type="file" name="uploadProfile" id="uploadProfile" style="display:none;" onchange="loadProfile(this);"/>
 					
 				</div>
@@ -132,7 +132,7 @@ function loadProfile(f){
   			</div></div>
 
 			
-			<button  type="button" class="btn btn-primary float-right">이전</button>
+			<button  type="button" class="btn btn-primary float-right" value="BACK" onclick="history.go(-1)">이전</button>
 			<button  type="submit" class="btn btn-primary float-right">등록</button>
 			
 			<div id="hidden-container">
@@ -143,4 +143,5 @@ function loadProfile(f){
 			</div>
 		</form>
 	</div>
+</section>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

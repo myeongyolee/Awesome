@@ -12,6 +12,10 @@ div#container	{}
 /********** club content **********/
 label{display:block; }​
 
+div.clubview-info-css{
+	border: solid 1px black;
+}
+
 
 
 

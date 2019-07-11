@@ -16,6 +16,14 @@ $(function(){
 	});
 });
 </script>
+<style>
+.clubslist:hover
+{
+    background-color: #F8E0E6;
+    cursor:pointer;
+}
+
+</style>
 
 <section>
 	
@@ -31,10 +39,10 @@ $(function(){
 			
 			</tr>
 		
-		<c:if test="${not empty clubList}">
 		
+			<c:if test="${not empty clubList}">
 			<c:forEach items="${clubList }" var="club">
-					
+				<table id="${club.clubCode }" class="clubslist">	
 					<tr no="${club.clubCode}">
 					<td rowspan="3" colspan="1">
 						<c:if test="${empty club.mainrenamedFilename}">
@@ -53,7 +61,7 @@ $(function(){
 					<tr no="${club.clubCode}">					
 						<td>클럽한줄소개:${club.clubsimpleInfo}</td>
 					</tr>
-					
+					</table>
 					<br>
 			</c:forEach>
 						

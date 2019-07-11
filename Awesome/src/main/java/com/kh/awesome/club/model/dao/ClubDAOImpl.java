@@ -45,7 +45,12 @@ public class ClubDAOImpl implements ClubDAO {
 
 	@Override
 	public Club selectOneClub(int clubCode) {
-		return sqlSession.selectOne("selectOneClub",clubCode);
+		return sqlSession.selectOne("club.selectOneClub",clubCode);
+	}
+
+	@Override
+	public String searchClubAdmin(int memberCode) {
+		return sqlSession.selectOne("searchClubAdmin",memberCode);
 	}
 
 	

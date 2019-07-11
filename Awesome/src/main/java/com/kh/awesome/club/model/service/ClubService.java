@@ -20,4 +20,6 @@ public interface ClubService {
 
 	Club selectOneClub(int clubCode);
 
+	String searchClubAdmin(int memberCode);
+
 }
