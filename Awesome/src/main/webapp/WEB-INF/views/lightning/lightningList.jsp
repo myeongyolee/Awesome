@@ -170,11 +170,26 @@ function getLightningList(){
 }
 function insertMap(i, mapx, mapy){
 	var id = $("#map"+i).attr('id');
-	
+	console.log(mapx,mapy);
 	var map = new naver.maps.Map(id, {
-	       center: new naver.maps.Point(mapx, mapy),
-	       zoom: 10
-	});
+        center: new naver.maps.Point(mapx, mapy),
+        zoom: 12,
+        mapTypes: new naver.maps.MapTypeRegistry({
+            'normal': naver.maps.NaverMapTypeOption.getNormalMap({
+                projection: naver.maps.TM128Coord
+            }),
+            'terrain': naver.maps.NaverMapTypeOption.getTerrainMap({
+                projection: naver.maps.TM128Coord
+            }),
+            'satellite': naver.maps.NaverMapTypeOption.getSatelliteMap({
+                projection: naver.maps.TM128Coord
+            }),
+            'hybrid': naver.maps.NaverMapTypeOption.getHybridMap({
+                projection: naver.maps.TM128Coord
+            })
+        }),
+        mapTypeControl: true
+    });
 	var marker = new naver.maps.Marker({
        position: new naver.maps.Point(mapx, mapy),
        map: map
