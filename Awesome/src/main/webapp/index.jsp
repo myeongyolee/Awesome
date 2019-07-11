@@ -1,21 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-<<<<<<< HEAD
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="awesome 인덱스" name="pageTitle"/>
-</jsp:include>
-test
-인덱스페이지
-
-<button onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'">lightning.do</button>
-
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-
-=======
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -55,9 +38,10 @@ label[for="agree"]{
 	left: 400px;
 }
 </style>
-
-</head>
-<body>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="awesome 인덱스" name="pageTitle"/>
+</jsp:include>
+<button onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'">lightning.do</button>
 
 <input type="button" value="동네친구 지도 확인" onclick="searchMap();" />
 <input type="button" value="동네친구찾기" onclick="modaltest();"/>
@@ -597,7 +581,4 @@ function test10(num){
 
 </script>
 
-</body>
-</html>
-
->>>>>>> refs/remotes/origin/jinwoo
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
