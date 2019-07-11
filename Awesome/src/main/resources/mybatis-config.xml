@@ -11,12 +11,27 @@
   </settings>
   
   <typeAliases>
+<<<<<<< HEAD
 
 	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
 
 	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="stringToLongTypeHandler"/>  
   </typeAliases>
+=======
+	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>	
+	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
+	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringLongTypeHandler"/>
+  </typeAliases> 
+  
+   <typeHandlers>
+		<typeHandler handler="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" javaType="String" 
+					jdbcType="LONGVARCHAR" />
+	</typeHandlers>
+	
+ 
+  
+>>>>>>> refs/remotes/origin/sora
   
 	<!-- <typeHandlers>
 		<typeHandler handler="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" javaType="String" 

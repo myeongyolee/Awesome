@@ -48,6 +48,15 @@ label[for="agree"]{
 <input type="button" value="동네친구찾기MODAL" class="modal" name="modal" data-toggle="modal" data-target="#searchfriend" /> 
 <input type="text" name="modalmember" value="124"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
 
+<button type="button" class="btn btn-outline-success"
+ onclick="location.href='${pageContext.request.contextPath}/questionBoard/boardForm.do'">질문 작성</button>
+ <button type="button" class="btn btn-outline-success"
+ onclick="location.href='${pageContext.request.contextPath}/questionBoard/questionBoard.do'">질문 게시판 보기</button>
+			 
+ <button type="button" class="btn btn-outline-success"
+ onclick="location.href='${pageContext.request.contextPath}/admin/adminMain.do'">관리자 메인 페이지</button>
+
+
 	<!-- 동네친구찾기버튼 눌렀을 때, 나타나는 MODAL -->
     <div class="modal fade" id="searchfriend" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
