@@ -82,7 +82,6 @@ function serchAjax(){
 };
 
 function getLightningList(){
-	console.log($("#cPage").val());
 	var param = {cPage: $("#cPage").val()};
 	
 	var check = $(":checkbox:checked");
@@ -106,7 +105,6 @@ function getLightningList(){
 	if($("#interesting>option:selected").not("#defaultInteresting")) param.interesting = $("#interesting>option:selected").val();
 	
 	var str = JSON.stringify(param);
-	console.log(str);
 	
 	$.ajax({
 		url : '${pageContext.request.contextPath}/lightning/lightningListPage.do',
@@ -115,7 +113,6 @@ function getLightningList(){
 		data : str,
 		contentType: "application/json; charset=UTF-8",
 		success : function(data) {
-			console.log(data);
 			for(var i=0; i<data.length; i++){
 				var j = 0;
 				var html = "";
@@ -165,7 +162,6 @@ function getLightningList(){
 				if(data[i].placeName!=null) insertMap(i, data[i].placeLat, data[i].placeLng);
 			}
 			$("#cPage").val(Number($("#cPage").val())+1);
-			console.log(cPage);
 		},
 		error:function(jqxhr, textStatus, errorThrown){
 			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
@@ -173,8 +169,9 @@ function getLightningList(){
 	}); 
 }
 function insertMap(i, mapx, mapy){
+	var id = $("#map"+i).attr('id');
 	
-	var map = new naver.maps.Map("map"+i, {
+	var map = new naver.maps.Map(id, {
 	       center: new naver.maps.Point(mapx, mapy),
 	       zoom: 10
 	});
