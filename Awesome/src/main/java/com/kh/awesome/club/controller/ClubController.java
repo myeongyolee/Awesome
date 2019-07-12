@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.awesome.club.model.service.ClubService;
 import com.kh.awesome.club.model.vo.Club;
 import com.kh.awesome.club.model.vo.Clubcontent;
+import com.kh.awesome.lightning.model.service.LightningService;
 
 
 @Controller

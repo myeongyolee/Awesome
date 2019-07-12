@@ -15,6 +15,7 @@
 		<result column="place_lng" property="placeLng"/>
 		<result column="matching_type" property="matchingType"/>
 		<result column="match_end_date" property="matchEndDate"/>
+		<result column="match_renamed_img" property="matchRenamedImg"/>
 		<result column="nickname" property="nickName"/>
 		<result column="local_name" property="localName"/>
 		<result column="city_name" property="cityName"/>
@@ -45,7 +46,7 @@
 	
 	<select id="selectLightningList" resultMap="matchManagerMap">
 		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_name, M.place_lat, 
-			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date,
+			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date, M.match_renamed_img,
 			   A.nickname, 
 			   I.interesting_name, 
 			   L.local_name ,

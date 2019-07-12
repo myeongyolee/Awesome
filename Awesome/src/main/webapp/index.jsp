@@ -41,6 +41,29 @@ label[for="agree"]{
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="awesome 인덱스" name="pageTitle"/>
 </jsp:include>
+<script>
+function city_local_info(){
+	/* var param = {};
+	param.key = '82C91404-6AF0-3A92-8D77-CB8CCEE31F42';
+	param.domain = 'http://localhost/awesome/';
+	
+	var jsonParam = JSON.stringify(param); */
+	
+	$.ajax({
+		url : 'http://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADSIGG_INFO&key=C5041472-87EC-3778-B5A6-95598389672F&domain=',
+		dataType: "json",
+		contentType: "application/json; charset=UTF-8",
+		success: function(data){
+			console.log(data);
+		},error: function(){
+			
+		}
+	});
+};
+</script>
+
+<button onclick="city_local_info();">도시정보</button>
+
 <button onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'">lightning.do</button>
 
 <input type="button" value="동네친구 지도 확인" onclick="searchMap();" />
