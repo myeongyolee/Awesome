@@ -38,7 +38,7 @@ function loadProfile(f){
 
 
 
-<section>
+
 
 	<h2>클럽개설</h2>
 		<div id="form-container" class="card mx-auto">
@@ -143,5 +143,5 @@ function loadProfile(f){
 			</div>
 		</form>
 	</div>
-</section>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

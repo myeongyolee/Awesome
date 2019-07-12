@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.club.model.service.ClubService;
 import com.kh.awesome.club.model.vo.Club;
+import com.kh.awesome.club.model.vo.Clubcontent;
 
 
 @Controller
@@ -116,32 +116,85 @@ public class ClubController {
 	
 	
 	@RequestMapping("/clubView.do")
-	public void selectOneBoard(@RequestParam("no") int clubCode, Model model) {
+	public ModelAndView selectOneClub(@RequestParam("no") int clubCode,@RequestParam(value="cPage", required=false, defaultValue="1") int cPage,HttpSession session) {
 		logger.debug("클럽 상세보기 요청!");
 		System.out.println("클럽상세보기페이지");
+		ModelAndView mav = new ModelAndView();
+		
 		
 		//club테이블+club_member테이블
 		Club club = clubService.selectOneClub(clubCode);
 		int clubmembercount = club.getClubMember().size();
 		String clubadmin= clubService.searchClubAdmin(club.getMemberCode());
-		System.out.println("^^^^^^"+clubmembercount+" "+clubadmin);
+		
+		mav.addObject("club",club);
+		mav.addObject("clubadmin",clubadmin);
+		mav.addObject("clubmembercount",clubmembercount);
 		
 		//club_content테이블
+		int numPerPage =7;
+		
+		List<Clubcontent> contentList = clubService.selectcontentList(clubCode,cPage,numPerPage);
+		
+		int totalContents = clubService.totalclubCount();
+		
+		System.out.println("contentList="+contentList);
+		System.out.println("club@totalContents="+totalContents);
+		
+		mav.addObject("cPage",cPage);
+		mav.addObject("numPerPage", numPerPage);
+		mav.addObject("totalContents",totalContents);
+		mav.addObject("contentList",contentList);
+		
 		
 		
 		//meeting_photo테이블
 		
-		model.addAttribute("club",club);
-		model.addAttribute("clubadmin",clubadmin);
-		model.addAttribute("clubmembercount",clubmembercount);
 		
+		
+		return mav;
 		
 	} 
 	
 	
 	@RequestMapping("/clubcontentMake.do")
-	public void clubcontentEnroll() {
-	
+	public void clubcontentEnroll(@RequestParam("clubCode") int clubCode,Model model,HttpSession session) {
+		Club club = clubService.selectOneClub(clubCode);
+		model.addAttribute("club",club);
+		
 	} 
+	
+	@RequestMapping("/clubcontentMakeend.do")
+	public String clubcontentMakeend(@RequestParam("clubCode") int clubCode,HttpServletRequest request,HttpSession session,Model model) {
+		Clubcontent clubcontent = new Clubcontent();
+		clubcontent.setClubCode(Integer.parseInt(request.getParameter("clubCode")));
+		clubcontent.setMemberCode(Integer.parseInt(request.getParameter("memberCode")));
+		clubcontent.setContentTitle(request.getParameter("contentTitle"));
+		clubcontent.setContent(request.getParameter("content"));
+		clubcontent.setWriteLevel(Integer.parseInt(request.getParameter("writeLevel")));
+		
+		int result = clubService.insertclubContent1(clubcontent);
+		System.out.println("$$$$$"+result);
+		
+		String msg = result>0?"게시물 등록 성공":"게시물 등록 오류";
+		String loc = "/club/clubView.do?no="+request.getParameter("clubCode");
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		
+		return "/common/msg";
+	} 
+	
+	@RequestMapping("/clubcontentView")
+	public ModelAndView clubcontentView(@RequestParam("no") int contentCode,HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		
+		Clubcontent clubcontent = new Clubcontent();
+		clubcontent=clubService.selectClubcontentOne(contentCode);
+		
+		mav.addObject("clubcontent",clubcontent);
+		
+		
+		return mav;
+	}
 	
 }

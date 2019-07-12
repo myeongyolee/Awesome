@@ -39,6 +39,18 @@
 		</resultMap>
 		
 		
+		<resultMap type="map" id="clubcontentMap">
+		<result column="CLUB_CONTENT_CODE" property="clubcontentCode"/>
+		<result column="CLUB_CODE" property="clubCode"/>
+		<result column="MEMBER_CODE" property="memberCode"/>
+		<result column="CONTENT_TITLE" property="contentTitle"/>
+		<result column="CONTENT" property="content"/>
+		<result column="WRITE_LEVEL" property="writeLevel"/>
+		<result column="WRITE_DATE" property="writeDate"/>
+		<result column="MEMBER_NICKNAME" property="memberNickname"/>
+		</resultMap>
+		
+		
 	<select id="selectClubList" resultMap="clubListMap">
 	select C.*,(select count(*) from club_member where CLUB_CODE = C.CLUB_CODE AND CLUB_JOIN_CHECK ='Y') CLUB_MEMBER_COUNT,(select NICKNAME FROM MEMBER WHERE MEMBER_CODE = C.MEMBER_CODE) CLUB_ADMIN
 	from club C 
@@ -70,5 +82,23 @@
 	<select id="searchClubAdmin" resultType="java.lang.String">
 		select NICKNAME from member  where MEMBER_CODE = #{memberCode} 
 	</select>
+	
+	<insert id="insertclubContent1">
+		insert into club_content values(seq_club_photo.nextval,#{clubCode},#{memberCode},#{contentTitle},#{content},#{writeLevel},sysdate)
+	</insert>
+	
+	
+	<select id="selectcontentList" resultMap="clubcontentMap">
+	select C.*,(select M.NICKNAME from member M where M.MEMBER_CODE = C.MEMBER_CODE)  MEMBER_NICKNAME
+	from club_content C 
+	where c.club_code=#{clubCode} and c.write_level =1
+	</select>
+	
+	<select id="selectClubcontentOne" resultType="clubcontent">
+	 	select C.*,(select M.NICKNAME from member M where M.MEMBER_CODE = C.MEMBER_CODE)  MEMBER_NICKNAME
+		from club_content C 
+		where C.club_content_code = #{contentCode} 
+	</select>
+	
 	
 </mapper>
