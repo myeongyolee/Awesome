@@ -13,16 +13,10 @@
   <typeAliases>
 	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
 	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
-<<<<<<< HEAD
 	<typeAlias type="com.kh.awesome.club.model.vo.Clubmember" alias="clubmember"/>
+	<typeAlias type="com.kh.awesome.club.model.vo.Clubcontent" alias="clubcontent"/>
 	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
   </typeAliases> 
 
-=======
-	<typeAlias type="com.kh.awesome.club.model.vo.Clubmember" alias="clubmember"/>
-	<typeAlias type="com.kh.awesome.club.model.vo.Clubcontent" alias="clubcontent"/>
-  </typeAliases>
-  
->>>>>>> refs/remotes/origin/joon
 </configuration>
