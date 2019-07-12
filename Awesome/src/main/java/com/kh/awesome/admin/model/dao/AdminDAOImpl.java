@@ -24,6 +24,24 @@ public List<Map<String, String>> selectAllMembers(int cPage, int numPerPage) {
 public int selectTotalMemberNum() {
 	return sqlSession.selectOne("admin.selectTotalMemberNum");
 }
+
+@Override
+public Map<String, Integer> memberStatistics() {
+	// TODO Auto-generated method stub
+	return sqlSession.selectOne("admin.memberStatistics");
+}
+
+@Override
+public Map<String, Integer> matchStatistics() {
+	// TODO Auto-generated method stub
+	return sqlSession.selectOne("admin.matchStatistics");
+}
+
+@Override
+public Map<String, Integer> clubStatistics() {
+	// TODO Auto-generated method stub
+	return sqlSession.selectOne("admin.clubStatistics");
+}
  
  
  

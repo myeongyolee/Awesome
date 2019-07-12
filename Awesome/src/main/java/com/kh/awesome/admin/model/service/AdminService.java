@@ -9,4 +9,10 @@ public interface AdminService {
 
 	int selectTotalMemberNum();
 
+	Map<String, Integer> memberStatistics();
+
+	Map<String, Integer> matchStatistics();
+
+	Map<String, Integer> clubStatistics();
+
 }

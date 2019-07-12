@@ -93,7 +93,7 @@ body {font-family: "Lato", sans-serif;}
   padding: 5px 12px;
   border: 1px solid red;
   width: 90%;
-  height: 300px;
+  min-height: 600px;
   border-radius:4px;
 }
 #today_count{

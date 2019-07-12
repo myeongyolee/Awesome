@@ -3,38 +3,75 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>관리자페이지</title>
 <script  src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/admin_main.css" />
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"/>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
+
+// Load Charts and the corechart package.
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
+// Draw the pie chart for Sarah's pizza when Charts is loaded.
+google.charts.setOnLoadCallback(drawSarahChart);
 
-  var data = google.visualization.arrayToDataTable([
-    ['Task', 'Hours per Day'],
-    ['Work',     11],
-    ['Eat',      2],
-    ['Commute',  2],
-    ['Watch TV', 2],
-    ['Sleep',    7]
-  ]);
+// Draw the pie chart for the Anthony's pizza when Charts is loaded.
+google.charts.setOnLoadCallback(drawAnthonyChart);
 
-  var options = {
-    title: 'My Daily Activities'
-  };
 
-  var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+function drawSarahChart() {
 
-  chart.draw(data, options);
-}
+    // Create the data table for Sarah's pizza.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Topping');
+    data.addColumn('number', 'Slices');
+    data.addRows([
+      ['Mushrooms', 1],
+      ['Onions', 1],
+      ['Olives', 2],
+      ['Zucchini', 2],
+      ['Pepperoni', 1]
+    ]);
 
+    // Set options for Sarah's pie chart.
+    var options = {title:'How Much Pizza Sarah Ate Last Night',
+                   width:400,
+                   height:300};
+
+    // Instantiate and draw the chart for Sarah's pizza.
+    var chart = new google.visualization.PieChart(document.getElementById('Sarah_chart_div'));
+    chart.draw(data, options);
+  }
+
+  // Callback that draws the pie chart for Anthony's pizza.
+  function drawAnthonyChart() {
+
+    // Create the data table for Anthony's pizza.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Topping');
+    data.addColumn('number', 'Slices');
+    data.addRows([
+      ['Mushrooms', 2],
+      ['Onions', 2],
+      ['Olives', 2],
+      ['Zucchini', 0],
+      ['Pepperoni', 3]
+    ]);
+
+    // Set options for Anthony's pie chart.
+    var options = {title:'How Much Pizza Anthony Ate Last Night',
+                   width:400,
+                   height:300,
+                   is3D: true};
+
+    // Instantiate and draw the chart for Anthony's pizza.
+    var chart = new google.visualization.PieChart(document.getElementById('Anthony_chart_div'));
+    chart.draw(data, options);
+  }
 </script>
 </head>
 <body>
@@ -76,9 +113,17 @@ function drawChart() {
 	</div>
 	
 	<div id="Home" class="tabcontent">
-		<div id="chart-container">
+		<div id="piechart"></div>
+			<table class="columns">
+				<tr>
+					<td><div id="Sarah_chart_div" style="border: 1px solid #ccc"></div></td>
+					<td><div id="Anthony_chart_div" style="border: 1px solid #ccc"></div></td>
+				</tr>
+			</table>
 			<div id="today_count">
 				오늘 접속자
+				<br />
+				현재 접속한 회원
 			</div>
 			<div id="member-chart-container">
 				1. 성비
@@ -97,7 +142,6 @@ function drawChart() {
 				2. 도시별 클럽 수
 				3. 지역별 클럽 수
 				4. 분야별 클럽 수
-				
 			</div>
 		</div>
 	</div>

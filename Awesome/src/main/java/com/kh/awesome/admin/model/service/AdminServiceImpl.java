@@ -23,6 +23,24 @@ public class AdminServiceImpl implements AdminService {
 	public int selectTotalMemberNum() {
 		return adminDAO.selectTotalMemberNum();
 	}
+
+	@Override
+	public Map<String, Integer> memberStatistics() {
+		// TODO Auto-generated method stub
+		return adminDAO.memberStatistics();
+	}
+
+	@Override
+	public Map<String, Integer> matchStatistics() {
+		// TODO Auto-generated method stub
+		return adminDAO.matchStatistics();
+	}
+
+	@Override
+	public Map<String, Integer> clubStatistics() {
+		// TODO Auto-generated method stub
+		return adminDAO.clubStatistics();
+	}
 	
 	
 	
