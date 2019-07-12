@@ -34,6 +34,30 @@ function loadProfile(f){
 		}
 	}
 };
+
+function selectLocalList(){
+	var param = {city: $("#cityName>option:selected").val()}
+	var city = JSON.stringify(param);
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/localList.do',
+		dataType: "json",
+		type : 'POST',
+		data : city,
+		contentType: "application/json; charset=UTF-8",
+		success : function(data){
+			$("#localName").html("");
+			var html = "";
+			html += '<option id="defaultLocal" disabled selected>지역을 선택해주세요</option>';
+			for(var i=0; i<data.length; i++){
+				html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
+			}
+			$("#localName").append(html);
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+};
 </script>
 
 
@@ -58,32 +82,25 @@ function loadProfile(f){
 					
 					<label for="interestingCode">카테고리선택</label>
 					<select name="interestingCode" id="interestingCode" class="form-control">
-						<option selected disabled="disabled">카테고리 선택</option>
-						<option value="1">분류1</option>
-						<option value="2">분류2</option>
-						<option value="3">분류3</option>
-						<option value="4">분류4</option>
+						<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
+						<c:forEach items="${interestingList}" var="interesting">
+						<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
+						</c:forEach>
 					</select>
-					
 					
 					<label for="cityName" style="margin-right: 110px; display: inline-block;" >도시선택</label>
 					<label for="localName" style=" display: inline-block;">State</label>
-					<select name="cityName" id="cityName" class="form-control" style="width: 150px; display: inline-block; margin-right: 18px;">
-						<option selected disabled="disabled">도시 선택</option>
-						<option value="city1">도시1</option>
-						<option value="city2">도시2</option>
-						<option value="city3">도시3</option>
-						<option value="city4">도시4</option>
+					
+					<select name="cityName" id="cityName" class="form-control" style="width: 150px; display: inline-block; margin-right: 18px;" onchange="selectLocalList();">
+						<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
+						<c:forEach items="${cityList}" var="city">
+						<option value=${city.cityCode }>${city.cityName }</option>						
+						</c:forEach>
 					</select>
 					
 					<select name="localCode" id="localName" class="form-control" style="width: 150px;  display: inline-block;">
-						<option selected disabled="disabled">구 선택</option>
-						<option value="1">지역1</option>
-						<option value="2">지역2</option>
-						<option value="3">지역3</option>
-						<option value="4">지역4</option>
+						<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
 					</select>
-					
 					<label for="clubsimpleInfo">클럽한줄소개</label>
 					<input type="text" class="form-control" name="clubsimpleInfo" placeholder="클럽한줄소개를 입력하세요.(50자 이내)">
 					

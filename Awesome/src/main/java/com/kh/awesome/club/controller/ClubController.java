@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.awesome.club.model.service.ClubService;
 import com.kh.awesome.club.model.vo.Club;
 import com.kh.awesome.club.model.vo.Clubcontent;
+import com.kh.awesome.lightning.model.service.LightningService;
 
 
 @Controller
@@ -34,6 +35,8 @@ public class ClubController {
 	
 	@Autowired
 	private ClubService clubService;
+	@Autowired
+	private LightningService lightningService;
 	
 	@RequestMapping("/clubList.do")
 	public ModelAndView clubList(@RequestParam(value="cPage", required=false, defaultValue="1") int cPage){
@@ -48,6 +51,18 @@ public class ClubController {
 		System.out.println("clubList="+clubList);
 		System.out.println("club@totalContents="+totalContents);
 		
+		
+		//도시목록 가져오기
+		List<String> cityList = lightningService.selectCityList();
+		//분류목록 가져오기
+		List<String> interestingList = lightningService.selectInterestingList();
+		
+		logger.info("cityList={}",cityList);
+		logger.info("interestingList={}",interestingList);
+		
+		mav.addObject("cityList", cityList);
+		mav.addObject("interestingList", interestingList);
+	
 		mav.addObject("cPage",cPage);
 		mav.addObject("numPerPage", numPerPage);
 		mav.addObject("totalContents",totalContents);
@@ -57,8 +72,17 @@ public class ClubController {
 	}
 	
 	@RequestMapping("/clubMake")
-	public void clubMake() {
+	public void clubMake(HttpServletRequest request) {
+		//도시목록 가져오기
+		List<String> cityList = lightningService.selectCityList();
+		//분류목록 가져오기
+		List<String> interestingList = lightningService.selectInterestingList();
 		
+		logger.info("cityList={}",cityList);
+		logger.info("interestingList={}",interestingList);
+		
+		request.setAttribute("cityList", cityList);
+		request.setAttribute("interestingList", interestingList);
 	}
 	
 	@RequestMapping("/clubMakeEnd.do")
