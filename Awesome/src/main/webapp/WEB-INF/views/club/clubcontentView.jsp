@@ -6,5 +6,17 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="" name="pageTitle"/>
 </jsp:include>
-	${clubcontent }
+	${clubcontent }<Br>
+	${club }<Br>
+	
+	<div>
+		<c:if test="${empty club.mainrenamedFilename}">
+			<img src="${pageContext.request.contextPath }/resources/images/log.jpg"  alt="awesome로고"  style="width: 100px; height: 100px; "  />
+		</c:if>
+		<c:if test="${not empty club.mainrenamedFilename}">
+			<img src="${pageContext.request.contextPath }/resources/upload/club/${club.mainrenamedFilename}"  alt="awesome로고"  style="width: 100px; height: 100px;" />
+		</c:if>
+	</div>
+	
+	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -131,6 +131,7 @@ public class ClubController {
 		mav.addObject("clubadmin",clubadmin);
 		mav.addObject("clubmembercount",clubmembercount);
 		
+		
 		//club_content테이블
 		int numPerPage =7;
 		
@@ -190,9 +191,11 @@ public class ClubController {
 		
 		Clubcontent clubcontent = new Clubcontent();
 		clubcontent=clubService.selectClubcontentOne(contentCode);
+		Club club = clubService.selectOneClub(clubcontent.getClubCode());
+		
 		
 		mav.addObject("clubcontent",clubcontent);
-		
+		mav.addObject("club",club);
 		
 		return mav;
 	}
