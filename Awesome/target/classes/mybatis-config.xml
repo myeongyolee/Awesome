@@ -13,6 +13,7 @@
   <typeAliases>
 	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
 	<typeAlias type="com.kh.awesome.club.model.vo.Clubmember" alias="clubmember"/>
+	<typeAlias type="com.kh.awesome.club.model.vo.Clubcontent" alias="clubcontent"/>
   </typeAliases>
   
 </configuration>

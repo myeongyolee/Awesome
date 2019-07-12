@@ -25,7 +25,7 @@ $(function(){
 
 </style>
 
-<section>
+
 	
 		<h2>클럽리스트</h2>
 		<button onclick="location.href='${pageContext.request.contextPath}/club/clubMake' ">클럽개설하기</button>
@@ -52,10 +52,10 @@ $(function(){
 						<img src="${pageContext.request.contextPath }/resources/upload/club/${club.mainrenamedFilename}"  alt="awesome로고"  style="width: 100px; height: 100px;" />
 						</c:if>
 						</td>
-						<td onclick="location.href=''">클럽이름:${club.clubName}</td>					
+						<td>클럽이름:${club.clubName}</td>					
 					</tr>
 					<tr no="${club.clubCode}">
-						<td>클럽장:${club.clubAdmin }</td>					
+						<td>클럽장:${club.clubAdmin}</td>					
 						<td>회원수:${club.clubmemberCount}</td>			
 					</tr>
 					<tr no="${club.clubCode}">					
@@ -80,4 +80,3 @@ $(function(){
 		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
 	%>	
 	<%=com.kh.awesome.common.util.Utils.getPageBar(totalContents, cPage, numPerPage, "clubList.do") %>
-</section>

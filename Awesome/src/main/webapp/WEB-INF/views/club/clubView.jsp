@@ -11,7 +11,7 @@
 
 <style>
 .clubview-info-css {
-    width: 500px;
+    width: 420px;
     margin-right: 50px auto;
     display: inline-block;
     float: right;
@@ -53,48 +53,43 @@ border-image: linear-gradient(to right, #0099CC 0%, #F27280 100%);
  
 
  /* 클럽 게시글리스트 css*/
- table {
-  font-family: 'Arial';
-  margin: 25px auto;
-  border-collapse: collapse;
-  border: 1px solid #eee;
-  border-bottom: 2px solid #00cccc;
-  box-shadow: 0px 0px 20px rgba(0,0,0,0.10),
-     0px 10px 20px rgba(0,0,0,0.05),
-     0px 20px 20px rgba(0,0,0,0.05),
-     0px 30px 20px rgba(0,0,0,0.05);
-  tr {
-     &:hover {
-      background: #f4f4f4;
-      
-      td {
-        color: #555;
-      }
+.table > thead {
+      background-color: #b3c6ff;
     }
-  }
-  th, td {
-    color: #999;
-    border: 1px solid #eee;
-    padding: 12px 35px;
-    border-collapse: collapse;
-  }
-  th {
-    background: #00cccc;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 12px;
-    &.last {
-      border-right: none;
+    .table > thead > tr > th {
+      text-align: center;
     }
-  }
-}
+    .table-hover > tbody > tr:hover {
+      background-color: #e6ecff;
+    }
+    .table > tbody > tr > td {
+      text-align: center;
+    }
+    .table > tbody > tr > #title {
+      text-align: left;
+    }
+     
+    div > #paging {
+      text-align: center;
+    }
 
 </style>
 
+<script>
+$(function(){
+	$("tr[no]").on("click",function(){
+		var clubCode = $(this).attr("no"); //사용자속성값 가져오기
+		location.href = "${pageContext.request.contextPath}/club/clubcontentView.do?no="+clubCode;
+	});
+});
+</script>
 
-${club} 
 
-<section>
+<span>${club}</span><br>
+<span>${contentList }</span> 
+
+
+
 	<h2>클럽뷰</h2>
 	
 	<table id="clubView-table">
@@ -107,13 +102,13 @@ ${club}
 			</c:if>
 		</div>
 		
-		<div style="margin: 20px 50px 20px 60px; ">
+		<div style="margin: 20px 50px 20px 60px; width: ">
 			<div style="display: inline-block; ">
 				<h2>모임이름: ${club.clubName}</h2>
 				<h4>클럽장: ${clubadmin }</h4>
 				<h4>카테고리: ${club.interestingCode}</h4>
-				<h4>지역:${club.localCode } 			활동인원: ${clubmembercount }</h4>
-				<h4>클럽한줄소개: ${club.clubsimpleInfo }</h4>
+				<h4>지역:${club.localCode } 	활동인원: ${clubmembercount }</h4>
+				<h4>한줄소개: ${club.clubsimpleInfo }</h4>
 			</div>
 			
 			<div class="clubview-info-css">
@@ -126,35 +121,56 @@ ${club}
 	</table>
 
 	<!-- 다음일정 있을시 출력 -->
+	<hr>
+	<h2>다음일정</h2>
+	
+	
 	
 	
 	<!-- 게시글 -->
 	
 	<hr>
-	<h2>게시글</h2>
-	<button onclick="location.href='${pageContext.request.contextPath}/club/clubcontentMake.do' ">게시글작성</button>
+	<h2 style="display: inline-block;">게시글</h2>
+	<form action="${pageContext.request.contextPath}/club/clubcontentMake.do" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="clubCode" value="${club.clubCode} " readonly>
+		<button  type="submit" class="btn btn-primary float-right">게시글작성</button>
+	</form>
 	<div class="club_contentview-css">
 	
-	<table>
-  		<thead>
-    		<tr>
-      			<th>글번호</th>
-      			<th>작성자</th>
-      			<th>글제목</th>
-      			<th>작성일</th>
+	<table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th width="10%">번호</th>
+            <th width="10%">작성자</th>
+            <th width="50%">제목</th>
+            <th width="20%">작성일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <c:forEach items="${contentList}" var="content">	
+            <tr no="${content.clubcontentCode }">
+      			<td>${content.clubcontentCode }</td>
+      			<td>${content.memberNickname }</td>
+      			<td id="title">${content.contentTitle}</td>
+      			<td>${content.writeDate }</td>
     		</tr>
-  		</thead>
-  		<tbody>
-    		<tr>
-      			<td>club_content_code</td>
-      			<td>member_code</td>
-      			<td>content_title</td>
-      			<td>sysdate</td>
-    			</tr>
-  		</tbody>
-	</table>
+          </c:forEach>
+        </tbody>
+      </table>
+	
+	<%
+		int totalContents = Integer.parseInt(String.valueOf(request.getAttribute("totalContents")));
+		int numPerPage = Integer.parseInt(String.valueOf(request.getAttribute("numPerPage")));
+		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
+	%>	
+	<%=com.kh.awesome.common.util.Utils.getPageBar(totalContents, cPage, numPerPage, "clubcontentMake.do") %>
 	</div>
 	
+	
+	
+  
+
+
 	
 	
 	
@@ -166,6 +182,6 @@ ${club}
 	<br>
 	<br>
 	<br>
-</section>
+
 	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
