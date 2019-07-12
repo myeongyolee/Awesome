@@ -16,6 +16,6 @@ public class RandingController {
 		
 		
 		
-		return "/common/loginAfter";
+		return "/common/header";
 	}
 }

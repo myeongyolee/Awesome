@@ -130,12 +130,14 @@
 
                                 <!-- 서버에서 데이터(사진 아이디) 받아와서 넣어줄것 LikeMe-->
                                 <div id="LikeMe" class="d-flex align-content-start flex-wrap">
-                                    <!--
+                                    <c:forEach items="likeMe" var="e" >
                                         <div>
-                                            <img src="./images/couple-1030744_1280.jpg" alt="" width="60px" height="90px"> <br>
-                                            <span onclick="ss">ID</span>
+                                        	<input type="hidden" name="" />
+                                            <img src="${pageContext.request.contextPath }/resources/images/${e.RENAMED_PROFILE}" alt="" width="60px" height="90px"> <br>
+                                            <span onclick="ss">${e.MEMBER_ID }</span>
                                         </div>
-                                    -->
+                                    </c:forEach>
+                                    
                                 </div>
                                 <!-- 서버에서 채팅창 가져오기 -->
                                 <div id="chat">
@@ -371,6 +373,7 @@
             	 
             }
             
+            
             $("#like").on("click",function(){
             	changeUser("Y");
             });
@@ -379,13 +382,15 @@
             	changeUser("N");
             });
             
+            /* 나를 좋아한 사람 */
             function likeMeUser(){
+            	var memberCode = ${sessioScope.memberCode}
             	$.ajax({
             		url:"${pageContext.request.contextPath}/meeting/likeMeMember",
-            		type:"post",
+            		type:"get",
             		success: function(data){
             			
-            		},error(jqxhr, textStatus, errorThrown){
+            		}, error(jqxhr, textStatus, errorThrown){
             			
             		}
             	})
