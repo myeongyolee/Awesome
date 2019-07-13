@@ -37,12 +37,16 @@
 		        box-shadow: 0 1px 6px 0 rgba(0,0,0,.27); border:0px; font-size:20px; }
 		.target{height: 500px;}
 		#content-container #page-introduce .container .row .col img#flx{ margin-right:79px; height: 358px; width:310px; margin-top: 100px; border-radius: 60px;}
-		header #content-container #page-introduce{background: #edc9c9;}
+		header #content-container #page-introduce{background: #fff;}
 		.icon{width: 36px; margin-right: 10px; margin-top:10px;}
 		.icon:last-of-type{margin-right:90px;}
+		.fp-tableCell{width:100%;}
 		#page-introduce{width:100%; height:100%; display:block;}
-		#page-introduce .page-info{width:49%; height:49%; display:inline-block; border:1px solid}
+		#page-introduce div.inline-div{display:inline-block;}
+		#page-introduce div#select-info{width:30%; height:100%; background:#4e6168;}
+		#page-introduce div#select-page-introduce{width:69%; height:100%; }
 		div.bx-viewport{width:100%; height:100%;}
+		.img-select{width:150px; height:100px; border:1px solid;}
     </style>
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
@@ -87,11 +91,12 @@
             </div>
 
             <div id="page-introduce" class="section" >
-            	
-			    <div class="page-info">Column</div>
-			    <div class="page-info">Column</div>
-			    <div class="page-info">Column</div>
-			    <div class="page-info">Column</div>
+            	<div id="select-info" class="inline-div">
+            		<img src="${pageContext.request.contextPath }/resource/images/sampleimage.png" alt="" />
+            	</div>
+            	<div id="select-page-introduce" class="inline-div">
+            	dd
+            	</div>
 		  </div>
 
         </div>
@@ -154,6 +159,8 @@
             	$("#page-introduce div").width($(window).innerWidth()/2 -10)
     			$("#page-introduce .fp-tableCell").width("100%");
             	$("#page-introduce").width("100%");
+            	$("#select-info").width("30%");
+            	$("#select-page-introduce").width("69%");
             })
                 //video 사이즈 조절
                 $("video").width($(window).innerWidth())
@@ -189,7 +196,7 @@
                 
             })
             
-    
+    	
         </script>
 </body>
 </html>

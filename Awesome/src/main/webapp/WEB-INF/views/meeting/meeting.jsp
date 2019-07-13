@@ -94,8 +94,8 @@
 	                           <c:forEach items="likeMe" var="e" >
 	                               <div>
 	                               	<input type="hidden" name="" />
-	                                   <img src="${pageContext.request.contextPath }/resources/images/${e.RENAMED_PROFILE}" alt="" width="60px" height="90px"> <br>
-	                                   <span onclick="ss">${e.MEMBER_ID }</span>
+	                                   <img src="${pageContext.request.contextPath }/resources/images/<%-- ${e.RENAMED_PROFILE} --%>" alt="" width="60px" height="90px"> <br>
+	                                   <span onclick="ss"><%-- ${e.MEMBER_ID } --%></span>
 	                               </div>
 	                           </c:forEach>
 	                           
