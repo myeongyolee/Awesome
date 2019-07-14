@@ -13,6 +13,9 @@ public class RandingController {
 	
 	@RequestMapping("/indexAfter")
 	public String indexAfter() {
+		
+		
+		
 		return "/common/loginAfter";
 	}
 }

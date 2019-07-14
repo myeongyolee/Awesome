@@ -7,8 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.ibatis.type.JdbcType;
+
+import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.TypeHandler;
 
+@MappedJdbcTypes(JdbcType.LONGVARCHAR)
 public class StringToLongTypeHandler implements TypeHandler<String>{
 
 	@Override
@@ -38,3 +41,4 @@ public class StringToLongTypeHandler implements TypeHandler<String>{
 	
 
 }
+

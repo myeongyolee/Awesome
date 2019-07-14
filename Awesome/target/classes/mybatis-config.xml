@@ -11,16 +11,12 @@
   </settings>
   
   <typeAliases>
-
 	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
-
 	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
-	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="stringToLongTypeHandler"/>  
-  </typeAliases>
-  
-	<!-- <typeHandlers>
-		<typeHandler handler="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" javaType="String" 
-					jdbcType="LONGVARCHAR" />
-	</typeHandlers> -->
-  
+	<typeAlias type="com.kh.awesome.club.model.vo.Clubmember" alias="clubmember"/>
+	<typeAlias type="com.kh.awesome.club.model.vo.Clubcontent" alias="clubcontent"/>
+	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
+	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
+  </typeAliases> 
+
 </configuration>
