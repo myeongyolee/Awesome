@@ -3,24 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>AweSome</title>
-    <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
-    <script src="${pageContext.request.contextPath }/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/fullpage.js"></script>
-    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
-    
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    <!-- 구글 폰트 -->
-    <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/common/header.jsp "/>
     <style>
          body{margin: 0 0; height: 100%}
         html{ height: 100%;}
@@ -106,8 +89,7 @@
     .meeting-div{margin-bottom: 30px;   }
     .user-id-addr{position: absolute; width: 0px; height: 0px; top:-504px; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); border-radius: 30px}
     </style>
-</head>
-<body>  
+	
     <header>
         <div id="content-container">
             
@@ -312,7 +294,7 @@
             
             
     </header>
-
+	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/common/loginAfter.jsp "/>
 
 
     <script>
@@ -398,5 +380,3 @@
             
     
         </script>
-</body>
-</html>

@@ -1,202 +1,71 @@
-<%@page import="com.kh.awesome.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>AweSome</title>
-    <script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
+	<title>Awesome</title>
+	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fullpage.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/fullpage.js"></script>
+    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
+     <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
     
-    <!-- 구글 폰트 -->
-    <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
-    <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/randing.css"> --%>
-    <style>
-    	body{margin: 0 0;}
-		html{overflow: hidden; }
-		header div.video{position: relative; }
-		header div.video h1{position: absolute; top: 0px; display: none;}
-		#top-bar{display:none; height: 60px; margin-right: 173px;}
-		#top-bar img{display: inline-block; margin:0 14px; left: -50px;}
-		#top-bar span{font-family: 'Nanum Pen Script', cursive; font-size:35px; margin-left:10px;}
-		#login{margin: 9px 0; padding: 7px 15px; font-size: 16px; position: fixed; right: 50px; width:90px;  z-index: 999; display: none;}
-		header #content-container{min-height: 500px;  display: none; }
-		header #content-container #index-image{position: relative; text-align: center; background-color: #fff; }
-		header #content-container #index-image img{opacity: 0.8; width:1024px; height: 660px;}
-		header #content-container #index-image #pTag{position: absolute;top: 0px; left:0px; text-align: center; padding-top: 200px; z-index: 1; }
-		header #content-container #index-image #pTag p{ color:white; text-align: center; font-size:80px; margin: 0 0; margin-bottom: 50px; text-shadow: 0 1px 6px rgba(0,0,0,.27)}
-		header #content-container #index-image #pTag .mybutton-css{width: 250px;  height: 50px; background: linear-gradient(262deg, #ff7854, #fd267d); 
-		        box-shadow: 0 1px 6px 0 rgba(0,0,0,.27); border:0px; font-size:20px; }
-		.target{height: 500px;}
-		#content-container #page-introduce .container .row .col img#flx{ margin-right:79px; height: 358px; width:310px; margin-top: 100px; border-radius: 60px;}
-		header #content-container #page-introduce{background: #fff;}
-		.icon{width: 36px; margin-right: 10px; margin-top:10px;}
-		.icon:last-of-type{margin-right:90px;}
-		.fp-tableCell{width:100%;}
-		#page-introduce{width:100%; height:100%; display:block;}
-		#page-introduce div.inline-div{display:inline-block;}
-		#page-introduce div#select-info{width:30%; height:100%; background:#4e6168;}
-		#page-introduce div#select-page-introduce{width:69%; height:100%; }
-		div.bx-viewport{width:100%; height:100%;}
-		.img-select{width:150px; height:100px; border:1px solid;}
-    </style>
-    <!-- bootstrap -->
+    
+    <%-- bootstrap --%>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- 구글 폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+	<style>
+		.mdl-layout__header-row{background: white;}
+		.mdl-layout__header-row .mdl-navigation__link{color:black;}
+		.mdl-layout-title{color:black;}
+	</style>
+	<script>
+	$(function(){
+		$(".mdl-layout__drawer-button").css("background-color","lightslategrey")
+	})
+	</script>
 </head>
 <body>
-    <header>
-        <div class="video">
-            <video autoplay loop muted >
-                <source src="${pageContext.request.contextPath}/resources/video/Circle - 17445.mp4" type="video/mp4" />
-            </video>
-            
-            <h1 id="logo">Awesome</h1>
-        </div>
-        
-        <div id="content-container">
-            
-            <div id="index-image" class="section" >
-            
-                <div id="top-bar" >
-                     <%--  <img src="${pageContext.request.contextPath}/resources/images/awesome-nontext.png" width="150px" height="60px" id="icon-logo" alt=""> --%>
-                    <c:if test="${empty memberLoggedIn}">
-				        <button type="button" class="btn btn-primary" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</button>
-                    </c:if>
-                    <c:if test="${not empty memberLoggedIn }">
-                    	<span>${memberLoggedIn.MEMBERID }님 , 반갑습니다.</span>
-				        <button type="button" class="btn btn-primary" id="login">Logout</button>
-                    </c:if>
-                    <span>Awesome</span>
-                    
-                </div>
-                <div class="bxslider">
-                    <img src="${pageContext.request.contextPath}/resources/images/blue-2564660_1280.jpg" alt="">
-                    <img src="${pageContext.request.contextPath}/resources/images/portrait-3204843_640.jpg" alt="">
-                    <img src="${pageContext.request.contextPath}/resources/images/workplace-1245776_1280.jpg" >
-                </div>
-                <div id="pTag">
-                    <p> &nbsp;&nbsp;&nbsp;Awesome</p>
-                    <button type="button" class="btn btn-primary mybutton-css" id="signUp" >Sign up</button>
-                </div>
-            </div>
-
-            <div id="page-introduce" class="section" >
-            	<div id="select-info" class="inline-div">
-            		<img src="${pageContext.request.contextPath }/resource/images/sampleimage.png" alt="" />
-            	</div>
-            	<div id="select-page-introduce" class="inline-div">
-            	dd
-            	</div>
-		  </div>
-
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">로그인</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form action="" method="post">
-            <div class="modal-body">
-                <span>아이디</span>
-                <input type="text" class="form-control" name="memberId" id="memberId" required>  <br>
-                <span>비밀번호</span>
-                <input type="password" class="form-control" name="password" id="password" required>  <br>
-                <a href="#">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br>
-                <button type="button">nav</button> 
-                <button type="button">gog+</button>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary">로그인</button>
-            </div>
-        </form>
-          </div>
-        </div>
-      </div>
-            
-            
-            
-            
-            
-            
-    </header>
-
-
-
-    <script>
-            $(function(){
-                $('.bxslider').bxSlider({
-                    auto: true,
-                    autoControls: true,
-                    stopAutoOnClick: true,
-                    pager: true
-            });
-            $(".bx-controls.bx-has-controls-direction.bx-has-controls-auto.bx-has-pager").css("display","none")
-                var myFullpage = new fullpage('#content-container', {
-            /*  sectionsColor: ['#1bbc9b', '#4BBFC3', '#7BAABE', 'whitesmoke', '#ccddff'],*/
-                anchors: ['firstPage', 'secondPage', '3rdPage', '4thpage', 'lastPage'],
-                menu: '#menu',
-                lazyLoad: true
-            });
-            
-            $(window).resize(function(){
-            	$("#page-introduce div").width($(window).innerWidth()/2 -10)
-    			$("#page-introduce .fp-tableCell").width("100%");
-            	$("#page-introduce").width("100%");
-            	$("#select-info").width("30%");
-            	$("#select-page-introduce").width("69%");
-            })
-                //video 사이즈 조절
-                $("video").width($(window).innerWidth())
-                
-                $("#logo").css("top",$("video").innerHeight()/2)
-                    .css("left",$("video").innerWidth()/2 -95)
-                    .fadeIn(3000,function(){
-                        $("div.video").remove();
-                        $("#top-bar").css("display","inline-block")
-                        $("#content-container").fadeIn(1500)
-                        $("#login").css("top","0px").css("display","block")
-                        $("html").css("overflow-y","auto")
-                    })
-                
-                    
-			$(".page-introduce .fp-tableCell").width("100%");
-                $(".bx-viewport").height("100%").width("100%");
-                $("#index-image img").width($(window).width())
-                        .height($(window).innerHeight()-60)
-                $("#index-image #main-image").css("height","500px")
-                
-                
-                $("#pTag").width($("#index-image").children("img").width())
-
-                $(".tp-tableCell").width("100%")
-
-                $("#icon-logo").css("width","120px").css("height","50px")
-                $("#myModal").prop("z-index","100").children().prop("z-index","100")
-
-                $("#index-image").siblings().width($(window).width()).height($(window).height())
-
-                
-                
-            })
-            
-    	
-        </script>
-</body>
-</html>
+	<!-- Always shows a header, even in smaller screens. -->
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	  <header class="mdl-layout__header">
+	    <div class="mdl-layout__header-row">
+	      <!-- Title -->
+	      <span class="mdl-layout-title">Awesome</span>
+	      <!-- Add spacer, to align navigation to the right -->
+	      <div class="mdl-layout-spacer"></div>
+	      <!-- Navigation. We hide it in small screens. -->
+	      <nav class="mdl-navigation mdl-layout--large-screen-only">
+	        <a class="mdl-navigation__link" href="">내 정보</a>
+	        <a class="mdl-navigation__link" href="">소개팅</a>
+	        <a class="mdl-navigation__link" href="">번개팅</a>
+	        <a class="mdl-navigation__link" href="">동네 친구</a>
+	        <a class="mdl-navigation__link" href="">소모임</a>
+	        <a class="mdl-navigation__link" href="">로그아웃</a>
+	      </nav>
+	    </div>
+	  </header>
+	  <div class="mdl-layout__drawer">
+	    <span class="mdl-layout-title">Awesome</span>
+	    <nav class="mdl-navigation">
+	      <a class="mdl-navigation__link" href="">소개팅</a>
+	      <a class="mdl-navigation__link" href="">번개팅</a>
+	      <a class="mdl-navigation__link" href="">동네 친구</a>
+	      <a class="mdl-navigation__link" href="">소모임</a>
+	    </nav>
+	  </div>
+	  <main class="mdl-layout__content">
+	    <div class="page-content">
+	    

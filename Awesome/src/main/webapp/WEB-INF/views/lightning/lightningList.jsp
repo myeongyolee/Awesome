@@ -3,15 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<!-- bootstrap -->
-<script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="번개팅" name="pageTitle" />
+</jsp:include>
 <style>
 #lightningList-content{width:500px; }
 #lightning{width:400px;}
@@ -22,9 +16,6 @@
 	top: 50px;
 }
 </style>
-<title>번개팅</title>
-</head>
-<body>
 	<div id="lightningList-content">
 		<div id="lightning" class="card">
 			<div id="lightningTest-head" class="card-header">
@@ -82,5 +73,4 @@
 		</div>
 	</div>
 	
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
