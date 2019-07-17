@@ -493,6 +493,8 @@ public class MemberController {
 						model.addAttribute("OAuth","NoMember");
 						returnResult="redirect:/index";
 					}else {
+						
+						System.out.println("로그인 성공");
 						msg="로그인성공!"+m.getMemberName()+"님, 반갑습니다.";
 						model.addAttribute("memberLoggedIn",m);
 						returnResult="common/msg";
