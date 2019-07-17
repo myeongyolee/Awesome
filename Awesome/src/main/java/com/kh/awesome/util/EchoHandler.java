@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+<<<<<<< HEAD
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
@@ -31,6 +32,28 @@ public class EchoHandler extends TextWebSocketHandler{
 		
 		logger.info("채팅방 입장:  "+session.getPrincipal().getName());
 		
+=======
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+public class EchoHandler extends TextWebSocketHandler{
+	
+	//전체 채팅
+	private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception{
+		//Map
+		//sessions.put(session.getId(),session);
+		
+		//List
+		sessionList.add(session);
+		
+		//세션값을 불러온 0번째 중괄호에 session.getId()를 넣으라는 뜻
+		logger.info("{} 연결됨",session.getId());
+		
+		logger.info("채팅방 입장:  "+session.getPrincipal().getName());
+>>>>>>> refs/remotes/origin/jinwoo
 	}
 	
 	@Override

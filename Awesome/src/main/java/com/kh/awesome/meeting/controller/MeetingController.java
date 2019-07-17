@@ -63,9 +63,15 @@ public class MeetingController {
 		html += "<img src='"+request.getContextPath()+"/resources/images/sampleimage.png' alt='' width='300px' height='504px'>";
 		html += "<div class='user-id-addr'>";
 		html += 	"<input type='hidden' id='memberCode' name='memberCode' value='"+String.valueOf(machting.get("MCODE"))+"' />";
+<<<<<<< HEAD
 		html += 	"<input type='hidden' name='receiveMemberCode' id='receiveMemberCode' value='"+machting.get("RECEIVE_MEMBERCODE")+"'/>";
 		html += 	"<p id='userId'>"+machting.get("MEMBER_ID")+"</p>";
 		html += 	"<p id='address'>"+machting.get("ROAD_ADDRESS")+"</p>";
+=======
+		html += 	"<input type='hidden' name='receiveMemberCode' id='receiveMemberCode' value='"+machting.get("RECEIVEMEMBERCODE")+"'/>";
+		html += 	"<p id='userId'>"+machting.get("MEMBERID")+"</p>";
+		html += 	"<p id='address'>"+machting.get("ADDRESS")+"</p>";
+>>>>>>> refs/remotes/origin/jinwoo
 		html += "</div>";
 		 
 		Map<String,String> htmlMap = new HashMap<String,String>();

@@ -1,6 +1,7 @@
 package com.kh.awesome.club.model.dao;
 
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,5 +31,15 @@ public interface ClubDAO {
 	List<Clubcontent> selectcontentList(int clubCode, int cPage, int numPerPage);
 
 	Clubcontent selectClubcontentOne(int contentCode);
+=======
+
+import com.kh.awesome.club.model.vo.Club;
+
+public interface ClubDAO {
+
+	List<Club> selectClubList(int cPage, int numPerPage);
+
+	int totalclubCount();
+>>>>>>> refs/remotes/origin/jinwoo
 
 }

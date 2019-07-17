@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<<<<<<< HEAD
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="club 리스트" name="pageTitle"/>
@@ -162,3 +163,13 @@ function selectLocalList(){
 		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
 	%>	
 	<%=com.kh.awesome.common.util.Utils.getPageBar(totalContents, cPage, numPerPage, "clubList.do") %>
+=======
+<html></html>
+
+<section>
+	<dev>
+		<h2>안녕</h2>
+		<img src="${pageContext.request.contextPath }/resources/images/log.jpg" id="center-image" alt="awesome로고" />
+	</dev>
+</section>
+>>>>>>> refs/remotes/origin/jinwoo

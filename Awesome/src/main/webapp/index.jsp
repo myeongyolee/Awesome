@@ -18,24 +18,32 @@
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
 
 <style>
-div.primary-div{
-	border:1px solid black;
-	min-height:30px;
+section.main-section{
+	border: 6px solid black;
+	border-radius: 80px;
+	width: 700px;
+	min-height: 500px;
+	
+	display: inline-flex;
 }
-button.modal{
-	display: none;
+div.profile-photo{
+	border: 1px solid red;
+	width: 49%;
+	height: 500px;
+	
+	display: flex;
+	overflow: hidden;
+    align-items: center;
+    justify-content: center;
 }
-textarea{
-	border: 5px solid red;
-	border-radius: 10px;
+div.profile-text{
+	border: 1px solid blue;
+	width: 49%;
+	height: 500px;
+	
 }
-input#agree{
-	position: relative;
-	left: 400px;
-}
-label[for="agree"]{
-	position: relative;
-	left: 400px;
+ul.profile-list{
+	padding: 60px;
 }
 </style>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
@@ -66,6 +74,7 @@ function city_local_info(){
 
 <button onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'">lightning.do</button>
 
+<<<<<<< HEAD
 <input type="button" value="동네친구 지도 확인" onclick="searchMap();" />
 <input type="button" value="동네친구찾기" onclick="modaltest();"/>
 <input type="button" value="동네친구찾기MODAL" class="modal" name="modal" data-toggle="modal" data-target="#searchfriend" /> 
@@ -144,473 +153,27 @@ function city_local_info(){
 
 	<!-- 로그인된 회원이 없을 경우 -->
 	<%-- <c:if test="">
+=======
+<section class="main-section">
+	<div class="profile-photo">
+		<img src="${pageContext.request.contextPath}/resources/images/너굴맨.jpg" alt="" />
+	</div>
+	<div class="profile-text">
+		<ul class="profile-list">
+			<li>이름 : </li>
+			<br />
+			<li>아이디 : </li>
+			<br />
+			<li>나이 : </li>
+			<br />
+			<li>성별 : </li>
+			<br />
+			<li>자기소개 : </li>
+		</ul>
+	</div>
+>>>>>>> refs/remotes/origin/jinwoo
 	
-	</c:if> --%>
-	
-	<!-- 로그인된 회원이 있을 경우 -->
-	<c:if test="true">
-	
-	<!-- 동창모임버튼 눌렀을 때, 나타나는 MODAL -->
-    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">나의 출신 학교</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          
-          <form action="${pageContext.request.contextPath}/school/enrollSchool" name="school-frm">
-          <input type="text" name="memberLoggedIn" value="123"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
-          <div class="modal-body"> <!-- 내가 회원가입할 때 등록한 학교정보 가지고 와서 보여주기 -->
-                <input type="text" class="form-control" name="primary" placeholder="출신 초등학교" >
-                <input type="hidden" name="primary_id" />
-                <input type="hidden" name="primary_address" />
-                <button type="button" onclick="test();">확인</button>
-               
-                <div class="primary-div">
-                </div>
-                
-                <br /> 
-                <input type="text" class="form-control" name="middle" placeholder="출신 중학교" >
-                <input type="hidden" name="middle_id" />
-                <input type="hidden" name="middle_address" />
-                <button type="button" onclick="test2();">확인</button>
-                
-                <div class="middle-div">
-                </div>
-                
-                <br />
-                <input type="text" class="form-control" name="high" placeholder="출신 고등학교" >
-                <input type="hidden" name="high_id" />
-                <input type="hidden" name="high_address" />
-                <button type="button" onclick="test3();">확인</button>
-                
-                <div class="high-div">
-                </div>
-               
-          </div>
-          
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" onclick="summitFrm();">확인</button>
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
-          </div>
-          </form>
-         
-        </div>
-      </div>
-    </div>
-    <!-- 동창찾기MODAL End -->
-    
-	</c:if>
-	
-	
-<script>
-
-$(function(){
-	$("div.primary-div").hide();
-	$("div.middle-div").hide();
-	$("div.high-div").hide();
-});
-
-function searchMap(){
-	location.href = "${pageContext.request.contextPath}/map/searchMap";	
-}
-
-function modaltest(){
-	var memberCode = $("input[name=modalmember]").val();
-	
-	$.ajax({
-		url:"${pageContext.request.contextPath}/map/checkInfo",
-		data:{memberCode:memberCode},
-		success:function(data){
-			console.log(data);
-			
-			if(data == 'Y'){
-				console.log("공개");
-				location.href = "${pageContext.request.contextPath}/map/searchMap";	
-			}
-			else{
-				console.log("비공개");
-				$("input[name=modal]").trigger("click");
-				
-			}
-
-		},error:function(jqxhr, textStatus, errorThrown){
-			console.log("ajax처리실패"+jqxhr.status);
-			console.log("ajax처리실패"+textStatus.status);
-			console.log("ajax처리실패"+errorThrown.status);
-		}
-	});
-}
-
-function summitFrm(){
-	console.log("summitFrm들어옴");
-	$("form[name=school-frm]").submit();
-}
-
-function summitFrm2(){
-	console.log("summitFrm2들어옴");
-	
-	if($("input[name=infocheck]").is(":checked")){
-		$("form[name=friend-frm]").submit();
-	}
-	else{
-		alert("수락버튼은 확인해주세요.");
-	}
-}
-
-function findPosition(){
-	
-	var param = $("input[name=position]").val();
-	
-	$.ajax({
-		url:"${pageContext.request.contextPath}/map/findPosition",
-		data:{param:param},
-		success:function(data){
-			console.log(data);
-	
-			var map = new naver.maps.Map("map", {
-		        center: new naver.maps.Point(data.items[0].mapx, data.items[0].mapy),
-		        zoom: 8,
-		        mapTypes: new naver.maps.MapTypeRegistry({
-		            'normal': naver.maps.NaverMapTypeOption.getNormalMap({
-		                projection: naver.maps.TM128Coord
-		            }),
-		            'terrain': naver.maps.NaverMapTypeOption.getTerrainMap({
-		                projection: naver.maps.TM128Coord
-		            }),
-		            'satellite': naver.maps.NaverMapTypeOption.getSatelliteMap({
-		                projection: naver.maps.TM128Coord
-		            }),
-		            'hybrid': naver.maps.NaverMapTypeOption.getHybridMap({
-		                projection: naver.maps.TM128Coord
-		            })
-		        }),
-		        mapTypeControl: true
-		    });
-			
-			var markers = [];
-			var infowindows = [];
-			var HTMLS = [];
-			
-			for(var i=0; i<data.items.length; i++){
-					 
-				 var HTML = "";
-				 HTML += "<input type='text' name='test"+i+"' value='"+data.items[i].title+"'>";
-				 HTML += "<input type='text' name='test_"+i+"' value='"+data.items[i].roadAddress+"'>";
-				 $("div#infotest").append(HTML);
-				 console.log(HTML);
-				 
-	    	     var marker = new naver.maps.Marker({
-	    	         position: new naver.maps.Point(data.items[i].mapx, data.items[i].mapy),
-	    	         map: map
-	    	     });
-	    	    
-	      	    var contentString = [
-	    	          '<div class="iw_inner">',
-					  '<p>'+data.items[i].title+'</p>',
-					  '<p>'+data.items[i].roadAddress+'</p>',
-					  '<button type="button" onclick="test10('+i+');">확인</button>',
-	    	          '</div>'
-	    	      ].join('');
-	    	        
-	    	    var infowindow = new naver.maps.InfoWindow({
-	    	         content: contentString,
-	    	         maxWidth: 1000,
-	    	         backgroundColor: "#eee",
-	    	         borderColor: "#dc50dc",
-	    	         borderWidth: 5,
-	    	         anchorSize: new naver.maps.Size(20, 20),
-	    	         anchorSkew: true,
-	    	         anchorColor: "#eee",
-	    	         pixelOffset: new naver.maps.Point(20, -20)
-	    	    });
-	    	        
-	    	    markers.push(marker);
-	    	    infowindows.push(infowindow);  
-	    	    HTMLS.push(HTML);
-			}
-			
-			function getClickHandler(seq){
-	        	return function(e){
-	        		var marker = markers[seq];
-	        		var infowindow = infowindows[seq];
-	        		
-	        		if(infowindow.getMap()){
-	        			infowindow.close();
-	        		}
-	        		else{
-	        			infowindow.open(map,marker);
-	        		}
-	        		
-	        	}
-	        }
-	        
-  			for(var i=0; i<markers.length; i++){
-    	        naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
-			} 		
-			
-		},error:function(jqxhr, textStatus, errorThrown){
-			console.log("ajax처리실패"+jqxhr.status);
-			console.log("ajax처리실패"+textStatus.status);
-			console.log("ajax처리실패"+errorThrown.status);
-		}
-	});
-}
-
-
-function test(){
-	
-	console.log("test함수 들어옴");
-	
-	var ch1 = $("input[name=primary]").val();
-	
-	console.log(ch1);
-	
-	$.ajax({
-		url:"${pageContext.request.contextPath}/school/test",
-		data:{schoolName1:ch1},
-		success:function(data){
-			console.log(data);
-			
-			if(data.response.header.resultCode == '00'){
-				
-				console.log(data.response.body.items.length);
-				var HTML = "";
-				
-				if(data.response.body.items.length > 1) {
-					for(var i=0; i<data.response.body.items.length; i++){
-						console.log("반복문 들어옴 확인");
-						
-						$("div.primary-div").show();
-						
-						var result = data.response.body.items[i].schoolNm;
-						var result2 = data.response.body.items[i].schoolId;
-						var result3 = data.response.body.items[i].lnmadr;
-				
-						HTML += "<a href='#' onclick='selectPrimary("+i+");' class='p"+i+"'>"+result+"</a>";
-						HTML += "<input type='hidden' name='pid"+i+"' value='"+result2+"'>";
-						HTML += "<input type='hidden' name='padd"+i+"' value='"+result3+"' >";
-						HTML += "&nbsp;&nbsp;&nbsp;";
-						HTML += "<p>"+result3+"</p>";
-						HTML += "<br/>";
-					}
-					$("div.primary-div").append(HTML);
-				}
-				else if(data.response.body.items.length == 1){
-					
-					var result = data.response.body.items[0].schoolNm;
-					var result2 = data.response.body.items[0].schoolId;
-					var result3 = data.response.body.items[0].lnmadr;
-					
-					console.log(result);
-					console.log(result2);
-					console.log(result3);
-					
-					$("input[name=primary]").val(result);
-					$("input[name=primary_id]").val(result2);
-					$("input[name=primary_address]").val(result3);
-					
-				}
-				
-			}
-			else{
-				console.log("해당데이터가 없습니다");
-				$("input[name=primary]").val("해당 학교가 존재하지 않습니다.");
-			}
-		}
-	});
-}
-
-function test2(){
-	
-	console.log("test2함수 들어옴");
-	
-	var ch1 = $("input[name=middle]").val();
-	
-	console.log(ch1);
-	
-	$.ajax({
-		url:"${pageContext.request.contextPath}/school/test",
-		data:{schoolName1:ch1},
-		success:function(data){
-			console.log(data);
-			
-			if(data.response.header.resultCode == '00'){
-				var HTML = "";
-				
-				if(data.response.body.items.length > 1) {
-					for(var i=0; i<data.response.body.items.length; i++){
-						console.log("반복문 들어옴 확인");
-						
-						$("div.middle-div").show();
-						
-						var result = data.response.body.items[i].schoolNm;
-						var result2 = data.response.body.items[i].schoolId;
-						var result3 = data.response.body.items[i].lnmadr;
-				
-						HTML += "<a href='#' onclick='selectMiddle("+i+");' class='m"+i+"'>"+result+"</a>";
-						HTML += "<input type='hidden' name='mid"+i+"' value='"+result2+"'>";
-						HTML += "<input type='hidden' name='madd"+i+"' value='"+result3+"' >";
-						HTML += "&nbsp;&nbsp;&nbsp;";
-						HTML += "<p>"+result3+"</p>";
-						HTML += "<br/>";
-					}
-					$("div.middle-div").append(HTML);
-				}
-				else if(data.response.body.items.length == 1){
-					var result = data.response.body.items[0].schoolNm;
-					var result2 = data.response.body.items[0].schoolId;
-					var result3 = data.response.body.items[0].lnmadr;
-					
-					console.log(result);
-					console.log(result2);
-					console.log(result3);
-					
-					$("input[name=middle]").val(result);
-					$("input[name=middle_id]").val(result2);
-					$("input[name=middle_address]").val(result3);
-				}
-				
-			}
-			else{
-				console.log("해당데이터가 없습니다");
-				$("input[name=middle]").val("해당 학교가 존재하지 않습니다.");
-			}
-		}
-	});
-}
-
-function test3(){
-	
-	console.log("test3함수 들어옴");
-	
-	var ch1 = $("input[name=high]").val();
-	
-	console.log(ch1);
-	
-	$.ajax({
-		url:"${pageContext.request.contextPath}/school/test",
-		data:{schoolName1:ch1},
-		success:function(data){
-			console.log(data);
-			
-			if(data.response.header.resultCode == '00'){
-				var HTML = "";
-				
-				if(data.response.body.items.length > 1) {
-					for(var i=0; i<data.response.body.items.length; i++){
-						console.log("반복문 들어옴 확인");
-						
-						$("div.high-div").show();
-						
-						var result = data.response.body.items[i].schoolNm;
-						var result2 = data.response.body.items[i].schoolId;
-						var result3 = data.response.body.items[i].lnmadr;
-				
-						HTML += "<a href='#' onclick='selectHigh("+i+");' class='h"+i+"'>"+result+"</a>";
-						HTML += "<input type='hidden' name='hid"+i+"' value='"+result2+"'>";
-						HTML += "<input type='hidden' name='hadd"+i+"' value='"+result3+"' >";
-						HTML += "&nbsp;&nbsp;&nbsp;";
-						HTML += "<p>"+result3+"</p>";
-						HTML += "<br/>";
-					}
-					$("div.high-div").append(HTML);
-				}
-				else if(data.response.body.items.length == 1){
-					var result = data.response.body.items[0].schoolNm;
-					var result2 = data.response.body.items[0].schoolId;
-					var result3 = data.response.body.items[0].lnmadr;
-					
-					console.log(result);
-					console.log(result2);
-					console.log(result3);
-					
-					$("input[name=high]").val(result);
-					$("input[name=high_id]").val(result2);
-					$("input[name=high_address]").val(result3);
-				}
-				
-			}
-			else{
-				console.log("해당데이터가 없습니다");
-				$("input[name=high]").val("해당 학교가 존재하지 않습니다.");
-			}
-		}
-	});
-}
-
-function selectPrimary(num){
-	console.log("selectPrimary 들어옴");
-	console.log(num);
-	
-	var result = $("a.p"+num)[0].innerHTML;
-	var result2 = $("input[name=pid"+num+"]").val();
-	var result3 = $("input[name=padd"+num+"]").val();
-	
-	console.log(result);
-	console.log(result2);
-	console.log(result3);
-	
-	$("input[name=primary]").val(result);
-	$("input[name=primary_id]").val(result2);
-	$("input[name=primary_address]").val(result3);
-	
-	$("div.primary-div").hide();
-	
-}
-
-function selectMiddle(num){
-	console.log("selectMiddle 들어옴");
-	console.log(num);
-	
-	var result = $("a.m"+num)[0].innerHTML;
-	var result2 = $("input[name=mid"+num+"]").val();
-	var result3 = $("input[name=madd"+num+"]").val();
-	
-	console.log(result);
-	console.log(result2);
-	console.log(result3);
-	
-	$("input[name=middle]").val(result);
-	$("input[name=middle_id]").val(result2);
-	$("input[name=middle_address]").val(result3);
-	
-	$("div.middle-div").hide();
-	
-}
-
-function selectHigh(num){
-	console.log("selectHigh 들어옴");
-	console.log(num);
-	
-	var result = $("a.h"+num)[0].innerHTML;
-	var result2 = $("input[name=hid"+num+"]").val();
-	var result3 = $("input[name=hadd"+num+"]").val();
-	
-	console.log(result);
-	console.log(result2);
-	console.log(result3);
-	
-	$("input[name=high]").val(result);
-	$("input[name=high_id]").val(result2);
-	$("input[name=high_address]").val(result3);
-	
-	$("div.high-div").hide();
-	
-}
-
-function test10(num){
-	console.log("체크");
-	console.log(num);
-	
-	console.log($("input[name=test"+num+"]").val());
-	console.log($("input[name=test_"+num+"]").val());
-}
-
-</script>
+	<button onclick="location.href='${pageContext.request.contextPath}/websocket/chatting'">채팅기능</button>
+</section>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

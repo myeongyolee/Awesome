@@ -10,6 +10,7 @@
   	<!-- 컬럼명에_를 사용한 경우, java코드에서는 camelCasing으로 치환할 것| -->
   </settings>
   
+<<<<<<< HEAD
   <typeAliases>
 	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
 	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
@@ -19,4 +20,14 @@
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
   </typeAliases> 
 
+=======
+<typeAliases>
+<typeAlias alias="matchManager" type="com.kh.awesome.matchManager.model.vo.MatchManager"/>
+<typeAlias alias="club" type="com.kh.awesome.club.model.vo.Club"/>
+</typeAliases>
+
+<typeHandlers>
+<typeHandler jdbcType="LONGVARCHAR" javaType="String" handler="com.kh.awesome.common.typeHandler.StringToLongTypeHandler"/>
+</typeHandlers>
+>>>>>>> refs/remotes/origin/jinwoo
 </configuration>

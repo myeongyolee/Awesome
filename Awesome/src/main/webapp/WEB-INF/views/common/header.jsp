@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -74,3 +75,22 @@
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
 	    
+=======
+<meta charset="UTF-8">
+<title>${param.pageTitle }</title>
+<script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
+<!-- 부트스트랩관련 라이브러리 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<!-- 사용자작성 css -->
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
+
+
+</head>
+<body>
+<div id="container">
+	<header>
+		<a href="${pageContext.request.contextPath }/club/clubList">소모임가기</a>
+	</header>
+	<section id="content">
+>>>>>>> refs/remotes/origin/jinwoo

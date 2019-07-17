@@ -6,4 +6,49 @@
 	<insert id="insertSchool">
 		insert into school values(#{memberCode}, #{school_code}, #{school_name}, #{school_address})
 	</insert>
+	
+	<select id="checkSchool" resultType="_int">
+		select count(*) from school where member_code = #{memberCode}
+	</select>
+	
+	<select id="MySchoolIdCheck" resultType="string">
+		select school_code from school where member_code = #{memberCode}
+	</select>
+	
+	<select id="schoolList" resultType="map">
+		select * from school_club where school_code in
+		<foreach collection="list" item="p" open="(" close=")" separator=",">
+			#{p}
+		</foreach>
+	</select>
+	
+	<select id="totalContent" resultType="_int">
+		select count(*) from school_club where school_code in
+		<foreach collection="list" item="p" open="(" close=")" separator=",">
+			#{p}
+		</foreach>
+	</select>
+	
+	<insert id="makeSchoolEnd">
+		insert into school_club values(seq_club_code.nextval, #{memberCode}, #{schoolClubTitle}, #{club_info}, #{club_info_long}, #{originalFileName}, #{renamedFileName}, #{schoolId}, #{schoolName}, #{schoolAddress})
+	</insert>
+	
+	<select id="MyList" resultType="map">
+		select school_name, school_code from school where member_code = #{memberCode}
+	</select>
+	
+	<select id="findPeople" resultType="map">
+		select * from member M join school S using(member_code) where school_code = #{schoolCode} and search_open = #{open} and member_code not in #{memberCode}
+	</select>
+	
+	<select id="totalCountfindPeople" resultType="_int">
+		select count(*) from member M join school S using(member_code) where school_code = #{schoolCode} and search_open = #{open} and member_code not in #{memberCode}
+	</select>
+	
+	
+	
+	
+	
+	
+	
 </mapper>

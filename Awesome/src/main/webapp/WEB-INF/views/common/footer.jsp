@@ -3,9 +3,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<<<<<<< HEAD
 		</div>
 	  </main>
 	</div>
 	
+=======
+	</section>
+	<footer>
+		<p>&lt;Copyright 2017. <strong>KH정보교육원</strong>. All rights reserved.&gt;</p>
+	</footer>
+	
+</div>
+>>>>>>> refs/remotes/origin/jinwoo
 </body>
 </html>

@@ -41,4 +41,3 @@ public class StringToLongTypeHandler implements TypeHandler<String>{
 	
 
 }
-
