@@ -19,4 +19,18 @@
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
   </typeAliases> 
 
+<<<<<<< HEAD
+=======
+	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
+	
+		<typeAlias type="com.kh.awesome.member.model.vo.Member" alias="member"/>
+	<typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>
+
+  </typeAliases>
+  
+<!--   <typeHandlers>
+	<typeHandler handler="com.kh.awesome.common.handler.CustomDateHandler"/>
+	</typeHandlers> -->
+  
+>>>>>>> refs/remotes/origin/bins
 </configuration>
