@@ -153,27 +153,7 @@ function city_local_info(){
 
 	<!-- 로그인된 회원이 없을 경우 -->
 	<%-- <c:if test="">
-=======
-<section class="main-section">
-	<div class="profile-photo">
-		<img src="${pageContext.request.contextPath}/resources/images/너굴맨.jpg" alt="" />
-	</div>
-	<div class="profile-text">
-		<ul class="profile-list">
-			<li>이름 : </li>
-			<br />
-			<li>아이디 : </li>
-			<br />
-			<li>나이 : </li>
-			<br />
-			<li>성별 : </li>
-			<br />
-			<li>자기소개 : </li>
-		</ul>
-	</div>
->>>>>>> refs/remotes/origin/jinwoo
-	
 	<button onclick="location.href='${pageContext.request.contextPath}/websocket/chatting'">채팅기능</button>
-</section>
-
+	</section>
+	--%>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

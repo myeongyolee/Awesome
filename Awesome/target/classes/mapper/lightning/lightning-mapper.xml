@@ -10,7 +10,6 @@
 		<result column="member_code" property="memberCode"/>
 		<result column="interesting_code" property="interestingCode"/>
 		<result column="local_code" property="localCode"/>
-<<<<<<< HEAD
 		<result column="place_name" property="placeName"/>
 		<result column="place_lat" property="placeLat"/>
 		<result column="place_lng" property="placeLng"/>
@@ -107,33 +106,5 @@
 		from local L left join city C on L.city_code = C.city_code
 		where C.city_code = #{city}
 	</select>
-	
-=======
-		<result column="place_id" property="placeId"/>
-		<result column="place_name" property="placeName"/>
-		<result column="place_lat" property="placeLat"/>
-		<result column="place_lng" property="placeLng"/>
-		<result column="matching_type" property="matchingType"/>
-		<result column="match_content" property="matchContent"/>
-		<result column="match_end_date" property="matchEndDate"/>
-		<result column="member_id" property="memberId"/>
-		<result column="local_name" property="matchNo"/>
-		<result column="interesting_name" property="matchNo"/>
-		<result column="member_count" property="memberCount"/>
-	</resultMap>
-	
-	<select id="selectLightningList" resultType="matchManager">
-		select M.*, 
-			   A.member_id, 
-			   I.interesting_name, 
-			   L.local_name ,
-			   (select count(*) from matching_join_member where match_no = M.match_no) member_count
-		from match_manager M 
-	        left join member A on M.member_code = A.member_code
-	        left join interesting I on M.interesting_code = I.interesting_code
-	        left join local L on M.local_code = L.local_code
-		where matching_type = #{matchingType}
-		order by match_no desc
-	</select>
->>>>>>> refs/remotes/origin/jinwoo
+
 </mapper>

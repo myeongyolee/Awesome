@@ -16,7 +16,6 @@ public class LightningServiceImpl implements LightningService {
 	private LightningDAO lightningDAO;
 	
 	@Override
-<<<<<<< HEAD
 	public List<Map<String, Object>> selectLightningList(Map<String, String> search, int cPage, int numPerPage) {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectLightningList(search, cPage, numPerPage);
@@ -50,11 +49,7 @@ public class LightningServiceImpl implements LightningService {
 	public List<String> selectInterestingList() {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectInterestingList();
-=======
-	public List<Map<String, String>> selectLightningList(char matchingType) {
-		// TODO Auto-generated method stub
-		return lightningDAO.selectLightningList(matchingType);
->>>>>>> refs/remotes/origin/jinwoo
+
 	}
 
 }
