@@ -74,7 +74,6 @@ function city_local_info(){
 
 <button onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'">lightning.do</button>
 
-<<<<<<< HEAD
 <input type="button" value="동네친구 지도 확인" onclick="searchMap();" />
 <input type="button" value="동네친구찾기" onclick="modaltest();"/>
 <input type="button" value="동네친구찾기MODAL" class="modal" name="modal" data-toggle="modal" data-target="#searchfriend" /> 

@@ -89,26 +89,28 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(rollbackFor=Exception.class)
 	public int updateMember(Member member, Address address) {
 		int result =0;
-		
-		if(member!=null && address.getAddress() !=null) {
-			
-			result =memberDAO.updateMember(member);
-			
-			if(result==0)
-				throw new MemberException("회원 정보 수정 오류");
-			
-			if(result!=0)
-				System.out.println("전전저너memberservice ="+address);
-				address.setMemberCode(member.getMemberCode());
-				System.out.println("후후후후후memberservice ="+address);
-				result =memberDAO.updateAddress(address);
+		if(member!=null && address!=null) {
+			if(member!=null && address.getAddress() !=null) {
 				
-			if(result==0)
-				throw new MemberException("회원 주소 정보 수정 오류");
-			
-			return result;
-		}else if(member ==null && address.getAddress() !=null ){
-			return memberDAO.updateAddress(address);
+				result =memberDAO.updateMember(member);
+				
+				if(result==0)
+					throw new MemberException("회원 정보 수정 오류");
+				
+				if(result!=0)
+					System.out.println("전전저너memberservice ="+address);
+					address.setMemberCode(member.getMemberCode());
+					System.out.println("후후후후후memberservice ="+address);
+					result =memberDAO.updateAddress(address);
+					
+				if(result==0)
+					throw new MemberException("회원 주소 정보 수정 오류");
+				
+				return result;
+			//}else if(member ==null && address.getAddress() !=null ){
+			}else {
+				return memberDAO.updateAddress(address);
+			}
 		}else {
 			return memberDAO.updateMember(member);
 		}
