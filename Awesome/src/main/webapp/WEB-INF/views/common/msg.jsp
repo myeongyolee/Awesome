@@ -2,5 +2,5 @@
     pageEncoding="UTF-8"%>
 <script>
 alert("${msg}");
-location.href="${pageContext.request.contextPath}${loc}";
+location.href ="${pageContext.request.contextPath}${loc}";
 </script>

@@ -10,16 +10,27 @@
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&callback=initMap"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
 
+<style>
+#tablet{width:800px; height: 600px; background: black; margin:0 auto; border-radius: 40px; padding:10px 37px;}
+#vicinage-friend{background:aliceblue; padding-top:50px ;}
+#naver-map{width: 700px; height: 575px; background: white;}
+</style>
 
 
 </head>
 <body>
 
-<div id="map" style="width:700px;height:700px;"></div>
-<input type="text" name="memberLoggedIn" value="123" />
+<input type="hidden" name="memberLoggedIn" value="124" />
+<div id="vicinage-friend" class="section">
+     <div id="tablet">
+         <div id="naver-map">
+            		     
+         </div>
+     </div>
+</div>
+
 
 <script type="text/javascript">
-
 function initMap() {
 	
 	//로그인된 회원의 동네찾기
@@ -41,7 +52,7 @@ function initMap() {
 					console.log(result);
 				
 				//Map의 중심지역설정 (로그인한 사용자를 기준으로 설정할 것)
-			    var map = new naver.maps.Map('map', {
+			    var map = new naver.maps.Map('naver-map', {
 			        center: new naver.maps.LatLng(result[0].PLACE_LNG, result[0].PLACE_LAT),
 			        zoom: 10
 			    });
@@ -118,7 +129,30 @@ function initMap() {
 
 <script>
 function sendFriend(friend, user){
-	location.href="${pageContext.request.contextPath}/map/sendFriend?memberCode="+user+"&friendCode="+friend;
+	//테이블에 친구요청한 사실이 있는지 없는지 먼저 확인
+	$.ajax({
+		url:"${pageContext.request.contextPath}/map/checkFriend?memberCode="+user+"&friendCode="+friend,
+		success:function(data){
+			console.log(data);
+			
+			if(data == 0){
+				console.log("친구등록사실없음. 등록진행 가능");
+				location.href="${pageContext.request.contextPath}/map/sendFriend?memberCode="+user+"&friendCode="+friend;
+			}
+			else{
+				console.log("친구등록사실있음. 중복진행 불가능");
+				alert("이미 친구요청을 보낸 사람입니다.");
+			}
+			
+			
+		},error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패"+jqxhr.status);
+			console.log("ajax처리실패"+textStatus.status);
+			console.log("ajax처리실패"+errorThrown.status);
+		}
+	});
+
+	
 }
 </script>
 
