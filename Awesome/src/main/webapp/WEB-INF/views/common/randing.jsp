@@ -73,22 +73,7 @@
 </head>
 <body>
     <header>
-<<<<<<< HEAD
-=======
-    
-    <!-- 20190708 로그인 분기처리 :김용빈-->
-    	<c:if test="${sessionScope.memberLoggedIn==null }">
-        	<button type="button" class="btn btn-primary" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</button>
-        </c:if>
-   <!-- 20190711 09:32 로그아웃,내정보 :김용빈-->
-        <c:if test="${sessionScope.memberLoggedIn!=null }">
-        	<div id="loginAfter">
-        		<a href="${pageContext.request.contextPath}/member/memberInfo.do"><button type="button" class="btn btn-primary" id="myInfo">My Info</button></a>
-	        	<button type="button" class="btn btn-primary" id="logOut">LogOut</button>
-        	</div>	
-        </c:if>
-        
->>>>>>> refs/remotes/origin/bins
+
         <div class="video">
             <video autoplay loop muted >
                 <source src="${pageContext.request.contextPath}/resources/video/Circle - 17445.mp4" type="video/mp4" />
@@ -102,14 +87,17 @@
             <div id="index-image" class="section" >
             
                 <div id="top-bar" >
-                     <%--  <img src="${pageContext.request.contextPath}/resources/images/awesome-nontext.png" width="150px" height="60px" id="icon-logo" alt=""> --%>
-                    <c:if test="${empty memberLoggedIn}">
-				        <button type="button" class="btn btn-primary" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</button>
-                    </c:if>
-                    <c:if test="${not empty memberLoggedIn }">
-                    	<span>${memberLoggedIn.MEMBERID }님 , 반갑습니다.</span>
-				        <button type="button" class="btn btn-primary" id="login">Logout</button>
-                    </c:if>
+				    <!-- 20190708 로그인 분기처리 :김용빈-->
+				    	<c:if test="${sessionScope.memberLoggedIn==null }">
+				        	<button type="button" class="btn btn-primary" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</button>
+				        </c:if>
+				   <!-- 20190711 09:32 로그아웃,내정보 :김용빈-->
+				        <c:if test="${sessionScope.memberLoggedIn!=null }">
+				        	<div id="loginAfter">
+				        		<a href="${pageContext.request.contextPath}/member/memberInfo.do"><button type="button" class="btn btn-primary" id="myInfo">My Info</button></a>
+					        	<button type="button" class="btn btn-primary" id="logOut">LogOut</button>
+				        	</div>	
+				        </c:if>
                     <span>Awesome</span>
                     
                 </div>

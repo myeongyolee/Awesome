@@ -3,7 +3,6 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<<<<<<< HEAD
 <mapper namespace="club">
 		<resultMap type="map" id="clubListMap">
 		<result column="CLUB_CODE" property="clubCode"/>
@@ -56,18 +55,12 @@
 	select C.*,(select count(*) from club_member where CLUB_CODE = C.CLUB_CODE AND CLUB_JOIN_CHECK ='Y') CLUB_MEMBER_COUNT,(select NICKNAME FROM MEMBER WHERE MEMBER_CODE = C.MEMBER_CODE) CLUB_ADMIN
 	from club C 
 	order by CLUB_CODE DESC
-=======
-<mapper namespace="club">
-	<select id="selectClubList" resultMap="clubMap">
-	select * from club
->>>>>>> refs/remotes/origin/bins
 	</select>
 	
 	<select id="totalclubCount" resultType="_int">
 	select count(*) from club
 	</select>
 	
-<<<<<<< HEAD
 	<insert id="insertClub" >
 		insert into club values(seq_club.nextval,#{interestingCode},#{memberCode},seq_local_code.nextval,#{clubName},#{clubsimpleInfo},#{clubInfo},#{mainoriginalFilename},#{mainrenamedFilename})
 		<selectKey keyProperty="clubCode" resultType="Integer" order="AFTER"> 
@@ -108,20 +101,3 @@
 	</select>
 	
 </mapper>
-=======
-	
-	
-	<resultMap type="map" id="clubMap">
-		<result column="CLUB_CODE" property="clubCode"/>
-		<result column="INTERESTING_CODE" property="interestingCode"/>
-		<result column="MEMBER_CODE" property="memberCode"/>
-		<result column="LOCAL_CODE" property="localCode"/>
-		<result column="CLUB_NAME" property="clubName"/>
-		<result column="CLUB_SIMPLE_INFO" property="clubsimpleInfo"/>
-		<result column="CLUB_INFO" property="clubInfo"/>
-	</resultMap>
-	
-	
-	
-</mapper>
->>>>>>> refs/remotes/origin/bins

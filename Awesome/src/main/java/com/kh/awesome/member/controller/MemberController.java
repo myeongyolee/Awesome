@@ -54,7 +54,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.kh.awesome.mail.controller.MailController;
+//import com.kh.awesome.mail.controller.MailController;
 import com.kh.awesome.member.model.exception.MemberException;
 import com.kh.awesome.member.model.service.MemberService;
 import com.kh.awesome.member.model.vo.Address;

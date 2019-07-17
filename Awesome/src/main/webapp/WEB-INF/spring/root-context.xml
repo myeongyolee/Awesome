@@ -72,9 +72,6 @@
         <aop:pointcut id="serviceMethod" expression="execution(* com.kh.spring..*ServiceImpl.*(..)))"/>
         <aop:advisor id="transactionAdvisor" advice-ref="txAdvice" pointcut-ref="serviceMethod"/>
     </aop:config>
-<<<<<<< HEAD
-
-=======
     
     <!-- #googleLogin#2 : Google 소셜 로그인 연결 설정 -->
     <bean id="googleOAuth2Template"
@@ -112,6 +109,6 @@
 		    </props>
 		    </property>
 		  </bean>
->>>>>>> refs/remotes/origin/bins
+
 </beans>
 
