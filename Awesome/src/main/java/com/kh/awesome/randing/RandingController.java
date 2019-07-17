@@ -16,6 +16,21 @@ public class RandingController {
 		
 		
 		
-		return "/common/loginAfter";
+		return "/common/header";
+	}
+	
+	@RequestMapping("/meeting")
+	public String meeting() {
+		return "/meeting/meeting";
+	}
+	
+	@RequestMapping("/vicinage")
+	public String vicinage() {
+		return "vicinage-friend/vicinageFriend";
+	}
+	
+	@RequestMapping("lightning")
+	public String lighting() {
+		return "lightning/lightningList";
 	}
 }

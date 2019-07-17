@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+//@EnableWebSocket
 public class EchoHandler extends TextWebSocketHandler{
 	
 	//전체 채팅
