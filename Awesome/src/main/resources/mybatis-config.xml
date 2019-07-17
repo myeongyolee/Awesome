@@ -21,4 +21,8 @@
 
   </typeAliases>
   
+<!--   <typeHandlers>
+	<typeHandler handler="com.kh.awesome.common.handler.CustomDateHandler"/>
+	</typeHandlers> -->
+  
 </configuration>

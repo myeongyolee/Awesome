@@ -70,7 +70,7 @@
    <!-- 20190711 09:32 로그아웃,내정보 :김용빈-->
         <c:if test="${sessionScope.memberLoggedIn!=null }">
         	<div id="loginAfter">
-	        	<button type="button" class="btn btn-primary" id="myInfo">My Info</button>
+        		<a href="${pageContext.request.contextPath}/member/memberInfo.do"><button type="button" class="btn btn-primary" id="myInfo">My Info</button></a>
 	        	<button type="button" class="btn btn-primary" id="logOut">LogOut</button>
         	</div>	
         </c:if>
@@ -97,7 +97,7 @@
                     <img src="${pageContext.request.contextPath}/resources/images/workplace-1245776_1280.jpg" >
                 </div>
                 <div id="pTag">
-                    <p> &nbsp;&nbsp;&nbsp;Awesome ${OAuth}</p>
+                    <p> &nbsp;&nbsp;&nbsp;Awesome</p>
                     
                    <!-- 20190705 12:53 김용빈  -->
                    <!-- 회원가입 모달 추가 -->
@@ -167,16 +167,22 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="${pageContext.request.contextPath}/member/memberLogin.do" method="post">
+            <form action="${pageContext.request.contextPath}/member/memberLogin.do" method="post" onsubmit="return validate();">
+            
             <div class="modal-body">
                 <span>아이디</span>
-                <input type="text" class="form-control" name="memberId" id="memberId" required>  <br>
+                <input type="text" class="form-control" name="memberId" id="memberId" placeholder="아이디입력" required>  <br>
+                <input type="checkbox" name="saveMemberId" id="saveMemberId" />
+            	<label for="saveMemberId">아이디저장</label> <br />
                 <span>비밀번호</span>
                 <input type="password" class="form-control" name="password" id="password" required>  <br>
-                <a href="#">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br>
+                <input type="checkbox" name="autoLogin" id="autoLogin" />
+            	<label for="autoLogin">자동로그인</label> <br />
+                <a href="http://localhost/awesome/member/findMember.do">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br>
                 <button type="button">nav</button> 
                 
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                 <button type="submit" class="btn btn-primary">로그인</button>
@@ -194,10 +200,6 @@
 					<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a></div>
 					<br>   
                             
-<!--                 <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">Sign in</div>
-                <div class="g-signin2" data-onsuccess="signOut" data-theme="dark">Sign Out</div>
-                
-                <a href="#" onclick="signOut();">Sign out</a> -->
           </div>
         </div>
       </div>
@@ -250,7 +252,6 @@
     </header>
 
     <script>
-
     //20190708 12:48
     //구글 인증 인,아웃
 /*     function onSignIn(googleUser) {
@@ -304,10 +305,24 @@
 				location.href='${pageContext.request.contextPath}/member/memberLogout.do';
 			}
 	    });
-	    
-	    
-	    
-	    
+		
+	<!--20190715 12:35 김용빈-->
+	<!--아이디 저장-->
+	
+		$(function(){
+			$("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
+		});
+		
+		function validate(){
+			if($("#saveMemberId").prop("checked")){
+		        var value = $("#memberId").val();
+		        localStorage.setItem("awesomeSaveMemberId", value);
+			}else{
+				localStorage.setItem("awesomeSaveMemberId", "");
+			}
+			
+			return true;
+		}
 	    
             $(function(){
                 $('.bxslider').bxSlider({

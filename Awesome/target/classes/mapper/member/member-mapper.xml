@@ -33,12 +33,18 @@
   	
 	  <select id="selectOneMember" parameterType="member" resultType="member">
 	  	select * from member
-	  	<trim prefix="where" suffixOverrides="and">
+	  	<trim prefix="where" prefixOverrides="AND |OR">
 	  		<if test="memberId != null and memberId != ''">
-				member_id = #{memberId}
+				and member_id = #{memberId}
 			</if>
 			<if test="nickName != null and nickName != ''">
-				nickname = #{nickName}
+				and nickname = #{nickName}
+			</if>
+			<if test="memberName != null and memberName != ''">
+				and member_name = #{memberName}
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone = #{phone}
 			</if>
 		</trim>
 	  </select>
@@ -62,5 +68,100 @@
   	<select id="chkSms" parameterType="map" resultType="_int">
 	  	select count(*) from smsauth where smsauth_jsessionid=#{jsessionid} and smsauth_sms=#{sms}
 	  </select>
-  
+	  
+	  <update id="updateMember" parameterType="member">
+	  	update member 
+	  	<trim prefix="set" suffixOverrides=",">
+	  		<if test="memberId != null and memberId != ''">
+				 member_id = #{memberId},
+			</if>
+			<if test="nickName != null and nickName != ''">
+				 nickname = #{nickName},
+			</if>
+			<if test="password != null and password != ''">
+				 password = #{password},
+			</if>
+			<if test="memberName != null and memberName != ''">
+				 member_name = #{memberName},
+			</if>
+<!--  			<if test="birthday != null and birthday != ''">
+				 birthday = #{birthday},
+			</if> --> 
+			<if test="phone != null and phone != ''">
+				 phone = #{phone},
+			</if>
+			<if test="gender != null and gender != ''">
+				 gender = #{gender},
+			</if>
+			<if test="profile != null and profile != ''">
+				 profile = #{profile},
+			</if>
+			<if test="renamedProfile != null and renamedProfile != ''">
+				 renamed_profile = #{renamedProfile},
+			</if>
+			<if test="introduce != null and introduce != ''">
+				 introduce = #{introduce},
+			</if>			
+		</trim>
+	  	<trim prefix="where" prefixOverrides="AND">
+	  		<if test="memberId != null and memberId != ''">
+				 and member_id = #{memberId}
+			</if>
+<!-- 			<if test="nickName != null and nickName != ''">
+				 and nickname = #{nickName}
+			</if>
+			<if test="password != null and password != ''">
+				 and password = #{password}
+			</if>
+			<if test="memberName != null and memberName != ''">
+				 and member_name = #{memberName}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				 and birthday = #{birthday}
+			</if>
+			<if test="phone != null and phone != ''">
+				 and phone = #{phone}
+			</if>
+			<if test="gender != null and gender != ''">
+				 and gender = #{gender}
+			</if>
+			<if test="profile != null and profile != ''">
+				 and profile = #{profile}
+			</if>
+			<if test="renamedProfile != null and renamedProfile != ''">
+				 and renamed_profile = #{renamedProfile}
+			</if>
+			<if test="introduce != null and introduce != ''">
+				 and introduce = #{introduce}
+			</if> -->
+		</trim>
+		
+		<selectKey keyProperty="memberCode" resultType="_int"
+					order="AFTER">
+			select member_code from member where member_id = #{memberId}
+		</selectKey>
+	  </update>
+	  
+	<!--
+        로그인된 경우 해당 세션id와 유효시간을 사용자 테이블에 세팅한다.
+     -->
+    <update id="keepLogin">
+        insert into userTable values(
+        					#{sessionId},
+        					#{memberId},
+							#{next}
+							)
+    </update>
+     
+    <!--
+        유효기간이 남아 있으면서 해당 sessionId를 가지는 사용자 정보를 꺼내오는 부분
+     -->
+    <select id="checkUserWithSessionKey" resultType="member">
+    <![CDATA[
+        select m.* from member m left join userTable u
+                    on m.member_id= u.member_id
+                    where u.sessionkey=#{sessionId} and u.sessionLimit > SYSTIMESTAMP
+    ]]>     
+    </select>
+	  
   </mapper>

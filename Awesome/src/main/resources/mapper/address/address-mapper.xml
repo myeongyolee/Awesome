@@ -15,7 +15,57 @@
                 #{placeLat},
                 #{placeLng}
 			)
-
   	</insert>
+  	
+  	<select id="memberAddress" resultType="address">
+	  	select * from address where member_code=#{memberCode}
+	  </select>
+	  
+	  
+	 	<update id="updateAddress" parameterType="address">
+	  	update address 
+	  	<trim prefix="set" suffixOverrides=",">
+	  		<if test="postNo != null and postNo != ''">
+				 post_No = #{postNo},
+			</if>
+			<if test="address != null and address != ''">
+				 address = #{address},
+			</if>
+			<if test="roadAddress != null and roadAddress != ''">
+				 road_Address = #{roadAddress},
+			</if>
+			<if test="detailAddress != null and detailAddress != ''">
+				 detail_Address = #{detailAddress},
+			</if>
+			<if test="placeLat != null and placeLat != ''">
+				 place_Lat = #{placeLat},
+			</if>
+			<if test="placeLng != null and placeLng != ''">
+				 place_Lng = #{placeLng},
+			</if>	
+		</trim>
+		where member_code=#{memberCode}
+<!-- 	  	<trim prefix="where" prefixOverrides="AND">
+	  		<if test="postNo != null and postNo != ''">
+				 and postNo = #{postNo}
+			</if>
+			<if test="address != null and address != ''">
+				 and address = #{address}
+			</if>
+			<if test="roadAddress != null and roadAddress != ''">
+				 and roadAddress = #{roadAddress}
+			</if>
+			<if test="detailAddress != null and detailAddress != ''">
+				 and detailAddress = #{detailAddress}
+			</if>
+			<if test="placeLat != null and placeLat != ''">
+				 and placeLat = #{placeLat}
+			</if>
+			<if test="placeLng != null and placeLng != ''">
+				 and placeLng = #{placeLng}
+			</if>
+		</trim> -->
+		
+	  </update>
   
   </mapper>

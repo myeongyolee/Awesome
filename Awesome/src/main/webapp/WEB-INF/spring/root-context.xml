@@ -7,6 +7,8 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
+	
+	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- #6.1. myBatis(JDBC)설정 연결 설정하기 -->
     <bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -93,4 +95,18 @@
         <constructor-arg value="1clPYDWRqjtbSo7orhe5X6tM" />
     </bean>
     
+    
+    <!-- 20190711 11;09 김용빈 -->
+   		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		    <property name="host" value="smtp.gmail.com" />
+		    <property name="port" value="587" />
+		    <property name="username" value="yyongpall@gmail.com" />
+		    <property name="password" value="yb145321" />
+		    <property name="javaMailProperties">
+		    <props>
+		      <prop key="mail.smtp.auth">true</prop>
+		      <prop key="mail.smtp.starttls.enable">true</prop>
+		    </props>
+		    </property>
+		  </bean>
 </beans>

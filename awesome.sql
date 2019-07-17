@@ -1,4 +1,4 @@
---외래키는 기본적으로 제외 시켜 두겠습니다.
+﻿--외래키는 기본적으로 제외 시켜 두겠습니다.
 
 --멤버테이블
 create table member(
@@ -7,7 +7,7 @@ create table member(
     nickname varchar2(100) not null,
     password varchar2(500) not null,
     member_name varchar2(50) not null,
-    birthdat date not null,
+    birthday date not null,
     phone varchar2(30) not null,
     gender char(1) check(gender in ('M','F')),
     profile varchar2(1000) not null,
@@ -22,6 +22,9 @@ create table member(
     constraint unique_nickname unique(nickname)
 );
 
+select * from member;
+delete from member where member_name='김용빈';
+commit;
 
 comment on table member is '회원테이블';
 comment on column member.member_code is '회원코드';
@@ -211,14 +214,14 @@ comment on column club.main_renamed_filename is '클럽메인사진db용이름';
 --클럽회원테이블
 create table club_member(
     club_code number,
-    member_code number,
-    club_join_check char(1) default 'N' check(club_join_check in ('Y','N')),
-    club_mem_grade number
+    club_member_code number,
+    club_mem_grade number,
+    club_join_check char(1) default 'N' check(club_join_check in ('Y','N'))
 );
 
 comment on table club_member is '클럽회원테이블';
 comment on column club_member.club_code is '클럽코드';
-comment on column club_member.member_code is '회원코드';
+comment on column club_member.club_member_code is '회원코드';
 comment on column club_member.club_join_check is '참여허가';
 comment on column club_member.club_mem_grade is '회원등급';
 
@@ -230,14 +233,30 @@ NOMAXVALUE
 NOCYCLE
 NOCACHE;
 
---클럽게시글테이블
+--club_photo 테이블 생성
+create table club_photo(
+    club_content_code number primary key,
+    club_original_filename varchar2(100) not null,
+    club_renamed_filename varchar2(100) not null,
+    pic_info varchar2(100)
+)
+
+comment on table club_photo is '클럽게시물사진';
+comment on column club_photo.club_content_code is '클럽게시글코드';
+comment on column club_photo.club_original_filename is '사진원본이름';
+comment on column club_photo.club_renamed_filename is 'db용사진이름';
+comment on column club_info.pic_info is '사진설명';
+
+
+
+--클럽게시글테이블 수정
 create table club_content(
     club_content_code number primary key,
     club_code number,
     member_code number,
-    content_title varchar2(200) not null,
-    content varchar2(4000) not null,
-    write_level number default 1 check(write_level in ('0','1')),
+    content_title varchar2(200),
+    content varchar2(4000),
+    write_level number default 1 check(write_level in ('0','1','2')),
     wrtie_date date default sysdate
 );
 
@@ -249,6 +268,8 @@ comment on column club_content.content_title is '게시글제목';
 comment on column club_content.content is '내용';
 comment on column club_content.write_level is '글레벨';
 comment on column club_content.wrtie_date is '작성일자';
+
+
 
 --게시글참여테이블
 create table club_content_join_member(
@@ -331,7 +352,7 @@ create table question_board(
     member_code number,
     question_title varchar2(200) not null,
     question_content long not null,
-    question_origin_filename varchar2(100),
+    question_original_filename varchar2(100),
     question_renamed_filename varchar2(100),
     question_date date default sysdate,
     question_open char(1) default 'Y' check (question_open in ('Y','N'))
@@ -342,7 +363,7 @@ comment on column question_board.question_no is '문의번호';
 comment on column question_board.member_code is '회원코드';
 comment on column question_board.question_title is '문의제목';
 comment on column question_board.question_content is '문의내용';
-comment on column question_board.question_origin_filename is '첨부파일명';
+comment on column question_board.question_original_filename is '첨부파일명';
 comment on column question_board.question_renamed_filename is 'DB첨부파일명';
 comment on column question_board.question_date is '문의날짜';
 comment on column question_board.question_open is '공개여부';
@@ -377,13 +398,19 @@ comment on column notice.notice_date is '작성날짜';
 
 commit;
 
+select * from smsauth;
 
 create table smsauth(
     smsauth_no number primary key,
     smsauth_jsessionid varchar2(100) not null,
-    smsauth_sms number not null
+    smsauth_sms varchar2(4) not null
 );
 
+insert into smsauth values(5,'3B620F0F6EE330F3B5E020E4AD181B71','1234');
+commit;
+
+select * from member;
+update member
 comment on table smsauth is '문자인증테이블';
 comment on column smsauth.smsauth_no is '문자번호';
 comment on column smsauth.smsauth_jsessionid is '세션id';
@@ -410,3 +437,39 @@ comment on table school is '학교테이블';
 comment on column school.school_code is '학교코드';
 comment on column school.school_name is '학교이름';
 comment on column school.school_address is '학교주소';
+
+CREATE SEQUENCE SEQ_CLUB_PHOTO
+START WITH 1
+INCREMENT BY 1
+NOMINVALUE
+NOMAXVALUE
+NOCYCLE
+NOCACHE;
+
+
+create table userTable(
+    sessionkey varchar(50) not null,
+    member_id varchar(100) not null,
+    sessionlimit timestamp,
+    constraint pk_sessionkey primary key(sessionkey),
+    constraint fk_userTable_member_id foreign key (member_id) references member(member_id)
+
+);
+
+comment on table userTable is '자동로그인테이블';
+comment on column userTable.sessionkey is '세션키';
+comment on column userTable.member_id is '회원 아이디';
+comment on column userTable.sessionlimit is '세션제한시간';
+
+        insert into userTable values(
+        					'testSEssionID',
+        					'yyongpall@gmail.com',
+							SYSTIMESTAMP
+							);
+
+select * from member;
+
+insert into smsauth values(12,'BB1DF4741030AF267BB2FCC854474C62',1111);
+commit;
+
+select * from address;

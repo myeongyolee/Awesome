@@ -23,6 +23,14 @@
     </repositories>
 	
 	<dependencies>
+	
+	<!-- 20190711 11:04 김용빈 -->
+		<dependency> 
+			<groupId>org.springframework</groupId> 
+			<artifactId>spring-context-support</artifactId> 
+			<version>${org.springframework-version}</version> 
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -86,10 +94,10 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.15</version>
 			<exclusions>
-				<exclusion>
+<!-- 				<exclusion>
 					<groupId>javax.mail</groupId>
 					<artifactId>mail</artifactId>
-				</exclusion>
+				</exclusion> -->
 				<exclusion>
 					<groupId>javax.jms</groupId>
 					<artifactId>jms</artifactId>
@@ -265,7 +273,37 @@
 			<version>1.1.1</version>
 		</dependency>
 
-	    
+	<!-- 20190711 10:54 김용빈 -->
+	 <!-- Java Mail API -->
+		  <dependency>
+		     <groupId>javax.mail</groupId>
+		     <artifactId>mail</artifactId>
+		     <version>1.4.3</version>
+		  </dependency>
+		  
+		  
+		  
+	        <!-- 구글 리캡챠 -->
+        <dependency>
+            <groupId>net.tanesha.recaptcha4j</groupId>
+            <artifactId>recaptcha4j</artifactId>
+            <version>0.0.7</version>
+        </dependency>
+ 
+        <!-- 구글 리캡챠 사용하기 위한 json -->
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+ 
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.1</version>
+        </dependency>
+ 
+
 	</dependencies>
     <build>
         <plugins>

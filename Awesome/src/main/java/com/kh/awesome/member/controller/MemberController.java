@@ -1,14 +1,20 @@
 package com.kh.awesome.member.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import org.apache.commons.codec.binary.Base64;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +28,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.social.google.connect.GoogleOAuth2Template;
 import org.springframework.social.oauth2.GrantType;
@@ -31,6 +39,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,15 +50,18 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.kh.awesome.mail.controller.MailController;
 import com.kh.awesome.member.model.exception.MemberException;
 import com.kh.awesome.member.model.service.MemberService;
 import com.kh.awesome.member.model.vo.Address;
 import com.kh.awesome.member.model.vo.AuthInfo;
 import com.kh.awesome.member.model.vo.Member;
 import com.kh.awesome.member.model.vo.NaverLoginBO;
+import com.kh.awesome.recaptcha.VerifyRecaptcha;
 import com.kh.awesome.sms.TempKey;
 
 import net.nurigo.java_sdk.Coolsms;
@@ -74,6 +87,9 @@ public class MemberController {
 	/* naver login */
 		private NaverLoginBO naverLoginBO;
 		private String apiResult = null;
+		
+		@Autowired
+		private JavaMailSender mailSender;
 		
 		@Autowired
 		private void setNaverLoginBO(NaverLoginBO naverLoginBO) {
@@ -115,10 +131,92 @@ public class MemberController {
 		if(logger.isInfoEnabled()) logger.info("회원 가입 페이지 요청!");
 	}
 	
+	@RequestMapping("/findMember.do")
+	public void findMember() {
+		if(logger.isInfoEnabled()) logger.info("회원 찾기 페이지 요청!");
+	}
+	
+	
+	//회원 정보 보기
+	@RequestMapping("/memberInfo.do")
+	public void memberInfo(HttpSession session,Model model) {
+		if(logger.isInfoEnabled()) logger.info("회원 정보 페이지 요청!");
+		
+		Member member=(Member) session.getAttribute("memberLoggedIn");
+		member=memberService.selectOneMember(member);
+		
+		model.addAttribute("member", member);
+	}
+	
+	//회원 정보 수정
+	@RequestMapping("/memberInfoUpdate.do")
+	public void memberInfoUpdate(HttpSession session,Model model) {
+		if(logger.isInfoEnabled()) logger.info("회원 수정 페이지 요청!");
+		
+		Member member=(Member) session.getAttribute("memberLoggedIn");
+		
+		member=memberService.selectOneMember(member);
+		Address address=memberService.memberAddress(member.getMemberCode());
+		
+		model.addAttribute("member", member);
+		model.addAttribute("address", address);
+	}
+	
+	//회원 정보 수정
+	@RequestMapping(value="/memberUpdate.do", method = RequestMethod.POST )
+	@ResponseBody
+	public String memberUpdate(Model model,
+			 Member member,
+			Address address,
+			//@ModelAttribute(value="member") Member member,
+			//@ModelAttribute(value="address") Address address,
+			@RequestParam(value="upfile",required=false) MultipartFile upfile,
+			HttpServletRequest request) {
+		if(logger.isInfoEnabled()) logger.info("회원 정보 수정 페이지 요청!");
+		//프로파일 사진 처리
+		String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/member");
+		if(upfile!=null) {
+			if(!upfile.isEmpty()) {
+				String originalFileName = upfile.getOriginalFilename();
+				String ext = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+				int rndNum =(int)(Math.random()*1000);
+				
+				String renamedFileName = sdf.format(new Date())+"_"+rndNum+"."+ext;
+				
+				//서버지정위치에 파일보관
+				try {
+					upfile.transferTo(new File(saveDirectory+"/"+renamedFileName));
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				member.setProfile(originalFileName);
+				member.setRenamedProfile(renamedFileName);
+			}
+		}
+		
+		System.out.println(member+","+address);
+		int result = memberService.updateMember(member,address);
+		System.out.println(result);
+		
+		Member m = memberService.selectOneMember(member);
+		
+		if(result>0) {
+			model.addAttribute("memberLoggedIn",m);
+			return member.getPhone();
+		}else {
+			return "fail";
+		}
+		
+	}
+	
+	//회원가입
 	@RequestMapping(value="/memberEnrollEnd.do", method = RequestMethod.POST )
 	public String memberEnrollEnd(Address address, 
 						Member member,
-						@RequestParam("upfile") MultipartFile upfile, 
+						@RequestParam(value="upfile",required=false) MultipartFile upfile, 
 						Model model,
 						HttpServletRequest request) {
 		if(logger.isInfoEnabled()) logger.info("회원 등록 페이지 요청!");
@@ -153,9 +251,13 @@ public class MemberController {
 			System.out.println("암호화전: "+rawPwd);
 			System.out.println("암호화후: "+encodedPwd);
 			
-			if(member.getFriendOpen()!='Y') member.setFriendOpen('N'); 
-			if(member.getBlindDateOpen()!='Y') member.setBlindDateOpen('N'); 
-			if(member.getSearchOpen()!='Y') member.setSearchOpen('N'); 
+//			if(member.getFriendOpen()!='Y') member.setFriendOpen('N'); 
+//			if(member.getBlindDateOpen()!='Y') member.setBlindDateOpen('N'); 
+//			if(member.getSearchOpen()!='Y') member.setSearchOpen('N'); 
+			member.setFriendOpen('N'); 
+			member.setBlindDateOpen('N'); 
+			member.setSearchOpen('N');
+			
 			member.setPassword(encodedPwd);
 		
 		//회원 등급처리(관리자,일반회원)
@@ -200,8 +302,11 @@ public class MemberController {
 	
 	@RequestMapping("/memberLogin.do")
 	public String memberLogin(@RequestParam("memberId") String memberId,
-							@RequestParam("password") String password,
+								@RequestParam("password") String password,
+								@RequestParam(value="autoLogin", required=false) String autoLogin,
 							Model model,
+							HttpSession session,
+							HttpServletResponse response,
 							HttpServletRequest request) {
 		
 		logger.info("회원 로그인 요청!");
@@ -225,8 +330,37 @@ public class MemberController {
 				boolean bool = bCryptPasswordEncoder.matches(password, m.getPassword());
 				
 				if(bool) {
+					
+					/* 20190714 김용빈
+		            *
+		             *  [   세션 추가되는 부분      ]
+		             */
+		            // 1. 로그인이 성공하면, 그 다음으로 로그인 폼에서 쿠키가 체크된 상태로 로그인 요청이 왔는지를 확인한다.
+		            if ( autoLogin !=null ){ 
+		                // 쿠키 사용한다는게 체크되어 있으면...
+		                // 쿠키를 생성하고 현재 로그인되어 있을 때 생성되었던 세션의 id를 쿠키에 저장한다.
+		                Cookie cookie = new Cookie("loginCookie", session.getId());
+		                // 쿠키를 찾을 경로를 컨텍스트 경로로 변경해 주고...
+		                cookie.setPath("/");
+		                int amount = 60 * 60 * 24 * 7;
+		                cookie.setMaxAge(amount); // 단위는 (초)임으로 7일정도로 유효시간을 설정해 준다.
+		                // 쿠키를 적용해 준다.
+		                response.addCookie(cookie);
+		                 
+		                // currentTimeMills()가 1/1000초 단위임으로 1000곱해서 더해야함
+		                java.sql.Date sessionLimit = new java.sql.Date(System.currentTimeMillis() + (1000*amount));
+		                System.out.println("sessionLimit="+sessionLimit);
+		                // 현재 세션 id와 유효시간을 사용자 테이블에 저장한다.
+		                memberService.keepLogin(member.getMemberId(), session.getId(), sessionLimit);
+		            }
+		                
 					msg="로그인성공!"+m.getMemberName()+"님, 반갑습니다.";
 					model.addAttribute("memberLoggedIn",m);
+					
+					Member test=(Member) session.getAttribute("memberLoggedIn");
+					logger.info("member="+test); //null
+					
+					
 				}else {
 					msg="비밀번호가 틀렸습니다.";
 				}
@@ -256,9 +390,31 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/memberLogout.do")
-	public String memeberLogOut(SessionStatus sessionStatus) {
-		
+	public String memeberLogOut(SessionStatus sessionStatus,HttpSession session,
+						HttpServletRequest request, HttpServletResponse response) {
+
 		logger.info("회원 로그아웃 요청!");
+		
+		Member member = (Member) session.getAttribute("memberLoggedIn");
+		
+		if(session.getAttribute("memberLoggedIn")!=null) {
+			session.removeAttribute("memberLoggedIn");
+			session.invalidate();
+			
+			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+            if ( loginCookie != null ){
+                // null이 아니면 존재하면!
+                loginCookie.setPath("/");
+                // 쿠키는 없앨 때 유효시간을 0으로 설정하는 것 !!! invalidate같은거 없음.
+                loginCookie.setMaxAge(0);
+                // 쿠키 설정을 적용한다.
+                response.addCookie(loginCookie);
+                 
+                // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
+                java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+                memberService.keepLogin(member.getMemberId(), session.getId(), date);
+            }
+		}
 		
 		//로그인하였을때HttpSession객체 .setAttribute을 통해 
 		//로그인 사용자 정보을 담았다면, httpSession .invalidate() 호출하여야한다.
@@ -461,6 +617,7 @@ public class MemberController {
 	    }
 		
 	    
+	    //문자 보내기
 	    @ResponseBody
 	    @RequestMapping(value = "/sendSMS", method = RequestMethod.POST, 
 	    		produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -486,7 +643,7 @@ public class MemberController {
 	    	HashMap<String, String> set = new HashMap<String, String>();
 	    	set.put("to", userPhoneNumber); // 수신번호
 	    	set.put("from", "01089721172"); // 발신번호
-	    	set.put("text", "안녕하세요 awesome입니다. 가입인증번호는 [" + key + "] 입니다."); // 문자내용
+	    	set.put("text", "안녕하세요 awesome입니다. 인증번호는 [" + key + "] 입니다."); // 문자내용
 	    	set.put("type", "sms"); // 문자 타입
 
 	    	Map<String, String> map = new HashMap<>();
@@ -526,10 +683,15 @@ public class MemberController {
 	    		method = RequestMethod.POST, 
 	    		produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	    public String chkSmsAuth(@RequestParam("authNum") String authNum,
+	    		@RequestParam(value="phone",required=false) String phone,
+	    		@RequestParam(value="memberName",required=false) String memberName,
+	    		@RequestParam(value="enrollMemberId",required=false) String enrollMemberId,
 	    		@CookieValue(value="JSESSIONID", required=false) Cookie jid,
 	    						HttpServletRequest request) {
-			
+
 	    	String jsessionid="";
+	    	
+	    	System.out.println(authNum+","+phone+","+memberName+","+enrollMemberId);
 	    	
 	    	if(jid != null)
 	    		jsessionid=jid.getValue();
@@ -542,9 +704,116 @@ public class MemberController {
 
 	    	if(result!=0) {
 	    		int delResult=memberService.deleteSms(map);
+	    		
+	    		
+	    	//계정찾기
+	    		if(phone!=null && memberName!=null && enrollMemberId==null) {
+	    			Member member = new Member();
+	    			member.setPhone(phone);
+	    			member.setMemberName(memberName);
+	    			member=memberService.selectOneMember(member);
+	    			return member.getMemberId();	    			
+	    		}
+	    		
+	    	//비밀번호 찾기
+	    		if(phone!=null && memberName!=null && enrollMemberId!=null) {
+	    			String mailResult=mailSending(enrollMemberId);
+	    			System.out.println("메일 보내고 난후 "+mailResult);
+	    			return mailResult;
+	    		}
+	    		
+	    	//가입시에 문자인증
 	    		return "success";
 	    	}
 	    	else return "fail";
 	    }
+	    
+	    @ResponseBody
+	    @RequestMapping(value = "/chkNamePhone.do", 
+	    		method = RequestMethod.POST, 
+	    		produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	    public String chkNamePhone(Member m,
+	    			@CookieValue(value="JSESSIONID", required=false) Cookie jid){
+	    	
+	    	String result ="";
+	    	
+	    	System.out.println(m);
+	    	
+	    	Member member=memberService.selectOneMember(m);
 
+	    	if(member !=null) {
+	    		try {
+					//if("전송 성공".equals(sendSMS(member.getPhone(),jid,null)))
+						result= "success";
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	    	}
+	    	else {
+	    		result= "fail";
+	    	}
+	    	
+	    	System.out.println(result);
+	    	return result;
+	    }
+	    
+	    @ResponseBody
+	    @RequestMapping(value = "/VerifyRecaptcha", method = RequestMethod.POST)
+	    public int verifyRecaptcha(HttpServletRequest request) {
+	    	logger.info("google recaptcha!!!!!!!!!!!!!!!!!!!!!");
+	       VerifyRecaptcha.setSecretKey("6LfzMK0UAAAAANGEUfhQ6WMnYWoAGvyjK7sYo_cj");
+	        String gRecaptchaResponse = request.getParameter("recaptcha");
+	        System.out.println(gRecaptchaResponse);
+	        //0 = 성공, 1 = 실패, -1 = 오류
+	        try {
+	            if(VerifyRecaptcha.verify(gRecaptchaResponse))
+	                return 0;
+	            else return 1;
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            return -1;
+	        }
+	    }
+	    
+		// mailSending 코드
+		@RequestMapping("/mailSending.do")
+		@ResponseBody
+		public String mailSending(String email) {
+			
+			System.out.println("메일 발송");
+			System.out.println(email);
+
+			String setfrom = "AwesomeAdmin@awesome.com";
+			String tomail = email; // 받는 사람 이메일
+			String title = "안녕하세요 awsome 입니다."; // 제목
+			
+			Member member = new Member();
+			String tempPwd = new TempKey().getKey(8); // 인증키 생성
+			String encodedPwd = bCryptPasswordEncoder.encode(tempPwd);
+			member.setPassword(encodedPwd);
+			member.setMemberId(email);
+			
+			int result = memberService.updateMember(member,null);
+			System.out.println("멤버 업데이트 후:"+result);
+			String content = "임시비밀번호는 "+tempPwd+"입니다."; // 내용
+
+			if(result==1) {
+				try {
+					MimeMessage message = mailSender.createMimeMessage();
+					MimeMessageHelper messageHelper = new MimeMessageHelper(message,true, "UTF-8");
+	
+					messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
+					messageHelper.setTo(tomail); // 받는사람 이메일
+					messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+					messageHelper.setText(content); // 메일 내용
+	
+					mailSender.send(message);
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+	
+				return "success";
+			}
+			return "fail";
+		}
 }

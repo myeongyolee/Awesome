@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -7,58 +7,26 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>회원가입</title>
-	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<title>내정보 수정 페이지</title>
+	
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" 
-			integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"/>
-	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"/>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
-		integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" 
-		crossorigin="anonymous">
-    <style>
-		#modalBody{ 
-			display : flex; 
-			flex-direction : row;
-			justify-content : space-between; 
-			align-items : center;      
-			align-content : center;       
-			max-width : 100%;     
-		}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
+    	integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
+	
+	<style>
+		div#update-container{width:400px; margin:0 auto; text-align:center;}
+		div#update-container input, div#update-container select {margin-bottom:10px;}
 		
-		#modalBody span.guide {display:none;font-size: 12px; top:12px; right:10px;}
-		#modalBody span.ok{color:green;}
-		#modalBody span.error{color:red;}
+		span.guide {display:none;font-size: 12px; top:12px; right:10px;}
+		span.ok{color:green;}
+		span.error{color:red;}
 		
-		#modalBody span.pwd {display:none;font-size: 12px; top:12px; right:10px;}
-		#modalBody span.error{color:red;}
+		span.pwd {display:none;font-size: 12px; top:12px; right:10px;}
+		span.error{color:red;}
 		.smsAuth {display:none;}
-		
-			#modalBody #modalList{
-				flex : 1 1 0; 
-				margin : auto; 
-				
-				display : flex; 
-				flex-direction : column;
-				justify-content : space-between; 
-			}
-				#modalBody #modalList .btn{
-					flex : 1 1 0; 
-					margin : auto;
-					margin-top : 1%; 
-					width:100%;
-				}
-			
-			
-			
-			#modalBody .modal-body{
-				flex : 1 1 0; 
-				margin : auto; 
-			}
-		
-	</style> 
-			
-	<script>
+	</style>
+	
+		<script>
 	
 	/*사진 미리보기
 	* FileReader객체을 이용해서 동적으로 파일을 읽어옴
@@ -145,49 +113,7 @@
 		    }
 		 }
 	
-	  	function enrollValidate(){
-	  		var result
-            $.ajax({
-                url: '${pageContext.request.contextPath}/member/VerifyRecaptcha',
-                type: 'post',
-                async: false,
-                data: {
-                    recaptcha: $("#g-recaptcha-response").val()
-                },
-                success: function(data) {
-                    switch (data) {
-                        case 0:
-                        	result=true;
-                            break;
-
-                        case 1:
-                        	result=false;
-                            alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
-                            break;
-
-                        default:
-                        	result=false;
-                            alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
-                        	break;
-                    }
-                }
-            });
-            
-	  		if(!result){
-	  			return false;
-	  		}
-            
-			if($("#idDuplicateCheck").val()!=1 ){
-				alert("아이디 중복 여부 확인하세요.");
-				$("#memberId").focus();
-				return false;
-			}
-			
-			if($("#idDuplicateCheck").val()!=1 ){
-				alert("아이디 중복 여부 확인하세요.");
-				$("#memberId").focus();
-				return false;
-			}
+	  	function validate(){
 			
 			if($("#smsAuthChk").val()!=1 ){
 				alert("핸드폰 인증이 필요합니다.");
@@ -204,7 +130,7 @@
       		var userPhoneNumber = $("#phoneAuth").val();
       		$(".smsAuth").show(); //운영시에 삭제
       		
-      		/*  $.ajax({        //운영시에 주석해제
+      		/*  $.ajax({         //운영시에 주석해제
       			 url:"${pageContext.request.contextPath}/member/sendSMS", 
       			type: "POST",
       			data: "userPhoneNumber="+userPhoneNumber,
@@ -221,9 +147,11 @@
       			}
       		});  */
     	  });
-    	  
-    	  $("#smsAuthBtn").on("click",function(){
-    		  
+      	$("#phoneAuthBtn").on("click",function(){
+    		$("#smsAuthChk").val(0);	
+    	});
+      	
+    	  $("#smsAuthBtn").on("click",function(){	
     		  var authNum = $("#smsAuth").val();
     		  
  			 $.ajax({ 
@@ -234,7 +162,7 @@
 				success : function(data){
 					if(data =="success"){
 						alert("문자인증을 완료하였습니다.");
-						//$(".smsAuth").hide();
+						//$("#smsAuthBtn").hide();
 						$("#smsAuthChk").val(1);
 						//$("#phoneAuthBtn").hide();
 					}
@@ -387,97 +315,65 @@
 
     });
 	</script>
-	
+	    	
 </head>
 <body>
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">회원 가입</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-	          
-       <div id="modalBody">
-        <!-- : https://getbootstrap.com/docs/4.1/components/forms/#overview -->
-        <form name="memberEnrollFrm" action="${pageContext.request.contextPath}/member/memberEnrollEnd.do" 
-        		enctype="multipart/form-data" method="post" onsubmit="return enrollValidate();">
-        <div class="modal-body">
-        	<div id="img-viewer-container">
-				<img id="profileImg" width=200/>
+
+	<div id="update-container">
+		<form name="memberUpdateFrm" action="${pageContext.request.contextPath}/member/memberUpdate.do" 
+        		enctype="multipart/form-data" method="post" onsubmit="return validate();">
+		    <div id="img-viewer-container">
+				<img id="profileImg" width=200 src="${pageContext.request.contextPath}/resources/upload/member/${member.renamedProfile }"/>
 			</div>
+			<input type="hidden" name="memberCode" value="${member.memberCode }"/>
+			<input type="email" class="form-control" placeholder="아이디 (4글자이상)" name="memberId" id="memberId_" value="${member.memberId }" readonly>
 			<br />
-              <input type="email" class="form-control" name="memberId" id="enrollMemberId" placeholder="아이디" value="${param.memberId}" required>
-              <br />
-              <button type="button" class="btn btn-outline-success" id="idDuplicateCheckBtn">중복체크</button>
-			  <input type="hidden" id="idDuplicateCheck" value="0"/>
-              <br />
-              <input type="text" class="form-control" name="nickName" id="nickName" placeholder="별명(4~11자 사이로 입력)" required>
-              <button type="button" class="btn btn-outline-success" id="nickDuplicateCheckBtn">중복체크</button>
-              <input type="hidden" id="nickDuplicateCheck" value="0"/>
-              <br />
-              <input type="password" class="form-control" name="password" id="password_" placeholder="비밀번호" required>
-              <span class="pwd error ori">패스워드는 6글자이상 입력하세요</span>
-              <br />
-              <input type="password" class="form-control" name="passwordChk" id="passwordChk" placeholder="비밀번호 확인" required>
-              <span class="pwd error chk">패스워드가 일치하지 않습니다.</span>
-              <br />
+			<input type="text" class="form-control" placeholder="이름" name="memberName" id="memberName" value="${member.memberName }" >
+			<br />
 	            <div id="profileUp" class="input-group mb-3" style="padding:0px;">
 				  <div class="custom-file">
-				    <input type="file" class="form-control custom-file-input" name="upfile" id="upfile" onchange="loadImg(this);">
-				    <label class="custom-file-label" for="upfile"><i class="far fa-user"> 프로필 사진 등록</i></label>
+				    <label class="custom-file-label" for="upfile"><i class="far fa-user"> 프로필 사진 등록</i>
+				    	<input type="file" class="form-control custom-file-input" name="upfile" id="upfile" onchange="loadImg(this);">
+				    </label>
 				  </div>
 				</div>
-              <br />
-              
-              
-              <input type="text" class="form-control" name="memberName" placeholder="이름" required>
-              <br />
-              <input type="date" class="form-control" name="birthday" placeholder="생년월일" required>
-              <br />
-              <input type="radio" name="gender" id="gender_m" value="M" required>
-              <label for="gender_m">남</label>
-
-              <input type="radio" name="gender" id="gender_f" value="F" required>
-              <label for="gender_f">여</label>
-              <br />
-              
-              <input type="tel" class="form-control" name="phone" id="phoneAuth" placeholder="연락처, '-'을 제외하고 입력하세요" required>
+			<br />
+			<input type="text" class="form-control" placeholder="별명" name="nickName" id="nickName" value="${member.nickName }" >
+			<button type="button" class="btn btn-outline-success" id="nickDuplicateCheckBtn">중복체크</button>
+			<br />
+  			<select class="form-control" name="gender" required>
+			  <option value="" disabled selected>성별</option>
+			  <option value="M" ${member.gender == 'M'.charAt(0)?"selected":"" }>남</option>
+			  <option value="F" ${member.gender == 'F'.charAt(0)?"selected":"" }>여</option>
+			</select>
+			<br />
+			<input type="date" class="form-control" name="birthday" placeholder="생년월일" value="${member.birthday }">
+			<br />
+			<input type="tel" class="form-control" placeholder="전화번호 (예:01012345678)" name="phone" id="phoneAuth" maxlength="11"  value="${member.phone }" placeholder="연락처, '-'을 제외하고 입력하세요">
               <span class="pwd error phone">'-'을 제외하고 입력하세요</span>
               <button type="button" class="btn btn-outline-success" id="phoneAuthBtn">인증문자 발송</button>
-              <input type="number" class="form-control smsAuth" name="phoneAuth" id="smsAuth" placeholder="인증문자 입력" required>
+              <input type="number" class="form-control smsAuth" name="phoneAuthIn" id="smsAuth" placeholder="인증문자 입력">
               <button type="button" class="btn btn-outline-success smsAuth" id="smsAuthBtn">확인</button>
-              <input type="hidden" id="smsAuthChk" value="0"/>
+              <input type="hidden" id="smsAuthChk" value="1"/>
+			<br />
+			  <input type="number" class="form-control" name="postNo" id="postNo" placeholder="우편번호"  value="${address.postNo }" readonly>
+              <button type="button" class="btn btn-outline-success" onclick="goPopup()">주소검색</button>
               <br />
-              <input type="number" class="form-control" name="postNo" id="postNo" placeholder="우편번호" required readonly>
-              <button type="button" class="btn btn-outline-success" onclick="goPopup()">검색</button>
-              <input type="text" class="form-control" name="roadAddress" id="roadAddress" placeholder="주소" required readonly>
-              <input type="hidden" class="form-control" name="address" id="address" placeholder="지번주소" required readonly>
-              <input type="hidden" class="form-control" name="placeLat" id="placeLat" placeholder="위도" required readonly>
-              <input type="hidden" class="form-control" name="placeLng" id="placeLng" placeholder="경도" required readonly>
-              <input type="text" class="form-control" name="detailAddress" id="detailAddress" placeholder="상세주소" required readonly>
+              <input type="text" class="form-control" name="roadAddress" id="roadAddress" placeholder="주소"  value="${address.roadAddress }" readonly>
               <br />
-<!--               <input type="checkbox" name="blindDateOpen" id="blindDateOpen" value="Y"/>
-              <label for="blindDateOpen">소개팅공개여부</label>
+              <input type="hidden" class="form-control" name="address" id="address" placeholder="지번주소"  value="${address.address }" readonly>
+              <input type="hidden" class="form-control" name="placeLat" id="placeLat" placeholder="위도"  value="${address.placeLat }" readonly>
+              <input type="hidden" class="form-control" name="placeLng" id="placeLng" placeholder="경도"  value="${address.placeLng }" readonly>
+              <input type="text" class="form-control" name="detailAddress" id="detailAddress" placeholder="상세주소" value="${address.detailAddress }"  readonly>
               <br />
-              <input type="checkbox" name="friendOpen" id="friendOpen" value="Y"/>
-              <label for="friendOpen">친구공개여부</label>
-              <br />
-              <input type="checkbox" name="searchOpen" id="searchOpen" value="Y"/>
-				<label for="searchOpen">검색공개여부</label>
-              <br /> -->
-			<textarea name="introduce" id="introduce" cols="30" rows="5" style="resize: none" placeholder="자기소개" required></textarea>
+              
+			<br />
+			<textarea name="introduce" id="introduce" cols="30" rows="5" style="resize: none" placeholder="자기소개" required>${member.introduce }</textarea>
+			<br />
+			<input type="submit" class="btn btn-outline-success" value="수정" >&nbsp;
+			<input type="reset" class="btn btn-outline-success" value="취소">
+		</form>
+	</div>
 
-				<br />
-			<div class="g-recaptcha" data-sitekey="6LfzMK0UAAAAAKN5D-f_R8j35H8xSDPgbxDBBReO"></div>
-			<input type="hidden" class="form-control" name="recaptcha" id="recaptcha" readonly>
-        </div>
-	       <div class="modal-footer">
-	         <button type="submit" class="btn btn-outline-success" >확인</button>
-	         <button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
-	       </div>
-       </form>
-       </div>
-		 <!-- 회원가입 모달 끝 -->
-		 
 </body>
 </html>
