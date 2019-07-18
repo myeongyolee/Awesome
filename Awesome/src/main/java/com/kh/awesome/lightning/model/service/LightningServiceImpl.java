@@ -16,15 +16,40 @@ public class LightningServiceImpl implements LightningService {
 	private LightningDAO lightningDAO;
 	
 	@Override
-	public List<Map<String, String>> selectLightningList(char matchingType) {
+	public List<Map<String, Object>> selectLightningList(Map<String, String> search, int cPage, int numPerPage) {
 		// TODO Auto-generated method stub
-		return lightningDAO.selectLightningList(matchingType);
+		return lightningDAO.selectLightningList(search, cPage, numPerPage);
 	}
 
 	@Override
-	public int insertLightning(MatchManager matchManager) {
+	public int insertLightning(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return lightningDAO.insertLightning(matchManager);
+		return lightningDAO.insertLightning(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectJoinMemberList(Map<String, List<String>> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectJoinMemberList(param);
+	}
+
+	@Override
+	public List<String> selectCityList() {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectCityList();
+	}
+
+	@Override
+	public List<Map<String, Object>> selectLocalList(int city) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectLocalList(city);
+	}
+
+	@Override
+	public List<String> selectInterestingList() {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectInterestingList();
+
 	}
 
 }

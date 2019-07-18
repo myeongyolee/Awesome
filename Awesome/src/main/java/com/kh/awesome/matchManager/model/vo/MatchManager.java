@@ -8,7 +8,6 @@ public class MatchManager {
 	private int memberCode;
 	private int interestingCode;
 	private int localCode;
-	private String placeId;
 	private String placeName;
 	private int placeLat;
 	private int placeLng;
@@ -22,7 +21,7 @@ public class MatchManager {
 	public MatchManager() {}
 
 	public MatchManager(int matchNo, String matchTitle, int memberCode, int interestingCode, int localCode,
-			String placeId, String placeName, int placeLat, int placeLng, char matchingType, String matchContent,
+			String placeName, int placeLat, int placeLng, char matchingType, String matchContent,
 			String matchOriginalImg, String matchRenamedImg, Date matchWriteDate, Date matchEndDate) {
 		super();
 		this.matchNo = matchNo;
@@ -30,7 +29,6 @@ public class MatchManager {
 		this.memberCode = memberCode;
 		this.interestingCode = interestingCode;
 		this.localCode = localCode;
-		this.placeId = placeId;
 		this.placeName = placeName;
 		this.placeLat = placeLat;
 		this.placeLng = placeLng;
@@ -80,14 +78,6 @@ public class MatchManager {
 
 	public void setLocalCode(int localCode) {
 		this.localCode = localCode;
-	}
-
-	public String getPlaceId() {
-		return placeId;
-	}
-
-	public void setPlaceId(String placeId) {
-		this.placeId = placeId;
 	}
 
 	public String getPlaceName() {
@@ -165,7 +155,7 @@ public class MatchManager {
 	@Override
 	public String toString() {
 		return "MatchManager [matchNo=" + matchNo + ", matchTitle=" + matchTitle + ", memberCode=" + memberCode
-				+ ", interestingCode=" + interestingCode + ", localCode=" + localCode + ", placeId=" + placeId
+				+ ", interestingCode=" + interestingCode + ", localCode=" + localCode + ", placeId=" 
 				+ ", placeName=" + placeName + ", placeLat=" + placeLat + ", placeLng=" + placeLng + ", matchingType="
 				+ matchingType + ", matchContent=" + matchContent + ", matchOriginalImg=" + matchOriginalImg
 				+ ", matchRenamedImg=" + matchRenamedImg + ", matchWriteDate=" + matchWriteDate + ", matchEndDate="

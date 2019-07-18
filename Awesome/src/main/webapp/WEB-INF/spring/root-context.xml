@@ -7,6 +7,8 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
+	
+	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- #6.1. myBatis(JDBC)설정 연결 설정하기 -->
     <bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -29,15 +31,13 @@
     
     <!-- #6.2. myBatis(JDBC)설정 : SqlSessionFactory -->
     <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!-- name=dataSource => 빈객체sqlSessionFactoryBean의  property명 dataSource임(setter)
-        ref의 dataSource는 위에서 선언한 datasource 빈객체를 의미함. -->
+
         <property name="dataSource" ref="dataSource"/>
-        
         <!-- 앞으로 생성할 모든 mapper파일을 한번에 읽어오도록하자.
         	여기서 classpath는 target/classes를 의미한다.
         src/main/resources 디렉토리에서 작성된 파일들은 classpath로 이동함. -->
+
         <property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
-        
         <!-- mybatis-config.xml파일 위치를 명시함. -->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
@@ -54,7 +54,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
     <!-- #11.1. @Transactional이 붙은 메소드를 대상으로 Transaction Advice를 적용함. ++++어노테이션방식++++ -->
-	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
 	
 	<!-- #11.1 선언적방식의 트랜잭션처리 ++++XML방식++++ -->
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -66,8 +66,49 @@
 		</tx:attributes>
 	</tx:advice>
 	<!-- #11.2 선언적방식의 트랜잭션 : aop pointcut및 advice등록 -->
+
      <aop:config proxy-target-class="true">
+
         <aop:pointcut id="serviceMethod" expression="execution(* com.kh.spring..*ServiceImpl.*(..)))"/>
         <aop:advisor id="transactionAdvisor" advice-ref="txAdvice" pointcut-ref="serviceMethod"/>
     </aop:config>
+    
+    <!-- #googleLogin#2 : Google 소셜 로그인 연결 설정 -->
+    <bean id="googleOAuth2Template"
+        class="org.springframework.social.google.connect.GoogleOAuth2Template">
+        <constructor-arg
+            value="620340826519-n25olunhj7rerh7f6fde1umslcfvgquf.apps.googleusercontent.com" />
+        <constructor-arg value="1clPYDWRqjtbSo7orhe5X6tM" />
+    </bean>
+ 
+    <bean id="googleOAuth2Parameters"
+        class="org.springframework.social.oauth2.OAuth2Parameters">
+        <!-- <property name="scope" value="profile"></property> -->
+        <property name="scope" value="email profile openid"></property>
+        <property name="redirectUri"
+            value="http://localhost/awesome/member/googlecallback" />
+    </bean>
+ 
+    <bean id="authInfo" class="com.kh.awesome.member.model.vo.AuthInfo">
+        <constructor-arg
+            value="620340826519-n25olunhj7rerh7f6fde1umslcfvgquf.apps.googleusercontent.com" />
+        <constructor-arg value="1clPYDWRqjtbSo7orhe5X6tM" />
+    </bean>
+    
+    
+    <!-- 20190711 11;09 김용빈 -->
+   		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		    <property name="host" value="smtp.gmail.com" />
+		    <property name="port" value="587" />
+		    <property name="username" value="yyongpall@gmail.com" />
+		    <property name="password" value="yb145321" />
+		    <property name="javaMailProperties">
+		    <props>
+		      <prop key="mail.smtp.auth">true</prop>
+		      <prop key="mail.smtp.starttls.enable">true</prop>
+		    </props>
+		    </property>
+		  </bean>
+
 </beans>
+

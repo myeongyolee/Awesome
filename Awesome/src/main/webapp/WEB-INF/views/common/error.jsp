@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-
 <%
 	//httpstaus 에러코드로 넘어온 경우: 404
 	//exception 내장객체가 null임.
@@ -32,5 +31,6 @@
 		<a href="${pageContext.request.contextPath }">Home</a>
 	</div>
 	
+
 </body>
 </html>
