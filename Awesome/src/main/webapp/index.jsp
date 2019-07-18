@@ -50,6 +50,21 @@ ul.profile-list{
 	<jsp:param value="awesome 인덱스" name="pageTitle"/>
 </jsp:include>
 <script>
+function chart(){
+	$.ajax({
+		url : "${pageContext.request.contextPath}/admin/chart.do",
+		dataType: "json",
+		success: function(data){
+			console.log(data);
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패"+jqxhr.status);
+			console.log("ajax처리실패"+textStatus.status);
+			console.log("ajax처리실패"+errorThrown.status);
+		}
+	});
+}
+
 function city_local_info(){
 	/* var param = {};
 	param.key = '82C91404-6AF0-3A92-8D77-CB8CCEE31F42';
@@ -73,6 +88,7 @@ function city_local_info(){
 <button onclick="city_local_info();">도시정보</button>
 
 <button onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'">lightning.do</button>
+<button onclick="location.href='${pageContext.request.contextPath}/admin/chart.do'">차트</button>
 
 <input type="button" value="동네친구 지도 확인" onclick="searchMap();" />
 <input type="button" value="동네친구찾기" onclick="modaltest();"/>
