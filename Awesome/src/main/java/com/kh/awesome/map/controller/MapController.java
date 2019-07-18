@@ -92,18 +92,32 @@ public class MapController {
 		return result;
 	}
 	
+	@RequestMapping("/map/checkFriend")
+	@ResponseBody
+	public int checkFriend(@RequestParam("memberCode") String memberCode, @RequestParam("friendCode") String friendCode) {
+		logger.info("checkFriend들어옴");
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("memberCode", memberCode);
+		param.put("friendCode", friendCode);
+		
+		int result = mapService.checkFriend(param);
+		
+		return result;
+		
+	}
+	
 	@RequestMapping("/map/sendFriend")
 	public String sendFriend(@RequestParam("memberCode") String memberCode, @RequestParam("friendCode") String friendCode) {
 		logger.info("sendFriend들어옴");
 		Map<String,String> param = new HashMap<String,String>();
 		param.put("memberCode", memberCode);
 		param.put("friendCode", friendCode);
+		param.put("result", "Y");
 		
-		int result = mapService.sendFriend(param);
+		int result = mapService.sendFriend(param); // 친구목록테이블에 기록 남기기
 		
 		return "/map/maptest";
-	}
-	
+	}	
 	
 	
 	@RequestMapping(value="/map/findPosition", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)

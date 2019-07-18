@@ -1,6 +1,9 @@
 package com.kh.awesome.member.model.service;
 
+import java.sql.Date;
 import java.util.Map;
+
+import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member selectOneMember(String memberId) {
-		return memberDAO.selectOneMember(memberId);
+	public Member selectOneMember(Member m) {
+		return memberDAO.selectOneMember(m);
 	}
 
 	/*
@@ -74,4 +77,55 @@ public class MemberServiceImpl implements MemberService {
 	public int chkSms(Map<String, String> map) {
 		return memberDAO.chkSms(map);
 	}
+
+	@Override
+	public Address memberAddress(int memberCode) {
+		return memberDAO.memberAddress(memberCode);
+	}
+
+	/*
+	 * 트랜잭션 처리시 정상처리여부는 RuntimeExcpetion이 발생했는지 여부이다.
+	 * 그외 Exception을 처리 하려면, rollbackFor 속성에 해당 예외 클래스을 전달하면 된다.  
+	 */
+	@Override
+	@Transactional(rollbackFor=Exception.class)
+	public int updateMember(Member member, Address address) {
+		int result =0;
+		if(member!=null && address!=null) {
+			if(member!=null && address.getAddress() !=null) {
+				
+				result =memberDAO.updateMember(member);
+				
+				if(result==0)
+					throw new MemberException("회원 정보 수정 오류");
+				
+				if(result!=0)
+					System.out.println("전전저너memberservice ="+address);
+					address.setMemberCode(member.getMemberCode());
+					System.out.println("후후후후후memberservice ="+address);
+					result =memberDAO.updateAddress(address);
+					
+				if(result==0)
+					throw new MemberException("회원 주소 정보 수정 오류");
+				
+				return result;
+			//}else if(member ==null && address.getAddress() !=null ){
+			}else {
+				return memberDAO.updateAddress(address);
+			}
+		}else {
+			return memberDAO.updateMember(member);
+		}
+	}
+
+	@Override
+	public void keepLogin(String memberId, String sessionId, Date next) {
+		memberDAO.keepLogin(memberId, sessionId, next);
+	}
+
+	@Override
+	public Member checkUserWithSessionKey(String sessionId) {
+		return memberDAO.checkUserWithSessionKey(sessionId);
+	}
+
 }

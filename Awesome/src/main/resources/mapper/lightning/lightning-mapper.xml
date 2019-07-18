@@ -106,5 +106,5 @@
 		from local L left join city C on L.city_code = C.city_code
 		where C.city_code = #{city}
 	</select>
-	
+
 </mapper>

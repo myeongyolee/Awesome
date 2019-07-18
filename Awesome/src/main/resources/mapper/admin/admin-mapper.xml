@@ -1,7 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="admin">
-	 <resultMap type="map" id="statisticsMap">
-	 	
-	 </resultMap>
+	<resultMap type="map" id="statisticsMap">
+		<result column="city_name" property="cityName"/>
+		<result column="count" property="count"/>
+	</resultMap>
+	
+	<select id="memberAllCnt" resultType="string">
+		select count(*) from member
+	</select>
+	<select id="memberMaleCnt" resultType="string">
+		select count(*) from member where gender = 'M'
+	</select>
+	<select id="memberFemaleCnt" resultType="string">
+		select count(*) from member where gender = 'F'
+	</select>
+	<select id="member20" resultType="string">
+		select count(*) from member where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> 30
+	</select>
+	<select id="member30" resultType="string">
+		select count(*) from member where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> 40
+	</select>
+	<select id="member40" resultType="string">
+		select count(*) from member where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[>=]]> 40
+	</select>
+	<select id="matchAllCnt" resultType="string">
+		select count(*) from match_manager
+	</select>
+	<select id="matchCnt" resultMap="statisticsMap">
+		select C.city_name, count(*) count
+		from match_manager M 
+    		left join local L on M.local_code = L.local_code
+    		left join city C on L.city_code = C.city_code
+		group by C.city_name
+	</select>
+	<select id="clubAllCnt" resultType="string">
+		select count(*) from club
+	</select>
+	<select id="clubCnt" resultMap="statisticsMap">
+		select C.city_name, count(*) count
+		from club M 
+    		left join local L on M.local_code = L.local_code
+    		left join city C on L.city_code = C.city_code
+		group by C.city_name
+	</select>
 </mapper>

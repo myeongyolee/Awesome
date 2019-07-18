@@ -57,11 +57,9 @@ public class MapDAOImpl implements MapDAO {
 	}
 
 	@Override
-	public int sendMessage(Map<String, String> param) {
+	public int checkFriend(Map<String, String> param) {
 		
-		return sqlSession.insert("map.sendMessage", param);
+		return sqlSession.selectOne("map.checkFriend", param);
 	}
-
-
 
 }

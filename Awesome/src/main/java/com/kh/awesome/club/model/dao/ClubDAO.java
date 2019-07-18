@@ -31,4 +31,5 @@ public interface ClubDAO {
 
 	Clubcontent selectClubcontentOne(int contentCode);
 
+
 }

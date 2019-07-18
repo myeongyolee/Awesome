@@ -25,21 +25,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Map<String, Integer> memberStatistics() {
+	public List<Map<String, String>> drawChart() {
 		// TODO Auto-generated method stub
-		return adminDAO.memberStatistics();
-	}
-
-	@Override
-	public Map<String, Integer> matchStatistics() {
-		// TODO Auto-generated method stub
-		return adminDAO.matchStatistics();
-	}
-
-	@Override
-	public Map<String, Integer> clubStatistics() {
-		// TODO Auto-generated method stub
-		return adminDAO.clubStatistics();
+		return adminDAO.drawChart();
 	}
 	
 	
