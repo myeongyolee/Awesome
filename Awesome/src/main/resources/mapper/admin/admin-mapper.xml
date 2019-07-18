@@ -4,4 +4,9 @@
 	 <resultMap type="map" id="statisticsMap">
 	 	
 	 </resultMap>
+	 
+	 <select id="genderCount">
+	 	select count(*) from member where gender = 'M'
+	 </select>
+	 
 </mapper>

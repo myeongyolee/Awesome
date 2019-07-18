@@ -1,5 +1,6 @@
 package com.kh.awesome.admin.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,9 @@ public int selectTotalMemberNum() {
 @Override
 public Map<String, Integer> memberStatistics() {
 	// TODO Auto-generated method stub
-	return sqlSession.selectOne("admin.memberStatistics");
+	Map<String, Integer> map = new HashMap<>();
+	map.put("genderCount", sqlSession.selectOne("admin.genderCount"));
+	return map;
 }
 
 @Override

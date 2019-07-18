@@ -98,6 +98,12 @@ function drawSarahChart() {
 	  	 회원관리
 	  	</span>
 	  </button>
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/reportBoard'">
+	  <img src="${pageContext.request.contextPath}/resources/images/icons/search.png"/>
+	  	<span class="text_">&nbsp;
+	  	신고관리
+	  	</span>
+	  </button>
 	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/answersToQuestions'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/october.png"/>
 	  	<span class="text_">&nbsp;
