@@ -63,11 +63,11 @@
 	<beans:bean id="jsonView" class="net.sf.json.spring.web.servlet.view.JsonView"/>
 	
 	<!--  websocket -->
-	<websocket:handlers>
+	<!-- <websocket:handlers>
 		<websocket:mapping handler="echoHandler" path="/echo"/>
 		<websocket:sockjs/>
 	</websocket:handlers>
-	<beans:bean id="echoHandler" class="com.kh.awesome.util.EchoHandler"/>
+	<beans:bean id="echoHandler" class="com.kh.awesome.util.EchoHandler"/> -->
 	
 	 <!-- #13.1 @Responsebody사용을 위한 의존 : 빈등록 (스프링 5.x.x => MappingJackson2HttpMessageConverter -->
     <beans:bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
@@ -83,6 +83,10 @@
     
     <!-- naver login -->
     <beans:bean id="naverLoginBO" class="com.kh.awesome.member.model.vo.NaverLoginBO" />
+    
+   
+
+
 
     
 </beans:beans>
