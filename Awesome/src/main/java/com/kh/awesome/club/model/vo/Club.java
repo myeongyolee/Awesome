@@ -100,7 +100,4 @@ public class Club implements Serializable{
 				+ ", clubInfo=" + clubInfo + ", mainoriginalFilename=" + mainoriginalFilename + ", mainrenamedFilename="
 				+ mainrenamedFilename + ", clubMember=" + clubMember + "]";
 	}
-	
-	
-	
 }

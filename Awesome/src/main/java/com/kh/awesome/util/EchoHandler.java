@@ -2,6 +2,7 @@ package com.kh.awesome.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+//@EnableWebSocket
 public class EchoHandler extends TextWebSocketHandler{
 	
 	//전체 채팅
@@ -20,7 +22,6 @@ public class EchoHandler extends TextWebSocketHandler{
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception{
 		//Map
 		//sessions.put(session.getId(),session);
-		
 		//List
 		sessionList.add(session);
 		

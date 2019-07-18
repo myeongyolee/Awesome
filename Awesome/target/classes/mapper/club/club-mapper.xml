@@ -100,5 +100,4 @@
 		where C.club_content_code = #{contentCode} 
 	</select>
 	
-	
 </mapper>

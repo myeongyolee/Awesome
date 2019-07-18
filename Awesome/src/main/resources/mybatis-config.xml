@@ -9,7 +9,7 @@
   	<setting name="mapUnderscoreToCamelCase" value="true"/>
   	<!-- 컬럼명에_를 사용한 경우, java코드에서는 camelCasing으로 치환할 것| -->
   </settings>
-  
+
   <typeAliases>
 	<typeAlias type="com.kh.awesome.matchManager.model.vo.MatchManager" alias="matchManager"/>
 	<typeAlias type="com.kh.awesome.club.model.vo.Club" alias="club"/>
@@ -18,6 +18,13 @@
 	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
 	<typeAlias type="com.kh.awesome.common.report.model.vo.Report" alias="report"/>
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
+	<typeAlias type="com.kh.awesome.member.model.vo.Member" alias="member"/>
+	<typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>
   </typeAliases> 
+
+  
+<!--   <typeHandlers>
+	<typeHandler handler="com.kh.awesome.common.handler.CustomDateHandler"/>
+	</typeHandlers> -->
 
 </configuration>

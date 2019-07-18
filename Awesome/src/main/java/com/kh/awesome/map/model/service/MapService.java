@@ -18,5 +18,7 @@ public interface MapService {
 
 	int sendFriend(Map<String, String> param);
 
+	int checkFriend(Map<String, String> param);
+
 
 }

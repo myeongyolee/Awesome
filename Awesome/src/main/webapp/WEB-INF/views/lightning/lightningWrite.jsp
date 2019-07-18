@@ -269,6 +269,7 @@ function insertData(btn){
 				</div>
 			</div>
 		</div>
+
 	</div>
 </body>
 </html>
