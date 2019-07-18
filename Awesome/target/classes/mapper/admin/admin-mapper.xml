@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="admin">
-	 <resultMap type="map" id="statisticsMap">
-	 	
-	 </resultMap>
-	 
-	 <select id="genderCount">
-	 	select count(*) from member where gender = 'M'
-	 </select>
-	 
-=======
 	<resultMap type="map" id="statisticsMap">
 		<result column="city_name" property="cityName"/>
 		<result column="count" property="count"/>
@@ -53,5 +44,5 @@
     		left join city C on L.city_code = C.city_code
 		group by C.city_name
 	</select>
->>>>>>> refs/remotes/origin/myeongyo
+
 </mapper>
