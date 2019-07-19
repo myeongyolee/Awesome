@@ -108,8 +108,10 @@ public class MemberServiceImpl implements MemberService {
 				
 				return result;
 			//}else if(member ==null && address.getAddress() !=null ){
-			}else {
+			}else if(address.getAddress() !=null){
 				return memberDAO.updateAddress(address);
+			}else {
+				return memberDAO.updateMember(member);
 			}
 		}else {
 			return memberDAO.updateMember(member);

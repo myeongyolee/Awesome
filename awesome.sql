@@ -15,12 +15,13 @@ create table member(
     blind_date_open char(1) default 'Y' check(blind_date_open in ('Y','N')),
     friend_open char(1) default 'Y' check(friend_open in ('Y','N')),
     search_open char(1) default 'Y' check(search_open in ('Y','N')),
-    introduce varchar2(500),
+    introduce varchar2(4000),
     verify char(1) default 'M' check(verify in ('A', 'M')),
     enroll_date date default sysdate,
     constraint unique_member_id unique(member_id),
     constraint unique_nickname unique(nickname)
 );
+drop table member;
 
 select * from member;
 delete from member where member_name='김용빈';
@@ -469,7 +470,9 @@ comment on column userTable.sessionlimit is '세션제한시간';
 
 select * from member;
 
-insert into smsauth values(12,'BB1DF4741030AF267BB2FCC854474C62',1111);
+insert into smsauth values(19,'BE21E71E42D8CBE9A7BF7F1A6FC3E9F7',1111);
 commit;
 
-select * from address;
+select * from member;
+delete from member where member_code=210;
+commit;
