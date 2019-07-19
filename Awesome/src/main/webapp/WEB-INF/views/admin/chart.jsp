@@ -22,16 +22,16 @@
 //Load Charts and the corechart package.
 google.charts.load('current', {'packages':['corechart']});
 
-// Draw the pie chart for Sarah's pizza when Charts is loaded.
-google.charts.setOnLoadCallback(drawSarahChart);
+// Draw the pie chart 회원 성비
+google.charts.setOnLoadCallback(drawMemberGender);
 
-// Draw the pie chart for the Anthony's pizza when Charts is loaded.
-google.charts.setOnLoadCallback(drawAnthonyChart);
+// Draw the Column Chart for 연령대별 비율
+google.charts.setOnLoadCallback(drawMemberAge);
 
 
-function drawSarahChart() {
+function drawMemberGender() {
 
-    // Create the data table for Sarah's pizza.
+    // Create the data table for 회원 성비.
     var data = new google.visualization.DataTable();
     data.addColumn('string', '성비');
     data.addColumn('number', '비율');
@@ -40,40 +40,45 @@ function drawSarahChart() {
       <%=memberMap.get("memberFemaleCnt").equals("0")?"":",['여', "+memberMap.get("memberFemaleCnt")+"]" %>
     ]);
 
-    // Set options for Sarah's pie chart.
+    // Set options for 회원 성비's pie chart.
     var options = {title:'회원 남여 성비',
                    width:400,
                    height:300,
                    is3D: true};
 
-    // Instantiate and draw the chart for Sarah's pizza.
-    var chart = new google.visualization.PieChart(document.getElementById('Sarah_chart_div'));
+    // Instantiate and draw the chart for 회원 성비.
+    var chart = new google.visualization.PieChart(document.getElementById('member_gender_div'));
     chart.draw(data, options);
-  }
+}
 
-  // Callback that draws the pie chart for Anthony's pizza.
-  function drawAnthonyChart() {
+// Callback that draws the Column Chart for 연령대별 비율.
+function drawMemberAge() {
+	var data = google.visualization.arrayToDataTable([
+		["Element", "회원수", { role: "style" } ],
+		['20대', <%=memberAge.get("member20")%>, 'silver'],
+		['30대', <%=memberAge.get("member30")%>, 'silver'],
+		['40대이상', <%=memberAge.get("member40")%>, 'silver']
+	]);
+	
+	var view = new google.visualization.DataView(data);
+	view.setColumns([0, 1,
+		{ calc: "stringify",
+		sourceColumn: 1,
+		type: "string",
+		role: "annotation" },
+		2]);
+	
+	var options = {
+		title: "연령대별 회원수",
+		width: 400,
+		height: 300,
+		bar: {groupWidth: "95%"},
+		legend: { position: "none" },
+	};
+	var chart = new google.visualization.ColumnChart(document.getElementById("member_age_div"));
+	chart.draw(view, options);
+}
 
-    // Create the data table for Anthony's pizza.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', '연령대');
-    data.addColumn('number', '비율');
-    data.addRows([
-    	<%=memberAge.get("member20").equals("0")?"":"['20대', "+memberAge.get("member20")+"]" %>
-    	<%=memberAge.get("member30").equals("0")?"":",['30대', "+memberAge.get("member30")+"]" %>
-    	<%=memberAge.get("member40").equals("0")?"":",['40대이상', "+memberAge.get("member40")+"]" %>      
-    ]);
-
-    // Set options for Anthony's pie chart.
-    var options = {title:'연령대별 회원수',
-                   width:400,
-                   height:300,
-                   is3D: true};
-
-    // Instantiate and draw the chart for Anthony's pizza.
-    var chart = new google.visualization.PieChart(document.getElementById('Anthony_chart_div'));
-    chart.draw(data, options);
-  }
 </script>
 </head>
 <body>
@@ -90,10 +95,9 @@ function drawSarahChart() {
 		현재 접속한 회원
 	</div>
 	<div id="member-chart-container">
-		<div id="Sarah_chart_div" style="border: 1px solid #ccc"></div>
-		<div id="Anthony_chart_div" style="border: 1px solid #ccc"></div>
+		<div id="member_gender_div" style="border: 1px solid #ccc"></div>
+		<div id="member_age_div" style="border: 1px solid #ccc"></div>
 		3. 관심분야
-		4. 공개여부
 	</div>
 	<div id="lightning-chart-container">
 		1. 전체 개시물 수

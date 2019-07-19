@@ -16,13 +16,18 @@
 		select count(*) from member where gender = 'F'
 	</select>
 	<select id="member20" resultType="string">
-		select count(*) from member where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> 30
+		select count(*) from member 
+		where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> 30
+			and to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[>=]]> 20
 	</select>
 	<select id="member30" resultType="string">
-		select count(*) from member where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> 40
+		select count(*) from member 
+		where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> 40
+			and to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[>=]]> 30
 	</select>
 	<select id="member40" resultType="string">
-		select count(*) from member where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[>=]]> 40
+		select count(*) from member 
+		where to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[>=]]> 40
 	</select>
 	<select id="matchAllCnt" resultType="string">
 		select count(*) from match_manager

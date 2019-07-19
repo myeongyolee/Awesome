@@ -55,7 +55,16 @@
 				flex : 1 1 0; 
 				margin : auto; 
 			}
+			
+			 #introduce{display:none;} 
+			 #introduceDiv{border:1px solid gray; border-radius:10px; padding:2%;}
 		
+		.flex{
+					display : flex; 
+            		flex-direction : row;
+				}
+				
+		#introduceBtnDiv{text-align: right;}
 	</style> 
 			
 	<script>
@@ -81,6 +90,12 @@
 					 //$("#profileUp").hide();
 				}
 			}
+		}
+	
+	
+		//스마트 에디터 연결(자기소개 작성)
+		function introducePopup(){
+			var pop = window.open("/awesome/member/smartEditor","pop","width=610,height=380, scrollbars=yes, resizable=yes");
 		}
 
 		/*
@@ -146,7 +161,8 @@
 		 }
 	
 	  	function enrollValidate(){
-	  		var result
+	  		console.log("!!start!!!");
+	  		result=false;
             $.ajax({
                 url: '${pageContext.request.contextPath}/member/VerifyRecaptcha',
                 type: 'post',
@@ -173,7 +189,7 @@
                     }
                 }
             });
-            
+            console.log("!!!!!"+result);
 	  		if(!result){
 	  			return false;
 	  		}
@@ -196,7 +212,7 @@
 				
 				//return false; //운영시에 주석해제
 			}
-			
+			console.log("???????????");
 			return true;
 		}
 		
@@ -385,7 +401,6 @@
     		$(this).next(".custom-file-label").html(fileName);
     	})
 
-
     });
 	</script>
 	
@@ -407,14 +422,17 @@
 				<img id="profileImg" width=200/>
 			</div>
 			<br />
-              <input type="email" class="form-control" name="memberId" id="enrollMemberId" placeholder="아이디" value="${param.memberId}" required>
+			<div class="flex">
+            		<input type="email" class="form-control" name="memberId" id="enrollMemberId" placeholder="아이디" value="${param.memberId}" required>
+             		<button type="button" class="btn btn-outline-success" id="idDuplicateCheckBtn">중복체크</button>
+		  		<input type="hidden" id="idDuplicateCheck" value="0"/>
+		  	</div>
               <br />
-              <button type="button" class="btn btn-outline-success" id="idDuplicateCheckBtn">중복체크</button>
-			  <input type="hidden" id="idDuplicateCheck" value="0"/>
-              <br />
+             <div class="flex">
               <input type="text" class="form-control" name="nickName" id="nickName" placeholder="별명(4~11자 사이로 입력)" required>
               <button type="button" class="btn btn-outline-success" id="nickDuplicateCheckBtn">중복체크</button>
               <input type="hidden" id="nickDuplicateCheck" value="0"/>
+             </div>
               <br />
               <input type="password" class="form-control" name="password" id="password_" placeholder="비밀번호" required>
               <span class="pwd error ori">패스워드는 6글자이상 입력하세요</span>
@@ -430,27 +448,38 @@
 				</div>
               <br />
               
-              
               <input type="text" class="form-control" name="memberName" placeholder="이름" required>
               <br />
               <input type="date" class="form-control" name="birthday" placeholder="생년월일" required>
               <br />
-              <input type="radio" name="gender" id="gender_m" value="M" required>
-              <label for="gender_m">남</label>
-
-              <input type="radio" name="gender" id="gender_f" value="F" required>
-              <label for="gender_f">여</label>
-              <br />
               
-              <input type="tel" class="form-control" name="phone" id="phoneAuth" placeholder="연락처, '-'을 제외하고 입력하세요" required>
-              <span class="pwd error phone">'-'을 제외하고 입력하세요</span>
-              <button type="button" class="btn btn-outline-success" id="phoneAuthBtn">인증문자 발송</button>
-              <input type="number" class="form-control smsAuth" name="phoneAuth" id="smsAuth" placeholder="인증문자 입력" required>
-              <button type="button" class="btn btn-outline-success smsAuth" id="smsAuthBtn">확인</button>
-              <input type="hidden" id="smsAuthChk" value="0"/>
+              <div class="flex">
+	            <div class="custom-control custom-radio">
+				  <input type="radio" id="gender_m" name="gender" class="custom-control-input" value="M" checked required>
+				  <label class="custom-control-label" for="gender_m">male</label>
+				</div> &nbsp;&nbsp;&nbsp;
+				<div class="custom-control custom-radio">
+				  <input type="radio" id="gender_f" name="gender" class="custom-control-input" value="F" required>
+				  <label class="custom-control-label" for="gender_f">female</label>
+				</div>
+			</div>
+
+			<br />
+              
+              <div class="flex">
+	              <input type="tel" class="form-control" name="phone" id="phoneAuth" placeholder="연락처, '-'을 제외하고 입력하세요" required>
+	              <button type="button" class="btn btn-outline-success" id="phoneAuthBtn">인증문자 발송</button>
+              </div>
+              <div class="flex">
+	              <input type="number" class="form-control smsAuth" name="phoneAuth" id="smsAuth" placeholder="인증문자 입력" required>
+	              <button type="button" class="btn btn-outline-success smsAuth" id="smsAuthBtn">확인</button>
+	              <input type="hidden" id="smsAuthChk" value="0"/>
+              </div>
               <br />
-              <input type="number" class="form-control" name="postNo" id="postNo" placeholder="우편번호" required readonly>
-              <button type="button" class="btn btn-outline-success" onclick="goPopup()">검색</button>
+              <div class="flex">
+	              <input type="number" class="form-control" name="postNo" id="postNo" placeholder="우편번호" required readonly>
+	              <button type="button" class="btn btn-outline-success" onclick="goPopup()">검색</button>
+              </div>
               <input type="text" class="form-control" name="roadAddress" id="roadAddress" placeholder="주소" required readonly>
               <input type="hidden" class="form-control" name="address" id="address" placeholder="지번주소" required readonly>
               <input type="hidden" class="form-control" name="placeLat" id="placeLat" placeholder="위도" required readonly>
@@ -466,8 +495,14 @@
               <input type="checkbox" name="searchOpen" id="searchOpen" value="Y"/>
 				<label for="searchOpen">검색공개여부</label>
               <br /> -->
-			<textarea name="introduce" id="introduce" cols="30" rows="5" style="resize: none" placeholder="자기소개" required></textarea>
-
+ 			 <textarea name="introduce" id="introduce" cols="30" rows="5" style="resize: none" placeholder="자기소개" required>
+			</textarea>
+			<div id="introduceDiv" name="introduceDiv">
+				<p>안녕하세요!~AWESOME입니다.</p>
+			</div>
+			<div id="introduceBtnDiv">
+				<button type="button" class="btn btn-outline-success" id="introduceBtn" onclick="introducePopup()">자기소개 작성</button>
+			</div>
 				<br />
 			<div class="g-recaptcha" data-sitekey="6LfzMK0UAAAAAKN5D-f_R8j35H8xSDPgbxDBBReO"></div>
 			<input type="hidden" class="form-control" name="recaptcha" id="recaptcha" readonly>

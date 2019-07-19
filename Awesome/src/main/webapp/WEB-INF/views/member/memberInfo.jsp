@@ -12,6 +12,11 @@
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
     	integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
+	  <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	
 	
 	<style>
 		#container{
@@ -20,11 +25,16 @@
             
            	height:500px;
            	width :1000px;
+			background: rgb(230,179,117);
+			background: -webkit-linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
+			background: -moz-linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
+			background: -o-linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
+			background: -webkit-gradient(linear, 0 100%, 0 0, from(rgba(230,179,117,1)), color-stop(0.06, rgba(255,255,255,1)));
+			background: linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
 		}
 			#item-head{
            		flex : 1; 
            		margin : auto;
-           		background : black;
            		
            		height:100%;
            		
@@ -35,7 +45,6 @@
 	           		flex : 1; 
 	           		margin : auto;
 	           		
-	           		background : blue;
 	           		
 	           		width:100%;
 	           		height:100%;
@@ -44,28 +53,25 @@
                		flex-direction : column;
 	           		align-items : center;   
 				}
+					#item-list{
+						list-style-type: none;
+					}
+					
 					#profile{
 						flex : 4; 
 	           			margin : auto;
 						
-						background : pink;
 						margin : 2%;
 						
 						overflow:hidden;
-						border: 1px solid black;
         				border-radius: 70%;
         				width:50%;
 					} 
 					
-					#memberName{
-						flex : 1; 
-	           			margin : auto;
-					}
 				
 				#item-head-items{
 	           		flex : 3; 
 	           		margin : 10%;
-	           		background : yellow;
 	           	
 	           		height:100%;
 				}
@@ -73,7 +79,6 @@
 			#item-body{
            		flex : 4; 
            		margin : auto;
-           		background : red;
            		
            		/* overflow: scroll; */
            		height:100%;
@@ -101,7 +106,15 @@
 	      			}
 	      		});
 			})
+			
+		  $("#info-head li").on("click",function(){
+    		 //$("#"+$(this)[0].className).slideToggle(1000, 'easeInBack');
+    		  $("#"+$(this)[0].className).show(1000);
+    	  });
+			
+			$("#memberInfoUpdate").trigger("click");
 		})
+		
 	</script>
 	    	
 </head>
@@ -115,14 +128,16 @@
 				<div id="profile">
 					<img id="profileImg" width=100% src="${pageContext.request.contextPath}/resources/upload/member/${member.renamedProfile }"/>
 				</div>
-				<div id="memberName">${member.nickName }</div>
+				<div id="memberNickName">${member.nickName }</div>
 			</div>
 			
+			<hr />
+			
 			<div id="item-head-items">
-				<ul>
-					<li><input type="button" id="memberInfoUpdate" value="내정보수정" /></li> 
-					<li></li>
-					<li></li>
+				<ul id="item-list">
+					<li><input type="button" class="btn btn-light" id="memberInfoUpdate" value="내정보수정" /></li> 
+					<li><input type="button" class="btn btn-light" id="menu2" value="메뉴2" /></li>
+					<li><input type="button" class="btn btn-light" id="menu3" value="메뉴3" /></li>
 					<li></li>
 					<li></li>
 				</ul>
