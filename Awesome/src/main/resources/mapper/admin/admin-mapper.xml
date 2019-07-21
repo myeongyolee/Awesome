@@ -53,4 +53,12 @@
 	<select id="selectCityList" resultType="string">
 		select city_name from city
 	</select>
+	
+	<select id="selectReportList" resultType="report">
+		select * from report where member_code = #{memberCode}
+	</select>
+	
+	<insert id="insertReport" parameterType="report">
+		insert into report values(#{memberCode}, #{reportType}, #{reportedCode}, #{reportedType}, #{reportComment})
+	</insert>
 </mapper>

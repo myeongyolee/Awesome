@@ -10,6 +10,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.awesome.admin.model.vo.Report;
+
 @Repository
 public class AdminDAOImpl implements AdminDAO {
 
@@ -74,6 +76,18 @@ public class AdminDAOImpl implements AdminDAO {
 	public List<String> selectCityList() {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("admin.selectCityList");
+	}
+
+	@Override
+	public List<Report> selectReportList(int memberCode) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("admin.selectReportList", memberCode);
+	}
+
+	@Override
+	public int insertReport(Report report) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("admin.insertReport", report);
 	}
 
 }
