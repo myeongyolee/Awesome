@@ -11,4 +11,6 @@ public interface AdminService {
 
 	List<Map<String, String>> drawChart();
 
+	List<String> selectCityList();
+
 }

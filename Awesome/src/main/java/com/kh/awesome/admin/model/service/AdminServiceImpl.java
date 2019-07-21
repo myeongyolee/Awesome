@@ -29,6 +29,12 @@ public class AdminServiceImpl implements AdminService {
 		// TODO Auto-generated method stub
 		return adminDAO.drawChart();
 	}
+
+	@Override
+	public List<String> selectCityList() {
+		// TODO Auto-generated method stub
+		return adminDAO.selectCityList();
+	}
 	
 	
 	

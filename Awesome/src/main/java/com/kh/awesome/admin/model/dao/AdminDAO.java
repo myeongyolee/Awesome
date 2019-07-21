@@ -11,4 +11,6 @@ public interface AdminDAO {
 
 	List<Map<String, String>> drawChart();
 
+	List<String> selectCityList();
+
 }

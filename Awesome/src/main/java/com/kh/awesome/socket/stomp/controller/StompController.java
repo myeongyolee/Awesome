@@ -27,8 +27,6 @@ import com.kh.awesome.socket.stomp.model.service.StompService;
 import com.kh.awesome.socket.stomp.model.vo.ChatRoom;
 import com.kh.awesome.socket.stomp.model.vo.Msg;
 
-
-
 @Controller
 public class StompController {
 		

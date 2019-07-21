@@ -49,4 +49,8 @@
     		left join city C on L.city_code = C.city_code
 		group by C.city_name
 	</select>
+	
+	<select id="selectCityList" resultType="string">
+		select city_name from city
+	</select>
 </mapper>

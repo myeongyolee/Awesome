@@ -70,4 +70,10 @@ public class AdminDAOImpl implements AdminDAO {
 		return chartMap;
 	}
 
+	@Override
+	public List<String> selectCityList() {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("admin.selectCityList");
+	}
+
 }
