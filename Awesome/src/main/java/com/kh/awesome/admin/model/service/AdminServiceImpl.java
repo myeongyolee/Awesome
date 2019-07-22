@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.awesome.admin.model.dao.AdminDAO;
+import com.kh.awesome.admin.model.vo.Report;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -28,6 +29,24 @@ public class AdminServiceImpl implements AdminService {
 	public List<Map<String, String>> drawChart() {
 		// TODO Auto-generated method stub
 		return adminDAO.drawChart();
+	}
+
+	@Override
+	public List<String> selectCityList() {
+		// TODO Auto-generated method stub
+		return adminDAO.selectCityList();
+	}
+
+	@Override
+	public List<Report> selectReportList(int memberCode) {
+		// TODO Auto-generated method stub
+		return adminDAO.selectReportList(memberCode);
+	}
+
+	@Override
+	public int insertReport(Report report) {
+		// TODO Auto-generated method stub
+		return adminDAO.insertReport(report);
 	}
 	
 	
