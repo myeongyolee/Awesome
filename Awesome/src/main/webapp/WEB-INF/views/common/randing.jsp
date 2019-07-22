@@ -64,7 +64,11 @@
 		#select-info img{width:200px; height:150px;}
 		#select-page-introduce{position:absolute; padding:150px 150px;}
 		#select-page-introduce div img{width:672px; height:400px;}
-		
+		.flex{
+					display : flex; 
+            		flex-direction : row;
+            		justify-content : flex-end;
+				}
     </style>
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
@@ -182,35 +186,47 @@
             
             <div class="modal-body">
                 <span>아이디</span>
-                <input type="text" class="form-control" name="memberId" id="memberId" placeholder="아이디입력" required>  <br>
-                <input type="checkbox" name="saveMemberId" id="saveMemberId" />
-            	<label for="saveMemberId">아이디저장</label> <br />
+                <input type="text" class="form-control" name="memberId" id="memberId" placeholder="이메일 형태의 아이디 입력" required>  <br>
                 <span>비밀번호</span>
                 <input type="password" class="form-control" name="password" id="password" required>  <br>
-                <input type="checkbox" name="autoLogin" id="autoLogin" />
-            	<label for="autoLogin">자동로그인</label> <br />
-                <a href="http://localhost/awesome/member/findMember.do">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br>
-                <button type="button">nav</button> 
-                
+                <div class="flex">
+	            	<div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" name="saveMemberId" id="saveMemberId">
+					  <label class="custom-control-label" for="saveMemberId">Save Id</label>
+					</div> &nbsp;&nbsp;&nbsp;
+					<div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" name="autoLogin" id="autoLogin">
+					  <label class="custom-control-label" for="autoLogin">Auto Login</label>
+					</div>
+            	</div>
+            	<br />
+                <!-- <a href="http://localhost/awesome/member/findMember.do">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br> -->
+                <a href="#" id="findMember" onclick="findMember()">아이디/비밀번호를 잃어버렸습니까?.</a>
             </div>
             
+            
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                 <button type="submit" class="btn btn-primary">로그인</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
             </div>
         </form>
+        
                 <!-- 20190706 23:48  -->
                 <!-- google login 김용빈 -->
-  				<a href="${google_url}"><button id="btnJoinGoogle" class="btn btn-primary btn-round"
-                                style="width: 100%">
+<%--  				<a href="${google_url}" id="btnJoinGoogle" class="g-signin2" data-theme="dark" style="width: 223px; height:48px">
                                 <i class="fa fa-google" aria-hidden="true"></i>Google Login
-                            </button></a>
+
+                </a> --%>
+               
+               	    <div id="btnJoinGoogle" style="text-align:center"><a href="${google_url}">
+					<img width="223" src="${pageContext.request.contextPath}/resources/images/btn_google.png"/></a></div>
+					<br>  
                 <!-- 20190709 09:36  -->
                 <!-- naver login 김용빈 -->             
 	                <div id="naver_id_login" style="text-align:center"><a href="${naver_url}">
 					<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a></div>
 					<br>   
-                            
+                           
           </div>
         </div>
       </div>
@@ -263,30 +279,10 @@
     </header>
 
     <script>
-    //20190708 12:48
-    //구글 인증 인,아웃
-/*     function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
 
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-    };
-    
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-        auth2.disconnect();
-      } */
+    function findMember(){
+    	window.open("/awesome/member/findMember.do","pop","width=570,height=420, scrollbars=yes, resizable=yes");
+    }
     
     <!-- 20190705 12:54 김용빈  -->
 	<!-- 회원가입 모달 추가 -->
@@ -317,13 +313,19 @@
 			}
 	    });
 		
-	<!--20190715 12:35 김용빈-->
-	<!--아이디 저장-->
 	
+	<!--20190718 18:07 김용빈-->
+	<!--아이디 저장-->
 		$(function(){
 			$("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
+			
+			if($("#memberId").val().length>0){
+				$("#saveMemberId").prop("checked",true);
+			}
 		});
 		
+	<!--20190715 12:35 김용빈-->
+	<!--아이디 저장-->
 		function validate(){
 			if($("#saveMemberId").prop("checked")){
 		        var value = $("#memberId").val();

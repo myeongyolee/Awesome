@@ -87,10 +87,13 @@
 	<select id="selectJoinMemberList" resultMap="joinMember">
 		select J.match_no, M.nickname
 		from matching_join_member J left join member M on J.member_code = M.member_code
-		where J.permit_check = 'Y' and J.join_check = 'Y' and J.match_no in 
+		where J.permit_check = 'Y' and J.join_check = 'Y' 
+		<if test="joinMemberList != null">
+		and J.match_no in 
 		<foreach collection="matchNo" item="e" open="(" close=")" separator=",">
 		#{e}
 		</foreach>
+		</if>
 	</select>
 	
 	<select id="selectCityList" resultMap="cityMap">

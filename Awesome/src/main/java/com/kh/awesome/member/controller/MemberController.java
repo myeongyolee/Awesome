@@ -126,6 +126,12 @@ public class MemberController {
 		return "member/jusoPopup";
 	}
 	
+	@RequestMapping("/smartEditor")
+	public String smartEditor() {
+		if(logger.isInfoEnabled()) logger.info("스마트에디터 팝업!");
+		return "common/smartEditor";
+	}
+	
 	@RequestMapping("/memberEnroll.do")
 	public void memberEnroll() {
 		if(logger.isInfoEnabled()) logger.info("회원 가입 페이지 요청!");
@@ -136,6 +142,21 @@ public class MemberController {
 		if(logger.isInfoEnabled()) logger.info("회원 찾기 페이지 요청!");
 	}
 	
+	//회원 아이디 가져오기
+	@RequestMapping("/getMemberId.do")
+	@ResponseBody
+	public String getMemberId(Member member,Model model, 
+			@RequestParam String phone,
+			@RequestParam String memberName) {
+		if(logger.isInfoEnabled()) logger.info("회원 정보 페이지 요청!");
+		System.out.println("전="+member);
+		member=memberService.selectOneMember(member);
+		System.out.println("후="+member);
+		if(member !=null) {
+			return member.getMemberId();
+		}
+		return "fail";
+	}
 	
 	//회원 정보 보기
 	@RequestMapping("/memberInfo.do")
@@ -173,6 +194,15 @@ public class MemberController {
 			@RequestParam(value="upfile",required=false) MultipartFile upfile,
 			HttpServletRequest request) {
 		if(logger.isInfoEnabled()) logger.info("회원 정보 수정 페이지 요청!");
+		
+		//패스워드 암호처리
+		
+		if(member.getPassword() !=null) {
+			String encodedPwd = bCryptPasswordEncoder.encode(member.getPassword());
+			member.setPassword(encodedPwd);
+		}
+		
+		
 		//프로파일 사진 처리
 		String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/member");
 		if(upfile!=null) {
@@ -298,6 +328,30 @@ public class MemberController {
 		map.put("isUsable", isUsable);
 		
 		return map;
+	}
+	
+	@RequestMapping("/checkPwd.do")
+	@ResponseBody
+	public String checkPwd(@RequestParam("memberId") String memberId,
+								@RequestParam("password") String password) {
+		
+		logger.info("회원 패스워드 체크 요청!");
+		Member member =new Member();
+		member.setMemberId(memberId);
+		
+		Member m = memberService.selectOneMember(member);
+		
+		boolean bool = bCryptPasswordEncoder.matches(password, m.getPassword());
+		
+		System.out.println(bool);
+		String str = "";
+		if(bool) {
+			str = "success";
+		}else {
+			str = "fail";
+		}
+		
+		return str;
 	}
 	
 	@RequestMapping("/memberLogin.do")
@@ -719,6 +773,7 @@ public class MemberController {
 	    		
 	    	//비밀번호 찾기
 	    		if(phone!=null && memberName!=null && enrollMemberId!=null) {
+	    			
 	    			String mailResult=mailSending(enrollMemberId);
 	    			System.out.println("메일 보내고 난후 "+mailResult);
 	    			return mailResult;
