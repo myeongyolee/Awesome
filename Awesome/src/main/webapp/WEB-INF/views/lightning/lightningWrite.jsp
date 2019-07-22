@@ -169,14 +169,6 @@ function findPosition(){
 	});
 }
 
-function test10(num){
-	console.log("체크");
-	console.log(num);
-	
-	console.log($("input[name=test"+num+"]").val());
-	console.log($("input[name=test_"+num+"]").val());
-}
-
 function insertData(btn){
 	$("[name=placeName]").val("");
 	$("[name=placeLat]").val("");
