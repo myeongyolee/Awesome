@@ -17,10 +17,19 @@
     <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+     <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+     <!-- jquery ui -->
+     <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+     
 	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/fullpage.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
-     <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+      <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+      
+      <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
+	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
      
      
      
@@ -48,9 +57,11 @@
 		#modalBody .modal-body{flex : 1 1 0; margin : auto; }
 		#login{font-size: 16px;  right: 50px; width:90px;  }
 		.mdl-badge{ border: 1px solid white; background: white;}
+		#draggable{position: fixed;z-index: 10; left:50px; top: 100px;}
 	</style>
 </head>
 <body>
+
 <!-- Modal -->
 <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
@@ -109,6 +120,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
     
+    
       
     </div>
   </div>
@@ -154,9 +166,10 @@
 	        	
 	        	$("li.mdl-menu__item").on("click",function(){
 	        		var mCode = $(this).attr("id");
+	        		console.log("mCode = "+mCode)
 	        		
 	        		$.ajax({
-	        			url : "${pageContext.reqeust.contextpath}/sock/selectMyChat"
+	        			url : "${pageContext.request.contextPath}/sock/selectMyChat",
 	        			data: mCode,
 	        			success: function(data){
 	        				
@@ -195,10 +208,12 @@
 	  </div> --%>
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
+	    	
 <script>
 <!-- 20190705 12:54 김용빈  -->
 <!-- 회원가입 모달 추가 - -->
 	$(function(){
+		$( "#draggable" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
 		
 		$("#signUp").on("click",function(){
 			$.ajax({ 
