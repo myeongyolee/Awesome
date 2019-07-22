@@ -14,16 +14,20 @@
 	<title>Awesome</title>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
+    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
 	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/fullpage.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
      <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+     
+     
+     
      <!-- WebSocket:sock.js CDN -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.js"></script>
-	<!-- WebSocket: stomp.js CDN -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.js"></script>
+	WebSocket: stomp.js CDN
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script> -->
     
     
     <%-- bootstrap --%>
@@ -43,41 +47,8 @@
 		#modalBody #modalList .btn{flex : 1 1 0; margin : auto;margin-top : 1%; width:100%;}
 		#modalBody .modal-body{flex : 1 1 0; margin : auto; }
 		#login{font-size: 16px;  right: 50px; width:90px;  }
+		.mdl-badge{ border: 1px solid white; background: white;}
 	</style>
-	<script>
-	$(function(){
-		$(".mdl-layout__drawer-button").css("background-color","lightslategrey")
-		
-		 <% if(member!= null){%>
-         //웹소켓 선언
-         //1.최초 웹소켓 생성 url: /stomp
-         let socket = new SockJS('<c:url value="/stomp" />');
-         let stompClient = Stomp.over(socket);
-
-         //connection이 맺어지면, 콜백함수가 호출된다.
-         stompClient.connect({}, function(frame) {
-         	console.log('connected stomp over sockjs');
-         	console.log(frame);
-         	
-         	//stomp에서는 구독개념으로 세션을 관리한다. 핸들러 메소드의 @SendTo어노테이션과 상응한다.
-         	stompClient.subscribe('/hello', function(message) {
-         		console.log("receive from /hello :", message);
-         		let messsageBody = JSON.parse(message.body);
-         		$("#data").append("<li class=\"list-group-item\">"+messsageBody.memberId+" : "+messsageBody.msg+ "</li>");
-         	});
-
-         	//stomp에서는 구독개념으로 세션을 관리한다. 핸들러 메소드의 @SendTo어노테이션과 상응한다.
-         	stompClient.subscribe('/chat/${chatId}', function(message) {
-         		console.log("receive from /subscribe/stomp/abcde :", message);
-         		let messsageBody = JSON.parse(message.body);
-         		$("#data").append("<li class=\"list-group-item\">"+messsageBody.memberId+" : "+messsageBody.msg+ "</li>");
-         	});
-
-         });
-       
-       <% } %>
-	})
-	</script>
 </head>
 <body>
 <!-- Modal -->
@@ -113,15 +84,19 @@
 </form>
         <!-- 20190706 23:48  -->
         <!-- google login 김용빈 -->
-<a href="${google_url}"><button id="btnJoinGoogle" class="btn btn-primary btn-round"
-                        style="width: 100%">
-                        <i class="fa fa-google" aria-hidden="true"></i>Google Login
-                    </button></a>
+		<a href="${google_url}">
+			<button id="btnJoinGoogle" class="btn btn-primary btn-round" style="width: 100%">
+                        <i class="fa fa-google" aria-hidden="true"></i>
+                        Google Login
+            </button>
+        </a>
         <!-- 20190709 09:36  -->
         <!-- naver login 김용빈 -->             
-         <div id="naver_id_login" style="text-align:center"><a href="${naver_url}">
-<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a></div>
-<br>   
+         <div id="naver_id_login" style="text-align:center">
+        	 <a href="${naver_url}">
+			<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a>
+		</div>
+		<br>   
                        
      </div>
    </div>
@@ -151,11 +126,54 @@
 	      <div class="mdl-layout-spacer"></div>
 	      <!-- Navigation. We hide it in small screens. -->
 	      <nav class="mdl-navigation mdl-layout--large-screen-only">
-	        <a class="mdl-navigation__link" href="">내 정보</a>
+	        <!-- Icon badge -->
+	        <c:if test="${ memberLoggedIn != null}">
+				<button id="demo-menu-lower-left" data-badge="♥"
+			        class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
+					
+					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
+					    for="demo-menu-lower-left" id="chatBox">
+					</ul>
+	        </c:if>
+	        <script>
+	        	$("#demo-menu-lower-left").on("click",function(){
+	        		var mCode = ${memberLoggedIn.memberCode}
+	        		console.log("hello chatBox")
+	        		$.ajax({ 
+	   				 	url:"${pageContext.request.contextPath}/sock/selectChat", 
+	   				 	data: mCode,
+	   				success : function(data){
+	   					$("ul#chatBox").html(data.html)
+	   				},
+	   				error: function(jqxhr, textStatus, errorThrown){
+	   					console.log("ajax처리실패! : "+jqxhr.status);
+	   				}
+	   			})
+	        		
+	        	})
+	        	
+	        	$("li.mdl-menu__item").on("click",function(){
+	        		var mCode = $(this).attr("id");
+	        		
+	        		$.ajax({
+	        			url : "${pageContext.reqeust.contextpath}/sock/selectMyChat"
+	        			data: mCode,
+	        			success: function(data){
+	        				
+	        			},error: function(jqxhr, textStatus, errorThrown){
+	        				console.log("ajax처리 실패! : "+kqxhr.status)
+	        			}
+	        			
+	        		})
+	        	})
+	        	
+	        </script>
+	        
 	        <a class="mdl-navigation__link" href="">소개팅</a>
 	        <a class="mdl-navigation__link" href="">번개팅</a>
 	        <a class="mdl-navigation__link" href="">동네 친구</a>
 	        <a class="mdl-navigation__link" href="">소모임</a>
+	        
 	        <c:if test="${memberLoggedIn == null }">
 	        	<span class="mdl-navigation__link" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</span>
 	        </c:if>
@@ -166,7 +184,7 @@
 	      </nav>
 	    </div>
 	  </header>
-	  <div class="mdl-layout__drawer">
+	 <%--  <div class="mdl-layout__drawer">
 	    <span class="mdl-layout-title">Awesome</span>
 	    <nav class="mdl-navigation">
 	      <a class="mdl-navigation__link" href="">소개팅</a>
@@ -174,28 +192,31 @@
 	      <a class="mdl-navigation__link" href="">동네 친구</a>
 	      <a class="mdl-navigation__link" href="">소모임</a>
 	    </nav>
-	  </div>
+	  </div> --%>
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
 <script>
 <!-- 20190705 12:54 김용빈  -->
-<!-- 회원가입 모달 추가 -->
-	$("#signUp").on("click",function(){
-		$.ajax({ 
-			 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
-			 data:"memberId=${param.memberId}",
-			success : function(data){
-				$("#memberEnrollModal .modal-content").empty();
-				$("#memberEnrollModal .modal-content").append(data);
-			},
-			error: function(jqxhr, textStatus, errorThrown){
-				console.log("ajax처리실패! : "+jqxhr.status);
-				console.log(jqxhr);
-				console.log(textStatus);
-				console.log(errorThrown);
-			}
-		});
-    });
+<!-- 회원가입 모달 추가 - -->
+	$(function(){
+		
+		$("#signUp").on("click",function(){
+			$.ajax({ 
+				 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
+				 data:"memberId=${param.memberId}",
+				success : function(data){
+					$("#memberEnrollModal .modal-content").empty();
+					$("#memberEnrollModal .modal-content").append(data);
+				},
+				error: function(jqxhr, textStatus, errorThrown){
+					console.log("ajax처리실패! : "+jqxhr.status);
+					console.log(jqxhr);
+					console.log(textStatus);
+					console.log(errorThrown);
+				}
+			});
+	    });
+	})
     
 <!--20190711 09:34 김용빈-->
 	$("#logOut").on("click",function(){
@@ -207,8 +228,8 @@
 		}
     });
 	
-<!--20190715 12:35 김용빈-->
-<!--아이디 저장-->
+<!-- 20190715 12:35 김용빈  -->
+<!-- 아이디 저장 -->
 
 	$(function(){
 		$("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
@@ -226,33 +247,46 @@
 		return true;
 	}
 	
-	<% if(member!= null){%>
-    //웹소켓 선언
-    //1.최초 웹소켓 생성 url: /stomp
-    let socket = new SockJS('<c:url value="/stomp" />');
-    let stompClient = Stomp.over(socket);
-
-    //connection이 맺어지면, 콜백함수가 호출된다.
-    stompClient.connect({}, function(frame) {
-    	console.log('connected stomp over sockjs');
-    	console.log(frame);
-    	
-    	//stomp에서는 구독개념으로 세션을 관리한다. 핸들러 메소드의 @SendTo어노테이션과 상응한다.
-    	stompClient.subscribe('/hello', function(message) {
-    		console.log("receive from /hello :", message);
-    		let messsageBody = JSON.parse(message.body);
-    		$("#data").append("<li class=\"list-group-item\">"+messsageBody.memberId+" : "+messsageBody.msg+ "</li>");
-    	});
-
-    	//stomp에서는 구독개념으로 세션을 관리한다. 핸들러 메소드의 @SendTo어노테이션과 상응한다.
-    	stompClient.subscribe('/chat/${chatId}', function(message) {
-    		console.log("receive from /subscribe/stomp/abcde :", message);
-    		let messsageBody = JSON.parse(message.body);
-    		$("#data").append("<li class=\"list-group-item\">"+messsageBody.memberId+" : "+messsageBody.msg+ "</li>");
-    	});
-
-    });
+	
   
-  <% } %>
-    
+  
+</script>
+<script type="text/javascript">
+	var sock = new SockJS("<c:url value='/echo'/>");
+	
+	//web socket 메세지보내면 자동 실행
+	sock.onmessage = onMessage;
+	sock.onclose = onClose;
+	/* $(function(){
+		sendMessage();
+	}) */
+	
+	function sendMessage(){
+		sock.send("hello ${memberLoggedIn.memberCode}");
+	}
+	
+	function onMessage(evt){
+		console.log("onMessage 호출됨")
+		var data = evt.data;
+		var sessionId = null;
+		var message = null;
+		
+		//문자열을 split
+		var strArray = data.split("|");
+		
+		for(var i=0; i<strArray.length; i++){
+			console.log("str["+i+"]" + strArray[i])
+		}
+		
+		sessionId = strArray[0];
+		message = strArray[1];
+		
+		console.log("멤버 코드 :" +sessionId)
+		console.log("메시지 : "+message)
+	}
+	
+	function onClose(evt){
+		console.log("연결 끊김")
+	}
+	
 </script>

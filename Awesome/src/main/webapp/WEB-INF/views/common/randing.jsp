@@ -179,7 +179,7 @@
                 //video 사이즈 조절
                 $("video").width($(window).innerWidth())
                 
-                if(<%=member%> == null){
+                if(${empty memberLoggedIn}){
                 	
 	                $("#logo").css("top",$("video").innerHeight()/2)
 	                    .css("left",$("video").innerWidth()/2 -95)
@@ -191,6 +191,7 @@
 	                        $("html").css("overflow-y","auto");
                     })
                 }else{
+                	$("video").remove();
                 	$("#content-container").fadeIn(1500);
                 	$("#login").css("top","0px").css("display","block");
                     $("#loginAfter").css("top","0px").css("display");
