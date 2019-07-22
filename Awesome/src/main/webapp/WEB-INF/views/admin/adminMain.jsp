@@ -8,11 +8,28 @@
 <head>
 <meta charset="UTF-8">
 <title>관리자페이지</title>
-<script  src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.css">
+<script src="https://www.gstatic.com/charts/loader.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/admin_main.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.css">
 <script>
-
-
+function chart(){
+	$.ajax({
+		url : '${pageContext.request.contextPath}/admin/chart.do',
+		success : function(data){
+			$("#Home").html(data);
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+};
+chart();
 </script>
 </head>
 <body>

@@ -305,10 +305,11 @@
         
  		<!-- 웹소켓 의존 추가 -->
 	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-websocket</artifactId>
-	        <version>${org.springframework-version}</version>
-	    </dependency>
+		 <groupId>org.springframework</groupId>
+		 <artifactId>spring-websocket</artifactId>
+		 <version>${org.springframework-version}</version>
+		</dependency>
+	     
 	     
 	    <!-- jackson -->
 	    <dependency>
@@ -316,6 +317,14 @@
 	    	<artifactId>jackson-mapper-asl</artifactId>
 	    	<version>1.4.2</version>
 	    </dependency>
+		
+		<!-- websocket -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-messaging</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+
 
 	</dependencies>
     <build>
