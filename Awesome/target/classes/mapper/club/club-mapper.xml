@@ -39,6 +39,28 @@
 		</resultMap>
 		
 		
+		<resultMap type="clubContent" id="clubcontentphoto">
+		<id column="CLUB_CONTENT_CODE" property="clubcontentCode"/>
+		<result column="CLUB_CODE" property="clubCode"/>
+		<result column="MEMBER_CODE" property="memberCode"/>
+		<result column="CONTENT_TITLE" property="contentTitle"/>
+		<result column="CONTENT" property="content"/>
+		<result column="WRITE_LEVEL" property="writeLevel"/>
+		<result column="WRITE_DATE" property="writeDate"/>
+		<result column="MEMBER_NICKNAME" property="memberNickname"/>
+		
+		<collection property="clubPhotos" ofType="clubphoto">
+			<result column="CLUBPHOTONUM" property="photorowNum"/>
+			<result column="CLUB_CONTENT_CODE" property="clubcontentCode"/>
+			<result column="CLUB_CODE" property="clubCode"/>
+			<result column="CLUB_ORIGINAL_FILENAME" property="cluboriginalFilename"/>
+			<result column="CLUB_RENAMED_FILENAME" property="clubrenamedFilename"/>
+			<result column="PIC_INFO" property="picInfo"/>
+			<result column="CLUB_PHOTO_NUM" property="clubphotoNum"/>
+		</collection>
+		</resultMap>
+		
+		
 		<resultMap type="map" id="clubcontentMap">
 		<result column="CLUB_CONTENT_CODE" property="clubcontentCode"/>
 		<result column="CLUB_CODE" property="clubCode"/>
@@ -49,6 +71,36 @@
 		<result column="WRITE_DATE" property="writeDate"/>
 		<result column="MEMBER_NICKNAME" property="memberNickname"/>
 		</resultMap>
+		
+		
+		<resultMap type="clubcomment" id="clubcommentMap">
+			<result column="MEETING_COMMENT_CODE" property="meetingcommentCode"/>
+			<result column="COMMENT_WRITER" property="commentWriter"/>
+			<result column="COMMENT_CONTENT" property="commentContent"/>
+			<result column="COMMENT_DATE" property="commentDate"/>
+			<result column="MEETING_CONTENT_CODE" property="meetingcontentCode"/>
+			<result column="NICKNAME" property="writerNickname"/>
+		</resultMap>
+		
+		
+		<resultMap type="clubphoto" id="seeImg">
+			<id column="CLUB_CONTENT_CODE" property="clubcontentCode"/>
+			<result column="CLUB_CODE" property="clubCode"/>
+			<result column="CLUB_ORIGINAL_FILENAME" property="cluboriginalFilename"/>
+			<result column="CLUB_RENAMED_FILENAME" property="clubrenamedFilename"/>
+			<result column="PIC_INFO" property="picInfo"/>
+			<result column="CLUB_PHOTO_NUM" property="clubphotoNum"/>
+			
+			<collection property="clubComments" ofType="clubcomment">
+				<result column="CLUB_CONTENT_CODE" property="meetingcommentCode"/>
+				<result column="COMMENT_WRITER" property="commentWriter"/>
+				<result column="COMMENT_CONTENT" property="commentContent"/>
+				<result column="COMMENT_DATE" property="commentDate"/>
+				<result column="MEETING_CONTENT_CODE" property="meetingcontentCode"/>
+				<result column="WRITER_NICKNAME" property="writerNickname"/>
+			</collection>
+		</resultMap>
+		
 		
 		
 	<select id="selectClubList" resultMap="clubListMap">
@@ -62,7 +114,7 @@
 	</select>
 	
 	<insert id="insertClub" >
-		insert into club values(seq_club.nextval,#{interestingCode},#{memberCode},seq_local_code.nextval,#{clubName},#{clubsimpleInfo},#{clubInfo},#{mainoriginalFilename},#{mainrenamedFilename})
+		insert into club values(seq_club.nextval,#{interestingCode},#{memberCode},#{localCode},#{clubName},#{clubsimpleInfo},#{clubInfo},#{mainoriginalFilename},#{mainrenamedFilename})
 		<selectKey keyProperty="clubCode" resultType="Integer" order="AFTER"> 
 			SELECT seq_club.currval FROM dual 
 		</selectKey>
@@ -84,14 +136,15 @@
 	</select>
 	
 	<insert id="insertclubContent1">
-		insert into club_content values(seq_club_photo.nextval,#{clubCode},#{memberCode},#{contentTitle},#{content},#{writeLevel},sysdate)
+		insert into club_content values(seq_club_content.nextval,#{clubCode},#{memberCode},#{contentTitle},#{content},#{writeLevel},sysdate)
 	</insert>
 	
 	
 	<select id="selectcontentList" resultMap="clubcontentMap">
 	select C.*,(select M.NICKNAME from member M where M.MEMBER_CODE = C.MEMBER_CODE)  MEMBER_NICKNAME
 	from club_content C 
-	where c.club_code=#{clubCode} and c.write_level =1
+	where c.club_code=#{clubCode} and (c.write_level =1 or c.write_level =0)
+	order by c.write_level , write_date desc
 	</select>
 	
 	<select id="selectClubcontentOne" resultType="clubcontent">
@@ -100,5 +153,60 @@
 		where C.club_content_code = #{contentCode} 
 	</select>
 	
+	<insert id="insertclubContent0">
+		insert into club_content values(seq_club_content.nextval,#{clubCode},#{memberCode},#{contentTitle},#{content},#{writeLevel},sysdate)
+	</insert>
+	
+	
+	<insert id="insertclubLocal">
+		insert into local values(#{localCode},seq_city_code.nextval,#{localName})
+		<selectKey keyProperty="cityCode" resultType="Integer" order="AFTER"> 
+			SELECT seq_city_code.currval FROM dual 
+		</selectKey>
+	</insert>
+	
+	<insert id="insertclubCity">
+		insert into city values(#{cityCode},#{localName})
+	</insert>
+	
+	
+	<insert id="insertclubContent2">
+		insert into club_content values(seq_club_content.nextval,#{clubCode},#{memberCode},#{contentTitle},#{content},#{writeLevel},sysdate)
+		<selectKey keyProperty="clubcontentCode" resultType="Integer" order="AFTER"> 
+			SELECT seq_club_content.currval FROM dual 
+		</selectKey>
+	</insert>
+	
+	<insert id="insertClubphoto">
+		insert into club_photo values(#{clubcontentCode},#{clubCode},#{cluboriginalFilename},#{clubrenamedFilename},#{picInfo},seq_club_photo.nextval)
+	</insert>
+	
+	<select id="selectphotocontentList" resultMap="clubcontentphoto">
+		select C.*,P.*
+		from club_content C left join (select row_number() over(partition by P.club_content_code order by P.club_content_code, P.club_photo_num) clubphotonum, P.*
+		from club_photo P
+		order by p.club_content_code, P.club_photo_num) P on C.club_content_code =P.club_content_code
+		where  c.club_code =#{clubCode} and c.write_level=2
+	</select>
+	
+	<insert id="addComment">
+		insert into club_comment values(seq_club_comment.nextval,#{commentWriter},#{commentContent},sysdate,#{meetingcontentCode})
+	</insert>
+	
+	<select id="selectBoardCommentByCode" resultMap="clubcommentMap">
+	    select C.*, M.NICKNAME
+		from club_comment C
+    		left join member M on C.comment_writer = M.member_code
+		where C.meeting_content_code = #{meetingcontentCode}
+	</select>
+	
+	<select id="selectseephotoList" resultMap="clubcontentphoto">
+		select C.*,M.NICKNAME MEMBER_NICKNAME,P.*
+		from club_content C left join member M on C.member_code = M.member_code 
+		left join (select row_number() over(partition by P.club_content_code order by P.club_content_code, P.club_photo_num) clubphotonum, P.*
+		from club_photo P
+		order by p.club_content_code, P.club_photo_num) P on C.club_content_code =P.club_content_code
+		where c.write_level=2 and c.club_content_code=#{seephotoCode}
+	</select>
 	
 </mapper>
