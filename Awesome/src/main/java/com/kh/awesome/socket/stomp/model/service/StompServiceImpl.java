@@ -34,7 +34,7 @@ public class StompServiceImpl implements StompService{
 	}
 	
 	@Override
-	public String codeToId(int memberCode) {
+	public String codeToId(String memberCode) {
 		return stompDAO.codeToId(memberCode);
 	}
 }
