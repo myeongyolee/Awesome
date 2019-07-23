@@ -39,7 +39,7 @@ public class LightningDAOImpl implements LightningDAO {
 	@Override
 	public List<String> selectCityList() {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("selectCityList");
+		return sqlSession.selectList("lightning.selectCityList");
 	}
 
 	@Override
