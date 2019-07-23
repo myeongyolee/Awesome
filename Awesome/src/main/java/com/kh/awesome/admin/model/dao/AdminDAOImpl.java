@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.awesome.admin.model.vo.Report;
+import com.kh.awesome.club.model.vo.Clubmember;
+import com.kh.awesome.member.model.vo.Member;
 
 @Repository
 public class AdminDAOImpl implements AdminDAO {
@@ -90,5 +92,22 @@ public class AdminDAOImpl implements AdminDAO {
 		return sqlSession.insert("admin.insertReport", report);
 	}
 
+
+	@Override
+	public Member seeOneMember(int memberCode) {
+		return sqlSession.selectOne("admin.seeOneMember", memberCode);
+	}
+	/*
+	@Override
+	public Clubmember seeClubJoined(int memberCode) {
+		return sqlSession.selectOne("admin.seeClubJoined", memberCode);
+	}*/
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 }
 

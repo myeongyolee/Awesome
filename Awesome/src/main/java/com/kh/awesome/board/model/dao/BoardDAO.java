@@ -13,6 +13,10 @@ public interface BoardDAO {
 
 	int insertBoard(QuestionBoard qBoard);
 
-	QuestionBoard selectOneQuestion(int questionNo);
+	Map<String, String> selectOneQuestion(int questionNo);
+
+	int deleteQuestion(int no);
+
+	int updateBoard(QuestionBoard qBoard);
 
 }

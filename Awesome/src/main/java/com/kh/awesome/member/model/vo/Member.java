@@ -2,6 +2,9 @@ package com.kh.awesome.member.model.vo;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
+
+import com.kh.awesome.club.model.vo.Clubmember;
 
 public class Member implements Serializable{
 	
@@ -24,9 +27,8 @@ public class Member implements Serializable{
 	private char verify;
 	private Date enrollDate;
 	
-	
-	
 	public Member() {
+		super();
 	}
 
 	public Member(int memberCode, String memberId, String nickName, String password, String memberName, Date birthday,
@@ -177,7 +179,6 @@ public class Member implements Serializable{
 	public void setEnrollDate(Date enrollDate) {
 		this.enrollDate = enrollDate;
 	}
-
 
 	@Override
 	public String toString() {

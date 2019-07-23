@@ -1,4 +1,4 @@
-package com.kh.awesome.club.model.vo;
+ package com.kh.awesome.club.model.vo;
 
 import java.io.Serializable;
 

@@ -79,10 +79,17 @@ chart();
 	<div id="Home" class="tabcontent">
 		
 	</div>
-	
-  </div>
 
+  </div>
  </div>
  
+<script>
+/*  $(function(){
+	$(".tab button.tablinks").hover(function(){
+		 $(".tab button.tablinks").css({"width":"200%"});			
+		 $("_text").css({"display":"inline-block")}.toggle(); 
+	 });
+});  */
+</script>
 </body>
 </html>
