@@ -158,7 +158,7 @@ input[name=schoolModal]{
           </div>
            
           <form action="${pageContext.request.contextPath}/map/enrollFriend" name="friend-frm">
-          <input type="text" name="memberLoggedIn" value="181"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
+          <input type="text" name="memberLoggedIn" value="124"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
           <div class="modal-body"> 
 			
 			<div class="">
@@ -208,7 +208,7 @@ input[name=schoolModal]{
           </div>
           
           <form action="${pageContext.request.contextPath}/school/enrollSchool" name="school-frm">
-          <input type="text" name="memberLoggedIn" value="181"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
+          <input type="text" name="memberLoggedIn" value="124"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
           <div class="modal-body"> <!-- 내가 회원가입할 때 등록한 학교정보 가지고 와서 보여주기 -->
                 <input type="text" class="form-control" name="primary" placeholder="출신 초등학교" >
                 <input type="hidden" name="primary_id" />
@@ -780,8 +780,6 @@ function summitFrm(){
                 $("#myModal").prop("z-index","100").children().prop("z-index","100")
 
                 $("#index-image").siblings().width($(window).width()).height($(window).height())
-
-                
                 
             })
             

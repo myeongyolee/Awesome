@@ -16,60 +16,28 @@
 
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
-
-<style>
-section.main-section{
-	border: 6px solid black;
-	border-radius: 80px;
-	width: 700px;
-	min-height: 500px;
-	
-	display: inline-flex;
-}
-div.profile-photo{
-	border: 1px solid red;
-	width: 49%;
-	height: 500px;
-	
-	display: flex;
-	overflow: hidden;
-    align-items: center;
-    justify-content: center;
-}
-div.profile-text{
-	border: 1px solid blue;
-	width: 49%;
-	height: 500px;
-	
-}
-ul.profile-list{
-	padding: 60px;
-}
-</style>
-
 </head>
 <body>
 
-<section class="main-section">
-	<div class="profile-photo">
-		<img src="${pageContext.request.contextPath}/resources/images/너굴맨.jpg" alt="" />
-	</div>
-	<div class="profile-text">
-		<ul class="profile-list">
-			<li>이름 : </li>
-			<br />
-			<li>아이디 : </li>
-			<br />
-			<li>나이 : </li>
-			<br />
-			<li>성별 : </li>
-			<br />
-			<li>자기소개 : </li>
-		</ul>
-	</div>
-	
-	<button onclick="location.href='${pageContext.request.contextPath}/websocket/chatting'">채팅기능</button>
-</section>
+<button onclick="checkFriend();">친구목록 확인</button>
+<button onclick="checkSchoolClub();">내가 가입된 동창목록 확인</button>
+
+<input type="text" name="memberLoggedId" value="206"/>
+
+
+<script>
+function checkFriend(){
+	var memberCode = $("input[name=memberLoggedId]").val();
+	location.href = "${pageContext.request.contextPath}/map/friendList?memberCode="+memberCode;
+}
+</script>
+
+<script>
+function checkSchoolClub(){
+	var memberCode = $("input[name=memberLoggedId]").val();
+	location.href = "${pageContext.request.contextPath}/school/searchMySchoolClub?memberCode="+memberCode;
+}
+</script>
 
 </body>
 </html>

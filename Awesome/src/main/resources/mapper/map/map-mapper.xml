@@ -38,4 +38,28 @@
 		select count(*) from friend where member_code = #{memberCode} and friend_member_code = #{friendCode}
 	</select>
 	
+	<select id="friendList" resultType="_int">
+		select friend_member_code from friend where member_code=#{memberCode}
+	</select>
+	
+	<select id="otherFriendList" resultType="_int">
+		select member_code from friend where member_code in
+		<foreach collection="list" item="p" open="(" close=")" separator=",">
+			#{p}
+		</foreach>
+		and friend_member_code = #{memberCode}
+	</select>
+	
+	<select id="showMyFriend" resultType="map">
+		select member_code,member_id,member_name,nickname,to_char(birthday,'yyyy/mm/dd') as brithday,phone,gender,profile,renamed_profile,introduce,to_char(enroll_date,'yyyy/mm/dd') as enroll_date
+		from member where member_code in
+		<foreach collection="list" item="p" open="(" close=")" separator=",">
+			#{p}
+		</foreach>
+	</select>
+	
+	<delete id="deleteFriend">
+		delete from friend where member_code = #{memberCode} and friend_member_code = #{friendCode}
+	</delete>
+	
 </mapper>

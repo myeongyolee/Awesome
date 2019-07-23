@@ -14,13 +14,40 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
 <!-- 부트스트랩관련 라이브러리 -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 
 </head>
 <body>
+
+<!-- 모임에 가입할 것인지 물어보는 모달 -->		
+<div class="modal fade" id="enrollClub" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+                 해당 기능을 이용하기 위해서는 가입되어야 합니다. 가입 신청을 하시겠습니까?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취 소</button>
+        <button type="button" class="btn btn-primary" onclick="enrollClub();">가입 신청</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 동창회List 보여주는 첫 페이지 (index)
 <h2>동참 모임 리스트</h2>
 		<table>
@@ -32,13 +59,13 @@
 				<th>동창모임한줄소개</th>
 			</tr>
 			
-		<c:if test="${empty schoolList}">
-			<td colspan="5">등록된 동창모임이 없습니다.</td>
-		</c:if>
+	<c:if test="${empty schoolList}">
+		<td colspan="5">등록된 동창모임이 없습니다.</td>
+	</c:if>
 		
-		<c:if test="${not empty schoolList}">
+	<c:if test="${not empty schoolList}">
 			<c:forEach items="${schoolList }" var="s">
-				<tr>
+				<tr no="${s.CLUB_CODE }">
 					<td><img src="${pageContext.request.contextPath }/resources/images/${s.MAIN_RENAMED_FILENAME }" alt="" /></td>
 					<td>${s.CLUB_NAME }</td>
 					<td>${s.MEMBER_CODE }</td>
@@ -46,20 +73,14 @@
 					<td>${s.CLUB_SIMPLE_INFO }</td>
 				</tr>
 			</c:forEach>
-		</c:if>
 		</table>
 		
 <%=com.kh.awesome.common.util.Utils.getPageBar3(totalContent, cPage, numPerPage, memberCode, "schoolList") %>
 
 		<br />
+				
 		
-		<label for="search">사람 검색하기</label>
-		<input type="text" name="findpeople" id="search" placeholder="검색할 사람을 입력하세요"/>
-		<button onclick="findPeople();">검색</button>
-		
-		<br />
-		
-		<input type="text" name="memberLoggedIn" value="123" />
+		<input type="text" name="memberLoggedIn" value="124" />
 		
 		<c:forEach var="my" items="${MyList }" varStatus="vs">
 			<c:if test="${fn:contains(my.SCHOOL_NAME, '초등학교') }">
@@ -75,11 +96,62 @@
 				<button onclick="high();">고등학교 친구 찾기</button>
 			</c:if>
 		</c:forEach>
+	</c:if>
 		
 		<br />
 		
 		<button onclick="location.href='${pageContext.request.contextPath}/school/makeSchool'">동창모임 개설하기</button>
+		<button type="button" name="enrollClub" data-toggle="modal" data-target="#enrollClub">가입여부 물어보는 MODAL</button> <!-- 안보임처리할것 -->
+		<input type="text" name="checkpoint" />
 
+<script>
+function enrollClub(){
+	console.log("enrollClub 들어옴");
+	var clubCode = $("input[name=checkpoint]").val();
+	var memberCode = $("input[name=memberLoggedIn]").val();
+	
+	console.log(clubCode);
+	console.log(memberCode);
+	
+	location.href = "${pageContext.request.contextPath}/school/enrollSchoolClub?clubCode="+clubCode+"&memberCode="+memberCode;
+}
+</script>
+
+<script>
+$(function(){
+	$("tr[no]").on("click",function(){
+		var clubCode = $(this).attr("no"); //사용자속성값 가져오기
+		var memberCode = $("input[name=memberLoggedIn]").val();
+		
+		$("input[name=checkpoint]").val(clubCode);
+		
+		//회원이 해당모임의 가입여부를 확인
+		$.ajax({
+			url:"${pageContext.request.contextPath}/school/checkClubSchool",
+			data:{memberCode:memberCode, clubCode:clubCode},
+			success:function(data){
+				console.log(data);
+				
+ 				if(data == '0'){
+					console.log("해당모임에 가입되지 않은 상태");
+					$("[name=enrollClub]").trigger("click");
+
+				}
+				else if(data == 'N'){
+					console.log("해당모임에 가입대기인 상태");
+					alert("현재 가입대기중입니다.");
+				}
+				else{
+					console.log("해당모임에 가입된 상태");
+					location.href = "${pageContext.request.contextPath}/school/schoolView?clubCode="+clubCode;
+				}
+				
+			}
+		});
+		
+	});
+});
+</script>
 
 <script>
 function primary(){
@@ -131,11 +203,5 @@ function findPeople(){
 }
 </script>
 
-<script>
-function findPeople(){
-	var result = $("input[name=findpeople]").val();
-	location.href="${pageContext.request.contextPath}/school/findPeople?people="+result;
-}
-</script>
 </body>
 </html>

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.map.model.service.MapService;
 
@@ -118,6 +120,54 @@ public class MapController {
 		
 		return "/map/maptest";
 	}	
+	
+	
+	@RequestMapping("/map/friendList")
+	public ModelAndView friendList(@RequestParam("memberCode") String memberCode) {
+		ModelAndView mav = new ModelAndView();
+		
+		
+		List<Integer> list = new ArrayList<>();
+		list = mapService.friendList(memberCode); // 내가 친구요청보낸 목록 확인
+		logger.info("친구목록 리스트:"+list);
+		
+		mav.addObject("list", list);
+		mav.setViewName("/map/friendList");
+		
+		return mav;
+	}
+	
+	@RequestMapping("/map/showMyFriend")
+	@ResponseBody
+	public List<Map<String,Object>> showMyFriend(@RequestParam("param") String[] param) {
+		logger.info("showMyFriend들어옴");
+		
+		List<String> list = new ArrayList<String>();
+		for(int i=0; i<param.length; i++) {
+			list.add(param[i]);
+		}
+		logger.info("보여줄 친구목록코드:" + list);
+		
+		List<Map<String,Object>> result = mapService.showMyFriend(list);
+		logger.info("result확인:"+result);
+		
+		return result;
+	}
+	
+	@RequestMapping("/map/deleteFriend")
+	@ResponseBody
+	public int deleteFriend(@RequestParam("memberCode") String memberCode ,@RequestParam("friendCode") String friendCode) {
+		logger.info("deleteFriend 들어옴");
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("memberCode", memberCode);
+		param.put("friendCode", friendCode);
+		
+		int result = mapService.deleteFriend(param);
+		
+		return result;
+		
+	}
+	
 	
 	
 	@RequestMapping(value="/map/findPosition", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)

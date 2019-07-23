@@ -22,5 +22,14 @@ public interface MapDAO {
 
 	int checkFriend(Map<String, String> param);
 
+	List<Integer> friendList(String memberCode);
+
+	List<Integer> otherFriendList(Map param);
+
+	List<Map<String, Object>> showMyFriend(List<String> list);
+
+	int deleteFriend(Map<String, String> param);
+
+
 
 }

@@ -13,6 +13,10 @@
 <typeAliases>
 <typeAlias alias="matchManager" type="com.kh.awesome.matchManager.model.vo.MatchManager"/>
 <typeAlias alias="club" type="com.kh.awesome.club.model.vo.Club"/>
+<typeAlias type="com.kh.awesome.club.model.vo.Clubmember" alias="clubmember"/>
+<typeAlias type="com.kh.awesome.club.model.vo.Clubcontent" alias="clubcontent"/>
+<typeAlias type="com.kh.awesome.club.model.vo.Clubphoto" alias="clubphoto"/>
+<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
 </typeAliases>
 
 <typeHandlers>

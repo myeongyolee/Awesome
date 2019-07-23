@@ -1,6 +1,7 @@
 package com.kh.awesome.map.model.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,33 @@ public class MapServiceImpl implements MapService {
 	public int checkFriend(Map<String, String> param) {
 		
 		return mapDAO.checkFriend(param);
+	}
+
+	@Override
+	public List<Integer> friendList(String memberCode) {
+		List<Integer> list = new ArrayList<Integer>();
+		
+		list = mapDAO.friendList(memberCode); // 내가 친구요청보낸 친구목록
+		
+		Map param = new HashMap<>();
+		param.put("list", list);
+		param.put("memberCode", memberCode);
+		
+		list = mapDAO.otherFriendList(param); // 내가 친구요청보낸 친구목록의 친구들이 나에게 친구요청 수락했는지 여부 확인
+		
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> showMyFriend(List<String> list) {
+		
+		return mapDAO.showMyFriend(list);
+	}
+
+	@Override
+	public int deleteFriend(Map<String, String> param) {
+		
+		return mapDAO.deleteFriend(param);
 	}
 
 
