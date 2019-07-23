@@ -34,12 +34,50 @@ function loadProfile(f){
 		}
 	}
 };
+
+function selectLocalList(){
+	var param = {city: $("#cityName>option:selected").val()}
+	var city = JSON.stringify(param);
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/localList.do',
+		dataType: "json",
+		type : 'POST',
+		data : city,
+		contentType: "application/json; charset=UTF-8",
+		success : function(data){
+			$("#localName").html("");
+			var html = "";
+			html += '<option id="defaultLocal" disabled selected>지역 선택</option>';
+			for(var i=0; i<data.length; i++){
+				html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
+			}
+			$("#localName").append(html);
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+};
+
+
+
+$(document).ready(function(){
+    $('#clubInfo').keyup(function(){
+        if ($(this).val().length > $(this).attr('maxlength')) {
+            alert('제한길이 초과');
+            $(this).val($(this).val().substr(0, $(this).attr('maxlength')));
+        }
+    });
+});
+
+
+
 </script>
 
 
 
-<section>
 
+	${cityList }
 	<h2>클럽개설</h2>
 		<div id="form-container" class="card mx-auto">
 		<form action="${pageContext.request.contextPath}/club/clubMakeEnd.do" method="post" enctype="multipart/form-data">
@@ -51,48 +89,45 @@ function loadProfile(f){
 				</div>
 				<div class="form-group col-md-6">
 					<label for="clubName">Club Name</label>
-					<input type="text" class="form-control" name="clubName" placeholder="club name입력">
+					<input type="text" class="form-control" name="clubName" placeholder="club name입력" required="required">
 					
 					<!-- 작성자: 로그인된 아이디로 전달(로그인구현하면 주석풀기) -->
 					<%-- <input type="hidden" name="memberCode" value="<%=memberLoggedIn!=null?memberLoggedIn.getMemberId():""%>" readonly> --%>
 					
 					<label for="interestingCode">카테고리선택</label>
 					<select name="interestingCode" id="interestingCode" class="form-control">
-						<option selected disabled="disabled">카테고리 선택</option>
-						<option value="1">분류1</option>
-						<option value="2">분류2</option>
-						<option value="3">분류3</option>
-						<option value="4">분류4</option>
+						<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
+						<c:forEach items="${interestingList}" var="interesting">
+						<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
+						</c:forEach>
 					</select>
-					
 					
 					<label for="cityName" style="margin-right: 110px; display: inline-block;" >도시선택</label>
 					<label for="localName" style=" display: inline-block;">State</label>
-					<select name="cityName" id="cityName" class="form-control" style="width: 150px; display: inline-block; margin-right: 18px;">
-						<option selected disabled="disabled">도시 선택</option>
-						<option value="city1">도시1</option>
-						<option value="city2">도시2</option>
-						<option value="city3">도시3</option>
-						<option value="city4">도시4</option>
+					
+					
+					
+					<select name="cityName" id="cityName" class="form-control" style="width: 150px; display: inline-block; margin-right: 18px;" onchange="selectLocalList();" required>
+						<option id="defaultCity" value="0" disabled selected>도시 선택</option>
+						<c:forEach items="${cityList}" var="city">
+						<option value=${city.cityCode }>${city.cityName }</option>						
+						</c:forEach>
 					</select>
 					
-					<select name="localCode" id="localName" class="form-control" style="width: 150px;  display: inline-block;">
-						<option selected disabled="disabled">구 선택</option>
-						<option value="1">지역1</option>
-						<option value="2">지역2</option>
-						<option value="3">지역3</option>
-						<option value="4">지역4</option>
+					<select name="localCode" id="localName" class="form-control" style="width: 150px;  display: inline-block;" required>
+						<option id="defaultLocal" value="0" disabled selected>지역 선택</option>
 					</select>
+						
 					
 					<label for="clubsimpleInfo">클럽한줄소개</label>
-					<input type="text" class="form-control" name="clubsimpleInfo" placeholder="클럽한줄소개를 입력하세요.(50자 이내)">
+					<input type="text" class="form-control" name="clubsimpleInfo" placeholder="클럽한줄소개를 입력하세요.(20자 이내)" required="required" maxlength="25">
 					
 				</div>
 			</div>
 			
 			<div class="form-group">
 				<label for="clubInfo">클럽상세설명</label>
-				<textarea class="form-control" name="clubInfo" id="clubInfo" placeholder="클럽을 소개해 주세요.(2000자 이내)" style="min-height: 200px;"></textarea>
+				<textarea class="form-control" name="clubInfo" id="clubInfo" placeholder="클럽을 소개해 주세요.(100자 이내)" style="min-height: 200px;" maxlength="120" ></textarea>
 			</div>
 			
 			<div style="display: none;">
@@ -107,29 +142,6 @@ function loadProfile(f){
 			</div>
 			
 	
-			<!-- modal 구동 버튼 (trigger) -->
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
- 			 친구추가
-			</button>
-
-
-			<!-- Modal -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  				<div class="modal-dialog" role="document">
-    				<div class="modal-content">
-      					<div class="modal-header">
-   
-        					<h4 class="modal-title" id="myModalLabel">친구목록</h4>
-      					</div>
-      				<div class="modal-body">
-       					 친구목록 ajax
-      				</div>
-      				<div class="modal-footer">
-      					<button type="button" class="btn btn-default" data-dismiss="modal">초대</button>
-        			<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-      			</div>
-    		</div>
-  			</div></div>
 
 			
 			<button  type="button" class="btn btn-primary float-right" value="BACK" onclick="history.go(-1)">이전</button>
@@ -143,5 +155,5 @@ function loadProfile(f){
 			</div>
 		</form>
 	</div>
-</section>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -3,10 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<<<<<<< HEAD
 
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="club 리스트" name="pageTitle"/>
 </jsp:include>
+
+<%
+	String memberLoggedIn ="admin";
+%>
 
 <script >
 $(function(){
@@ -15,6 +20,46 @@ $(function(){
 		location.href = "${pageContext.request.contextPath}/club/clubView.do?no="+clubCode;
 	});
 });
+function selectLocalList(){
+	var param = {city: $("#city>option:selected").val()}
+	var city = JSON.stringify(param);
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/localList.do',
+		dataType: "json",
+		type : 'POST',
+		data : city,
+		contentType: "application/json; charset=UTF-8",
+		success : function(data){
+			$("#local").html("");
+			var html = "";
+			html += '<option id="defaultLocal" disabled selected>지역을 선택해주세요</option>';
+			for(var i=0; i<data.length; i++){
+				html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
+			}
+			$("#local").append(html);
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+};
+
+
+$(function(){  
+	
+	$(":text").focus(function(){
+		$("[name="+$(this).attr('id')+"]").prop("checked",true);
+	});
+	
+	$(":text").blur(function(){
+		if($(this).val().trim() == ''){
+			console.log("입력값 없음");
+			$("[name="+$(this).attr('id')+"]").prop("checked",false);		
+		}
+	});
+	
+});
+
 </script>
 <style>
 .clubslist:hover
@@ -22,13 +67,19 @@ $(function(){
     background-color: #F8E0E6;
     cursor:pointer;
 }
-
+#search-container{
+	width:300px;
+	position: fixed;
+	right: 0;
+	top: 50px;
+}
 </style>
 
-<section>
+
 	
 		<h2>클럽리스트</h2>
-		<button onclick="location.href='${pageContext.request.contextPath}/club/clubMake' ">클럽개설하기</button>
+		${clubList }
+		
 		<table>
 			<tr>
 				<th>클럽이미지</th>
@@ -44,7 +95,7 @@ $(function(){
 			<c:forEach items="${clubList }" var="club">
 				<table id="${club.clubCode }" class="clubslist">	
 					<tr no="${club.clubCode}">
-					<td rowspan="3" colspan="1">
+					<td rowspan="4" colspan="1">
 						<c:if test="${empty club.mainrenamedFilename}">
 						<img src="${pageContext.request.contextPath }/resources/images/log.jpg"  alt="awesome로고"  style="width: 100px; height: 100px; "  />
 						</c:if>
@@ -52,14 +103,29 @@ $(function(){
 						<img src="${pageContext.request.contextPath }/resources/upload/club/${club.mainrenamedFilename}"  alt="awesome로고"  style="width: 100px; height: 100px;" />
 						</c:if>
 						</td>
-						<td onclick="location.href=''">클럽이름:${club.clubName}</td>					
+						<td style="font-weight: 800;">  클럽이름: ${club.clubName}</td>					
 					</tr>
 					<tr no="${club.clubCode}">
-						<td>클럽장:${club.clubAdmin }</td>					
-						<td>회원수:${club.clubmemberCount}</td>			
+						<c:if test="${club.interestingCode eq '1'}">
+							<td>  카테고리: 운동</td>
+						</c:if>
+						<c:if test="${club.interestingCode eq '21'}">
+							<td>  카테고리: 음식</td>
+						</c:if>
+						<c:if test="${club.interestingCode eq '22'}">
+							<td>  카테고리: 여행</td>
+						</c:if>
+						<c:if test="${club.interestingCode eq '23'}">
+							<td>  카테고리: 기타</td>
+						</c:if>
+						
+					</tr>
+					<tr no="${club.clubCode}">
+						<td>  클럽장: ${club.clubAdmin}</td>					
+						<td>회원수: ${club.clubmemberCount}</td>			
 					</tr>
 					<tr no="${club.clubCode}">					
-						<td>클럽한줄소개:${club.clubsimpleInfo}</td>
+						<td>  클럽한줄소개: ${club.clubsimpleInfo}</td>
 					</tr>
 					</table>
 					<br>
@@ -70,7 +136,61 @@ $(function(){
 	
 		</table>
 		
-		
+		<div id="search-container" class="card p-4 mb-4 bg-white">
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item">
+				<label for="title">클럽이름 검색</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<input type="checkbox" name="title">
+						</div>
+					</div>
+					<input type="text" class="form-control" id="title">
+				</div>
+			</li>
+			<li class="list-group-item">
+				<label for="city">도시검색</label>
+				<select class="form-control" id="city" onchange="selectLocalList();">
+					<option id="defaultCity" value="0" disabled selected>도시로 검색</option>
+					<c:forEach items="${cityList}" var="city">
+					<option value=${city.cityCode }>${city.cityName }</option>						
+					</c:forEach>
+				</select>
+			</li>
+			<li class="list-group-item">
+				<label for="local">지역검색</label>
+				<select class="form-control" id="local">
+					<option id="defaultLocal" value="0" disabled selected>지역으로 검색</option>
+				</select>
+			</li>
+			<li class="list-group-item">
+				<label for="nickName">클럽장 검색</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<input type="checkbox" name="nickName">
+						</div>
+					</div>
+					<input type="text" class="form-control" id="nickName">
+				</div>
+			</li>
+			<li class="list-group-item">
+				<label for="interesting-search">분류검색</label>
+				<select class="form-control" id="interesting">
+					<option id="defaultInteresting" value="0" disabled selected>카테고리로 검색</option>
+					<c:forEach items="${interestingList}" var="interesting">
+					<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
+					</c:forEach>
+				</select>
+			</li>
+			
+			<li class="list-group-item">
+				<button class="btn btn-outline-secondary" onclick="location.href='${pageContext.request.contextPath}/club/clubMake' ">클럽개설</button>
+				<button class="btn btn-outline-secondary" type="button" onclick="serchAjax();">검색하기</button>
+			</li>
+		</ul>
+	</div>
 		
 	
 
@@ -80,4 +200,13 @@ $(function(){
 		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
 	%>	
 	<%=com.kh.awesome.common.util.Utils.getPageBar(totalContents, cPage, numPerPage, "clubList.do") %>
+=======
+<html></html>
+
+<section>
+	<dev>
+		<h2>안녕</h2>
+		<img src="${pageContext.request.contextPath }/resources/images/log.jpg" id="center-image" alt="awesome로고" />
+	</dev>
 </section>
+>>>>>>> refs/remotes/origin/jinwoo

@@ -3,24 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>AweSome</title>
-    <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
-    <script src="${pageContext.request.contextPath }/resources/js/bxslider-4-4.2.12/src/js/jquery.bxslider.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/fullpage.js"></script>
-    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
-    
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    <!-- 구글 폰트 -->
-    <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/common/header.jsp "/>
     <style>
          body{margin: 0 0; height: 100%}
         html{ height: 100%;}
@@ -106,8 +89,7 @@
     .meeting-div{margin-bottom: 30px;   }
     .user-id-addr{position: absolute; width: 0px; height: 0px; top:-504px; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); border-radius: 30px}
     </style>
-</head>
-<body>  
+	
     <header>
         <div id="content-container">
             
@@ -130,12 +112,14 @@
 
                                 <!-- 서버에서 데이터(사진 아이디) 받아와서 넣어줄것 LikeMe-->
                                 <div id="LikeMe" class="d-flex align-content-start flex-wrap">
-                                    <!--
+                                    <c:forEach items="likeMe" var="e" >
                                         <div>
-                                            <img src="./images/couple-1030744_1280.jpg" alt="" width="60px" height="90px"> <br>
-                                            <span onclick="ss">ID</span>
+                                        	<input type="hidden" name="" />
+                                            <img src="${pageContext.request.contextPath }/resources/images/${e.RENAMED_PROFILE}" alt="" width="60px" height="90px"> <br>
+                                            <span onclick="ss">${e.MEMBER_ID }</span>
                                         </div>
-                                    -->
+                                    </c:forEach>
+                                    
                                 </div>
                                 <!-- 서버에서 채팅창 가져오기 -->
                                 <div id="chat">
@@ -310,7 +294,7 @@
             
             
     </header>
-
+	<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/common/loginAfter.jsp "/>
 
 
     <script>
@@ -371,6 +355,7 @@
             	 
             }
             
+            
             $("#like").on("click",function(){
             	changeUser("Y");
             });
@@ -379,14 +364,15 @@
             	changeUser("N");
             });
             
+            /* 나를 좋아한 사람 */
             function likeMeUser(){
+            	var memberCode = ${sessioScope.memberCode}
             	$.ajax({
             		url:"${pageContext.request.contextPath}/meeting/likeMeMember",
-            		type:"post",
+            		type:"get",
             		success: function(data){
-            			
-            		},
-            		error(jqxhr, textStatus, errorThrown){
+
+            		}, error(jqxhr, textStatus, errorThrown){
             			
             		}
             	})
@@ -394,5 +380,8 @@
             
     
         </script>
+
+
 </body>
 </html>
+

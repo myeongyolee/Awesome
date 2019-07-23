@@ -33,24 +33,25 @@
 	
 	<!-- #8.interceptor등록 -->
 	<!-- DispatcherServlet과 Controller의 handler메소드 사이에서 intercept한다. -->
-	<!-- <interceptors>
-		<interceptor>
+    <interceptors>
+		<!-- <interceptor>
 			<mapping path="/**"/>
 			<beans:bean id="loggerInterceptor"
 				class="com.kh.spring.common.interceptor.LoggerInterceptor"/>
-		</interceptor>
+		</interceptor> -->
 		
 		<interceptor>
-			<mapping path="/board/**/*.do"/>
-			<exclude-mapping path="/board/boardList.do"/>
+			<mapping path="/index"/>
+			<!-- <exclude-mapping path="/board/boardList.do"/> -->
 			<beans:bean id="loginIntercepter"
-				class="com.kh.spring.common.interceptor.LoginIntercepter"/>
+				class="com.kh.awesome.common.interceptor.LoginInterceptor"/>
 		</interceptor>
-	</interceptors> -->
+	</interceptors>
 	
 	<!-- #10.1 파일업로드를 처리할 Resolver클래스 빈등록(빈이름 주의) -->
     <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">   
         <beans:property name="maxUploadSize" value="10485760" /> <!-- max 파일용량은 10MB이다. -->
+        <!-- <property name="defaultEncoding" value="utf-8" /> -->
     </beans:bean>
 	
 	<!-- #12.1 jsonView Bean 및 viewResolver 등록 -->
@@ -64,21 +65,33 @@
 	<!--  websocket -->
 	<websocket:handlers>
 		<websocket:mapping handler="echoHandler" path="/echo"/>
+		<websocket:handshake-interceptors>
+   			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+    	</websocket:handshake-interceptors>
+
 		<websocket:sockjs/>
 	</websocket:handlers>
 	<beans:bean id="echoHandler" class="com.kh.awesome.util.EchoHandler"/>
+	
 	
 	 <!-- #13.1 @Responsebody사용을 위한 의존 : 빈등록 (스프링 5.x.x => MappingJackson2HttpMessageConverter -->
     <beans:bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
     
     <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <beans:property name="messageConverters">
-        <beans:list>
-            <beans:ref bean="jacksonMessageConverter"/>
-            <beans:bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
-        </beans:list>
-        
+	        <beans:list>
+	            <beans:ref bean="jacksonMessageConverter"/>
+	            <beans:bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+	        </beans:list>
         </beans:property>
     </beans:bean>
+    
+    <!-- naver login -->
+    <beans:bean id="naverLoginBO" class="com.kh.awesome.member.model.vo.NaverLoginBO" />
+    
+   
+
+
+
     
 </beans:beans>

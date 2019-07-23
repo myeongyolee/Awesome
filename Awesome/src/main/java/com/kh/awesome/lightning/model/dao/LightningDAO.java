@@ -7,6 +7,7 @@ import com.kh.awesome.matchManager.model.vo.MatchManager;
 
 public interface LightningDAO {
 
+
 	List<Map<String, Object>> selectLightningList(Map<String, String> search, int cPage, int numPerPage);
 
 	int insertLightning(Map<String, Object> map);
@@ -18,5 +19,6 @@ public interface LightningDAO {
 	List<Map<String, Object>> selectLocalList(int city);
 
 	List<String> selectInterestingList();
+
 
 }

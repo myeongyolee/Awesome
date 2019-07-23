@@ -163,7 +163,7 @@ public class LightningController {
 								@RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
 		//세션에서 memberCode가져오기
 //		session.getAttribute("memberLoggedIn");
-		matchManager.setMemberCode(63);
+		matchManager.setMemberCode(124);
 		
 		logger.info("uploadProfile="+uploadProfile);
 //		file
@@ -249,4 +249,5 @@ public class LightningController {
 		
 		return response.toString();
 	}
+
 }

@@ -20,7 +20,7 @@ public interface MapDAO {
 
 	int sendFriend(Map<String, String> param);
 
-	int sendMessage(Map<String, String> param);
+	int checkFriend(Map<String, String> param);
 
 
 }

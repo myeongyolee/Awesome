@@ -12,6 +12,7 @@ public class Member implements Serializable{
 	 
 	private int memberCode;
 	private String memberId;
+	private String nickName;
 	private String password;
 	private String memberName;
 	private Date birthday;
@@ -23,20 +24,19 @@ public class Member implements Serializable{
 	private char friendOpen;
 	private char searchOpen;
 	private String introduce;
-	private char verify;
+	private char verify;	
 	private Date enrollDate;
-	private String email;
-	
 	
 	public Member() {
 		super();
 	}
 
-	public Member(int memberCode, String memberId, String password, String memberName, Date birthday, String phone,
-			char gender, String profile, String renamedProfile, char blindDateOpen, char friendOpen, char searchOpen,
-			String introduce, char verify, Date enrollDate, String email) {
+	public Member(int memberCode, String memberId, String nickName, String password, String memberName, Date birthday,
+			String phone, char gender, String profile, String renamedProfile, char blindDateOpen, char friendOpen,
+			char searchOpen, String introduce, char verify, Date enrollDate) {
 		this.memberCode = memberCode;
 		this.memberId = memberId;
+		this.nickName = nickName;
 		this.password = password;
 		this.memberName = memberName;
 		this.birthday = birthday;
@@ -50,7 +50,6 @@ public class Member implements Serializable{
 		this.introduce = introduce;
 		this.verify = verify;
 		this.enrollDate = enrollDate;
-		this.email = email;
 	}
 
 	public int getMemberCode() {
@@ -67,6 +66,14 @@ public class Member implements Serializable{
 
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getPassword() {
@@ -173,22 +180,13 @@ public class Member implements Serializable{
 		this.enrollDate = enrollDate;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	@Override
 	public String toString() {
-		return "Member [memberCode=" + memberCode + ", memberId=" + memberId + ", password=" + password
-				+ ", memberName=" + memberName + ", birthday=" + birthday + ", phone=" + phone + ", gender=" + gender
-				+ ", profile=" + profile + ", renamedProfile=" + renamedProfile + ", blindDateOpen=" + blindDateOpen
-				+ ", friendOpen=" + friendOpen + ", searchOpen=" + searchOpen + ", introduce=" + introduce + ", verify="
-				+ verify + ", enrollDate=" + enrollDate + ", email=" + email + "]";
+		return "Member [memberCode=" + memberCode + ", memberId=" + memberId + ", nickName=" + nickName + ", password="
+				+ password + ", memberName=" + memberName + ", birthday=" + birthday + ", phone=" + phone + ", gender="
+				+ gender + ", profile=" + profile + ", renamedProfile=" + renamedProfile + ", blindDateOpen="
+				+ blindDateOpen + ", friendOpen=" + friendOpen + ", searchOpen=" + searchOpen + ", introduce="
+				+ introduce + ", verify=" + verify + ", enrollDate=" + enrollDate + "]";
 	}
-	
 	
 }

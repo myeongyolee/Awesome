@@ -3,10 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="번개모임"/>
+</jsp:include>
 <!-- bootstrap -->
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
@@ -14,7 +13,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
 <style>
 #lightningList-content{width:600px; }
 #lightning{width:500px; margin-bottom: 10px;}
@@ -24,8 +23,19 @@
 	right: 0;
 	top: 50px;
 }
-#ContentView{height: 300px;}
+#swiperContainer{height:350px; position: relative;}
 .myMap{width:334px; height:250px; position: relative;}
+#swiper-container {
+      width: 100%;
+      height: 100%;
+      margin-left: auto;
+      margin-right: auto;
+}
+#swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+}
 </style>
 <script>
 
@@ -118,49 +128,34 @@ function getLightningList(){
 				var html = "";
 				html +=	'<div id="lightning" class="card">';
 				html +=	'<div id="lightningTest-head" class="card-header">';
-				html +=	'<img class="card-img-top" src="" alt="Card image cap">';
+				html +=	'<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/match/'+data[i].matchRenamedImg+'" alt="Card image cap">';
 				html +=	'<div class="card-body" data-toggle="collapse" data-target="#'+data[i].matchNo+'" aria-expanded="true" aria-controls="lightningTest-body">';
 				html +=	'<h5 class="card-title"> '+data[i].matchTitle+' </h5></div></div>';
 				html +=	'<ul class="list-group list-group-flush">';
 				html +=	'<li class="list-group-item"> '+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+'</li>';
 				html +=	'<li class="list-group-item"> 작성자:'+data[i].nickName+' | 참여회원수: '+(Number(data[i].memberCount)+1)+' </li></ul>';
 				html +=	'<div id="'+data[i].matchNo+'" class="collapse container" aria-labelledby="lightningTest-head" data-parent="#lightning">';
-				html +=	'<div id="carousel" class="carousel slide bg-secondary mb-3" data-ride="carousel">';
-				html +=	'<ol id="indicators" class="carousel-indicators">';
-				html +=	'<li data-target="#carousel" data-slide-to="'+j+'" class="active"></li>';
+				html += '<div id="swiperContainer"  class="card-body">';
+				html +=	'<div id="swiper-container" class="swiper-container'+data[i].matchNo+'">';
+				html +=	'<div class="swiper-wrapper">';
+				html +=	'<div id="swiper-slide" class="swiper-slide card-body">'+data[i].matchContent+'</div>';
 				if(data[i].memberCount>=1){
-					j++;
-					html += '<li data-target="#carousel" data-slide-to="'+j+'"></li>';
+					html +=	'<div id="swiper-slide" class="swiper-slide card-body">'+data[i].joinMemberNickName+'</div>';
 				}
 				if(data[i].placeName!=null){
-					j++;
-					html += '<li data-target="#carousel" data-slide-to="'+j+'"></li>';					
+					html +=	'<div id="swiper-slide" class="swiper-slide card-body">'+data[i].placeName+'<div id="map_'+i+'" class="myMap"></div></div>';
 				}
-				html += '</ol>'
-				html +=	'<div class="carousel-inner">';
-				html +=	'<div class="carousel-item active p-5">';
-				html +=	'<div class="card">';
-				html +=	'<div id="ContentView" class="card-header">'+data[i].matchContent+'</div></div></div>';
-				if(data[i].memberCount>=1){
-					html +=	'<div class="carousel-item p-5">';
-					html +=	'<div class="card">';
-					html +=	'<div id="ContentView" class="card-header">'+data[i].joinMemberNickName+'</div></div></div>';
-				}
-				if(data[i].placeName!=null){
-					html +=	'<div class="carousel-item p-5">';
-					html +=	'<div class="card">';
-					html +=	'<div id="ContentView" class="card-header">'+data[i].placeName+'<div id="map'+i+'" class="myMap"></div></div></div></div>';
-				}
-				html +=	'<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">';
-				html +=	'<span class="carousel-control-prev-icon" aria-hidden="false"></span>';
-				html +=	'<span class="sr-only">Previous</span></a>';
-				html +=	'<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">';
-				html +=	'<span class="carousel-control-next-icon" aria-hidden="false"></span>';
-				html +=	'<span class="sr-only">Next</span></a></div></div>';
+				html += '</div><div class="swiper-pagination'+data[i].matchNo+'"></div></div></div>';
+				/* html += '<div class="swiper-button-prev'+data[i].matchNo+'"></div>';
+				html += '<div class="swiper-button-next'+data[i].matchNo+'"></div></div></div>'; */
 				html +=	'<button type="button" class="btn btn-primary float-right">참가신청</button></div>';
 				$("#lightningList-content").append(html);
-				if(data[i].placeName!=null) insertMap(i, data[i].placeLat, data[i].placeLng);
+				if(data[i].placeName!=null){
+					insertMap(i, data[i].placeLat, data[i].placeLng);
+				}
+				insertSlide(data[i].matchNo);
 			}
+			
 			$("#cPage").val(Number($("#cPage").val())+1);
 		},
 		error:function(jqxhr, textStatus, errorThrown){
@@ -169,7 +164,7 @@ function getLightningList(){
 	}); 
 }
 function insertMap(i, mapx, mapy){
-	var id = $("#map"+i).attr('id');
+	var id = $("#map_"+i).attr('id');
 	console.log(mapx,mapy);
 	var map = new naver.maps.Map(id, {
         center: new naver.maps.Point(mapx, mapy),
@@ -196,10 +191,24 @@ function insertMap(i, mapx, mapy){
   	});
 
 };
+
+function insertSlide(no){
+	var swiper = new Swiper('.swiper-container'+no, {
+	      effect: 'cube',
+	      grabCursor: true,
+	      cubeEffect: {
+	        shadow: true,
+	        slideShadows: true,
+	        shadowOffset: 20,
+	        shadowScale: 0.94,
+	      },
+	      pagination: {
+	        el: '.swiper-pagination'+no,
+	      },
+	    });
+}
 </script>
-<title>번개팅</title>
-</head>
-<body>
+
 	<input type="hidden" id="cPage" value="1"/>
 	<div id="lightningList-content" class="mx-auto"></div>
 	<div id="search-container" class="card p-4 mb-4 bg-white">
@@ -258,5 +267,4 @@ function insertMap(i, mapx, mapy){
 		</ul>
 	</div>
 
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
