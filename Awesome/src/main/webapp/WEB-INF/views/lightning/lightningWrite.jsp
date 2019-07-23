@@ -3,12 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>번개팅작성</title>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="번개모임"/>
+</jsp:include>
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -182,8 +179,7 @@ function insertData(btn){
 	
 }
 </script>
-</head>
-<body>
+
 	<div id="form-container" class="card mx-auto">
 		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do" method="post" enctype="multipart/form-data">
 			<div class="form-row">
@@ -262,5 +258,4 @@ function insertData(btn){
 			</div>
 		</div>
 	</div>
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

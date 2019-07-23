@@ -3,11 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="번개모임"/>
+</jsp:include>
 <!-- bootstrap -->
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
@@ -210,9 +208,7 @@ function insertSlide(no){
 	    });
 }
 </script>
-<title>번개팅</title>
-</head>
-<body>
+
 	<input type="hidden" id="cPage" value="1"/>
 	<div id="lightningList-content" class="mx-auto"></div>
 	<div id="search-container" class="card p-4 mb-4 bg-white">
@@ -271,5 +267,4 @@ function insertSlide(no){
 		</ul>
 	</div>
 
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
