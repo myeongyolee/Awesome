@@ -13,6 +13,7 @@
     <style>
     	body{margin: 0 0; overflow-y: hidden;}
 		html{overflow: hidden; overflow-y:hidden;}
+		.mdl-layout__content{overflow-y:hidden;}
 		header div.video{position: relative; }
 		header div.video h1{position: absolute; top: 0px; display: none;}
 		#loginAfter{margin: 9px 0; padding: 7px 15px; font-size: 16px; position: fixed; right: 100px; width:90px;  z-index: 999; display: none;display : flex; flex-direction : row;justify-content : space-between; }
@@ -36,14 +37,9 @@
 		div.bx-viewport{width:100%; height:100%;}
 		.img-select{width:150px; height:100px; border:1px solid;}
 		#select-info{text-align:center;}
-		#select-info img{width:200px; height:150px;}
-		#select-page-introduce{position:absolute; padding:150px 150px;}
+		#select-info img{width:200px; height:15%;}
+		#select-page-introduce{position:absolute; padding:50px 150px;}
 		#select-page-introduce div img{width:672px; height:400px;}
-		.flex{
-					display : flex; 
-            		flex-direction : row;
-            		justify-content : flex-end;
-				}		
 
     </style>
     <header>
