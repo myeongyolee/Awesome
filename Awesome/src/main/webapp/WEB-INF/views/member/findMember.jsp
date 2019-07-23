@@ -9,16 +9,17 @@
 	<meta charset="UTF-8" />
 	<title>회원 찾기 페이지</title>
 		<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
-	    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
-	    	integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
-	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" ></script>
 		<!-- easing 플러그인 추가 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     
+    <!-- 20190723 김용빈 -->
+    <!-- Tiny Nice Confirmation Popup Plugin With jQuery - H-confirm-alert -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/H-confirm-alert.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/H-confirm-alert.css">
     
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src='https://code.jquery.com/ui/1.10.4/jquery-ui.js'></script>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-animate-css-rotate-scale.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-css-transform.js"></script>
@@ -83,10 +84,22 @@
 	    			dataType : 'text',
 	    			success:function(data){
 	    				if(data=="success"){
-	    					alert("문자로 인증번호을 발송하였습니다.");
+	    					$.confirm.show({
+	    						  "message": "문자로 인증번호을 발송하였습니다.",
+	    						  "yes": function (){
+	    						  },
+	    						  "hideNo":true,
+	    						  "type":"success" // default or success, danger, warning
+	    						})
 	    					$("#smsAuthDiv").slideToggle(600, 'easeInBack');
 	    				}else{
-							alert("이름과 전화번호가 일치 하지 않습니다.");
+	    					$.confirm.show({
+	    						  "message": "이름과 전화번호가 일치 하지 않습니다.",
+	    						  "yes": function (){
+	    						  },
+	    						  "hideNo":true,
+	    						  "type":"warning" // default or success, danger, warning
+	    						})
 	    				}
 	    			},
 	    			error:function(jqxhr, textStatus, errorThrown){
@@ -114,12 +127,25 @@
 
 					console.log(data);
 					if(data =="fail"){
-						alert("인증을 실패하였습니다. 인증번호을 확인하세요");
+    					$.confirm.show({
+  						  "message": "인증을 실패하였습니다. 인증번호을 확인하세요",
+  						  "yes": function (){
+  						  },
+  						  "hideNo":true,
+  						  "type":"warning" // default or success, danger, warning
+  						})
+  						
 						$("#smsAuth").val("").focus();
 					}
 					
 					if( data !="fail"){
-						alert("문자인증을 완료하였습니다.");
+    					$.confirm.show({
+    						  "message": "문자인증을 완료하였습니다.",
+    						  "yes": function (){
+    						  },
+    						  "hideNo":true,
+    						  "type":"success" // default or success, danger, warning
+    						})
 						
 						$.ajax({
 			    			url:"${pageContext.request.contextPath}/member/getMemberId.do",
@@ -168,10 +194,23 @@
 		    			dataType : 'text',
 		    			success:function(data){
 		    				if(data=="success"){
-		    					alert("문자로 인증번호을 발송하였습니다.");
+		    					$.confirm.show({
+		    						  "message": "문자로 인증번호을 발송하였습니다.",
+		    						  "yes": function (){
+		    						  },
+		    						  "hideNo":true,
+		    						  "type":"success" // default or success, danger, warning
+		    						})
+		    						
 		    					$("#pwd-smsAuthDiv").slideToggle(600, 'easeInBack');
 		    				}else{
-								alert("이름과 전화번호가 일치 하지 않습니다.");
+		    					$.confirm.show({
+		    						  "message": "이름과 전화번호가 일치 하지 않습니다.",
+		    						  "yes": function (){
+		    						  },
+		    						  "hideNo":true,
+		    						  "type":"success" // default or success, danger, warning
+		    						})
 		    				}
 		    			},
 		    			error:function(jqxhr, textStatus, errorThrown){
@@ -200,12 +239,25 @@
 
 							console.log(data);
 							if(data =="fail"){
-								alert("인증을 실패하였습니다. 인증번호을 확인하세요");
+		    					$.confirm.show({
+		    						  "message": "인증을 실패하였습니다. 인증번호을 확인하세요",
+		    						  "yes": function (){
+		    						  },
+		    						  "hideNo":true,
+		    						  "type":"warning" // default or success, danger, warning
+		    						})
+		    						
 								$("#smsAuth").val("").focus();
 							}
 							
 							if( data !="fail"){
-								alert("임시비밀번호을 이메일로 전달하였습니다.");
+		    					$.confirm.show({
+		    						  "message": "임시비밀번호을 이메일로 전달하였습니다.",
+		    						  "yes": function (){
+		    						  },
+		    						  "hideNo":true,
+		    						  "type":"success" // default or success, danger, warning
+		    						})
 								
 							}
 						},
@@ -279,9 +331,11 @@
 							<button type="button" class="btn btn-outline-success" id="phoneAuthBtn">인증문자 발송</button>
 						</div>
 						
-						<div id="smsAuthDiv" class="flex nodisplay" >
-							<input type="number" class="form-control smsAuth" name="smsAuth" id="smsAuth" placeholder="인증문자 입력" required>
-							<button type="button" class="btn btn-outline-success smsAuth" id="smsAuthBtn">확인</button>
+						<div id="smsAuthDiv" class="nodisplay" >
+							<div class="flex">
+								<input type="number" class="form-control smsAuth" name="smsAuth" id="smsAuth" placeholder="인증문자 입력" required>
+								<button type="button" class="btn btn-outline-success smsAuth" id="smsAuthBtn">확인</button>
+							</div>
 						</div>
 						<br />
 					<div id="idFindResultDiv" class="nodisplay">
@@ -297,9 +351,11 @@
 							<button type="button" class="btn btn-outline-success" id="pwd-phoneAuthBtn">인증문자 발송</button>
 						</div>
 						
-						<div id="pwd-smsAuthDiv" class="flex nodisplay" >
-							<input type="number" class="form-control smsAuth" name="smsAuth" id="pwd-smsAuth" placeholder="인증문자 입력" required>
-							<button type="button" class="btn btn-outline-success smsAuth" id="pwd-smsAuthBtn">이메일확인</button>
+						<div id="pwd-smsAuthDiv" class="nodisplay" >
+							<div class="flex">
+								<input type="number" class="form-control smsAuth" name="smsAuth" id="pwd-smsAuth" placeholder="인증문자 입력" required>
+								<button type="button" class="btn btn-outline-success smsAuth" id="pwd-smsAuthBtn">인증문자 확인</button>
+							</div>
 						</div>
 						<br />
 				</div>

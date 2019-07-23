@@ -181,6 +181,8 @@ public class MemberController {
 		
 		model.addAttribute("member", member);
 		model.addAttribute("address", address);
+		
+		System.out.println(member.getMemberId());
 	}
 	
 	//회원 정보 수정

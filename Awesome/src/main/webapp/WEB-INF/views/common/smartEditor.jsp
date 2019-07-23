@@ -34,6 +34,10 @@
 	        }
 		});
 		
+		$(function(){
+			$("#rev").css("display","none");
+		});
+		
 		function submitContents() {
 	        // 에디터의 내용이 textarea에 적용
 			oEditors.getById["textTest"].exec("UPDATE_CONTENTS_FIELD", []);

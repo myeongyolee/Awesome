@@ -85,8 +85,10 @@
         class="org.springframework.social.oauth2.OAuth2Parameters">
         <!-- <property name="scope" value="profile"></property> -->
         <property name="scope" value="email profile openid"></property>
-        <property name="redirectUri"
-            value="http://localhost/awesome/member/googlecallback" />
+        <!-- <property name="redirectUri"
+            value="http://localhost/awesome/member/googlecallback" /> -->
+            <property name="redirectUri"
+            value="http://www.khawesome.com/awesome/member/googlecallback" />
     </bean>
  
     <bean id="authInfo" class="com.kh.awesome.member.model.vo.AuthInfo">
