@@ -88,6 +88,85 @@
     </c:if>
   </tbody>
 </table>
+
+<input type="hidden" id="cPage" value="1"/>
+	<div id="lightningList-content" class="mx-auto"></div>
+	<div id="search-container" class="card p-4 mb-4 bg-white">
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item">
+				<label for="title">회원 이름으로 검색</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<input type="checkbox" name="title">
+						</div>
+					</div>
+					<input type="text" class="form-control" id="title">
+				</div>
+				<label for="title">회원 아이디로 검색</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<input type="checkbox" name="title">
+						</div>
+					</div>
+					<input type="text" class="form-control" id="title">
+				</div>
+				<label for="title">회원 별명으로 검색</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<input type="checkbox" name="title">
+						</div>
+					</div>
+					<input type="text" class="form-control" id="title">
+				</div>
+			</li>
+			<li class="list-group-item">
+				<label for="city">성별 </label>
+				<select class="form-control" id="city" onchange="selectLocalList();">
+					<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
+					<c:forEach items="${cityList}" var="city">
+					<option value=${city.cityCode }>${city.cityName }</option>						
+					</c:forEach>
+				</select>
+			</li>
+			<li class="list-group-item">
+				<label for="local">나이 </label>
+				<select class="form-control" id="local">
+					<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
+				</select>
+			</li>
+			<li class="list-group-item">
+				<label for="nickName">작성자검색</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<input type="checkbox" name="nickName">
+						</div>
+					</div>
+					<input type="text" class="form-control" id="nickName">
+				</div>
+			</li>
+			<li class="list-group-item">
+				<label for="interesting-search">분류검색</label>
+				<select class="form-control" id="interesting">
+					<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
+					<c:forEach items="${interestingList}" var="interesting">
+					<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
+					</c:forEach>
+				</select>
+			</li>
+			
+			<li class="list-group-item">
+				<button class="btn btn-outline-secondary" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningWrite.do'">신규작성</button>
+				<button class="btn btn-outline-secondary" type="button" onclick="serchAjax();">검색하기</button>
+			</li>
+		</ul>
+	</div>
+
+
+
 <br /><br /><br />
 <%
 		int totalMemberNum = Integer.parseInt(String.valueOf(request.getAttribute("totalMemberNum")));

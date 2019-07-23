@@ -26,11 +26,12 @@ public class Member implements Serializable{
 	private String introduce;
 	private char verify;
 	private Date enrollDate;
+
 	
 	public Member() {
 		super();
 	}
-
+	
 	public Member(int memberCode, String memberId, String nickName, String password, String memberName, Date birthday,
 			String phone, char gender, String profile, String renamedProfile, char blindDateOpen, char friendOpen,
 			char searchOpen, String introduce, char verify, Date enrollDate) {
@@ -188,5 +189,6 @@ public class Member implements Serializable{
 				+ blindDateOpen + ", friendOpen=" + friendOpen + ", searchOpen=" + searchOpen + ", introduce="
 				+ introduce + ", verify=" + verify + ", enrollDate=" + enrollDate + "]";
 	}
+
 	
 }

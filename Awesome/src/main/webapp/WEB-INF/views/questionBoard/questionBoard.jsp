@@ -82,12 +82,13 @@ top:100px;
 				console.log("memberName === "+data.memberName);
 				console.log("questionOriginalFilename === "+data.questionOriginalFilename);
 				//boardTitle.html(data.boardTitle);
-				$("#questionNo").val(data.questionNo);
+				$("[name=questionNo]").val(data.question_No);
 				$("#boardWriter").val(data.memberName);
+				$("[name=memberCode]").val(data.memberCode);
 				$("#boardTitle").val(data.questionTitle);
 				$("[name=questionContent]").append(data.questionContent);
-			    $("[name=original_Qimg]").val(data.questionOriginalFilename);
-				$("[name=renamed_Qimg]").val(data.questionRenamedFilename);
+			    $("[name=questionOriginalFilename]").val(data.questionOriginalFilename);
+				$("[name=questionRenamedFilename]").val(data.questionRenamedFilename);
 				$("[name=upFile]").next(".custom-file-label").html(data.questionOriginalFilename);
 				
 	},
@@ -111,7 +112,8 @@ top:100px;
   });
   function validate(){
   	console.log($("[name=boardFrm]").serialize());
-  	var content = $("[name=questionContent]").val();
+  	var content = $("#questionContent1"||"#questionContent2").val();
+  	console.log("게시판 내용길이: " +content.trim().length);
   	if(content.trim().length==0){
   		alert("내용을 입력하세요");
   		return false;
@@ -244,7 +246,8 @@ top:100px;
 		action="${pageContext.request.contextPath}/questionBoard/updateBoard.do"
 		method="post" onsubmit="return validate();"
 		enctype="multipart/form-data">
-		<input type="hidden" id="questionNo"/>
+		<input type="hidden" name="questionNo"/> 
+		<input type="hidden" name="memberCode"/> 
 		<input type="text" class="form-control" 
 			name="questionTitle" id="boardTitle"> 
 		<input type="text" class="form-control"
@@ -260,8 +263,9 @@ top:100px;
 					name="upFile" id="upFile"> 
 <!-- 					onchange="loadImg(this);"> -->
 					 <label class="custom-file-label" for="upFile">파일을 선택하세요</label>
-					<input type="hidden" name="original_Qimg"/>
-					<input type="hidden" name="renamed_Qimg" />
+					 
+					 <input type="hidden" name="questionOriginalFilename"/>
+					<input type="hidden" name="questionRenamedFilename" /> 
 			</div>
 		</div>
 		<div class="form-group row">
@@ -282,7 +286,7 @@ top:100px;
 	      </div>
 	    </div>
 	  </div>
-		<textarea class="form-control" name="questionContent" placeholder="내용"
+		<textarea class="form-control" id="questionContent2" name="questionContent" placeholder="내용"
 			required></textarea>
 		<br /> 
 		  <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
@@ -348,7 +352,7 @@ top:100px;
 	      </div>
 	    </div>
 	  </div>
-		<textarea class="form-control" name="questionContent" placeholder="내용"
+		<textarea class="form-control" id="questionContent1" name="questionContent" placeholder="내용"
 			required></textarea>
 		<br /> <input type="submit" class="btn btn-outline-success"
 			value="저장">
