@@ -47,7 +47,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 	<style>
 		.mdl-layout__header-row{background: white;}
-		.mdl-layout__content{overflow-y:hidden;}
+		
 		.mdl-layout__header-row .mdl-navigation__link{color:black;}
 		.mdl-layout-title{color:black;}
 		#awe-logo-img{height:30px;}
@@ -57,7 +57,7 @@
 		#modalBody .modal-body{flex : 1 1 0; margin : auto; }
 		#login{font-size: 16px;  right: 50px; width:90px;  }
 		.mdl-badge{ border: 1px solid white; background: white;}
-		#draggable{position: fixed;z-index: 10; left:50px; top: 100px;}
+		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;}
 	</style>
 </head>
 <body>
@@ -213,7 +213,7 @@
 <!-- 20190705 12:54 김용빈  -->
 <!-- 회원가입 모달 추가 - -->
 	$(function(){
-		$( "#draggable" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
+		$( ".dragcomponent" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
 		
 		$("#signUp").on("click",function(){
 			$.ajax({ 

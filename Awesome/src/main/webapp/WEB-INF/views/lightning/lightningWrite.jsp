@@ -4,18 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>번개팅작성</title>
-<script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-<<<<<<< HEAD
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 <style>
 #form-container{width:700px;}
 #matchContent{min-height: 200px; resize: none;}
@@ -23,6 +12,7 @@
 #selectPlace{width:150px;}
 #img-viewer{width:344px; height: 300px;}
 #map{width:465px; height:350px;}
+.modal-content div{z-index: 1050;}
 </style>
 <script>
 $(function(){
@@ -191,8 +181,6 @@ function insertData(btn){
 	
 }
 </script>
-</head>
-<body>
 	<div id="form-container" class="card mx-auto">
 		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do" method="post" enctype="multipart/form-data">
 			<div class="form-row">
@@ -247,81 +235,31 @@ function insertData(btn){
 			</div>
 		</form>
 	</div>
-	<div class="modal fade" id="searchMap" tabindex="-1" role="dialog" aria-labelledby="searchMap" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="searchMapTitle">지도 검색</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body" id="searchMapBody">
-					<div id="search-container" class="mb-2">
-						<input type="text" name="position" class="col-md-9" placeholder="검색하려는 장소를 입력하세요"/>
-						<input type="button" value="검색" onclick="findPosition();" />
-					</div>
-					<div id="map" class="mb-2"></div>
-					<div id="mapInfo" class="mapInfo"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					<button type="button" class="btn btn-primary">완료</button>
-				</div>
-			</div>
-		</div>
-=======
-<style>
-#form-container{width:700px;}
-#lightningContent{min-height: 200px; resize: none;}
-#btn{margin-right:20px;}
-#selectPlace{width:150px;}
-#lightningImg{width:344px; height: 300px;}
-</style>
-</head>
-<body>
-	<div id="form-container" class="card mx-auto">
-		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do">
-			<div class="form-row">
-				<div class="form-group col-md-6">
-					<img src="${pageContext.request.contextPath}/resources/images/sampleimage.png" alt="sample" id="matchOriginalImg" class="img-thumbnail">
-					<label for="placeName">지도에서 장소 선택하기</label>
-					<input type="text" class="form-control" id="placeName" placeholder="장소 선택하기" readonly>
-				</div>
-				<div class="form-group col-md-6">
-					<label for="matchTitle">Title</label>
-					<input type="text" class="form-control" id="matchTitle" placeholder="title입력">
-					<label for="cityName">도시선택</label>
-					<select id="cityName" class="form-control">
-						<option selected>도시 선택</option>
-						<option>도시1</option>
-						<option>도시2</option>
-						<option>도시3</option>
-						<option>도시4</option>
-					</select>
-					<label for="localName">State</label>
-					<select id="localName" class="form-control">
-						<option  selected>구 선택</option>
-					</select>
-					<label for="lightningEndDate">모집마감일자</label>
-					<input type="date" class="form-control" id="lightningEndDate">
-					<label for="lightningEndTime">모집마감시각</label>
-					<input type="time" class="form-control" id="lightningEndTime"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<textarea class="form-control" id="lightningContent" placeholder="내용을 입력해주세요." ></textarea>
-			</div>
-			<button id="btn" type="submit" class="btn btn-primary float-right">등록</button>
-			<button id="btn" type="button" class="btn btn-primary float-right">이전</button>
-			<div id="hidden-container">
-				<input type="hidden" id="placeId" />
-				<input type="hidden" id="placeLat" />
-				<input type="hidden" id="placeLng" />
-				<input type="hidden" id="matchType" value="L"/>
-			</div>
-		</form>
->>>>>>> refs/remotes/origin/jinwoo
-	</div>
-</body>
-</html>
+	
+	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+	<script>
+	var html ='<div class="modal fade" id="searchMap" tabindex="-1" role="dialog" aria-labelledby="searchMap" aria-hidden="true">'
+	html += '<div class="modal-dialog modal-dialog-centered" role="document">'
+	html += '	<div class="modal-content">'
+	html += '		<div class="modal-header">'
+	html += '			<h5 class="modal-title" id="searchMapTitle">지도 검색</h5>'
+	html += '			<button type="button" class="close" data-dismiss="modal" aria-label="Close">'
+	html += '				<span aria-hidden="true">&times;</span>'
+	html += '			</button>'
+	html += '		</div>'
+	html += '		<div class="modal-body" id="searchMapBody">'
+	html += '			<div id="search-container" class="mb-2">'
+	html += '				<input type="text" name="position" class="col-md-9" placeholder="검색하려는 장소를 입력하세요"/>'
+	html += '				<input type="button" value="검색" onclick="findPosition();" />'
+	html += '			</div>'
+	html += '		<div id="map" class="mb-2"></div>'
+	html += '		<div id="mapInfo" class="mapInfo"></div>'
+	html += '	</div>'
+	html += '	<div class="modal-footer">'
+	html += '		<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>'
+	html += '		<button type="button" class="btn btn-primary">완료</button>'
+	html += '	</div>'
+	html += '</div>'
+
+		$("body").append(html)
+	</script>
