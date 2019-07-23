@@ -309,8 +309,7 @@
 		 <artifactId>spring-websocket</artifactId>
 		 <version>${org.springframework-version}</version>
 		</dependency>
-	     
-	     
+
 	    <!-- jackson -->
 	    <dependency>
 	    	<groupId>org.codehaus.jackson</groupId>

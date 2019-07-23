@@ -6,8 +6,9 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="" name="pageTitle"/>
 </jsp:include>
-
-
+	
+	
+	
 	
 <style>
 div#contentmake-container{width:600px; margin:0 auto; text-align:center;}
@@ -24,8 +25,10 @@ function validate(){
 	}
 	return true;
 }
-</script>
+</script>	
 	
+	
+	${club }
 	
 	<div style="text-align: center;">
 			<c:if test="${empty club.mainrenamedFilename}">
@@ -37,8 +40,7 @@ function validate(){
 	</div>
 	
 	<div id="contentmake-container">	
-	<h2>게시물 작성</h2>
-	${club }
+	<h2>공지사항 작성</h2>
 	
 	<form name="contentmakeFrm" 
 		  action="${pageContext.request.contextPath}/club/clubcontentMakeend.do" 
@@ -50,13 +52,11 @@ function validate(){
 		<%-- <input type="hidden" name="memberCode" value="${memberLoggedIn.memberCode} " readonly> --%>
 		<input type="hidden" name="memberCode" value="1" readonly>
 		<input type="text" class="form-control" placeholder="제목" name="contentTitle" id="contentTitle" required>
-		<input type="text" class="form-control" name="contentWriter" value="memberLoggedIn.memberId" readonly required>
+		<input type="text" class="form-control" name="contentWriter" value="${memberLoggedIn.memberId}" readonly required>
 	    <textarea class="form-control" name="content" placeholder="내용" required></textarea>
-		<input type="hidden" name="writeLevel" value="1" readonly>
+		<input type="hidden" name="writeLevel" value="0" readonly>
 		<br />
 		<input type="submit" class="btn btn-outline-success" value="저장" >
 	</form>
 </div>
-	
-	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
