@@ -266,9 +266,8 @@
 					
 				$("#phoneAuth").focus();
 				
-				//return false; //운영시에 주석해제
+				return false; //운영시에 주석해제
 			}
-			console.log("???????????");
 			return true;
 		}
 		
@@ -289,26 +288,59 @@
 				return false;
 			}
       		
-      		$(".smsAuth").show(400);//운영시에 삭제
-			$("#smsAuthBtn").show(400);//운영시에 삭제
-      		
-      		/*  $.ajax({        //운영시에 주석해제
-      			 url:"${pageContext.request.contextPath}/member/sendSMS", 
+			$.ajax({        //운영시에 주석해제
+  			 	url:"${pageContext.request.contextPath}/member/checkPhoneDuplicate.do", 
       			type: "POST",
       			data: "userPhoneNumber="+userPhoneNumber,
-				dataType : 'text',
+				dataType : 'json',
       			success : function(data){
-      				$(".smsAuth").show(400);
-      				$("#smsAuthBtn").hide(400);
-      				alert(data);
-      			},
-      			error: function(jqxhr, textStatus, errorThrown){
+      				console.log(data);
+      				if(data.isUsable){
+      					 $.ajax({        //운영시에 주석해제
+    	      			 	url:"${pageContext.request.contextPath}/member/sendSMS", 
+    		      			type: "POST",
+    		      			data: "userPhoneNumber="+userPhoneNumber,
+    						dataType : 'text',
+    		      			success : function(data){
+    		      				
+    		      				if(data !="전송 실패"){
+    			      				$(".smsAuth").show(400);
+    			      				$("#smsAuthBtn").show(400);
+    			
+    								$.confirm.show({
+    								  "message": data,
+    								  "yes": function (){
+    								  },
+    								  "hideNo":true,
+    								  "type":"warning" // default or success, danger, warning
+    								})
+    			      			}
+    			      		},
+    			      		error: function(jqxhr, textStatus, errorThrown){
+    		      				console.log("ajax처리실패! : "+jqxhr.status);
+    		      				console.log(jqxhr);
+    		      				console.log(textStatus);
+    		      				console.log(errorThrown);
+    		      			} 
+    			      	});
+	      			}else{
+	      				$.confirm.show({
+							  "message": "이미 사용중인 번호입니다.",
+							  "yes": function (){
+							  },
+							  "hideNo":true,
+							  "type":"warning" // default or success, danger, warning
+							})
+	      			}
+	      		},
+	      		error: function(jqxhr, textStatus, errorThrown){
       				console.log("ajax처리실패! : "+jqxhr.status);
       				console.log(jqxhr);
       				console.log(textStatus);
       				console.log(errorThrown);
       			}
-      		});  */
+	      	});
+      		
     	  });
     	  
     	  $("#smsAuthBtn").on("click",function(){

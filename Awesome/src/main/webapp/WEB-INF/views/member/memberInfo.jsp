@@ -22,17 +22,18 @@
 			display : flex; 
             flex-direction : row;
             
-           	height:500px;
-           	width :1000px;
+           	height:100%;
+           	width :100%;
 		}
 			#item-head{
            		flex : 1; 
-           		margin : auto;
+           		margin : 5%;
            		
            		height:100%;
            		
            		display : flex; 
             	flex-direction : column;
+            	justify-content :flex-start;
 			}
 				#item-head-main{
 	           		flex : 1; 
@@ -68,19 +69,15 @@
 	           	
 	           		height:100%;
 				}
-			
-			#item-body{
-           		flex : 4; 
-           		margin : auto;
            		
-           		/* overflow: scroll; */
-           		height:100%;
+        		#item-body{
+        		flex : 4;
+        		 height:100vh;
+        		 overflow:scroll;
 			}
-			
- 			#item-body::-webkit-scrollbar { 
-			    display: none; 
-			} 
-			
+			#item-body::-webkit-scrollbar { 
+			    display: none !important; // 윈도우 크롬 등
+			}
 	</style>
 		
 	<script>
