@@ -4,13 +4,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!-- 부트스트랩관련 라이브러리 -->
+<script  src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
-<script  src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/admin_main.css" />
 <div id="admin_board">
-	<h2>관리자님 안녕하세요? </h2>
+	<h4>관리자님 안녕하세요? </h2>
   <div id="main_board">
   <!--메뉴 탭  -->
 	  <div class="tab">
@@ -23,7 +23,7 @@
 	  <button class="tablinks" onclick="${pageContext.request.contextPath}/admin/manageMembers">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/group.png"/>
 	  	<span class="text_">&nbsp;
-	  	 회원찾기 
+	  	 <h4>회원찾기</h4> 
 	  	</span>
 	  </button>
 	  <button class="tablinks" onclick="${pageContext.request.contextPath}/admin/FindMembers">
@@ -50,7 +50,7 @@
 		
 		<div id="see_members">
 			<h3>모든 회원</h3>
-			<table class="member_table">
+			<table class="table table-hover">
   <thead>
     <tr id="member_header">
       <th scope="col">회원코드</th>
@@ -68,9 +68,9 @@
     </tr>
   </thead>
   <tbody>
-    <c:if test="not empty list">
-    	<c:forEach items="list" var="l">
-		    <tr id="member_body">
+    <c:if test="${not empty list}">
+    	<c:forEach items="${list}" var="l">
+		    <tr id="member_body" no="${l.memberCode }">
 		      <td>${l.memberCode }</td>
 		      <td>${l.memberId }</td>
 		      <td>${l.memberName }</td>
@@ -88,13 +88,26 @@
     </c:if>
   </tbody>
 </table>
+<br /><br /><br />
+<%
+		int totalMemberNum = Integer.parseInt(String.valueOf(request.getAttribute("totalMemberNum")));
+		int numPerPage = Integer.parseInt(String.valueOf(request.getAttribute("numPerPage")));
+		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
+		%>
+		<%= com.kh.awesome.common.util.Utils.getPageBar(totalMemberNum, cPage, numPerPage, "manageMembers")%>
 		</div>
 	</div>
 	
   </div>
-
  </div>
-	<script>
-
-</script>
+ <script>
+  $(function(){
+	 $("tr[no]").on("click",function(){
+		 var memberCode = $(this).attr("no");
+		 if(memberCode == undefined) return;
+		location.href="${pageContext.request.contextPath}/admin/seeOneMember?memberCode=" + memberCode; 
+	 });
+ });
+ 
+ </script>
    

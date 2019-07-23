@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="admin">
-	 <!-- <select id="selectAllMemebers" resultMap="member_">
+<resultMap type="member" id="member">
+<result column="member_code" property="memberCode"/>
+	<result column="member_id" property="memberId"/>
+	<result column="password" property="password"/>
+	<result column="member_name" property="memberName"/>
+	<result column="birthday" property="birthday"/>	
+	<result column="phone" property="phone"/>
+	<result column="gender" property="gender"/>
+	<result column="profile" property="profile"/>
+	<result column="renamed_profile" property="renamedProfile"/>
+	<result column="blind_date_open" property="blindDateOpen"/>	
+	<result column="friend_open" property="friendOpen"/>
+	<result column="search_open" property="searchOpen"/>
+	<result column="introduce" property="introduce"/>
+	<result column="verify" property="verify"/>
+	<result column="enroll_date" property="enrollDate"/>
+	<result column="email" property="email"/>
+	
+	<collection property="clubMember" ofType="clubmember" >
+			<result column="CLUB_CODE" 	property="clubCode"/>
+			<result column="CLUB_MEMBER_CODE" property="clubmemberCode"/>
+			<result column="CLUB_MEM_GRADE" property="clubmemGrade"/>
+			<result column="CLUB_JOIN_CHECK" property="clubjoinCheck"/>
+		</collection>	
+	</resultMap>
+	
+	  <select id="selectAllMembers" resultMap="member">
 	  select * from member order by member_code
 	 </select>
-	 	<resultMap type= "Member" id="member_">
-	 	</resultMap>
-	 <select id="selectTotalMemberNum">
+	 <select id="selectTotalMemberNum" resultType="_int">
 	 select count(*) from member
+	 </select>
+	 <select id="seeOneMember" resultMap = "member">
+		select M.*, C.* 
+		from member M left join club_member C
+	 on M.member_code = C.club_member_code
+	 where M.member_code = #{memberCode}
+	 order by M.member_code
+	 </select>
+	 <!--
+	 select M.*, C.*
+	 from member M left join club_member C on
+	 M.member_code = C.club_member_code
+	 where M.member_code = #{memberCode} order by member_code-->
+	 
+	 
+	 <!-- <select id="seeClubJoined" resultType = "clubmember">
+	 select * from club_member where club_member_code = #{memberCode}
 	 </select> -->
 </mapper>

@@ -3,22 +3,22 @@ package com.kh.awesome.board.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,14 +36,14 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	@RequestMapping("/boardForm.do")
+	/*@RequestMapping("/boardForm.do")
 	public void boardForm() {
 		if(logger.isDebugEnabled())
 			logger.debug("게시판 글쓰기 페이지 요청");
 		
 		
 		logger.info("게시판 글쓰기 페이지 요청");
-	}
+	}*/
 	
 	//게시판 목록 페이지
 	@RequestMapping("/questionBoard.do")
@@ -58,10 +58,8 @@ public class BoardController {
 	//1. 현재페이지 컨텐츠 구하기
 	List<Map<String,String>> list = boardService.selectBoardList(cPage, numPerPage);
 	
-	
 	//2. 전체컨텐츠수 구하기
 	int totalContents = boardService.selectBoardTotalContents();
-	
 	mav.addObject("list",list);
 	mav.addObject("totalContents",totalContents);
 	mav.addObject("numPerPage",numPerPage);
@@ -73,9 +71,9 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/boardFormEnd.do")
-	public ModelAndView insertBoard(QuestionBoard qBoard, 
+	public String insertBoard(QuestionBoard qBoard, 
 								   MultipartFile upFile,
-			HttpServletRequest request, ModelAndView mav) {
+			HttpServletRequest request) {
 		if(logger.isDebugEnabled())
 		logger.debug("게시판 페이지 등록 요청~!");
 		logger.debug("boardFormEnd' qBoard@Controller== " + qBoard);
@@ -87,23 +85,23 @@ public class BoardController {
 		
 		if(!upFile.isEmpty()) {
 			//filerename policy
-			String questionOriginalFileName = upFile.getOriginalFilename();
-			String ext = questionOriginalFileName.substring(questionOriginalFileName.lastIndexOf(".")+1);
+			String questionOriginalFilename = upFile.getOriginalFilename();
+			String ext = questionOriginalFilename.substring(questionOriginalFilename.lastIndexOf(".")+1);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
 			int rndNum = (int) (Math.random()*1000);
 			
-			String qeustionRenamedFileName = sdf.format(new Date()) +"_" + rndNum +"." + ext;
+			String qeustionRenamedFilename = sdf.format(new Date()) +"_" + rndNum +"." + ext;
 			//서버지정위치에 파일 보관
 			try {
-				upFile.transferTo(new File(saveDirectory + "/" + qeustionRenamedFileName));
+				upFile.transferTo(new File(saveDirectory + "/" + qeustionRenamedFilename));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) { 
 				e.printStackTrace();
 			}
 			
-			qBoard.setQuestionOriginalFilename(questionOriginalFileName);
-			qBoard.setQuestionRenamedFilename(qeustionRenamedFileName);
+			qBoard.setQuestionOriginalFilename(questionOriginalFilename);
+			qBoard.setQuestionRenamedFilename(qeustionRenamedFilename);
 		}
 	
 		//2.업무로직:DB 에 게시물 등록
@@ -112,46 +110,116 @@ public class BoardController {
 		logger.error("게시물 등록에러",e);
 		throw new BoardException("게시물 등록 중 오류가 발생했습니다. ");
 	}
-		String msg = result > 0? "게시물 등록성공~!": "게시물 등록 실패~!";
-		String loc= "/";
-		mav.addObject("loc", loc);
-		mav.addObject("msg", msg);
-		mav.setViewName("common/msg");
-		return mav;	
+		
+		return "redirect:/questionBoard/questionBoard.do";
 		
 	}
 	
-	@RequestMapping("/boardView.do")
-	public void selectOneBoard(@RequestParam ("questionNo") int questionNo, 
-							Model model) {
-		logger.debug("게시판 상세보기 요청!@*** ");
-		logger.debug("questionNo@controller"+ questionNo);
-		//my batis 에서 한방에 끝내는 방법으로 
-		QuestionBoard b =boardService.selectOneQuestion(questionNo);
+	
+	@RequestMapping(value="/updateBoard.do")
+	public String updateBoard(QuestionBoard qBoard, 
+								   MultipartFile upFile,
+			HttpServletRequest request) {
+		if(logger.isDebugEnabled())
+		logger.debug("update 등록 요청~!");
+		logger.debug("boardUpdate' qBoard@Controller== " + qBoard);
+		int result =0;
+		try{//1. 파일 업로드
+		String saveDirectory = request.getSession()
+									.getServletContext()
+									.getRealPath("/resources/upload/qBoard");
 		
-		model.addAttribute("board",b);
+		if(!upFile.isEmpty()) {
+			//filerename policy
+			String questionOriginalFilename = upFile.getOriginalFilename();
+			String ext = questionOriginalFilename.substring(questionOriginalFilename.lastIndexOf(".")+1);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+			int rndNum = (int) (Math.random()*1000);
+			
+			String qeustionRenamedFilename = sdf.format(new Date()) +"_" + rndNum +"." + ext;
+			//서버지정위치에 파일 보관
+			try {
+				upFile.transferTo(new File(saveDirectory + "/" + qeustionRenamedFilename));
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) { 
+				e.printStackTrace();
+			}
+			
+			qBoard.setQuestionOriginalFilename(questionOriginalFilename);
+			qBoard.setQuestionRenamedFilename(qeustionRenamedFilename);
+		}
+	
+		//2.업무로직:DB 에 게시물 등록
+		result = boardService.updateBoard(qBoard);
+	}catch(Exception e) {
+		logger.error("게시물 등록에러",e);
+		throw new BoardException("게시물 등록 중 오류가 발생했습니다. ");
+	}
+		
+		return "redirect:/questionBoard/questionBoard.do";
 		
 	}
 	
-	@RequestMapping("/fileDownload.do")
+		
+	@RequestMapping(value="/boardView.do", method=RequestMethod.POST,
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)	
 	@ResponseBody
-	public byte[] fileDownload(@RequestParam String oName,
-							@RequestParam String rName, 
-							HttpServletRequest request, 
-							HttpServletResponse response) throws IOException {
-		logger.debug(oName +","+rName);
+	public Map<String, String> selectOneBoard(
+			@RequestParam ("questionNo") int questionNo, HttpServletRequest request) {
+		Map<String, String> b = new HashMap<>();
+				b= boardService.selectOneQuestion(questionNo);
+				logger.info("selectedQ={}", b);
+		String html = "";
+		String question_No=String.valueOf(b.get("questionNo"));
+		String questionTitle= b.get("questionTitle");
+		String memberName= b.get("memberName");
+		String questionContent = b.get("questionContent");
+		String questionOriginalFilename = b.get("questionOriginalFilename");
+		String questionRenamedFilename = b.get("questionRenamedFilename");
 		
-		//저장된 파일 디렉토리 
-		//예전 getServletConxt(): application, 지금은 여러개가 될수 있다. application Context 객체 
-		String saveDirectory = request.getSession().getServletContext().
-								getRealPath("/resources/upload/qBoard");
-		File savedFile = new File(saveDirectory +"/" +rName);
+		html += "<img src='"+request.getContextPath()+"/resources/upload/qBoard/"+b.get("questionRenamedFilename")
+		+"' style=\"width: 250px; height: 250px; position: block;\"/>";
 		
-		response.setHeader("Content-Type",
-				"application/octet-stream; charset=utf-8");
-		response.setHeader("Content-Disposition", 
-				"attachment;fileName=\"" + new String(oName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
-		response.setHeader("Content-Length", Long.toString(savedFile.length()));
-		return Files.readAllBytes(savedFile.toPath());
+		Map<String, String> htmlMap = new HashMap<String, String>();
+		htmlMap.put("html", html);
+		htmlMap.put("question_No", question_No);
+		htmlMap.put("questionTitle", questionTitle);
+		htmlMap.put("questionContent", questionContent);
+		htmlMap.put("memberName", memberName);
+		htmlMap.put("questionOriginalFilename", questionOriginalFilename);
+		htmlMap.put("questionRenamedFilename", questionRenamedFilename);
+		
+		return htmlMap;
 	}
+	
+	/*@RequestMapping(value="/boardView.do", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)	
+	@ResponseBody
+	public String selectOneBoard(
+			@RequestParam ("questionNo") int questionNo) throws IOException {
+		String request = "http://localhost/awesome/questionBoard/questionBoard?"
+				+"questionNo="+ questionNo;
+		URL url = new URL(request);
+		String line= "";
+		StringBuilder sb = new StringBuilder();
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+		while((line=br.readLine())!=null) {
+			sb.append(line);
+		}
+		return sb.toString();
+	}
+	*/
+	 @RequestMapping("/deleteQuestion.do")
+		public String deleteQ(@RequestParam ("questionNo") int no){
+			logger.debug("질문 삭제");
+			/*Map<String, String> map = new HashMap<>();
+			map.put("no", questionNo);*/
+			boardService.deleteQuestion(no);
+			
+			return "redirect:/questionBoard/questionBoard.do";
+		}
+
+	
+	
 }

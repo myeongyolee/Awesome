@@ -52,11 +52,11 @@
   </div>
  </div>
 	<script>
-	/* $(function(){
+	/*  $(function(){
 		$(".tab button.tablinks").hover(function(){
-			$(".tab button.tablinks").css({"background-color":"white", "width":"200%"});			
-			$("_text").css({"display":"inline-block")}.toggle();
-		});
-	}); */
+			 $(".tab button.tablinks").css({"width":"200%"});			
+			 $("_text").css({"display":"inline-block")}.toggle(); 
+		 });
+	});  */
 </script>
    

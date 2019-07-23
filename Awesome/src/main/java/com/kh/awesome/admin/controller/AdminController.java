@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.admin.model.service.AdminService;
+import com.kh.awesome.club.model.vo.Clubmember;
+import com.kh.awesome.member.model.vo.Member;
 
 @Controller
 @RequestMapping("admin")
@@ -28,18 +30,11 @@ public class AdminController {
 		
 	}
 	
-	/*public void manageMembers() {
-		if(logger.isDebugEnabled())
-			logger.debug("멤버 페이지 요청");
-	}
-*/	
 	//회원 정보 모두 보기 
 	@RequestMapping("/manageMembers")
 	public ModelAndView selectAllMembers(
 			@RequestParam(value = "cPage", required=false
 			, defaultValue = "1") int cPage) {
-		if(logger.isDebugEnabled())
-			logger.debug("멤버관리 페이지 요청");
 		
 		ModelAndView mav = new ModelAndView();
 		//한페이지당 10명씩 데리고 오기
@@ -47,7 +42,6 @@ public class AdminController {
 		
 		List<Map<String, String>> list =
 				adminService.selectAllMembers(cPage, numPerPage); 
-		logger.info("list@Controller == "  + list);
 		
 		//전체 컨텐츠수 구하기 
 		int totalMemberNum = adminService.selectTotalMemberNum();
@@ -60,4 +54,17 @@ public class AdminController {
 		
 		return mav;
 	}
+	@RequestMapping("/seeOneMember")
+	public ModelAndView seeOneMember(
+			@RequestParam("memberCode") int memberCode) {
+		
+		ModelAndView mav = new ModelAndView();
+		Member m = adminService.seeOneMember(memberCode);
+		/*Clubmember cm = adminService.seeClubJoined(memberCode);*/
+		mav.addObject("member", m);
+		/*mav.addObject("clubjoined", cm);*/
+		mav.setViewName("admin/seeOneMember");
+		return mav;
+	}
+	
 }

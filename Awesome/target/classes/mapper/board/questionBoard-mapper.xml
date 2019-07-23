@@ -2,20 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="qBoard">
 	 <resultMap type = "map" id="qBoard">
+	 	<result column="question_no" property="questionNo"/>
+		<result column="member_code" property="memberCode"/>
+		<result column="member_name" property="memberName"/>
+		<result column="question_title" property="questionTitle"/>
+		<result column="question_content" property="questionContent"/>
+		<result column="question_original_filename" property="questionOriginalFilename"/>
+		<result column="question_renamed_filename" property="questionRenamedFilename"/>
+		<result column="question_date" property="questionDate"/>
+		<result column="question_open" property="questionOpen"/>
 	</resultMap> 
-	<select id="selectBoardList" resultType = "qBoard">
-		select question_no, member_code, question_title, question_original_filename, question_renamed_filename, question_date,
-		 question_open from question_board order by question_no
-		
-	</select>
+	<select id="selectBoardList" resultMap = "qBoard">
+		select Q.question_no, Q.member_code, Q.question_title, 
+		Q.question_original_filename, Q.question_renamed_filename, 
+		substr(Q.question_date,1,10) question_date, 
+		Q.question_open, substr(M.member_name, 1,1)||'*'|| substr(M.member_name, -1,1) member_name 
+		from member M join question_board Q on M.member_code = Q.member_code 
+		order by question_no
+    </select> 
 
 	<select id="selectBoardTotalContents" resultType = "_int">
-		select count(*) from question_board
+		select count(*) 
+		from member M join question_board Q on M.member_code = Q.member_code
+		where M.member_code = Q.member_code
 	</select>
 	
-	<select id="selectOneQuestion" resultType= "qBoard">
-		select * from question_board 
-		where question_no = #{question_no} 
+	<select id="selectOneQuestion" resultMap= "qBoard">	
+		select Q.question_no, M.member_name, Q.question_title, 
+		Q.question_original_filename, Q.question_renamed_filename, 
+		substr(Q.question_date,1,10) question_date, 
+		Q.question_open, Q.question_content 
+		from member M join question_board Q on M.member_code = Q.member_code 
+		where question_no = #{questionNo} 
+		order by question_no
 	</select>
 	
 	<insert id="insertBoard" parameterType = "qBoard">
@@ -25,10 +44,21 @@
 	values(seq_question_board.nextval, #{memberCode}, #{questionTitle}, #{questionContent}, #{questionOriginalFilename}, #{questionRenamedFilename}
 	, sysdate, #{questionOpen})
 	<selectKey keyProperty = "questionNo" resultType = "_int" order ="AFTER">
-	 select seq_question_board.currval from dual
-	 
+	 select seq_question_board.currval from dual 
 	</selectKey>
 	</insert>
 	
+	<delete id="deleteQuestion">
+	delete from question_board where question_no = #{no}
+	</delete>
+	
+	<update id="updateQuestion">
+	update question_board set question_title = #{questionTitle},
+							  question_content = #{questionContent},
+							  question_original_filename = #{questionOriginalFilename}, 
+							  question_renamed_filename = #{questionRenamedFilename}, 
+							  question_open = #{questionOpen}
+				where question_no = #{questionNo}
+	</update>
 	
 </mapper>

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.awesome.admin.model.dao.AdminDAO;
+import com.kh.awesome.club.model.vo.Clubmember;
+import com.kh.awesome.member.model.vo.Member;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -23,6 +25,16 @@ public class AdminServiceImpl implements AdminService {
 	public int selectTotalMemberNum() {
 		return adminDAO.selectTotalMemberNum();
 	}
+
+	@Override
+	public Member seeOneMember(int memberCode) {
+		return adminDAO.seeOneMember(memberCode);
+	}
+
+	/*@Override
+	public Clubmember seeClubJoined(int memberCode) {
+		return adminDAO.seeClubJoined(memberCode);
+	}*/
 	
 	
 	
