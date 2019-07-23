@@ -13,6 +13,11 @@ public interface BoardService {
 
 	int insertBoard(QuestionBoard board);
 
-	QuestionBoard selectOneQuestion(int questionNo);
+	Map<String, String> selectOneQuestion(int questionNo);
+
+	int deleteQuestion(int no);
+
+	int updateBoard(QuestionBoard qBoard);
+
 
 }

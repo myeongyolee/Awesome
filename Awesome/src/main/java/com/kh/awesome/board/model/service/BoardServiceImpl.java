@@ -47,9 +47,20 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public QuestionBoard selectOneQuestion(int questionNo) {
+	public Map<String, String> selectOneQuestion(int questionNo) {
 		return boardDAO.selectOneQuestion(questionNo);
 	}
+
+	@Override
+	public int deleteQuestion(int no) {
+		return boardDAO.deleteQuestion(no);
+	}
+
+	@Override
+	public int updateBoard(QuestionBoard qBoard) {
+		return boardDAO.updateBoard(qBoard);
+	}
+
 
 }
 

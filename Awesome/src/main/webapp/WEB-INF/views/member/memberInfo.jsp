@@ -1,14 +1,13 @@
+<%@page import="com.kh.awesome.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8" />
-	<title>내정보 수정 페이지</title>
-	
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="title"/>
+</jsp:include>
+
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
     	integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
@@ -25,12 +24,6 @@
             
            	height:500px;
            	width :1000px;
-			background: rgb(230,179,117);
-			background: -webkit-linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
-			background: -moz-linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
-			background: -o-linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
-			background: -webkit-gradient(linear, 0 100%, 0 0, from(rgba(230,179,117,1)), color-stop(0.06, rgba(255,255,255,1)));
-			background: linear-gradient(90deg, rgba(230,179,117,1) 0%, rgba(255,255,255,1) 6%);
 		}
 			#item-head{
            		flex : 1; 
@@ -116,8 +109,6 @@
 		})
 		
 	</script>
-	    	
-</head>
 <body>
 
 	<div id="container">

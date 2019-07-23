@@ -38,9 +38,21 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public QuestionBoard selectOneQuestion(int questionNo) {
+	public Map<String, String> selectOneQuestion(int questionNo) {
 		return sqlSession.selectOne("qBoard.selectOneQuestion",questionNo);
 	}
+
+	@Override
+	public int deleteQuestion(int no) {
+		return sqlSession.delete("qBoard.deleteQuestion", no);
+	}
+
+	@Override
+	public int updateBoard(QuestionBoard qBoard) {
+		return sqlSession.update("qBoard.updateQuestion",qBoard);
+	}
+
+	
 	
 	
 }

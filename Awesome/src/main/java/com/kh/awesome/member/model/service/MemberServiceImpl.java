@@ -3,8 +3,6 @@ package com.kh.awesome.member.model.service;
 import java.sql.Date;
 import java.util.Map;
 
-import javax.websocket.Session;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
