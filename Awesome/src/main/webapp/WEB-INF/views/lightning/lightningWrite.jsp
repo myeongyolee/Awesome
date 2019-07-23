@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="Awesome" name="번개모임"/>
+	<jsp:param value="Awesome" name="번개모임작성"/>
 </jsp:include>
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
@@ -234,6 +234,9 @@ function insertData(btn){
 			</div>
 		</form>
 	</div>
+</div>
+</main>
+</div>
 	<div class="modal fade" id="searchMap" tabindex="-1" role="dialog" aria-labelledby="searchMap" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
@@ -258,4 +261,5 @@ function insertData(btn){
 			</div>
 		</div>
 	</div>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+</body>
+</html>
