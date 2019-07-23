@@ -44,6 +44,8 @@
   <button onclick="cancel();">취소</button>
   <button onclick="updateContentEnd();">수정</button>
 
+<input type="text" id="cInput" value="넘어감?">
+
 
 <script>
 function updateContentEnd(){
@@ -59,6 +61,8 @@ function updateContentEnd(){
 		success:function(data){
 			
 			if(data > 0){
+				opener.document.getElementById("ptext").value = document.getElementById("cInput").value
+
 				self.close();
 			}
 		}

@@ -288,6 +288,8 @@ div.content-view{
 	</table>
 	<div class="swiper-pagination" style=""></div>
 
+<input type="text" id="ptext" value="" />
+
 <script>
 function updateContent(result){
 	console.log("게시글 수정 버튼 누름");
