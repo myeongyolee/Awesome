@@ -153,9 +153,6 @@
 		where C.club_content_code = #{contentCode} 
 	</select>
 	
-<<<<<<< HEAD
-</mapper>
-=======
 	<insert id="insertclubContent0">
 		insert into club_content values(seq_club_content.nextval,#{clubCode},#{memberCode},#{contentTitle},#{content},#{writeLevel},sysdate)
 	</insert>
@@ -213,4 +210,4 @@
 	</select>
 	
 </mapper>
->>>>>>> refs/remotes/origin/joon
+

@@ -19,7 +19,6 @@
 	<typeAlias type="com.kh.awesome.club.model.vo.Clubcomment" alias="clubcomment"/>
 	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
-<<<<<<< HEAD
 	<typeAlias type="com.kh.awesome.member.model.vo.Member" alias="member"/>
 	<typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>
 	<typeAlias type="com.kh.awesome.admin.model.vo.Report" alias="report"/>
@@ -31,9 +30,6 @@
 <!--   <typeHandlers>
 	<typeHandler handler="com.kh.awesome.common.handler.CustomDateHandler"/>
 	</typeHandlers> -->
-=======
-	
-  </typeAliases> 
->>>>>>> refs/remotes/origin/joon
+
 
 </configuration>
