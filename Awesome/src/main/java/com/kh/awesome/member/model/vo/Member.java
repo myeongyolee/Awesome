@@ -26,7 +26,7 @@ public class Member implements Serializable{
 	private char verify;
 	private Date enrollDate;
 	private String email;
-	private List<Clubmember> clubMember;
+	
 	
 	public Member() {
 		super();
@@ -34,8 +34,7 @@ public class Member implements Serializable{
 
 	public Member(int memberCode, String memberId, String password, String memberName, Date birthday, String phone,
 			char gender, String profile, String renamedProfile, char blindDateOpen, char friendOpen, char searchOpen,
-			String introduce, char verify, Date enrollDate, String email, 
-			List<Clubmember> clubMember) {
+			String introduce, char verify, Date enrollDate, String email) {
 		this.memberCode = memberCode;
 		this.memberId = memberId;
 		this.password = password;
@@ -52,7 +51,6 @@ public class Member implements Serializable{
 		this.verify = verify;
 		this.enrollDate = enrollDate;
 		this.email = email;
-		this.clubMember = clubMember;
 	}
 
 	public int getMemberCode() {
@@ -183,19 +181,13 @@ public class Member implements Serializable{
 		this.email = email;
 	}
 
-	public List<Clubmember> getClubMember() {
-		return clubMember;
-	}
-	public void setClubMember(List<Clubmember> clubMember) {
-		this.clubMember = clubMember;
-	}
 	@Override
 	public String toString() {
 		return "Member [memberCode=" + memberCode + ", memberId=" + memberId + ", password=" + password
 				+ ", memberName=" + memberName + ", birthday=" + birthday + ", phone=" + phone + ", gender=" + gender
 				+ ", profile=" + profile + ", renamedProfile=" + renamedProfile + ", blindDateOpen=" + blindDateOpen
 				+ ", friendOpen=" + friendOpen + ", searchOpen=" + searchOpen + ", introduce=" + introduce + ", verify="
-				+ verify + ", enrollDate=" + enrollDate + ", email=" + email + ",clubMember" + clubMember + "]";
+				+ verify + ", enrollDate=" + enrollDate + ", email=" + email + "]";
 	}
 	
 	

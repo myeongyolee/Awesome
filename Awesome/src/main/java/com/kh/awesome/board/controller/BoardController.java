@@ -122,7 +122,7 @@ public class BoardController {
 			HttpServletRequest request) {
 		if(logger.isDebugEnabled())
 		logger.debug("update 등록 요청~!");
-		logger.debug("boardUpdate' qBoard@Controller== " + qBoard);
+		logger.info("boardUpdate' qBoard@Controller== " + qBoard);
 		int result =0;
 		try{//1. 파일 업로드
 		String saveDirectory = request.getSession()
@@ -174,6 +174,7 @@ public class BoardController {
 		String question_No=String.valueOf(b.get("questionNo"));
 		String questionTitle= b.get("questionTitle");
 		String memberName= b.get("memberName");
+		String memberCode = String.valueOf(b.get("memberCode"));
 		String questionContent = b.get("questionContent");
 		String questionOriginalFilename = b.get("questionOriginalFilename");
 		String questionRenamedFilename = b.get("questionRenamedFilename");
@@ -184,6 +185,7 @@ public class BoardController {
 		Map<String, String> htmlMap = new HashMap<String, String>();
 		htmlMap.put("html", html);
 		htmlMap.put("question_No", question_No);
+		htmlMap.put("memberCode", memberCode);
 		htmlMap.put("questionTitle", questionTitle);
 		htmlMap.put("questionContent", questionContent);
 		htmlMap.put("memberName", memberName);

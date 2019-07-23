@@ -28,7 +28,7 @@
 	</select>
 	
 	<select id="selectOneQuestion" resultMap= "qBoard">	
-		select Q.question_no, M.member_name, Q.question_title, 
+		select Q.question_no, M.member_name, Q.member_code, Q.question_title, 
 		Q.question_original_filename, Q.question_renamed_filename, 
 		substr(Q.question_date,1,10) question_date, 
 		Q.question_open, Q.question_content 
