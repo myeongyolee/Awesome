@@ -246,7 +246,7 @@ public class MemberController {
 	
 	//회원가입
 	@RequestMapping(value="/memberEnrollEnd.do", method = RequestMethod.POST )
-	public String memberEnrollEnd(Address address, 
+	public String memberEnrollEnd(Address address,
 						Member member,
 						@RequestParam(value="upfile",required=false) MultipartFile upfile, 
 						Model model,
