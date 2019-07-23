@@ -4,7 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <% Member member = (Member)session.getAttribute("memberLoggedIn"); %>
+
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Awesome" name="title"/>
 </jsp:include>
@@ -37,7 +39,12 @@
 		#select-info img{width:200px; height:150px;}
 		#select-page-introduce{position:absolute; padding:150px 150px;}
 		#select-page-introduce div img{width:672px; height:400px;}
-		
+		.flex{
+					display : flex; 
+            		flex-direction : row;
+            		justify-content : flex-end;
+				}		
+
     </style>
     <header>
 
@@ -120,36 +127,10 @@
 		  </div>
 
         </div>
-           
             
     </header>
 
     <script>
-    //20190708 12:48
-    //구글 인증 인,아웃
-/*     function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-    };
-    
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-        auth2.disconnect();
-      } */
-      
     		//first 페이지 이미지슬라이드
             $(function(){
                 $('.bxslider').bxSlider({
@@ -225,12 +206,11 @@
                 	else if($(this).attr("id") == "sel-4th") changeImg("intro-4th")
                 	else if($(this).attr("id") == "sel-5th") changeImg("intro-5th")
                 	
-                	
                 })
             })
             function changeImg(idd){
-            	$("#select-page-introduce div").css("display","none")
-            	$("#"+idd+"").css("display","inline-block")
+            	$("#select-page-introduce div").css("display","none");
+            	$("#"+idd+"").css("display","inline-block");
             }
             
             
