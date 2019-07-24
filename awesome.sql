@@ -472,11 +472,16 @@ comment on column userTable.sessionlimit is '세션제한시간';
 
 select * from member;
 
-insert into smsauth values(20,'B52EF24080AC9AE6B0541FBF54D3BDDD',1111);
+insert into smsauth values(23,'C85AE517EDE52452FC39D3797B0024AE',1111);
 commit;
 
 select * from member;
-delete from member where member_code=210;
+delete from member where member_code=211;
+commit;
+
+delete from member;
+delete from address;
+
 commit;
 
 update address 
@@ -490,6 +495,7 @@ update address
         
         select * from address;
         select * from member;
-        
-        insert into address values(211,'16875','경기도 용인시 수지구 죽전동 1165 새터마을죽전힐스테이트','경기도 용인시 수지구 현암로125번길 11','ㅂㅈㅍㄷㅂㅈㄷㅍㅂㅈㄷㅍ',127.1209373,37.3330944);
+        delete from member where member_code=262;
+        commit;
+        insert into address values(241,'16875','경기도 용인시 수지구 죽전동 1165 새터마을죽전힐스테이트','경기도 용인시 수지구 현암로125번길 11','ㅂㅈㅍㄷㅂㅈㄷㅍㅂㅈㄷㅍ',127.1209373,37.3330944);
         commit;

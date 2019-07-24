@@ -25,6 +25,7 @@
 	  		<input type="text" name="message" id="msg" /> <button>전송</button>
 	  	</div>
 	  </div>
+
 	</div>
 
 </body>
