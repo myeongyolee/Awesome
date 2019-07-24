@@ -23,6 +23,8 @@ public interface AdminDAO {
 
 	Member seeOneMember(int memberCode);
 
+	List<Map<String, Object>> searchPpl(Map<String, String> search, int cPage, int numPerPage);
+
 /*	Clubmember seeClubJoined(int memberCode);*/
 
 

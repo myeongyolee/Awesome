@@ -55,6 +55,11 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.seeOneMember(memberCode);
 	}
 
+	@Override
+	public List<Map<String, Object>> searchPpl(Map<String, String> search, int cPage, int numPerPage) {
+		return adminDAO.searchPpl(search, cPage, numPerPage);
+	}
+
 	/*@Override
 	public Clubmember seeClubJoined(int memberCode) {
 		return adminDAO.seeClubJoined(memberCode);

@@ -102,6 +102,13 @@ public class AdminDAOImpl implements AdminDAO {
 	public Clubmember seeClubJoined(int memberCode) {
 		return sqlSession.selectOne("admin.seeClubJoined", memberCode);
 	}*/
+
+	@Override
+	public List<Map<String, Object>> searchPpl(Map<String, String> search, int cPage, int numPerPage) {
+		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
+		System.out.println("search@DAOimpl== " + search);
+		return sqlSession.selectList("admin.searchPplList", search, rowBounds);
+	}
  
  
  

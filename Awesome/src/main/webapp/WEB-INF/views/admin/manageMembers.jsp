@@ -7,8 +7,15 @@
 <script  src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/admin_main.css" />
+ <!--Plugin CSS file with desired skin-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+ <!-- Tiny Nice Confirmation Popup Plugin With jQuery - H-confirm-alert -->
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/H-confirm-alert.js"></script>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/H-confirm-alert.css">
+   
+ 
 <div id="admin_board">
 	<h4>관리자님 안녕하세요? </h2>
   <div id="main_board">
@@ -88,79 +95,60 @@
     </c:if>
   </tbody>
 </table>
-
-<input type="hidden" id="cPage" value="1"/>
-	<div id="lightningList-content" class="mx-auto"></div>
+<br /><br />
+<%
+		int totalMemberNum = Integer.parseInt(String.valueOf(request.getAttribute("totalMemberNum")));
+		int numPerPage = Integer.parseInt(String.valueOf(request.getAttribute("numPerPage")));
+		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
+		%>
+<%= com.kh.awesome.common.util.Utils.getPageBar(totalMemberNum, cPage, numPerPage, "manageMembers")%>
+	<input type="hidden" id="cPage" value="1"/>
+	<div id="pplList" class="mx-auto"></div>	
 	<div id="search-container" class="card p-4 mb-4 bg-white">
 		<ul class="list-group list-group-flush">
 			<li class="list-group-item">
-				<label for="title">회원 이름으로 검색</label>
+				<label for="byName">회원 이름으로 검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
-							<input type="checkbox" name="title">
+							<input type="checkbox" name="byName">
 						</div>
 					</div>
-					<input type="text" class="form-control" id="title">
+					<input type="text" class="form-control" id="byName">
 				</div>
-				<label for="title">회원 아이디로 검색</label>
+				<label for="byMid">회원 아이디로 검색 (이메일 형식)</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
-							<input type="checkbox" name="title">
+							<input type="checkbox" name="byMid">
 						</div>
 					</div>
-					<input type="text" class="form-control" id="title">
+					<input type="text" class="form-control" id="byMid">
 				</div>
-				<label for="title">회원 별명으로 검색</label>
+				<label for="nickname">회원 별명으로 검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
-							<input type="checkbox" name="title">
+							<input type="checkbox" name="nickname">
 						</div>
 					</div>
-					<input type="text" class="form-control" id="title">
+					<input type="text" class="form-control" id="nickname">
 				</div>
 			</li>
 			<li class="list-group-item">
-				<label for="city">성별 </label>
-				<select class="form-control" id="city" onchange="selectLocalList();">
-					<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
-					<c:forEach items="${cityList}" var="city">
-					<option value=${city.cityCode }>${city.cityName }</option>						
-					</c:forEach>
+				<label for="gender">성별 </label>
+				<select class="form-control" id="gender" onchange="selectGenderList();">
+					<option id="defaultGender" value="0" disabled selected>성별을 선택해 주세요.</option>
+					<option value="M">남자</option>						
+					<option value="F">여자</option>						
 				</select>
 			</li>
 			<li class="list-group-item">
-				<label for="local">나이 </label>
-				<select class="form-control" id="local">
-					<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
-				</select>
+				<label for="age">나이 </label>
+				  <input type="text" class="js-range-slider" name="age" value="20" />
 			</li>
 			<li class="list-group-item">
-				<label for="nickName">작성자검색</label>
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<div class="input-group-text">
-							<input type="checkbox" name="nickName">
-						</div>
-					</div>
-					<input type="text" class="form-control" id="nickName">
-				</div>
-			</li>
-			<li class="list-group-item">
-				<label for="interesting-search">분류검색</label>
-				<select class="form-control" id="interesting">
-					<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
-					<c:forEach items="${interestingList}" var="interesting">
-					<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
-					</c:forEach>
-				</select>
-			</li>
-			
-			<li class="list-group-item">
-				<button class="btn btn-outline-secondary" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningWrite.do'">신규작성</button>
-				<button class="btn btn-outline-secondary" type="button" onclick="serchAjax();">검색하기</button>
+				<button class="btn btn-outline-secondary" type="button" onclick="searchPpl();">검색하기</button>
 			</li>
 		</ul>
 	</div>
@@ -168,13 +156,7 @@
 
 
 <br /><br /><br />
-<%
-		int totalMemberNum = Integer.parseInt(String.valueOf(request.getAttribute("totalMemberNum")));
-		int numPerPage = Integer.parseInt(String.valueOf(request.getAttribute("numPerPage")));
-		int cPage = Integer.parseInt(String.valueOf(request.getAttribute("cPage")));
-		%>
-		<%= com.kh.awesome.common.util.Utils.getPageBar(totalMemberNum, cPage, numPerPage, "manageMembers")%>
-		</div>
+	</div>
 	</div>
 	
   </div>
@@ -187,6 +169,81 @@
 		location.href="${pageContext.request.contextPath}/admin/seeOneMember?memberCode=" + memberCode; 
 	 });
  });
- 
+  /*나이 검색 슬라이더  */
+  $(".js-range-slider").ionRangeSlider({
+      type: "double",
+      grid: true,
+      min: 0,
+      max: 100,
+      from: 5,
+      to: 100,
+      step: 1, 
+      onChange: function(data){
+    	  var from = data.from;
+    	  var to = data.to;
+    	  console.dir("data.from"+ from);
+    	  console.dir("data.to"+ to);
+      }
+  });
+  
+ function searchPpl(){
+	 $("#pplList").html("");
+	 $("#cPage").val(1);
+	 getPplList();
+ };
+ /*회원 검색   */
+ function getPplList(){
+	 var param = {cPage: $("#cPage").val()};
+	 var check = $(":checkbox:checked");
+	 if(check!=null){
+		 for(var i=0; i<check.length;i++){
+			 var id = $(check[i]).attr("name");
+			 console.log($("#"+id).val());
+			 switch(id){
+			 case "byName" :
+				 param.byName = $(":text#" + id).val();
+				 break;
+			 case "byMid" : 
+				 param.byMid = $(":text#" + id).val();
+				 break;
+			 case "nickname" : 
+				 param.nickname = $(":text#" + id).val();
+				 break;
+			 }
+		 }
+	 }
+	
+	 if($("#gender>option:selected").not("#defaultGender")) param.gender = $("gender>option:selected").val();
+	 
+	 var str = JSON.stringify(param);
+	 $.ajax({
+		 url: '${pageContext.request.contextPath}/admin/searchPpl.do',
+		 dataType: "json", 
+		 type: "POST", 
+		 data: str, 
+		 contentType: "application/json; charset=UTF-8", 
+		 success: function(data){
+			 console.log(data);
+				 if(data !== "fail") {
+					 $.confirm.show({
+						 "message": "검색하신 회원이 없습니다.<br> 검색 조건을 다시 입력해주세요.", 
+						 "yes":function(){
+							 
+						 },
+						 "hideNo":true,
+						 "type":"warning"
+					 })
+					 $("#byName" && "byMid" && "nickname").val("").focus();
+				 }
+				 if(data == "success")
+			 		{for(var i=0; i<data.length; i++){
+					$("#see_members>h3").html("검색된 회원입니다."); 
+				 	$("tbody").html(data[i]);	
+			 }}}, 
+			 error: function(jqxhr, textStatus, errorThrown){
+				 console.log("ajax 처리 실패: " , jqxhr.statu, textStatus, errorThrown);
+			 }
+	 });
+ }
  </script>
    

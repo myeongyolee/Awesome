@@ -48,7 +48,7 @@ ul.profile-list{
 </style>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="awesome 인덱스" name="pageTitle"/>
-<<<<<<< HEAD
+
 </jsp:include>
 <script>
 function chart(){

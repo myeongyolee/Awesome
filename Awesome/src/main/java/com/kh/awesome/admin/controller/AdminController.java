@@ -1,6 +1,7 @@
 package com.kh.awesome.admin.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.admin.model.service.AdminService;
@@ -118,4 +121,34 @@ public class AdminController {
 		
 		
 	}
+	
+	@RequestMapping("/searchPpl.do")
+	@ResponseBody
+	public List<Map<String, Object>> searchPpl(@RequestBody Map requestMap){
+		logger.info("requestMap={}", requestMap);
+		int cPage = Integer.parseInt((String)requestMap.get("cPage"));
+		String byName = "";
+		String byMid = "";
+		String nickname = "";
+//		char gender = '';
+		
+		if(requestMap.get("byName")!=null) byName = (String)requestMap.get("byName");
+		if(requestMap.get("byMid")!=null) byMid = (String)requestMap.get("byMid");
+		if(requestMap.get("nickname")!=null) nickname = (String)requestMap.get("nickname");
+		Map<String, String> search = new HashMap();
+		
+		search.put("byName", byName);
+		search.put("byMid", byMid);
+		search.put("nickname", nickname);
+		
+		
+		int numPerPage = 5;
+		logger.info("search==@controller"+ search);
+		List<Map<String, Object>> searchPplList = adminService.searchPpl(search, cPage, numPerPage);
+		logger.info("searchPplList={}", searchPplList);
+		logger.info("searchPplList.size= " + searchPplList.size());		
+		
+		return searchPplList;
+	}
+	
 }
