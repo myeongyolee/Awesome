@@ -181,6 +181,8 @@ public class MemberController {
 		
 		model.addAttribute("member", member);
 		model.addAttribute("address", address);
+		
+		System.out.println(member.getMemberId());
 	}
 	
 	//회원 정보 수정
@@ -244,7 +246,7 @@ public class MemberController {
 	
 	//회원가입
 	@RequestMapping(value="/memberEnrollEnd.do", method = RequestMethod.POST )
-	public String memberEnrollEnd(Address address, 
+	public String memberEnrollEnd(Address address,
 						Member member,
 						@RequestParam(value="upfile",required=false) MultipartFile upfile, 
 						Model model,
@@ -322,6 +324,22 @@ public class MemberController {
 		
 		Member m = new Member();
 		m.setNickName(nickName);
+		
+		boolean isUsable = memberService.selectOneMember(m)==null?true:false;
+		logger.info("닉네임중복체크 : "+isUsable);
+		map.put("isUsable", isUsable);
+		
+		return map;
+	}
+	
+	@RequestMapping("/checkPhoneDuplicate.do")
+	@ResponseBody
+	public Map<String,Object> checkPhoneDuplicate(@RequestParam String userPhoneNumber){
+		Map<String,Object> map = new HashMap<String, Object>();
+		
+		System.out.println("번호 중복체크:"+userPhoneNumber);
+		Member m = new Member();
+		m.setPhone(userPhoneNumber);
 		
 		boolean isUsable = memberService.selectOneMember(m)==null?true:false;
 		logger.info("닉네임중복체크 : "+isUsable);
@@ -800,7 +818,7 @@ public class MemberController {
 
 	    	if(member !=null) {
 	    		try {
-					//if("전송 성공".equals(sendSMS(member.getPhone(),jid,null)))
+					if("전송 성공".equals(sendSMS(member.getPhone(),jid,null)))
 						result= "success";
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -820,6 +838,7 @@ public class MemberController {
 	    	logger.info("google recaptcha!!!!!!!!!!!!!!!!!!!!!");
 	       VerifyRecaptcha.setSecretKey("6LfzMK0UAAAAANGEUfhQ6WMnYWoAGvyjK7sYo_cj");
 	        String gRecaptchaResponse = request.getParameter("recaptcha");
+	        
 	        System.out.println(gRecaptchaResponse);
 	        //0 = 성공, 1 = 실패, -1 = 오류
 	        try {

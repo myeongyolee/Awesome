@@ -9,6 +9,10 @@
 	<jsp:param value="club 리스트" name="pageTitle"/>
 </jsp:include>
 
+<%
+	String memberLoggedIn ="admin";
+%>
+
 <script >
 $(function(){
 	$("tr[no]").on("click",function(){
@@ -39,6 +43,23 @@ function selectLocalList(){
 		}
 	});
 };
+
+
+$(function(){  
+	
+	$(":text").focus(function(){
+		$("[name="+$(this).attr('id')+"]").prop("checked",true);
+	});
+	
+	$(":text").blur(function(){
+		if($(this).val().trim() == ''){
+			console.log("입력값 없음");
+			$("[name="+$(this).attr('id')+"]").prop("checked",false);		
+		}
+	});
+	
+});
+
 </script>
 <style>
 .clubslist:hover
@@ -57,6 +78,7 @@ function selectLocalList(){
 
 	
 		<h2>클럽리스트</h2>
+		${clubList }
 		
 		<table>
 			<tr>
@@ -73,7 +95,7 @@ function selectLocalList(){
 			<c:forEach items="${clubList }" var="club">
 				<table id="${club.clubCode }" class="clubslist">	
 					<tr no="${club.clubCode}">
-					<td rowspan="3" colspan="1">
+					<td rowspan="4" colspan="1">
 						<c:if test="${empty club.mainrenamedFilename}">
 						<img src="${pageContext.request.contextPath }/resources/images/log.jpg"  alt="awesome로고"  style="width: 100px; height: 100px; "  />
 						</c:if>
@@ -81,14 +103,29 @@ function selectLocalList(){
 						<img src="${pageContext.request.contextPath }/resources/upload/club/${club.mainrenamedFilename}"  alt="awesome로고"  style="width: 100px; height: 100px;" />
 						</c:if>
 						</td>
-						<td>클럽이름:${club.clubName}</td>					
+						<td style="font-weight: 800;">  클럽이름: ${club.clubName}</td>					
 					</tr>
 					<tr no="${club.clubCode}">
-						<td>클럽장:${club.clubAdmin}</td>					
-						<td>회원수:${club.clubmemberCount}</td>			
+						<c:if test="${club.interestingCode eq '1'}">
+							<td>  카테고리: 운동</td>
+						</c:if>
+						<c:if test="${club.interestingCode eq '21'}">
+							<td>  카테고리: 음식</td>
+						</c:if>
+						<c:if test="${club.interestingCode eq '22'}">
+							<td>  카테고리: 여행</td>
+						</c:if>
+						<c:if test="${club.interestingCode eq '23'}">
+							<td>  카테고리: 기타</td>
+						</c:if>
+						
+					</tr>
+					<tr no="${club.clubCode}">
+						<td>  클럽장: ${club.clubAdmin}</td>					
+						<td>회원수: ${club.clubmemberCount}</td>			
 					</tr>
 					<tr no="${club.clubCode}">					
-						<td>클럽한줄소개:${club.clubsimpleInfo}</td>
+						<td>  클럽한줄소개: ${club.clubsimpleInfo}</td>
 					</tr>
 					</table>
 					<br>
@@ -102,7 +139,7 @@ function selectLocalList(){
 		<div id="search-container" class="card p-4 mb-4 bg-white">
 		<ul class="list-group list-group-flush">
 			<li class="list-group-item">
-				<label for="title">제목검색</label>
+				<label for="title">클럽이름 검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
@@ -115,7 +152,7 @@ function selectLocalList(){
 			<li class="list-group-item">
 				<label for="city">도시검색</label>
 				<select class="form-control" id="city" onchange="selectLocalList();">
-					<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
+					<option id="defaultCity" value="0" disabled selected>도시로 검색</option>
 					<c:forEach items="${cityList}" var="city">
 					<option value=${city.cityCode }>${city.cityName }</option>						
 					</c:forEach>
@@ -124,11 +161,11 @@ function selectLocalList(){
 			<li class="list-group-item">
 				<label for="local">지역검색</label>
 				<select class="form-control" id="local">
-					<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
+					<option id="defaultLocal" value="0" disabled selected>지역으로 검색</option>
 				</select>
 			</li>
 			<li class="list-group-item">
-				<label for="nickName">작성자검색</label>
+				<label for="nickName">클럽장 검색</label>
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
@@ -141,7 +178,7 @@ function selectLocalList(){
 			<li class="list-group-item">
 				<label for="interesting-search">분류검색</label>
 				<select class="form-control" id="interesting">
-					<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
+					<option id="defaultInteresting" value="0" disabled selected>카테고리로 검색</option>
 					<c:forEach items="${interestingList}" var="interesting">
 					<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
 					</c:forEach>
@@ -149,7 +186,7 @@ function selectLocalList(){
 			</li>
 			
 			<li class="list-group-item">
-				<button class="btn btn-outline-secondary" onclick="location.href='${pageContext.request.contextPath}/club/clubMake' ">클럽개설하기</button>
+				<button class="btn btn-outline-secondary" onclick="location.href='${pageContext.request.contextPath}/club/clubMake' ">클럽개설</button>
 				<button class="btn btn-outline-secondary" type="button" onclick="serchAjax();">검색하기</button>
 			</li>
 		</ul>

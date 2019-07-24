@@ -7,21 +7,17 @@
 			join (select * from chatroom where member_code = #{otherMemberCode} and status='Y') B 
 			on A.chat_id = B.chat_id
 	</select>
-	<insert id="insertChatRoom">
-		INSERT INTO CHATROOM (CHAT_ID, MEMBER_CODE,STATUS, START_DATE, END_DATE)
-		VALUES(#{chatId}, #{memberCode}, #{status}, sysdate, null)
-	</insert>
 	
 	<insert id="insertChatLog">
-		INSERT INTO CHATLOG (CHAT_NO, CHAT_ID, MEMBER_CODE, MSG, TIME)
-		VALUES(SEQ_CHATLOG.NEXTVAL, #{chatId}, #{memberCode}, #{msg}, #{time})
+		INSERT INTO CHAT_LOG
+		VALUES(#{memberCode}, #{otherMemberCode}, #{message}, sysdate, 'N')
+		
 	</insert>
-	<update id="deleteChatRoom">
-		UPDATE CHATROOM SET STATUS = 'N', END_DATE=SYSDATE
-		WHERE CHAT_ID = #{chatId}
-	</update>
 	<select id="codeToId" resultType="string">
 		select member_id from member where member_code = #{memberCode}
+	</select>
+	<select id="selectChat" resultType="map">
+		select DISTINCT member_code from chat_log where receive_member_code = #{mCode}
 	</select>
 	<select id="findRecentList" resultType="map">
 		select *

@@ -12,8 +12,11 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.awesome.club.model.dao.ClubDAO;
 import com.kh.awesome.club.model.vo.Club;
+import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
+import com.kh.awesome.club.model.vo.Clublocal;
 import com.kh.awesome.club.model.vo.Clubmember;
+import com.kh.awesome.club.model.vo.Clubphoto;
 
 @Repository
 public class ClubDAOImpl implements ClubDAO {
@@ -72,5 +75,52 @@ public class ClubDAOImpl implements ClubDAO {
 	public Clubcontent selectClubcontentOne(int contentCode) {
 		return sqlSession.selectOne("selectClubcontentOne",contentCode);
 	}
+
+	@Override
+	public int insertclubContent0(Clubcontent clubcontent) {
+		return sqlSession.insert("insertclubContent0",clubcontent);
+	}
+
+	@Override
+	public int insertClubLocal(Clublocal insertlocal) {
+		return sqlSession.insert("insertclubLocal",insertlocal);
+	}
+
+	@Override
+	public int insertClubCity(Clublocal insertcity) {
+		return sqlSession.insert("insertclubCity",insertcity);
+	}
+
+	@Override
+	public int insertclubContent2(Clubcontent clubcontent) {
+		return sqlSession.insert("insertclubContent2",clubcontent);
+	}
+
+	@Override
+	public int insertClubphoto(Clubphoto c) {
+		return sqlSession.insert("insertClubphoto",c);
+	}
+
+	@Override
+	public List<Clubcontent> selectphotocontentList(int clubCode) {
+		return sqlSession.selectList("selectphotocontentList",clubCode);
+	}
+
+	@Override
+	public int addComment(Clubcomment clubComment) {
+		return sqlSession.insert("addComment",clubComment);
+	}
+
+	@Override
+	public List<Clubcomment> selectBoardCommentByCode(Clubcomment clubComment) {
+		return sqlSession.selectList("selectBoardCommentByCode", clubComment);
+	}
+
+	@Override
+	public List<Clubcontent> selectseephotoList(int seephotoCode) {
+		return sqlSession.selectList("selectseephotoList",seephotoCode);
+	}
+
+	
 
 }

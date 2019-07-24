@@ -20,7 +20,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <!-- 스마트에디터 -->
     <script src="${pageContext.request.contextPath}/resources/smartEditor/js/service/HuskyEZCreator.js"></script>
+    
+    <!-- 20190723 김용빈 -->
+    <!-- Tiny Nice Confirmation Popup Plugin With jQuery - H-confirm-alert -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/H-confirm-alert.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/H-confirm-alert.css">
+    
+    
 	<style>
+			
+			
 		#info-container{
 			display : flex; 
             flex-direction : row;
@@ -34,19 +43,13 @@
            		
            		height:97%;
            		
-           		overflow: scroll;
-           		
-           		
            		display : flex; 
             	flex-direction : column;
 			}
 				
-			#info-body::-webkit-scrollbar { 
-			    display: none; 
-			}
-				#basic-info-head{
+				 #basic-info-head{
 					text-align: right;
-				} 
+				}  
 				
 				#info-body input{
 					width:50%;
@@ -60,6 +63,7 @@
 				.flex{
 					display : flex; 
             		flex-direction : row;
+            		justify-content: flex-start;
 				}
 
 	.nameHead{font-size:20px; font-weight: bold;}
@@ -126,18 +130,27 @@
 	    $(function(){
     	  $("#phoneAuthBtn").on("click",function(){
       		var userPhoneNumber = $("#phoneAuth").val();
-      		$(".smsAuth").slideToggle(1000, 'easeInBack');
-      		$("#smsAuth").val("");
-      		$("#phoneUpdate").hide(300);
+
       		
-      		/*  $.ajax({        //운영시에 주석해제
+      		  $.ajax({        //운영시에 주석해제
       			 url:"${pageContext.request.contextPath}/member/sendSMS", 
       			type: "POST",
       			data: "userPhoneNumber="+userPhoneNumber,
 				dataType : 'text',
       			success : function(data){
-      				$(".smsAuth").show();
-      				alert(data);
+      				if(data !="전송 실패"){
+      					$(".smsAuth").slideToggle(1000, 'easeInBack');
+          	      		$("#smsAuth").val("");
+          	      		$("#phoneUpdate").hide(300);
+	
+						$.confirm.show({
+						  "message": data,
+						  "yes": function (){
+						  },
+						  "hideNo":true,
+						  "type":"warning" // default or success, danger, warning
+						})
+      				}
       			},
       			error: function(jqxhr, textStatus, errorThrown){
       				console.log("ajax처리실패! : "+jqxhr.status);
@@ -145,7 +158,7 @@
       				console.log(textStatus);
       				console.log(errorThrown);
       			}
-      		});  */
+      		});  
     	  });
     	  
     	  $("#smsAuthBtn").on("click",function(){
@@ -181,9 +194,9 @@
     	  //암호확인
     	  $("#passwordAuth").on("click",function(){
     		  
-    		  var password = $("#password").val();
+    		  var password = $("#password_").val();
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  console.log(password,memberCode,memberId);
 			  
  			 $.ajax({ 
@@ -198,8 +211,8 @@
 					}
 					if(data =="fail"){
 						alert("패스워드가 틀렸습니다.");
-						$("#password").val("");
-						$("#password").focus();
+						$("#password_").val("");
+						$("#password_").focus();
 					}
 				},
 				error: function(jqxhr, textStatus, errorThrown){
@@ -222,7 +235,7 @@
     		  
     		  var password = $("#newPassword").val();
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  console.log(password,memberCode,memberId);
 			  
  			 $.ajax({ 
@@ -234,7 +247,7 @@
 					if(data !="fail"){
 						alert("암호 변경 성공");
 						
-						$("#password").val("");
+						$("#password_").val("");
 						$("#newPassword").val("");
 						$("#passwordChk").val("");
 						$(".newPassword").slideToggle(700, 'easeInBack');
@@ -287,7 +300,7 @@
     		  
     		  var nickName = $("#nick").val();
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  
  			 $.ajax({ 
 				 url:"${pageContext.request.contextPath}/member/memberUpdate.do", 
@@ -319,7 +332,7 @@
     		  
     		  var memberName = $("#memberNameVal").val();
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  
  			 $.ajax({ 
 				 url:"${pageContext.request.contextPath}/member/memberUpdate.do", 
@@ -350,7 +363,7 @@
     		  
     		  var birthday = $("#birthdayVal").val();
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  
  			 $.ajax({ 
 				 url:"${pageContext.request.contextPath}/member/memberUpdate.do", 
@@ -386,7 +399,7 @@
     			  gender = "F";
     		  }
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  
     		  
  			  $.ajax({ 
@@ -417,7 +430,7 @@
     		  
     		  var phone = $("#phoneAuth").val();
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  console.log(phone,memberCode,memberId);
  			 $.ajax({ 
 				 url:"${pageContext.request.contextPath}/member/memberUpdate.do", 
@@ -447,7 +460,7 @@
     	  $("#addressUpdate").on("click",function(){
     		  
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  
     		  var postNo = $("#postNo").val();
     		  var roadAddress = $("#roadAddress").val();
@@ -456,8 +469,9 @@
     		  var placeLng = $("#placeLng").val();
     		  var detailAddress = $("#detailAddress").val();
     		  
-    		  console.log(memberCode,memberId,postNo,roadAddress,address,detailAddress);
-    		  console.log(placeLat,placeLng);
+    		  console.log(memberId);
+    		  /* console.log(memberCode,memberId,postNo,roadAddress,address,detailAddress);
+    		  console.log(placeLat,placeLng); */
     		  
  			 $.ajax({ 
 				 url:"${pageContext.request.contextPath}/member/memberUpdate.do", 
@@ -474,9 +488,11 @@
 				success : function(data){
 					if(data !="fail"){
 						alert("주소 수정완료.");
+						
 						$("#memberRoadAddress").html(roadAddress);
 						$("#memberDetailAddress").html(detailAddress);
 						$("#memberAddress").html(address);
+						$("#memberPostNo").html(postNo);
 						
 						$(".addressModi").slideToggle(700, 'easeInBack');
 						
@@ -502,7 +518,7 @@
     	  $("#introduceUpdate").on("click",function(){
     		  
     		  var memberCode = $("#memberCode").val();
-    		  var memberId = $("#memberId").val();
+    		  var memberId = $("#memberId_").val();
     		  
     		  oEditors.getById["introduceArea"].exec("UPDATE_CONTENTS_FIELD", []);
     		  var introduce = $("#introduceArea").val()
@@ -597,7 +613,7 @@
 </head>
 <body>
 			<input type="hidden" name="memberCode" id="memberCode" value="${member.memberCode }"/>
-			<input type="hidden" name="memberId" id="memberId" value="${member.memberId }" >
+			<input type="hidden" name="memberId" id="memberId_" value="${member.memberId }"/>
 
 	<div id="info-container">
 		
@@ -619,7 +635,7 @@
 						
 						<form id="uploadForm" class="nodisplay">
 							<input type="hidden" name="memberCode" id="memberCode" value="${member.memberCode }"/>
-							<input type="hidden" name="memberId" id="memberId" value="${member.memberId }" readonly>
+							<input type="hidden" name="memberId" value="${member.memberId }" readonly>
 							 <div id="profileUp" class="input-group mb-3 nodisplay" style="padding:0px;">
 							  <div class="custom-file">
 							    <input type="file" class="form-control custom-file-input" name="upfile" id="upfile" onchange="loadImg(this);">
@@ -630,7 +646,7 @@
 						
 						<hr />
 						<div id="id"><span class="nameHead">아이디</span> <br />
-						<div id="memberId">${member.memberId}</div><br />
+						<div>${member.memberId}</div><br />
 						
 						<hr />
 						
@@ -638,14 +654,14 @@
 						</div>
 							<div class="passwordModi nodisplay">
 								<div class="flex">
-									<input type="password" class="form-control" placeholder="기존패스워드입력" name="password" id="password">
+									<input type="password" class="form-control" placeholder="기존패스워드입력" name="password" id="password_">
 									<button type="button" class="btn btn-outline-success " id="passwordAuth">암호 확인</button>
 								</div>
 								<br />
 								<div class="flex newPassword nodisplay">
 									    <input type="password" class="form-control" name="password" id="newPassword" placeholder="비밀번호" required>
               							<input type="password" class="form-control" name="passwordChk" id="passwordChk" placeholder="비밀번호 확인" required>
-									<button type="button" class="btn btn-outline-success" id="passwordUpdate">연락처 수정 </button>
+									<button type="button" class="btn btn-outline-success" id="passwordUpdate">비밀번호 수정 </button>
 								</div>
 							</div>
 						<hr />

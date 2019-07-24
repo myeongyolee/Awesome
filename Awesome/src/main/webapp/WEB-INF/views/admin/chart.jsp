@@ -115,7 +115,7 @@ function drawLightningByCity() {
 	var options = {
 		title: "도시별 번개모임 숫자",
 		width: 400,
-		height: 200,
+		height: 400,
 		bar: {groupWidth: "95%"},
 		legend: { position: "none" },
 	};
@@ -141,8 +141,8 @@ function drawClubByCity() {
 	
 	var options = {
 		title: "클럽 도시별 숫자",
-		width: 300,
-		height: 200,
+		width: 400,
+		height: 400,
 		bar: {groupWidth: "95%"},
 		legend: { position: "none" },
 	};
@@ -192,7 +192,7 @@ var swiper = new Swiper('.swiper-container', {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
     },
-});
+}); 
 </script>
 </body>
 </html>

@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.member.model.vo.Member;
 import com.kh.awesome.socket.stomp.model.service.StompService;
@@ -36,46 +37,62 @@ public class StompController {
 	StompService stompService;
 	
 	//채팅방 가져오기
-	@GetMapping("/ws/stomp.do/{otherMemberCode}")
-	public void websocket(Model model,
+//	@GetMapping("/ws/stomp.do")
+//	public void websocket(Model model,
+//						  HttpSession session,
+//						  @SessionAttribute(value="memberLoggedIn", required=false) Member memberLoggedIn){
+//		logger.info("------------------ws stomp----------------------");
+//		Optional<Integer> OpMemberCode = Optional.ofNullable(memberLoggedIn).map(Member::getMemberCode);
+//		int memberCode = OpMemberCode.get();
+//		String chatId = null;
+//		
+//		//chatId조회
+//		//1.memberId로 등록한 chatroom존재여부 검사. 있는 경우 chatId 리턴.
+//		Map<String, Integer> chatUser = new HashMap<>();
+//		chatUser.put("memberCode", memberCode);
+//		
+//		chatId = stompService.findChatIdByMemberId(chatUser);
+//		
+//		//2.로그인을 하지 않았거나, 로그인을 해도 최초접속인 경우 chatId를 발급하고 db에 저장한다.
+//		if(chatId == null){
+//			chatId = getRandomChatId(15);//chat_randomToken -> jdbcType=char(20byte)
+//			
+//			List<ChatRoom> list = new ArrayList<>();
+//			list.add(new ChatRoom(chatId,memberCode , "Y", null, null));
+////			stompService.insertChatRoom(list);
+//		}
+//		//chatId가 존재하는 경우, 채팅내역 조회
+//		else{
+//			List<Msg> chatList = stompService.findChatListByChatId(chatId);
+//			model.addAttribute("chatList", chatList);
+//		}
+//		
+//		
+//		
+//		logger.info("memberId=[{}], chatId=[{}]",memberCode, chatId);
+//		
+//		
+//		//비회원일 경우, httpSessionId값을 memberId로 사용한다. 
+//		//클라이언트에서는 httpOnly-true로 설정된 cookie값은 document.cookie로 가져올 수 없다.
+//		model.addAttribute("memberCode", memberCode);
+//		model.addAttribute("chatId", chatId);
+//	}
+	@GetMapping("/ws/stomp.do")
+	public ModelAndView websocket(Model model,
+							ModelAndView mav,
 						  HttpSession session,
-						  @DestinationVariable int otherMemberCode,
 						  @SessionAttribute(value="memberLoggedIn", required=false) Member memberLoggedIn){
+		logger.info("------------------ws stomp----------------------");
 		Optional<Integer> OpMemberCode = Optional.ofNullable(memberLoggedIn).map(Member::getMemberCode);
 		int memberCode = OpMemberCode.get();
-		String chatId = null;
-		//chatId조회
-		//1.memberId로 등록한 chatroom존재여부 검사. 있는 경우 chatId 리턴.
-		Map<String, Integer> chatUser = new HashMap<>();
-		chatUser.put("memberCode", memberCode);
-		chatUser.put("otherMemberCode", otherMemberCode);
-		
-		chatId = stompService.findChatIdByMemberId(chatUser);
-		
-		//2.로그인을 하지 않았거나, 로그인을 해도 최초접속인 경우 chatId를 발급하고 db에 저장한다.
-		if(chatId == null){
-			chatId = getRandomChatId(15);//chat_randomToken -> jdbcType=char(20byte)
-			
-			List<ChatRoom> list = new ArrayList<>();
-			list.add(new ChatRoom(chatId,memberCode , "Y", null, null));
-			list.add(new ChatRoom(chatId, otherMemberCode, "Y", null, null));
-			stompService.insertChatRoom(list);
-		}
-		//chatId가 존재하는 경우, 채팅내역 조회
-		else{
-			List<Msg> chatList = stompService.findChatListByChatId(chatId);
-			model.addAttribute("chatList", chatList);
-		}
-		
-		
-		
-		logger.info("memberId=[{}], chatId=[{}]",memberCode, chatId);
-		
 		
 		//비회원일 경우, httpSessionId값을 memberId로 사용한다. 
 		//클라이언트에서는 httpOnly-true로 설정된 cookie값은 document.cookie로 가져올 수 없다.
 		model.addAttribute("memberCode", memberCode);
-		model.addAttribute("chatId", chatId);
+		
+		mav.addObject("memberCode", memberCode);
+		
+		return mav;
 	}
 	
 	/**
@@ -110,14 +127,36 @@ public class StompController {
 						@DestinationVariable String chatId){
 		logger.info("fromMessage={}",fromMessage);
 		logger.info("chatId={}",chatId);
+		System.out.println("여기는 /chat"+fromMessage);
 		
 		stompService.insertChatLog(fromMessage);
 
 		return fromMessage; 
 	}
 	
-	public String codeToId(int memberCode) {
+	public String codeToId(String memberCode) {
 		return stompService.codeToId(memberCode);
 	}
 	
+	
+	@MessageMapping("/hello")
+	@SendTo("/hello")
+	public Msg stomp(Msg fromMessage,
+					 @Header("simpSessionId") String sessionId,//WesocketSessionId값을 가져옴.
+					 SimpMessageHeaderAccessor headerAccessor//HttpSessionHandshakeInterceptor빈을 통해 httpSession의 속성에 접근 가능함.
+					 ){
+		logger.info("fromMessage={}",fromMessage);
+		logger.info("@Header sessionId={}",sessionId);
+		
+		//httpSession속성 가져오기
+		String sessionIdFromHeaderAccessor = headerAccessor.getSessionId();//@Header sessionId와 동일
+		Map<String,Object> httpSessionAttr = headerAccessor.getSessionAttributes();
+		Member member = (Member)httpSessionAttr.get("memberLoggedIn");
+		String httpSessionId = (String)httpSessionAttr.get("HTTP.SESSION.ID");//비회원인 경우 chatId로 사용함.
+		logger.info("sessionIdFromHeaderAccessor={}",sessionIdFromHeaderAccessor);
+		logger.info("httpSessionAttr={}",httpSessionAttr);
+		logger.info("memberLoggedIn={}",member);
+		
+        return fromMessage; 
+	}
 }

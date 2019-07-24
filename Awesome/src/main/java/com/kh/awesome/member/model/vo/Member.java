@@ -2,6 +2,9 @@ package com.kh.awesome.member.model.vo;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
+
+import com.kh.awesome.club.model.vo.Clubmember;
 
 public class Member implements Serializable{
 	
@@ -23,12 +26,12 @@ public class Member implements Serializable{
 	private String introduce;
 	private char verify;
 	private Date enrollDate;
-	
-	
+
 	
 	public Member() {
+		super();
 	}
-
+	
 	public Member(int memberCode, String memberId, String nickName, String password, String memberName, Date birthday,
 			String phone, char gender, String profile, String renamedProfile, char blindDateOpen, char friendOpen,
 			char searchOpen, String introduce, char verify, Date enrollDate) {
@@ -178,7 +181,6 @@ public class Member implements Serializable{
 		this.enrollDate = enrollDate;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Member [memberCode=" + memberCode + ", memberId=" + memberId + ", nickName=" + nickName + ", password="
@@ -187,5 +189,6 @@ public class Member implements Serializable{
 				+ blindDateOpen + ", friendOpen=" + friendOpen + ", searchOpen=" + searchOpen + ", introduce="
 				+ introduce + ", verify=" + verify + ", enrollDate=" + enrollDate + "]";
 	}
+
 	
 }

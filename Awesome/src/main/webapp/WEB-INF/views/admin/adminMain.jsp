@@ -56,6 +56,12 @@ chart();
 	  	 회원관리
 	  	</span>
 	  </button>
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/reportBoard'">
+	  <img src="${pageContext.request.contextPath}/resources/images/icons/search.png"/>
+	  	<span class="text_">&nbsp;
+	  	신고관리
+	  	</span>
+	  </button>
 	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/answersToQuestions'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/october.png"/>
 	  	<span class="text_">&nbsp;
@@ -73,10 +79,17 @@ chart();
 	<div id="Home" class="tabcontent">
 		
 	</div>
-	
-  </div>
 
+  </div>
  </div>
  
+<script>
+/*  $(function(){
+	$(".tab button.tablinks").hover(function(){
+		 $(".tab button.tablinks").css({"width":"200%"});			
+		 $("_text").css({"display":"inline-block")}.toggle(); 
+	 });
+});  */
+</script>
 </body>
 </html>

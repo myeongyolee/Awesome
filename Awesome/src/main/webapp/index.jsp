@@ -48,6 +48,7 @@ ul.profile-list{
 </style>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="awesome 인덱스" name="pageTitle"/>
+<<<<<<< HEAD
 </jsp:include>
 <script>
 function chart(){
@@ -96,8 +97,6 @@ function city_local_info(){
 <input type="text" name="modalmember" value="124"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
 
 <button type="button" class="btn btn-outline-success"
- onclick="location.href='${pageContext.request.contextPath}/questionBoard/boardForm.do'">질문 작성</button>
- <button type="button" class="btn btn-outline-success"
  onclick="location.href='${pageContext.request.contextPath}/questionBoard/questionBoard.do'">질문 게시판 보기</button>
 			 
  <button type="button" class="btn btn-outline-success"

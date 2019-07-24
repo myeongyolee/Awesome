@@ -47,13 +47,15 @@ comment on column member.enroll_date is '가입일';
 --주소테이블
 create table address(
     member_code number,
-    post_no number not null,
+    post_no varchar2(30) not null,
     address varchar2(100) not null,
     road_address varchar2(100) not null,
     detail_address varchar2(100) not null,
     place_lat number not null,
     place_lng number not null
 );
+
+drop table address;
 
 comment on table address is '주소테이블';
 comment on column address.member_code is '회원코드';
@@ -470,9 +472,24 @@ comment on column userTable.sessionlimit is '세션제한시간';
 
 select * from member;
 
-insert into smsauth values(19,'BE21E71E42D8CBE9A7BF7F1A6FC3E9F7',1111);
+insert into smsauth values(20,'B52EF24080AC9AE6B0541FBF54D3BDDD',1111);
 commit;
 
 select * from member;
 delete from member where member_code=210;
 commit;
+
+update address 
+	  	 set post_No = '8813',
+				 address = '서울특별시 관악구 신림동 1536-14',
+				 road_Address = '서울특별시 관악구 호암로22길 55',
+				 detail_Address = 'ㅂㅍㅈㄷㅂㅈㅍㄷㅂㄷㅍ',
+				 place_Lat = 126.9358797,
+				 place_Lng = 37.4687822 
+		where member_code=211;
+        
+        select * from address;
+        select * from member;
+        
+        insert into address values(211,'16875','경기도 용인시 수지구 죽전동 1165 새터마을죽전힐스테이트','경기도 용인시 수지구 현암로125번길 11','ㅂㅈㅍㄷㅂㅈㄷㅍㅂㅈㄷㅍ',127.1209373,37.3330944);
+        commit;

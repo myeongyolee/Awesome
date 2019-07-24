@@ -37,7 +37,7 @@ public class StompDAOImpl implements StompDAO{
 	}
 	
 	@Override
-	public String codeToId(int memberCode) {
+	public String codeToId(String memberCode) {
 		return sqlSession.selectOne("stomp.codeToId", memberCode);
 	}
 	

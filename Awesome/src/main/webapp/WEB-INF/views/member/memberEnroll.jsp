@@ -16,6 +16,12 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" 
 		integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" 
 		crossorigin="anonymous">
+		
+	<!-- 20190721 김용빈 -->
+    <!-- Tiny Nice Confirmation Popup Plugin With jQuery - H-confirm-alert -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/H-confirm-alert.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/H-confirm-alert.css">
+    
     <style>
 		#modalBody{ 
 			display : flex; 
@@ -142,7 +148,15 @@
 		    var id = $("#"+y).val();
 
 		    if(!v.test(id)){
-		    	alert(str);
+		    	$.confirm.show({
+					  "message": str,
+					  "yes": function (){
+						  $("#enrollMemberId").focus();
+	    				  $("#idDuplicateCheck").val(0);
+					  },
+					  "hideNo":true,
+					  "type":"warning" // default or success, danger, warning
+					})
 		        return false;
 		    }else{
 		        return true;
@@ -153,7 +167,15 @@
 		    var id = $("#"+y).val();
 
 		    if(v.test(id)){
-		    	alert(str);
+		    	$.confirm.show({
+					  "message": str,
+					  "yes": function (){
+						  $("#enrollMemberId").focus();
+	    				  $("#idDuplicateCheck").val(0);
+					  },
+					  "hideNo":true,
+					  "type":"warning" // default or success, danger, warning
+					})
 		        return false;
 		    }else{
 		        return true;
@@ -179,12 +201,24 @@
 
                         case 1:
                         	result=false;
-                            alert("자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.");
+                            $.confirm.show({
+         						  "message": "자동 가입 방지 봇을 확인 한뒤 진행 해 주세요.",
+         						  "yes": function (){
+         						  },
+         						  "hideNo":true,
+         						  "type":"warning" // default or success, danger, warning
+         						})
                             break;
 
                         default:
                         	result=false;
-                            alert("자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]");
+                            $.confirm.show({
+       						  "message": "자동 가입 방지 봇을 실행 하던 중 오류가 발생 했습니다. [Error bot Code : " + Number(data) + "]",
+       						  "yes": function (){
+       						  },
+       						  "hideNo":true,
+       						  "type":"warning" // default or success, danger, warning
+       						})
                         	break;
                     }
                 }
@@ -195,48 +229,118 @@
 	  		}
             
 			if($("#idDuplicateCheck").val()!=1 ){
-				alert("아이디 중복 여부 확인하세요.");
+				
+				$.confirm.show({
+						  "message": "아이디 중복 여부 확인하세요.",
+						  "yes": function (){
+						  },
+						  "hideNo":true,
+						  "type":"warning" // default or success, danger, warning
+						})
+				
 				$("#memberId").focus();
 				return false;
 			}
 			
-			if($("#idDuplicateCheck").val()!=1 ){
-				alert("아이디 중복 여부 확인하세요.");
-				$("#memberId").focus();
+			if($("#nickDuplicateCheck").val()!=1 ){
+				$.confirm.show({
+					  "message": "닉네임 중복 여부 확인하세요.",
+					  "yes": function (){
+					  },
+					  "hideNo":true,
+					  "type":"warning" // default or success, danger, warning
+					})
+				$("#nickDuplicateCheck").focus();
 				return false;
 			}
 			
 			if($("#smsAuthChk").val()!=1 ){
-				alert("핸드폰 인증이 필요합니다.");
+				
+				$.confirm.show({
+					  "message": "핸드폰 인증이 필요합니다.",
+					  "yes": function (){
+					  },
+					  "hideNo":true,
+					  "type":"warning" // default or success, danger, warning
+					})
+					
 				$("#phoneAuth").focus();
 				
-				//return false; //운영시에 주석해제
+				return false; //운영시에 주석해제
 			}
-			console.log("???????????");
 			return true;
 		}
 		
       $(function(){
     	  $("#phoneAuthBtn").on("click",function(){
       		var userPhoneNumber = $("#phoneAuth").val();
-      		$(".smsAuth").show(); //운영시에 삭제
+			if($("#phoneAuth").val().length<10 ){
+				
+				$.confirm.show({
+						  "message": "연락처을 -을 제외하고 입력하세요",
+						  "yes": function (){
+						  },
+						  "hideNo":true,
+						  "type":"warning" // default or success, danger, warning
+						})
+				
+				$("#phoneAuth").focus();
+				return false;
+			}
       		
-      		/*  $.ajax({        //운영시에 주석해제
-      			 url:"${pageContext.request.contextPath}/member/sendSMS", 
+			$.ajax({        //운영시에 주석해제
+  			 	url:"${pageContext.request.contextPath}/member/checkPhoneDuplicate.do", 
       			type: "POST",
       			data: "userPhoneNumber="+userPhoneNumber,
-				dataType : 'text',
+				dataType : 'json',
       			success : function(data){
-      				$(".smsAuth").show();
-      				alert(data);
-      			},
-      			error: function(jqxhr, textStatus, errorThrown){
+      				console.log(data);
+      				if(data.isUsable){
+      					 $.ajax({        //운영시에 주석해제
+    	      			 	url:"${pageContext.request.contextPath}/member/sendSMS", 
+    		      			type: "POST",
+    		      			data: "userPhoneNumber="+userPhoneNumber,
+    						dataType : 'text',
+    		      			success : function(data){
+    		      				
+    		      				if(data !="전송 실패"){
+    			      				$(".smsAuth").show(400);
+    			      				$("#smsAuthBtn").show(400);
+    			
+    								$.confirm.show({
+    								  "message": data,
+    								  "yes": function (){
+    								  },
+    								  "hideNo":true,
+    								  "type":"warning" // default or success, danger, warning
+    								})
+    			      			}
+    			      		},
+    			      		error: function(jqxhr, textStatus, errorThrown){
+    		      				console.log("ajax처리실패! : "+jqxhr.status);
+    		      				console.log(jqxhr);
+    		      				console.log(textStatus);
+    		      				console.log(errorThrown);
+    		      			} 
+    			      	});
+	      			}else{
+	      				$.confirm.show({
+							  "message": "이미 사용중인 번호입니다.",
+							  "yes": function (){
+							  },
+							  "hideNo":true,
+							  "type":"warning" // default or success, danger, warning
+							})
+	      			}
+	      		},
+	      		error: function(jqxhr, textStatus, errorThrown){
       				console.log("ajax처리실패! : "+jqxhr.status);
       				console.log(jqxhr);
       				console.log(textStatus);
       				console.log(errorThrown);
       			}
-      		});  */
+	      	});
+      		
     	  });
     	  
     	  $("#smsAuthBtn").on("click",function(){
@@ -250,13 +354,28 @@
 				dataType : 'text',
 				success : function(data){
 					if(data =="success"){
-						alert("문자인증을 완료하였습니다.");
+						$.confirm.show({
+							  "message": "문자인증을 완료하였습니다.",
+							  "yes": function (){
+							  },
+							  "hideNo":true,
+							  "type":"warning" // default or success, danger, warning
+							})
+							
+						$("#smsAuth").val("").hide(400);
+						$("#smsAuthBtn").hide(400);
 						//$(".smsAuth").hide();
 						$("#smsAuthChk").val(1);
 						//$("#phoneAuthBtn").hide();
 					}
 					if(data =="fail"){
-						alert("인증을 실패하였습니다. 인증번호을 확인하세요");
+						$.confirm.show({
+							  "message": "인증을 실패하였습니다. 인증번호을 확인하세요",
+							  "yes": function (){
+							  },
+							  "hideNo":true,
+							  "type":"warning" // default or success, danger, warning
+							})
 						$("#smsAuthChk").val(0);
 						$("#smsAuth").val("").focus();
 					}
@@ -278,7 +397,14 @@
     	    var regExp1 = /^[a-z][a-z\d]{3,11}/;
     	    var regExp2 = /[0-9]/;
     	    var regExpId = /\s/;
+    	    var regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
+    	    var bool = regExpTest(regEmail,"enrollMemberId","사용자 아이디는 이메일형식으로 입력하세요");
+    	    if(!bool){
+    	    	$("#enrollMemberId").focus();
+    	    	return;
+    	    }
+    	    
     	    var bool = nullChk(regExpId,"enrollMemberId","아이디에는 공백이포함되면 안됩니다.");
     	    if(!bool){
     	    	$("#enrollMemberId").focus();
@@ -291,13 +417,27 @@
     			success : function(data){
     				
     				if(data.isUsable == true){
-    					alert("사용 가능 한 아이디입니다.");
-    					$("#nickName").focus();
-    					$("#idDuplicateCheck").val(1);
+    					$.confirm.show({
+							  "message": "사용가능한 아이디입니다.",
+							  "yes": function (){
+								  $("#nickName").focus();
+			    				  $("#idDuplicateCheck").val(1);
+							  },
+							  "hideNo":true,
+							  "type":"warning" // default or success, danger, warning
+							})
+    					
     				}else{
-    					alert("사용 불가 한 아이디입니다.");
-    					$("#enrollMemberId").focus();
-    					$("#idDuplicateCheck").val(0);
+    					$.confirm.show({
+    						  "message": "사용불가한 아이디입니다 ",
+    						  "yes": function (){
+    							  $("#enrollMemberId").focus();
+    		    				  $("#idDuplicateCheck").val(0);
+    						  },
+    						  "hideNo":true,
+    						  "type":"warning" // default or success, danger, warning
+    						})
+    					
     				}
     			},
     			error: function(jqxhr, textStatus, errorThrown){
@@ -336,13 +476,25 @@
     			success : function(data){
     				
     				if(data.isUsable == true){
-    					alert("사용 가능 한 닉네임입니다.");
-    					$("#password_").focus();
-    					$("#nickDuplicateCheck").val(1);
+    					$.confirm.show({
+  						  "message": "사용 가능 한 닉네임입니다.",
+  						  "yes": function (){
+  							$("#password_").focus();
+  	    					$("#nickDuplicateCheck").val(1);
+  						  },
+  						  "hideNo":true,
+  						  "type":"warning" // default or success, danger, warning
+  						})
     				}else{
-    					alert("사용 불가 한 닉네임입니다.");
-    					$("#nickName").focus();
-    					$("#nickDuplicateCheck").val(0);
+    					$.confirm.show({
+   						  "message": "사용 불가 한 닉네임입니다.",
+   						  "yes": function (){
+   		    					$("#nickName").focus();
+   		    					$("#nickDuplicateCheck").val(0);
+   						  },
+   						  "hideNo":true,
+   						  "type":"warning" // default or success, danger, warning
+   						})
     				}
     			},
     			error: function(jqxhr, textStatus, errorThrown){
@@ -423,7 +575,7 @@
 			</div>
 			<br />
 			<div class="flex">
-            		<input type="email" class="form-control" name="memberId" id="enrollMemberId" placeholder="아이디" value="${param.memberId}" required>
+            		<input type="email" class="form-control" name="memberId" id="enrollMemberId" placeholder="이메일 형식 아이디" value="${param.memberId}" required>
              		<button type="button" class="btn btn-outline-success" id="idDuplicateCheckBtn">중복체크</button>
 		  		<input type="hidden" id="idDuplicateCheck" value="0"/>
 		  	</div>
@@ -471,7 +623,7 @@
 	              <button type="button" class="btn btn-outline-success" id="phoneAuthBtn">인증문자 발송</button>
               </div>
               <div class="flex">
-	              <input type="number" class="form-control smsAuth" name="phoneAuth" id="smsAuth" placeholder="인증문자 입력" required>
+	              <input type="number" class="form-control smsAuth" name="smsAuthInput" id="smsAuth" placeholder="인증문자 입력">
 	              <button type="button" class="btn btn-outline-success smsAuth" id="smsAuthBtn">확인</button>
 	              <input type="hidden" id="smsAuthChk" value="0"/>
               </div>
@@ -498,7 +650,7 @@
  			 <textarea name="introduce" id="introduce" cols="30" rows="5" style="resize: none" placeholder="자기소개" required>
 			</textarea>
 			<div id="introduceDiv" name="introduceDiv">
-				<p>안녕하세요!~AWESOME입니다.</p>
+				<p>안녕하세요!~AWESOME입니다.<br>아래버튼을 눌러 자기소개을 작성하세요!</p>
 			</div>
 			<div id="introduceBtnDiv">
 				<button type="button" class="btn btn-outline-success" id="introduceBtn" onclick="introducePopup()">자기소개 작성</button>

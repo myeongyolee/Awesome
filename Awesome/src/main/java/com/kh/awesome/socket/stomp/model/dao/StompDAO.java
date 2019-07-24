@@ -16,6 +16,6 @@ public interface StompDAO {
 
 	void insertChatLog(Msg fromMessage);
 
-	String codeToId(int memberCode);
+	String codeToId(String memberCode);
 
 }
