@@ -83,8 +83,26 @@
 	<script>
 		$(function(){
 			$("#memberInfoUpdate").on("click",function(){
+				
+				
+				
 	      		  $.ajax({
 	      			url:"${pageContext.request.contextPath}/member/memberInfoUpdate.do", 
+	      			success : function(data){
+	      				$("#item-body").html(data);
+	      			},
+	      			error: function(jqxhr, textStatus, errorThrown){
+	      				console.log("ajax처리실패! : "+jqxhr.status);
+	      				console.log(jqxhr);
+	      				console.log(textStatus);
+	      				console.log(errorThrown);
+	      			}
+	      		});
+			})
+			
+			$("#memberSecession").on("click",function(){
+	      		  $.ajax({
+	      			url:"${pageContext.request.contextPath}/member/memberSecession.do", 
 	      			success : function(data){
 	      				$("#item-body").html(data);
 	      			},
@@ -103,6 +121,7 @@
     	  });
 			
 			$("#memberInfoUpdate").trigger("click");
+			
 		})
 		
 	</script>
@@ -126,8 +145,9 @@
 					<li><input type="button" class="btn btn-light" id="memberInfoUpdate" value="내정보수정" /></li> 
 					<li><input type="button" class="btn btn-light" id="menu2" value="메뉴2" /></li>
 					<li><input type="button" class="btn btn-light" id="menu3" value="메뉴3" /></li>
-					<li></li>
-					<li></li>
+					<br /><br /><br /><br /><br /><br /><br /><br /><br /><hr />
+					<li><input type="button" class="btn btn-light" id="memberSecession" value="회원탈퇴" /></li>
+
 				</ul>
 			</div>
 			
@@ -135,8 +155,9 @@
 		<div id="item-body">
 			
 		</div>
-	
+
+		
 	</div>
 
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+	

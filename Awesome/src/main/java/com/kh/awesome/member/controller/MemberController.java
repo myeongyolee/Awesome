@@ -142,6 +142,11 @@ public class MemberController {
 		if(logger.isInfoEnabled()) logger.info("회원 찾기 페이지 요청!");
 	}
 	
+	@RequestMapping("/memberSecession.do")
+	public void memberSecession() {
+		if(logger.isInfoEnabled()) logger.info("회원 탈퇴 페이지 요청!");
+	}
+	
 	//회원 아이디 가져오기
 	@RequestMapping("/getMemberId.do")
 	@ResponseBody
@@ -164,6 +169,7 @@ public class MemberController {
 		if(logger.isInfoEnabled()) logger.info("회원 정보 페이지 요청!");
 		
 		Member member=(Member) session.getAttribute("memberLoggedIn");
+		System.out.println("test member!!!!!+"+member);
 		member=memberService.selectOneMember(member);
 		
 		model.addAttribute("member", member);
@@ -438,7 +444,7 @@ public class MemberController {
 				}
 			}
 				
-				String referer= request.getHeader("Referer");  //http://localhost/awesome/index
+	/*			String referer= request.getHeader("Referer");  //http://localhost/awesome/index
 				String origin= request.getHeader("Origin"); // http://localhost (port)
 				String url = request.getRequestURL().toString(); //url=http://localhost/awesome/member/memberLogin.do
 				String uri = request.getRequestURI(); //uri=/awesome/member/memberLogin.do
@@ -447,7 +453,8 @@ public class MemberController {
 					origin = url.replace(uri, "");
 				}
 				
-				loc = referer.replace(origin+request.getContextPath(),"");
+				loc = referer.replace(origin+request.getContextPath(),"");*/
+			loc= "/index";
 				
 				model.addAttribute("msg",msg);
 				model.addAttribute("loc",loc);
@@ -569,10 +576,11 @@ public class MemberController {
 						System.out.println("로그인 성공");
 						msg="로그인성공!"+m.getMemberName()+"님, 반갑습니다.";
 						model.addAttribute("memberLoggedIn",m);
+						loc="/index";
 						returnResult="common/msg";
 					}
 						
-						String referer= request.getHeader("Referer");  //http://localhost/awesome/index
+						/*String referer= request.getHeader("Referer");  //http://localhost/awesome/index
 						String origin= request.getHeader("Origin"); // http://localhost (port)
 						String url = request.getRequestURL().toString(); //url=http://localhost/awesome/member/memberLogin.do
 						String uri = request.getRequestURI(); //uri=/awesome/member/memberLogin.do
@@ -581,7 +589,7 @@ public class MemberController {
 							origin = url.replace(uri, "");
 						}
 						
-						loc = referer.replace(origin+request.getContextPath(),"");
+						loc = referer.replace(origin+request.getContextPath(),"");*/
 						
 						model.addAttribute("msg",msg);
 						model.addAttribute("loc",loc);
@@ -658,7 +666,7 @@ public class MemberController {
 					if(m ==null) {
 						msg="해당 아이디의 회원이 존재하지 않습니다. 가입이 필요합니다.";
 						model.addAttribute("OAuth","NoMember");
-						loc="http://localhost/awesome/index";
+						//loc="http://localhost/awesome/index";
 						returnResult="redirect:/index";
 					}else {
 						msg="로그인성공!"+m.getMemberName()+"님, 반갑습니다.";
@@ -667,7 +675,7 @@ public class MemberController {
 						returnResult="common/msg";
 					}
 						
-						String referer= request.getHeader("Referer");  //http://localhost/awesome/index
+						/*String referer= request.getHeader("Referer");  //http://localhost/awesome/index
 						String origin= request.getHeader("Origin"); // http://localhost (port)
 						String url = request.getRequestURL().toString(); //url=http://localhost/awesome/member/memberLogin.do
 						String uri = request.getRequestURI(); //uri=/awesome/member/memberLogin.do
@@ -675,7 +683,8 @@ public class MemberController {
 						logger.info("naver Login="+referer+","+origin+","+url);
 						if(origin ==null) {
 							origin = url.replace(uri, "");
-						}
+						}*/
+					
 						
 						model.addAttribute("msg",msg);
 						model.addAttribute("loc",loc);
@@ -871,7 +880,7 @@ public class MemberController {
 			
 			int result = memberService.updateMember(member,null);
 			System.out.println("멤버 업데이트 후:"+result);
-			String content = "임시비밀번호는 "+tempPwd+"입니다."; // 내용
+			String content = "임시비밀번호는 "+tempPwd+"입니다. 로그인 후 보안을 위해 암호을 변경하세요."; // 내용
 
 			if(result==1) {
 				try {
