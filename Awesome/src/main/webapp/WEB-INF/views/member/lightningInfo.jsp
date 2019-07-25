@@ -13,8 +13,22 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script>
+$(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+	if($(window).scrollTop() >= $(document).height() - $(window).height()){
+		lightningListAjax();
+	}
+});
+
+function lightningUpdate(){
+	location.href='${pageContext.request.contextPath}/lightning/lightningWirteUpdate.do';
+}
+
+function lightningDelete(){
+	location.href='${pageContext.request.contextPath}/lightning/lightningDelete.do';
+}
+
 function lightningListAjax(){
-	var cPage = $("[name=cPage]").val();
+	var cPage = $("#cPage").val();
 	
 	$.ajax({
 		url: "${pageContext.request.contextPath}/member/myLightningList.do",
@@ -28,12 +42,11 @@ function lightningListAjax(){
 				html += '<div class="card-body">';
 				html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 				html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
-				'+data[i].matchContent+'
-				    
-				    <a href="#" class="btn btn-primary">수정</a>
-				    <a href="#" class="btn btn-primary">삭제</a>
-				    
-				html += "</div></div></li>"
+				html += '<p class="card-text>"'+data[i].matchContent+'</p>';
+				html += '<button class="btn btn-primary" onclick="lightningUpdate();">수정</button>';
+				html += '<button class="btn btn-primary" onclick="lightningDelete();">삭제</button>';				    
+				html += "</div></div></li>";
+				$("#lightningList-body").append(html);
 			}
 			$("#cPage").val(Number($("#cPage").val())+1);
 		},
@@ -47,8 +60,8 @@ function lightningListAjax(){
 <body>
 <input type="hidden" name="" />
 	<div id="lightningList-container">
-		<input type="hidden" name="cPage" value="1"/>
-		<ul class="list-group">
+		<input type="hidden" id="cPage" value="1"/>
+		<ul id="lightningList-body" class="list-group">
 		
 		</ul>
 	</div>
