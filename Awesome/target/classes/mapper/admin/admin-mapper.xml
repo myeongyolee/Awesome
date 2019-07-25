@@ -61,4 +61,45 @@
 	<insert id="insertReport" parameterType="report">
 		insert into report values(#{memberCode}, #{reportType}, #{reportedCode}, #{reportedType}, #{reportComment})
 	</insert>
+
+<resultMap type="map" id="member">
+<result column="member_code" property="memberCode"/>
+	<result column="member_id" property="memberId"/>
+	<result column="password" property="password"/>
+	<result column="member_name" property="memberName"/>
+	<result column="birthday" property="birthday"/>	
+	<result column="phone" property="phone"/>
+	<result column="gender" property="gender"/>
+	<result column="profile" property="profile"/>
+	<result column="renamed_profile" property="renamedProfile"/>
+	<result column="blind_date_open" property="blindDateOpen"/>	
+	<result column="friend_open" property="friendOpen"/>
+	<result column="search_open" property="searchOpen"/>
+	<result column="introduce" property="introduce"/>
+	<result column="verify" property="verify"/>
+	<result column="enroll_date" property="enrollDate"/>
+	<result column="email" property="email"/>
+	
+	<!-- <collection property="clubMember" ofType="clubmember" >
+			<result column="CLUB_CODE" 	property="clubCode"/>
+			<result column="CLUB_MEMBER_CODE" property="clubmemberCode"/>
+			<result column="CLUB_MEM_GRADE" property="clubmemGrade"/>
+			<result column="CLUB_JOIN_CHECK" property="clubjoinCheck"/>
+		</collection>	 -->
+	</resultMap>
+	
+	  <select id="selectAllMembers" resultMap="member">
+	  select * from member order by member_code
+	 </select>
+	 <select id="selectTotalMemberNum" resultType="_int">
+	 select count(*) from member
+	 </select>
+	 <!-- <select id="seeOneMember" resultMap = "member">
+		select M.*, C.* 
+		from member M left join club_member C
+	 on M.member_code = C.club_member_code
+	 where M.member_code = #{memberCode}
+	 order by M.member_code
+	 </select> -->
+
 </mapper>

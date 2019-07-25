@@ -77,6 +77,24 @@
 		order by match_no desc
 	</select>
 	
+	<select id="selectMyLightningList" resultMap="matchManagerMap">
+		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_name, M.place_lat, 
+			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date, M.match_renamed_img,
+			   A.nickname, 
+			   I.interesting_name, 
+			   L.local_name ,
+			   C.city_name,
+			   (select count(*) from matching_join_member where match_no = M.match_no) member_count,
+			   M.match_content
+		from match_manager M 
+	        left join member A on M.member_code = A.member_code
+	        left join interesting I on M.interesting_code = I.interesting_code
+	        left join local L on M.local_code = L.local_code
+	        left join city C on L.city_code = C.city_code
+		where matching_type = 'L' and member_code = #{memberCode}
+		order by match_no desc
+	</select>
+	
 	<insert id="insertLightning">
 		insert into match_manager 
 		values(seq_match_no.nextval, #{matchManager.matchTitle}, #{matchManager.memberCode}, #{matchManager.interestingCode}, #{matchManager.localCode}, 

@@ -2,8 +2,10 @@ package com.kh.awesome.member.model.dao;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -94,6 +96,12 @@ public class MemberDAOImpl implements MemberDAO {
         // 유효시간이 남아있고(>now()) 전달받은 세션 id와 일치하는 사용자 정보를 꺼낸다.
         return sqlSession.selectOne("member.checkUserWithSessionKey",sessionId);
     }
+
+	@Override
+	public List<Map<String, String>> selectLightningList(int memberCode, int numPerPage, int cPage) {
+		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
+		return sqlSession.selectList("lightning.selectMyLightningList", memberCode, rowBounds);
+	}
 
 
 	

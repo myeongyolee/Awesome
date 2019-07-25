@@ -1,5 +1,79 @@
 @charset "UTF-8";
 
 #qBoard_body:hover{
-	background-color:red;
+	background-color:#f7f7f7;
+}
+#locked{
+	width:13px;
+	height:13px;
+}
+
+div#qboard-container
+{width:800px; margin:0; text-align:center;
+padding:none;
+position:relative;}
+div#qboard-container input,div#board-container button{margin-bottom:15px;}
+div#board-container{width:400px; margin:0 auto; text-align:center;}
+div#board-container input{margin-bottom:15px;}
+div#board-container label.custom-file-label{text-align:left;}
+
+
+.sidenav {
+  width: 130px;
+  position: fixed;
+  z-index: 1;
+  top: 20px;
+  left: 10px;
+  background: white;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #2196F3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+.sidenav a img{
+	width: 20px;
+	height: 20px;
+}
+
+ .main {
+   margin-left: 140px; /* Same width as the sidebar + left position in px */ */
+   font-size: 10px; /* Increased text to enable scrolling */ */
+   padding: 0px 10px; */
+ } 
+
+#locked{
+	width:14px;
+	height:14px;
+	font-weight:bold;
+}
+ #writeButton{
+/*  position:absolute; */
+ left: 100px;
+ } 
+ 
+#a_box{
+border:1px gray; width: 950px; height: 50px;z-index:3;
+margin-top:100px; background-color: #f2f2f2;
+}
+
+#selectedQ{
+border: 1px solid gray;
+background: white;
+width: 800px;
+height: auto;	
+}
+#kakao_Q{ 
+position: fixed;
+left: 50px;
+top: 100px;
 }
