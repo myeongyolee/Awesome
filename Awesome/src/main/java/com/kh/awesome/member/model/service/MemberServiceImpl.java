@@ -128,4 +128,15 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.checkUserWithSessionKey(sessionId);
 	}
 
+	@Override
+	public int deleteMember(Member member) {
+		return memberDAO.deleteMember(member);
+	}
+
+	@Override
+	public void updateReason(int memberCode, String reason) {
+		memberDAO.updateReason(memberCode,reason);
+		
+	}
+
 }

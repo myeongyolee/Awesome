@@ -682,12 +682,12 @@
 			<div id="infomation" class="info-body-item">
 			
 				<div id="accessMemberUpdate">
-						<div>본인확인을 위해 패스워드을 입력해주세요!</div>
-						<br />
-						<div id="accessMemberUpdateInput">
-							<input type="password" id="accessMemberUpdatePwd" />
-							<button type="button" class="btn btn-outline-success " id="accessMemberUpdatePwdBtn"> 확인</button>
-						</div>
+					<div>본인확인을 위해 패스워드을 입력해주세요!</div>
+					<br />
+					<div id="accessMemberUpdateInput">
+						<input type="password" id="accessMemberUpdatePwd" />
+						<button type="button" class="btn btn-outline-success " id="accessMemberUpdatePwdBtn"> 확인</button>
+					</div>
 				</div>
 				<div id="basic-info" class="nodisplay">
 					<div id="basic-info-head"><span class="nameHead">기본정보</span></div>

@@ -95,6 +95,20 @@ public class MemberDAOImpl implements MemberDAO {
         return sqlSession.selectOne("member.checkUserWithSessionKey",sessionId);
     }
 
+	@Override
+	public int deleteMember(Member member) {
+        return sqlSession.delete("member.deleteMember",member);
+	}
+
+	@Override
+	public void updateReason(int memberCode,String reason) {
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("memberCode", memberCode);
+        map.put("reason", reason);
+        
+        sqlSession.update("member.updateReason",map);
+	}
+
 
 	
 }
