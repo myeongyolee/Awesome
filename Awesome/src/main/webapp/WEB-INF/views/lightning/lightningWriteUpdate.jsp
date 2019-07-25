@@ -229,7 +229,7 @@ function insertData(btn){
 					<select class="form-control" id="cityCode" onchange="selectLocalList();">
 						<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
 						<c:forEach items="${cityList}" var="city">
-						<option value=${city.cityCode }>${city.cityName }</option>						
+						<option value=${city.cityCode } <c:if test="${matchManage.cityCode}==${city.cityCode }">selected</c:if>>${city.cityName }</option>						
 						</c:forEach>
 					</select>
 					<label for="local">지역검색</label>

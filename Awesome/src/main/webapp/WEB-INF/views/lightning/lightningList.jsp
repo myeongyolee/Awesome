@@ -118,7 +118,9 @@ function getLightningList(){
 				var html = "";
 				html +=	'<div id="lightning" class="card border-success">';
 				html +=	'<div id="'+data[i].matchNo+'-head" class="card-header">';
-				html +=	'<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/match/'+data[i].matchRenamedImg+'" alt="Card image cap">';
+				if(data[i].matchRenamedImg!=null){
+				html +=	'<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/match/'+data[i].matchRenamedImg+'" alt="Card image cap">';					
+				}
 				html +=	'<div class="card-body" data-toggle="collapse" data-target="#'+data[i].matchNo+'" aria-expanded="true" aria-controls="'+data[i].matchNo+'">';
 				html +=	'<h5 class="card-title"> '+data[i].matchTitle+' </h5></div></div>';
 				html +=	'<ul class="list-group list-group-flush">';
