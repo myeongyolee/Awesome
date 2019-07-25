@@ -1,6 +1,7 @@
 package com.kh.awesome.member.model.service;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member checkUserWithSessionKey(String sessionId) {
 		return memberDAO.checkUserWithSessionKey(sessionId);
+	}
+
+	@Override
+	public List<Map<String, String>> selectLightningList(int memberCode, int numPerPage, int cPage) {
+		return memberDAO.selectLightningList(memberCode, numPerPage, cPage);
 	}
 
 }

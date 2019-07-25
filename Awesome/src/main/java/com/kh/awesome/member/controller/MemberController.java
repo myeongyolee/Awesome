@@ -1,16 +1,11 @@
 package com.kh.awesome.member.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import org.apache.commons.codec.binary.Base64;
-
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -20,26 +15,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.social.google.connect.GoogleOAuth2Template;
-import org.springframework.social.oauth2.GrantType;
 import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +45,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,14 +58,6 @@ import com.kh.awesome.member.model.vo.Member;
 import com.kh.awesome.member.model.vo.NaverLoginBO;
 import com.kh.awesome.recaptcha.VerifyRecaptcha;
 import com.kh.awesome.sms.TempKey;
-
-import net.nurigo.java_sdk.Coolsms;
-import net.nurigo.java_sdk.api.Message;
-
-import java.util.HashMap;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -242,6 +229,24 @@ public class MemberController {
 			return "fail";
 		}
 		
+	}
+	
+	//나의 번개모임 리스트 페이지
+	@RequestMapping("/lightningInfo.do")
+	public void lightningInfo() {}
+	
+	//나의 번개모임 리스트 호출
+	@RequestMapping("/myLightningList.do")
+	@ResponseBody
+	public void myLightningList(HttpSession session, Model model, @RequestBody int cPage) {
+		int numPerPage = 5;
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = member.getMemberCode();
+		
+		//리스트 가져오기
+		List<Map<String, String>> lightningList = memberService.selectLightningList(memberCode, numPerPage, cPage);
+		
+		model.addAttribute("lightningList", lightningList);
 	}
 	
 	//회원가입
