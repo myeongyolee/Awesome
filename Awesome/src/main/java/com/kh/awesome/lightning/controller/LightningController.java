@@ -249,5 +249,9 @@ public class LightningController {
 		
 		return response.toString();
 	}
-
+	
+	@RequestMapping("/lightningWirteUpdate.do")
+	public void lightningUpdate() {
+		
+	}
 }

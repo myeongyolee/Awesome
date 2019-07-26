@@ -19,8 +19,8 @@ $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리�
 	}
 });
 
-function lightningUpdate(){
-	location.href='${pageContext.request.contextPath}/lightning/lightningWirteUpdate.do';
+function lightningUpdate(matchCode){
+	location.href='${pageContext.request.contextPath}/lightning/lightningWirteUpdate.do?matchCode='+matchCode;
 }
 
 function lightningDelete(){
@@ -43,7 +43,7 @@ function lightningListAjax(){
 				html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 				html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
 				html += '<p class="card-text>"'+data[i].matchContent+'</p>';
-				html += '<button class="btn btn-primary" onclick="lightningUpdate();">수정</button>';
+				html += '<button class="btn btn-primary" onclick="lightningUpdate('+data[i].matchCode+');">수정</button>';
 				html += '<button class="btn btn-primary" onclick="lightningDelete();">삭제</button>';				    
 				html += "</div></div></li>";
 				$("#lightningList-body").append(html);

@@ -67,7 +67,6 @@
 		#modalBody #modalList .btn{flex : 1 1 0; margin : auto;margin-top : 1%; width:100%;}
 		#modalBody .modal-body{flex : 1 1 0; margin : auto; }
 		#login{font-size: 16px;  right: 50px; width:90px;  }
-<<<<<<< HEAD
 		#draggable{position: fixed;z-index: 10; left:50px; top: 100px;}
 	    *{
 			font-family: 'Jua', sans-serif;
@@ -81,10 +80,7 @@
 		#titleLogo:hover{
 			cursor:pointer;
 		}
-=======
-		.mdl-badge{ border: 1px solid white; background: white;}
-		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;}
->>>>>>> refs/remotes/origin/taewonn
+
 	</style>
     
 </head>
@@ -263,28 +259,6 @@ function findMember(){
 
 <!-- 20190705 12:54 김용빈  -->
 <!-- 회원가입 모달 추가 - -->
-<<<<<<< HEAD
-    $(function(){
-        $("#signUp").on("click",function(){
-        	
-            $.ajax({ 
-                 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
-                 data:"memberId=${param.memberId}",
-                success : function(data){
-                    $("#memberEnrollModal .modal-content").empty();
-                    $("#memberEnrollModal .modal-content").append(data);
-                    
-                },
-                error: function(jqxhr, textStatus, errorThrown){
-                    console.log("ajax처리실패! : "+jqxhr.status);
-                    console.log(jqxhr);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                }
-            });
-        });
-    })
-=======
 	$(function(){
 		$( ".dragcomponent" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
 		
@@ -305,7 +279,7 @@ function findMember(){
 			});
 	    });
 	})
->>>>>>> refs/remotes/origin/taewonn
+
     
 <!--20190711 09:34 김용빈-->
     $("#logOut").on("click",function(){
