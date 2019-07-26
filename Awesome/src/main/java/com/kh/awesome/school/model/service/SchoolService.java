@@ -36,6 +36,8 @@ public interface SchoolService {
 	List<Map<String, String>> schoolView(int clubCode, int cPage, int numPerPage);
 
 	int totalClubContent(int clubCode);
+	
+	List AllContentCode(int clubCode);
 
 	List<Map<String, String>> schoolPhoto(List list);
 
@@ -68,6 +70,15 @@ public interface SchoolService {
 	Map<String, String> updateSchoolContent(int clubContentCode);
 
 	int updateContentEnd(Map<String, Object> param);
+
+	int deleteSchoolContent(int clubContentCode);
+
+	Map<String, String> selectOneCalender(int clubCode);
+
+	int deleteCalender(int matchNo);
+
+	int logoutClub(Map<String, Integer> param);
+
 
 
 	

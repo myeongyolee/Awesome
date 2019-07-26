@@ -108,6 +108,12 @@ public class SchoolDAOImpl implements SchoolDAO {
 		
 		return sqlSession.selectOne("school.totalClubContent", clubCode);
 	}
+	
+	@Override
+	public List AllContentCode(int clubCode) {
+		
+		return sqlSession.selectList("school.AllContentCode", clubCode);
+	}
 
 	@Override
 	public List<Map<String, String>> schoolPhoto(List list) {
@@ -210,5 +216,37 @@ public class SchoolDAOImpl implements SchoolDAO {
 		
 		return sqlSession.update("school.updateContentEnd", param);
 	}
+
+	@Override
+	public int deleteSchoolContent(int clubContentCode) {
+		
+		return sqlSession.delete("school.deleteSchoolContent", clubContentCode);
+	}
+
+	@Override
+	public Map<String, String> selectOneCalender(int clubCode) {
+		
+		return sqlSession.selectOne("school.selectOneCalender", clubCode);
+	}
+
+	@Override
+	public int deleteCalender(int matchNo) {
+		
+		return sqlSession.delete("school.deleteCalender", matchNo);
+	}
+
+	@Override
+	public int logoutClub(Map<String, Integer> param) {
+		
+		return sqlSession.delete("school.logoutClub", param);
+	}
+
+	@Override
+	public int deleteSchoolContent2(Map<String, Integer> param) {
+		
+		return sqlSession.delete("school.deleteSchoolContent2", param);
+	}
+
+
 
 }

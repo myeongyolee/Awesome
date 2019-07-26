@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.plexus.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,8 +87,10 @@ public class MapServiceImpl implements MapService {
 		param.put("list", list);
 		param.put("memberCode", memberCode);
 		
-		list = mapDAO.otherFriendList(param); // 내가 친구요청보낸 친구목록의 친구들이 나에게 친구요청 수락했는지 여부 확인
-		
+		if(list.size() != 0) {
+			System.out.println("@@@@@@@@@@@@@ 내가 친구요청보낸적이 있다! @@@@@@@@@@@@@");
+			list = mapDAO.otherFriendList(param); // 내가 친구요청보낸 친구목록의 친구들이 나에게 친구요청 수락했는지 여부 확인
+		}
 		return list;
 	}
 

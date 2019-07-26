@@ -1,12 +1,10 @@
+<%@page import="com.kh.awesome.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<% Member member = (Member)session.getAttribute("memberLoggedIn"); %>
 
 <!-- 부트스트랩관련 라이브러리 -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -15,9 +13,6 @@
 
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 
-<title>Insert title here</title>
-</head>
-<body>
 <p>${detailContent }</p>
 <p>글 내용 : ${detailContent.CONTENT }</p>
 
@@ -44,12 +39,14 @@
             </div>
         </div>
         <input type="hidden" name="meetingcontentCode" value="${detailContent.CLUB_CONTENT_CODE}"/>
-		<input type="hidden" name="commentWriter" value="1"/>       
+		<input type="hidden" name="commentWriter" value="<%=member.getMemberCode()%>"/>
+		<input type="hidden" name="commentWriterNickName" value="<%=member.getNickName()%>"/>
   
 </div>
 <div class="container">
     <form id="commentListForm" name="commentListForm" method="post">
         <div id="commentList">
+   
         </div>
     </form>
 </div>
@@ -85,7 +82,7 @@ function getCommentList(){
 	$.ajax({
 		url:"${pageContext.request.contextPath}/school/schoolCommentList",
 		data:{meetingcontentCode:meetingcontentCode},
-		/* async: false, */
+		async: false,
 		success:function(data){ 
 			console.log(data);
 			
@@ -117,7 +114,3 @@ function getCommentList(){
 	});
 }
 </script>
-
-
-</body>
-</html>

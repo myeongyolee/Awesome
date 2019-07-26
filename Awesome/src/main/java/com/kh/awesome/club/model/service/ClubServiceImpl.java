@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.awesome.club.model.dao.ClubDAO;
 import com.kh.awesome.club.model.vo.Club;
+import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clublocal;
 import com.kh.awesome.club.model.vo.Clubmember;
@@ -107,6 +108,35 @@ public class ClubServiceImpl implements ClubService{
 	public List<Clubcontent> selectphotocontentList(int clubCode) {
 		return clubDAO.selectphotocontentList(clubCode);
 	}
+
+	@Override
+	public int addComment(Clubcomment clubComment) {
+		return clubDAO.addComment(clubComment);
+	}
+
+	@Override
+	public List<Clubcomment> selectBoardCommentByCode(Clubcomment clubComment) {
+		return clubDAO.selectBoardCommentByCode(clubComment);
+	}
+
+	@Override
+	public List<Clubcontent> selectseephotoList(int seephotoCode) {
+		return clubDAO.selectseephotoList(seephotoCode);
+	}
+
+	@Override
+	public int deleteclubContent(int contentCode) {
+		return clubDAO.deleteclubContent(contentCode);
+	}
+
+	@Override
+	public int deleteclubImg(int contentCode) {
+		return clubDAO.deleteclubImg(contentCode);
+	}
+
+
+	
+	
 
 	
 

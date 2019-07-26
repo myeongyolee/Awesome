@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.club.model.vo.Clubcontent;
@@ -159,63 +162,8 @@ public class ShcoolController {
 		return "school/makeSchool";
 	}
 	
-	@RequestMapping("/makeSchoolEnd")
-	public ModelAndView makeSchoolEnd(@RequestParam("memberCode") String memberCode, @RequestParam("schoolClubTitle") String schoolClubTitle,
-			                  @RequestParam("schoolName") String schoolName, @RequestParam("schoolId") String schoolId,
-			                  @RequestParam("schoolAddress") String schoolAddress, @RequestParam("club_info") String club_info,
-			                  @RequestParam("club_info_long") String club_info_long, @RequestParam("upFile") MultipartFile upFile, HttpServletRequest request) {
-		
-		logger.info("makeSchoolEnd들어옴");
-		ModelAndView mav = new ModelAndView();
-		
-		Map<String,String> param = new HashMap<String,String>();
-		param.put("memberCode", memberCode);
-		param.put("schoolClubTitle", schoolClubTitle);
-		param.put("schoolName", schoolName);
-		param.put("schoolId", schoolId);
-		param.put("schoolAddress", schoolAddress);
-		param.put("club_info", club_info);
-		param.put("club_info_long", club_info_long);
-		
-		String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/school");
-		
-			if(!upFile.isEmpty()) {
-				String originalFileName = upFile.getOriginalFilename();
-				
-				String ext = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
-				int rndNum = (int)(Math.random()*1000);
-				
-				String renamedFileName = sdf.format(new Date())+"_"+rndNum+"."+ext;
-				
-				//서버지정위치에 파일보관
-				try {
-					File file = new File(saveDirectory+"/"+renamedFileName);
-					upFile.transferTo(file);
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				param.put("originalFileName", originalFileName);
-				param.put("renamedFileName", renamedFileName);
-			}
-		
-		logger.info("파라미터 확인="+param);
-		int result = schoolService.makeSchoolEnd(param);
-		
-		String msg = result>0?"동창모임 만들기 성공":"동창모임 만들기 실패";
-		String loc = "/school/schoolList";
-		mav.addObject("msg", msg);
-		mav.addObject("loc", loc);
-		
-		mav.setViewName("common/msg");
-		
-		return mav;
-	}
 	
-	
-	@RequestMapping("/findPeople")
+/*	@RequestMapping("/findPeople")
 	public ModelAndView findPeople(@RequestParam("schoolCode") String schoolCode, @RequestParam("memberCode") String memberCode,
 								   @RequestParam(value="cPage", required=false, defaultValue="1") int cPage) {
 		logger.info("findPeople들어옴");
@@ -226,8 +174,9 @@ public class ShcoolController {
 		param.put("memberCode", memberCode);
 		param.put("schoolCode", schoolCode);
 		param.put("open", "Y");
+		logger.info("param확인:"+param);
 		
-		int numPerPage = 5;
+		int numPerPage = 1;
 		
 		List<Map<String,String>> friendList = schoolService.findPeople(cPage, numPerPage, param); // 해당학교ID에 해당하는 회원정보 가져오기
 		logger.info("가입되어있는 내 친구="+friendList);
@@ -240,16 +189,16 @@ public class ShcoolController {
 		mav.addObject("numPerPage", numPerPage);
 		mav.addObject("memberCode", memberCode);
 		mav.addObject("schoolCode", schoolCode);
-		
+
 		mav.setViewName("school/findPeople");
 		
 		return mav;
-	}
+	}*/
 	
 	@RequestMapping("/schoolView")
 	public ModelAndView schoolView(@RequestParam("clubCode") int clubCode, @RequestParam(value="cPage", required=false, defaultValue="1") int cPage) {
 		logger.info("schoolView 들어옴");
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView(); // "jsonView"
 		
 		List<Map<String,String>> schoolInfo = schoolService.selectSchoolOne(clubCode);//해당클럽에 대한 정보 전부 가져오기
 		logger.info("해당클럽정보:"+schoolInfo);
@@ -267,13 +216,25 @@ public class ShcoolController {
 		int numPerPage = 5;
 		List<Map<String,String>> SchoolContentlist = schoolService.schoolView(clubCode, cPage, numPerPage); //해당 클럽에 존재하는 게시글 가져오기
 		int totalContent = schoolService.totalClubContent(clubCode); // 해당클럽에 존재하는 게시글의 총 수
-
 		
-		List list = new ArrayList<>();
-		for(int i=0; i<SchoolContentlist.size(); i++) {
-			list.add(SchoolContentlist.get(i).get("CLUB_CONTENT_CODE"));
-		}		
-		List<Map<String,String>> SchoolPhoto = schoolService.schoolPhoto(list);//해당 게시글코드에 해당하는 사진을 가져오기
+		
+		List AllContentCode = schoolService.AllContentCode(clubCode);//해당 클럽에 존재하는 게시글 번호 전부 가져오기
+		logger.info("AllContentCode 확인 :" + AllContentCode);
+		
+		List<Map<String,String>> SchoolPhoto = new ArrayList<>();
+		
+		if(AllContentCode.size() != 0) {
+			logger.info("if문 들어옴");
+			SchoolPhoto = schoolService.schoolPhoto(AllContentCode); //해당 게시글코드에 해당하는 사진을 가져오기
+		}
+		else {
+			logger.info("else문");
+		}
+
+		//--------------------------------------------------------------------------------//
+
+		Map<String,String> Calender = schoolService.selectOneCalender(clubCode);//모임 일정 가져오는 일정 (매치매니저 테이블의 인터레스링코드(클럽코드)를 이용해서 해당 클럽의 모임을 가져온다)
+
 		//--------------------------------------------------------------------------------//
 		
 		mav.addObject("schoolInfo", schoolInfo);
@@ -286,9 +247,10 @@ public class ShcoolController {
 		mav.addObject("cPage", cPage);
 		mav.addObject("numPerPage", numPerPage);
 		mav.addObject("SchoolPhoto", SchoolPhoto);
-		
+		mav.addObject("Calender", Calender);
+	
 		mav.setViewName("school/schoolView");
-		
+
 		return mav;
 	}
 	
@@ -488,6 +450,7 @@ public class ShcoolController {
 		mav.addObject("msg", msg);
 		mav.addObject("loc", loc);
 		mav.setViewName("common/msg");
+		
 		return mav;
 	}
 	
@@ -645,7 +608,7 @@ public class ShcoolController {
 	@ResponseBody
 	public List<HashMap> schoolCommentList(@RequestParam("meetingcontentCode") int meetingcontentCode) {
 		logger.info("schoolCommentList 들어옴");
-		
+		logger.info("meetingcontentCode:"+meetingcontentCode);
 		List<Map<String,String>> commentList = schoolService.schoolCommentList(meetingcontentCode);
 		logger.info("댓글리스트 확인:"+commentList);
 		
@@ -689,6 +652,171 @@ public class ShcoolController {
 		
 		return result;
 	}
+	
+	@RequestMapping("/deleteSchoolContent")
+	public ModelAndView deleteSchoolContent(@RequestParam("clubContentCode") int clubContentCode, @RequestParam("clubCode") int clubCode) {
+		logger.info("deleteSchoolContent 들어옴");
+		ModelAndView mav = new ModelAndView();
+		
+		logger.info("지울 게시글 번호 확인 :" + clubContentCode);
+		
+		int result = schoolService.deleteSchoolContent(clubContentCode); // on delete cascade 설정으로 연결된거 한번에 다 지우기
+		
+		if(result>0) {
+			mav.addObject("msg", "삭제 성공");
+			mav.addObject("loc", "/school/schoolView?clubCode="+clubCode);
+		}
+		else {
+			mav.addObject("msg", "삭제 실패");
+			mav.addObject("loc", "/school/schoolView?clubCode="+clubCode);
+		}
+		
+		mav.setViewName("common/msg");
+		return mav;
+	}
+	
+	@RequestMapping("/clubCalendar")
+	public ModelAndView clubCalendar(@RequestParam("clubCode") int clubCode) {
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject("clubCode", clubCode);
+		mav.setViewName("school/clubCalendar");
+		return mav;
+	}
+	
+	@RequestMapping("/deleteCalender")
+	public ModelAndView deleteCalender(@RequestParam("matchNo") int matchNo, @RequestParam("clubCode") int clubCode ) {
+		logger.info("deleteCalender 들어옴");
+		ModelAndView mav = new ModelAndView();
+		
+		int result = schoolService.deleteCalender(matchNo);
+		
+		String msg = result>0?"일정삭제성공":"일정삭제실패";
+		String loc = "/school/schoolView?clubCode="+clubCode;
+		mav.addObject("msg", msg);
+		mav.addObject("loc", loc);
+		mav.setViewName("common/msg");
+		
+		return mav;
+	}
+	
+	@RequestMapping("/logoutClub")
+	public ModelAndView logoutClub(@RequestParam("clubCode") int clubCode, @RequestParam("memberCode") int memberCode) {
+		logger.info("logoutClub 들어옴");
+		ModelAndView mav = new ModelAndView();
+		
+		Map<String, Integer> param = new HashMap<String,Integer>();
+		param.put("clubCode", clubCode);
+		param.put("memberCode", memberCode);
+		
+		int result = schoolService.logoutClub(param);// club_member 테이블에서 삭제
+		
+		String msg = result>0?"탈퇴성공":"탈퇴실패";
+		String loc = "/school/schoolList?memberCode="+memberCode;
+		mav.addObject("msg", msg);
+		mav.addObject("loc", loc);
+		mav.setViewName("common/msg");
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/imgupload", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> imgupload(MultipartHttpServletRequest request) {
+		
+		Map<String,Object> param = new HashMap<String,Object>();
+		
+		String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/school");
+		Iterator<String> itr = request.getFileNames(); 
+		if(itr.hasNext()) { 
+			MultipartFile mpf = request.getFile(itr.next()); 
+			try {
+				String originalFileName = mpf.getOriginalFilename();
+				
+				String ext = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+				int rndNum = (int)(Math.random()*1000);
+				
+				String renamedFileName = sdf.format(new Date())+"_"+rndNum+"."+ext;
+				
+				//서버지정위치에 파일보관
+				File file = new File(saveDirectory+"/"+renamedFileName);
+				mpf.transferTo(file);
+				
+				param.put("originalFileName", originalFileName);
+				param.put("renamedFileName", renamedFileName);
+				param.put("result", true);
+				
+				} catch (IOException e) { 
+					System.out.println(e.getMessage()); e.printStackTrace(); 
+				}  
+			}
+			return param;
+		}
+	
+	@RequestMapping("/makeSchoolEnd")
+	@ResponseBody
+	public Object makeSchoolEnd(@RequestParam("memberCode") String memberCode, @RequestParam("schoolClubTitle") String schoolClubTitle,
+			                  @RequestParam("schoolName") String schoolName, @RequestParam("schoolId") String schoolId,
+			                  @RequestParam("schoolAddress") String schoolAddress, @RequestParam("club_info") String club_info,
+			                  @RequestParam("club_info_long") String club_info_long, @RequestParam("originalFileName") String originalFileName,
+			                  @RequestParam("renamedFileName") String renamedFileName){
+		
+		logger.info("makeSchoolEnd들어옴");
+		
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("memberCode", memberCode);
+		param.put("schoolClubTitle", schoolClubTitle);
+		param.put("schoolName", schoolName);
+		param.put("schoolId", schoolId);
+		param.put("schoolAddress", schoolAddress);
+		param.put("club_info", club_info);
+		param.put("club_info_long", club_info_long);
+		param.put("originalFileName", originalFileName);
+		param.put("renamedFileName", renamedFileName);
+		
+		logger.info("파라미터 확인="+param);
+		int result = schoolService.makeSchoolEnd(param);
+		
+		return result;
+	}
+	
+	@RequestMapping("/findPeople")
+	@ResponseBody
+	public Map<String, Object> findPeople(@RequestParam("schoolCode") String schoolCode, @RequestParam("memberCode") String memberCode,
+								   @RequestParam(value="cPage", required=false, defaultValue="1") int cPage) {
+		logger.info("findPeople들어옴");
+		Map<String, Object> result = new HashMap<String,Object>();
+		
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("memberCode", memberCode);
+		param.put("schoolCode", schoolCode);
+		param.put("open", "Y");
+		logger.info("param확인:"+param);
+		
+		int numPerPage = 1;
+		
+		List<Map<String,String>> friendList = schoolService.findPeople(cPage, numPerPage, param); // 해당학교ID에 해당하는 회원정보 가져오기
+		logger.info("가입되어있는 내 친구="+friendList);
+		int totalContent = schoolService.totalCountfindPeople(param);
+		logger.info("총검색된 수:"+totalContent);
+		
+		result.put("totalContent", totalContent);
+		result.put("friendList", friendList);
+		result.put("cPage", cPage);
+		result.put("numPerPage", numPerPage);
+		result.put("memberCode", memberCode);
+		result.put("schoolCode", schoolCode);
+		
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value="/test", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody

@@ -2,10 +2,13 @@ package com.kh.awesome.club.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,20 +16,29 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.club.model.service.ClubService;
 import com.kh.awesome.club.model.vo.Club;
+import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
-import com.kh.awesome.club.model.vo.Clublocal;
 import com.kh.awesome.club.model.vo.Clubphoto;
 import com.kh.awesome.lightning.model.service.LightningService;
+import com.kh.awesome.matchManager.model.vo.MatchManager;
+
+import oracle.sql.converter.CharacterConverterFactoryOGS;
+
+
 
 
 
@@ -52,10 +64,6 @@ public class ClubController {
 		List<Club> clubList = clubService.selectClubList(cPage,numPerPage);
 		
 		int totalContents = clubService.totalclubCount();
-		
-		System.out.println("clubList="+clubList);
-		System.out.println("club@totalContents="+totalContents);
-		
 		
 		//도시목록 가져오기
 		List<String> cityList = lightningService.selectCityList();
@@ -128,7 +136,6 @@ public class ClubController {
 		
 		int cityCode = Integer.parseInt(request.getParameter("cityName"));
 		int localCode = Integer.parseInt(request.getParameter("localCode"));
-		System.out.println("!!^"+cityCode+","+localCode);
 		club.setLocalCode(localCode);
 		
 		
@@ -151,7 +158,7 @@ public class ClubController {
 	
 	//클럽선택시 클럽뷰페이지로전송
 	@RequestMapping("/clubView.do")
-	public ModelAndView selectOneClub(@RequestParam("no") int clubCode, @RequestParam(value="cPage", required=false, defaultValue="1") int cPage,HttpSession session) {
+	public ModelAndView selectOneClub(@RequestParam("no") int clubCode,@RequestParam(value="cPage", required=false, defaultValue="1") int cPage,HttpSession session) {
 		logger.debug("클럽 상세보기 요청!");
 		System.out.println("클럽상세보기페이지");
 		ModelAndView mav = new ModelAndView();
@@ -173,8 +180,6 @@ public class ClubController {
 		List<Clubcontent> contentList = clubService.selectcontentList(clubCode,cPage,numPerPage);
 		int totalContents = clubService.totalclubCount();
 		
-		System.out.println("contentList="+contentList);
-		
 		mav.addObject("cPage",cPage);
 		mav.addObject("numPerPage", numPerPage);
 		mav.addObject("totalContents",totalContents);
@@ -184,7 +189,6 @@ public class ClubController {
 		
 		//club_photo테이블
 		List<Clubcontent> photocontentList = clubService.selectphotocontentList(clubCode);
-		System.out.println("club@photoList="+photocontentList);
 		mav.addObject("photoList",photocontentList);
 		
 		return mav;
@@ -272,8 +276,7 @@ public class ClubController {
 	}
 	
 	@RequestMapping("/clubcontentImgend.do")
-	public String clubcontentImginsert(@RequestParam("clubCode") int clubCode, HttpServletRequest request,HttpSession session,MultipartFile[] upFile) {
-		
+	public String clubcontentImginsert(@RequestParam("clubCode") int clubCode,HttpServletRequest request,HttpSession session,MultipartFile[] upFile) {
 		Clubcontent clubcontent = new Clubcontent();
 		clubcontent.setClubCode(Integer.parseInt(request.getParameter("clubCode")));
 		clubcontent.setMemberCode(Integer.parseInt(request.getParameter("memberCode")));
@@ -282,13 +285,10 @@ public class ClubController {
 		clubcontent.setWriteLevel(Integer.parseInt(request.getParameter("writeLevel")));
 		
 		int result = clubService.insertclubContent2(clubcontent);
-		System.out.println("sijoon:"+clubcontent.getClubcontentCode());
-		
-		
+	
 		String picinfo1 = request.getParameter("content1");
 		String picinfo2 = request.getParameter("content2");
 		String picinfo3 = request.getParameter("content3");
-		
 		int cnt =1;
 		
 		try {
@@ -348,9 +348,141 @@ public class ClubController {
 		
 		return "/common/msg";
 		
-
-		
-		
 	}
+	
+	@RequestMapping("/clubComment.do")
+	@ResponseBody
+	public String ajax_addComment(@ModelAttribute("clubComment") Clubcomment clubComment, HttpServletRequest request) throws Exception{
+       int result =0;
+		
+	   int commentwriter = Integer.parseInt(request.getParameter("commentWriter"));
+       String commentcontent = request.getParameter("commentContent");
+       int meetingcontentcode = Integer.parseInt(request.getParameter("meetingcontentCode"));
+        
+       Clubcomment clubcomment = new Clubcomment();
+       clubcomment.setCommentWriter(commentwriter);
+       clubcomment.setCommentContent(commentcontent);
+       clubComment.setMeetingcontentCode(meetingcontentcode);
+       
+        try{      
+            result=clubService.addComment(clubComment);
+            
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        
+        return "success";
+    }
+	
+	 @RequestMapping(value="commentList.do", produces="application/json; charset=utf8")
+	    @ResponseBody
+	    public List<HashMap> ajax_commentList(@ModelAttribute("clubComment") Clubcomment clubComment, HttpServletRequest request) throws Exception{
+	        
+	        HttpHeaders responseHeaders = new HttpHeaders();
+	        ArrayList<HashMap> hmlist = new ArrayList<HashMap>();
+	        
+	        // 해당 게시물 댓글
+	        List<Clubcomment> commentVO = clubService.selectBoardCommentByCode(clubComment);
+	       
+	        if(commentVO.size() > 0){
+	            for(int i=0; i<commentVO.size(); i++){
+	                HashMap hm = new HashMap();
+	                hm.put("meetingcommentCode", commentVO.get(i).getMeetingcommentCode());//댓글번호
+	                hm.put("commentWriter",commentVO.get(i).getCommentWriter());//작성자번호
+	                hm.put("meetingcomment", commentVO.get(i).getCommentContent()); //글내용
+	                hm.put("commentDate", commentVO.get(i).getCommentDate());//작성일
+	                hm.put("meetingcontentCode", commentVO.get(i).getMeetingcontentCode());//게시글번호
+	                hm.put("writerNickname",commentVO.get(i).getWriterNickname());
+	                
+	                hmlist.add(hm);
+	            }
+	            
+	        }
+	        
+	            
+	        return hmlist;
+	        
+	    }
+	 
+	 
+	 @RequestMapping("/seePhoto.do")
+		@ResponseBody
+		public List<Clubcontent> selectlocalList(@RequestBody Map contentCode){
+		
+		 int seephotoCode = Integer.parseInt((String)contentCode.get("contentCode"));
+			
+		 List<Clubcontent> seephotoList = clubService.selectseephotoList(seephotoCode);
+		
+		 logger.info("seephotoList={}",seephotoList);
+			
+			return seephotoList;
+		}
+	 
+	 @RequestMapping("/clubimgDelete.do")
+	 public String clubimgDelete(HttpServletRequest request,HttpSession session) {
+		 int contentCode =Integer.parseInt(request.getParameter("contentCode"));
+		 int clubCode = Integer.parseInt(request.getParameter("clubCode"));
+		 int result =0;
+		 
+		 result = clubService.deleteclubContent(contentCode);
+		 
+		 if(result>0) {
+			 result = clubService.deleteclubImg(contentCode);
+		 }
+		 
+		 	String msg = result>0?"사진 삭제 성공":"사진 삭제 오류";
+			String loc = "/club/clubView.do?no="+request.getParameter("clubCode");
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		 return "/common/msg";
+	 }
+	 
+	 @RequestMapping("/clubCalendar.do")
+	 public void clubCalendarEnroll(HttpServletRequest request,HttpSession session) {
+		 int clubCode = Integer.parseInt(request.getParameter("clubCode"));
+		 System.out.println("일정등록컨트롤러"+clubCode);
+		 
+		 request.setAttribute("clubCode", clubCode);
+	 }
+	 
+	 
+	 @RequestMapping("/lightningWriteEnd.do")
+	 @ResponseBody
+	 public int insertLightning(MatchManager matchManager, HttpSession session, HttpServletRequest request,
+			 					   @RequestParam("matchTitle") String matchTitle, @RequestParam("placeName") String placeName,
+			                       @RequestParam("lightningEndDate") String lightningEndDate, @RequestParam("lightningEndTime") String lightningEndTime,
+			                       @RequestParam("placeLat") int placeLat, @RequestParam("placeLng") int placeLng,
+			                       @RequestParam("matchingType") char matchingType, @RequestParam("clubCode") int clubCode) throws ParseException {
+			//세션에서 memberCode가져오기
+//			session.getAttribute("memberLoggedIn");
+			matchManager.setMemberCode(1);
+			matchManager.setInterestingCode(clubCode); // 쉿! 사실 클럽코드임!
+			matchManager.setLocalCode(999999);
+			matchManager.setMatchContent("클럽일정테스트");
+			
+			matchManager.setMatchTitle(matchTitle);
+			matchManager.setPlaceName(placeName);
+			matchManager.setPlaceLat(placeLat);
+			matchManager.setPlaceLng(placeLng);
+			matchManager.setMatchingType(matchingType);
+			
+			//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기	
+/*			String lightningEndDate = request.getParameter("lightningEndDate");
+			String lightningEndTime = request.getParameter("lightningEndTime");*/
+			logger.info("lightningEndDate={}, lightningEndTime={}", lightningEndDate, lightningEndTime);
+			
+			String matchEndDate = lightningEndDate+" "+lightningEndTime;
+			
+			Map<String, Object> map = new HashMap();
+			map.put("matchManager", matchManager);
+			map.put("matchEndDate" ,matchEndDate);
+			
+			logger.info("matchManager="+matchManager);
+			int result = lightningService.insertLightning(map);
+			logger.info("result="+result);
+			
+			return result;
+		}
 	
 }

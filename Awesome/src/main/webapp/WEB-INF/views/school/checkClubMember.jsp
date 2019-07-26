@@ -11,7 +11,7 @@
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 </head>
 <body>
-<input type="text" name="clubCode" value="${clubCode }" /> <!-- 안보임 처리할 것 -->
+<input type="hidden" name="clubCode" value="${clubCode }" /> <!-- 안보임 처리할 것 -->
 	
 	<div class="enroll-container">
 	<c:forEach items="${clubMemberList }" var="list" varStatus="vs">

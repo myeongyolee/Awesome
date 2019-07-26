@@ -100,6 +100,12 @@ public class SchoolServiceImpl implements SchoolService {
 		
 		return schoolDAO.totalClubContent(clubCode);
 	}
+	
+	@Override
+	public List AllContentCode(int clubCode) {
+		
+		return schoolDAO.AllContentCode(clubCode);
+	}
 
 	@Override
 	public List<Map<String, String>> schoolPhoto(List list) {
@@ -209,6 +215,40 @@ public class SchoolServiceImpl implements SchoolService {
 		
 		return schoolDAO.updateContentEnd(param);
 	}
+
+	@Override
+	public int deleteSchoolContent(int clubContentCode) {
+		int result = 0;
+		
+		result = schoolDAO.deleteSchoolContent(clubContentCode); // club_content 테이블에서 지우기 , on delete cascade로 설정할 것
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, String> selectOneCalender(int clubCode) {
+		
+		return schoolDAO.selectOneCalender(clubCode);
+	}
+
+	@Override
+	public int deleteCalender(int matchNo) {
+		
+		return schoolDAO.deleteCalender(matchNo);
+	}
+
+	@Override
+	public int logoutClub(Map<String, Integer> param) {
+		int result = 0;
+		result = schoolDAO.logoutClub(param);
+		
+		if(result>0) {
+			result = schoolDAO.deleteSchoolContent2(param);// 클럽게시글에서 지우기
+		}
+		
+		return result;
+	}
+
 
 
 

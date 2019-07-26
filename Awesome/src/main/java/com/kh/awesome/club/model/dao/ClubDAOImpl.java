@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.awesome.club.model.vo.Club;
+import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clublocal;
 import com.kh.awesome.club.model.vo.Clubmember;
@@ -104,9 +105,31 @@ public class ClubDAOImpl implements ClubDAO {
 		return sqlSession.selectList("selectphotocontentList",clubCode);
 	}
 
-	
+	@Override
+	public int addComment(Clubcomment clubComment) {
+		return sqlSession.insert("addComment",clubComment);
+	}
 
-	
+	@Override
+	public List<Clubcomment> selectBoardCommentByCode(Clubcomment clubComment) {
+		return sqlSession.selectList("selectBoardCommentByCode", clubComment);
+	}
+
+	@Override
+	public List<Clubcontent> selectseephotoList(int seephotoCode) {
+		return sqlSession.selectList("selectseephotoList",seephotoCode);
+	}
+
+	@Override
+	public int deleteclubContent(int contentCode) {
+		return sqlSession.delete("deleteclubContent",contentCode);
+	}
+
+	@Override
+	public int deleteclubImg(int contentCode) {
+		return sqlSession.delete("deleteclubImg",contentCode);
+	}
+
 	
 	
 

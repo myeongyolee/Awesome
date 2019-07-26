@@ -11,8 +11,8 @@
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 </head>
 <body>
-<input type="text" name="clubCode" value="${clubCode }" />
-<input type="text" name="memberCode" value="${memberCode }" />
+<input type="hidden" name="clubCode" value="${clubCode }" />
+<input type="hidden" name="memberCode" value="${memberCode }" />
 
 <div class="clubMember-container">
 <p>이름:${memberName }</p>
@@ -52,6 +52,7 @@ function send(){
 		success:function(data){
 			console.log(data);
 			
+			window.opener.location.reload();
 			self.close(); 
 		}		
 	});

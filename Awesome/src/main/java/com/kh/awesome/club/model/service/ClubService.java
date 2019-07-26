@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.kh.awesome.club.model.vo.Club;
+import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clublocal;
 import com.kh.awesome.club.model.vo.Clubmember;
@@ -44,6 +45,17 @@ public interface ClubService {
 	int insertClubphoto(List<Clubphoto> clubphotoList);
 
 	List<Clubcontent> selectphotocontentList(int clubCode);
+
+	int addComment(Clubcomment clubComment);
+
+	List<Clubcomment> selectBoardCommentByCode(Clubcomment clubComment);
+
+
+	List<Clubcontent> selectseephotoList(int seephotoCode);
+
+	int deleteclubContent(int contentCode);
+
+	int deleteclubImg(int contentCode);
 
 	
 

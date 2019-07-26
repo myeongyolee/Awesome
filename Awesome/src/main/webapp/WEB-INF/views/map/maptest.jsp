@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="동네친구 보여주기" name="pageTitle"/>
+</jsp:include>
 
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&callback=initMap"></script>
@@ -14,13 +12,10 @@
 #tablet{width:800px; height: 600px; background: black; margin:0 auto; border-radius: 40px; padding:10px 37px;}
 #vicinage-friend{background:aliceblue; padding-top:50px ;}
 #naver-map{width: 700px; height: 575px; background: white;}
+
 </style>
 
-
-</head>
-<body>
-
-<input type="hidden" name="memberLoggedIn" value="124" />
+<input type="hidden" name="memberLoggedIn" value="${memberCode }" />
 <div id="vicinage-friend" class="section">
      <div id="tablet">
          <div id="naver-map">
@@ -37,6 +32,7 @@ function initMap() {
 	var param = $("input[name=memberLoggedIn]").val();
 	console.log(param);
 	
+	if(param != ""){
 	//Member테이블의 회원정보 중 로그인된 사용자와 같은 도로명 주소 가지고 오기 및 회원정보 가지고 오기 (JOIN사용해서 MAP형식으로 전부 받을 것)
  	$.ajax({
 		url:"${pageContext.request.contextPath}/map/selectAddress",
@@ -73,7 +69,7 @@ function initMap() {
 		    	          '<img src="${pageContext.request.contextPath}/resources/upload/member/'+data[i].RENAMED_PROFILE+'" width="100" height="100" alt="" class="thumb" />',
 		    	          '<p>이름:'+data[i].MEMBER_NAME+'</p>',
 		    	          '<p>성별:'+data[i].GENDER+'</p>',
-		    	          '<p>자기소개:'+data[i].INTRODUCE+'</p>',
+		    	          '<p>자기소개 ↓↓↓</p>'+data[i].INTRODUCE,
 		    	          '<p>관심분야:'+data[i].INTERESTING_CODE+'</p>',
 		    	          '<button type="button" onclick="sendFriend('+data[i].MEMBER_CODE+','+param+');">친구요청</button>',
 		    	          '</div>'
@@ -122,7 +118,12 @@ function initMap() {
 			console.log("ajax처리실패"+textStatus.status);
 			console.log("ajax처리실패"+errorThrown.status);
 		}
-	}); 
+	});
+	}
+	else{
+		var HTML = "<p>등록된 동네친구가 없습니다</p>";
+		$("#naver-map").append(HTML);
+	}
 	
 };
 </script>
@@ -150,9 +151,7 @@ function sendFriend(friend, user){
 			console.log("ajax처리실패"+textStatus.status);
 			console.log("ajax처리실패"+errorThrown.status);
 		}
-	});
-
-	
+	});	
 }
 </script>
 

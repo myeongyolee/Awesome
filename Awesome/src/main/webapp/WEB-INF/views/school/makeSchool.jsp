@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
+<%@page import="com.kh.awesome.member.model.vo.Member"%>
+<% Member member = (Member)session.getAttribute("memberLoggedIn"); %>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="동창모임 보여주기" name="pageTitle"/>
+</jsp:include>
 
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
+<script src="/js/jquery.form.js"></script>
 <style>
 div.one{
 	width: 1000px;
@@ -40,24 +41,25 @@ input[name=upFile], input[name=submit]{
 	
 }
 button[name=searchSchool]{
-	position:relative;
-	left: 800px;
-	top: 55px;
+	position:fixed;
+	left: 700px;
+	top: 150px;
 }
 </style>
 
-</head>
-<body>
-
 <div class="one">
 
-<form action="${pageContext.request.contextPath }/school/makeSchoolEnd" enctype="multipart/form-data" method="post">
+<form id="uploadForm" enctype="multipart/form-data" method="post">
+<input type="file" name="upFile" id="upFile" onchange="loadImg(this);">
+</form>
+<input type="button" id="btn-upload" value="전송" />
+
 <div class="two">
 <img id="img-viewer" width=350 />
 </div>
 
 <div class="three">
-<input type="text" name="memberCode" value="작성자코드" />
+<input type="hidden" name="memberCode" value="<%=member.getMemberCode()%>"/>
 <hr />
 
 <input type="text" name="schoolClubTitle" placeholder="모임제목 입력" />
@@ -66,8 +68,8 @@ button[name=searchSchool]{
 <input type="text" name="schoolName" placeholder="학교등록하기"/>
 <div class="school-select">
 </div>
-<input type="text" name="schoolId" placeholder="학교id" />
-<input type="text" name="schoolAddress" placeholder="학교주소" />
+<input type="hidden" name="schoolId" placeholder="학교id" />
+<input type="hidden" name="schoolAddress" placeholder="학교주소" />
 <hr />
 
 <input type="text" name="club_info" placeholder="클럽간단소개"/>
@@ -77,14 +79,83 @@ button[name=searchSchool]{
 <hr />
 </div>
 
-<input type="file" name="upFile" id="upFile" onchange="loadImg(this);">
-<input type="submit" name="submit" value="전송" />
-</form>
-
-<button name="searchSchool" onclick="enrollSchool();">학교검색</button>
+<button name="searchSchool" onclick="enrollSchool();">확인</button>
 
 </div>
 	
+
+
+<script>
+$(document).ready(function(){
+	$("#btn-upload").on("click", function(){
+		console.log('btn-upload');
+/* 		var memberCode = $("input[name=memberCode]").val();
+		var schoolClubTitle = $("input[name=schoolClubTitle]").val();
+		var schoolName = $("input[name=schoolName]").val();
+		var schoolId = $("input[name=schoolId]").val();
+		var schoolAddress = $("input[name=schoolAddress]").val();
+		var club_info = $("input[name=club_info]").val();
+		var club_info_long = $("input[name=club_info_long]").val();
+		{memberCode:memberCode, schoolClubTitle:schoolClubTitle, schoolName:schoolName,schoolId:schoolId,schoolAddress:schoolAddress,club_info:club_info,club_info_long:club_info_long
+		console.log(memberCode);
+		console.log(schoolClubTitle);
+		console.log(schoolName);
+		console.log(schoolId);
+		console.log(schoolAddress);
+		console.log(club_info);
+		console.log(club_info_long); */
+
+		var form = new FormData(document.getElementById('uploadForm'));
+		
+		$.ajax({
+			url:"${pageContext.request.contextPath}/school/imgupload",
+			data:form,
+			type:"post",
+	        processData: false,
+	        contentType: false,
+	        success:function(data){
+	        	console.log(data);
+	        	
+	        	if(data.result == true){
+	        		var memberCode = $("input[name=memberCode]").val();
+	        		var schoolClubTitle = $("input[name=schoolClubTitle]").val();
+	        		var schoolName = $("input[name=schoolName]").val();
+	        		var schoolId = $("input[name=schoolId]").val();
+	        		var schoolAddress = $("input[name=schoolAddress]").val();
+	        		var club_info = $("input[name=club_info]").val();
+	        		var club_info_long = $("input[name=club_info_long]").val();
+	        		var originalFileName = data.originalFileName;
+	        		var renamedFileName = data.renamedFileName;
+	        		
+	        		console.log(memberCode);
+	        		console.log(schoolClubTitle);
+	        		console.log(schoolName);
+	        		console.log(schoolId);
+	        		console.log(schoolAddress);
+	        		console.log(club_info);
+	        		console.log(club_info_long);
+	        		console.log(originalFileName);
+	        		console.log(renamedFileName);
+	        		
+	        		$.ajax({
+	        			url:"${pageContext.request.contextPath}/school/makeSchoolEnd",
+	        			data:{memberCode:memberCode, schoolClubTitle:schoolClubTitle, schoolName:schoolName,schoolId:schoolId,schoolAddress:schoolAddress,club_info:club_info,club_info_long:club_info_long,originalFileName:originalFileName,renamedFileName:renamedFileName},
+	        			success:function(data){
+	        				if(data == 1){
+	        					window.opener.location.reload();
+	        					self.close();
+	        				}
+	        				
+	        			}
+	        		});
+	        	}
+ 	
+	        } // 첫번째 에이작스 석세스 끝
+		}); // 첫번째 에이작스 끝
+	});
+});
+
+</script>
 
 
 <script>
@@ -187,6 +258,3 @@ function loadImg(f){
 	}
 }
 </script>
-	
-</body>
-</html>

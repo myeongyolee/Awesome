@@ -13,10 +13,17 @@
 <typeAliases>
 <typeAlias alias="matchManager" type="com.kh.awesome.matchManager.model.vo.MatchManager"/>
 <typeAlias alias="club" type="com.kh.awesome.club.model.vo.Club"/>
-<typeAlias type="com.kh.awesome.club.model.vo.Clubmember" alias="clubmember"/>
-<typeAlias type="com.kh.awesome.club.model.vo.Clubcontent" alias="clubcontent"/>
-<typeAlias type="com.kh.awesome.club.model.vo.Clubphoto" alias="clubphoto"/>
-<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
+<typeAlias alias="clubmember" type="com.kh.awesome.club.model.vo.Clubmember"/>
+<typeAlias alias="clubcontent" type="com.kh.awesome.club.model.vo.Clubcontent"/>
+<typeAlias alias="clubphoto" type="com.kh.awesome.club.model.vo.Clubphoto"/>
+<typeAlias alias="clubcomment" type="com.kh.awesome.club.model.vo.Clubcomment"/>
+<!-- <typeAlias alias="qBoard" type="com.kh.awesome.board.model.vo.QuestionBoard"/> -->
+<typeAlias type="com.kh.awesome.member.model.vo.Member" alias="member"/>
+<typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>
+<!-- <typeAlias type="com.kh.awesome.admin.model.vo.Report" alias="report"/> -->
+<!-- <typeAlias type="com.kh.awesome.socket.stomp.model.vo.Msg" alias="msg"/> -->
+<!-- <typeAlias type="com.kh.awesome.socket.stomp.model.vo.ChatRoom" alias="chatRoom"/> -->
+<typeAlias alias="StringToLongTypeHandler" type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler"/>
 </typeAliases>
 
 <typeHandlers>

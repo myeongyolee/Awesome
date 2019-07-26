@@ -1,6 +1,7 @@
 package com.kh.awesome.club.model.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Clubphoto implements Serializable{
 	private int photorowNum;
@@ -10,12 +11,13 @@ public class Clubphoto implements Serializable{
 	private String clubrenamedFilename;
 	private String picInfo;
 	private int clubphotoNum;
+	private List<Clubcomment> clubComments;
 	public Clubphoto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public Clubphoto(int photorowNum, int clubcontentCode, int clubCode, String cluboriginalFilename,
-			String clubrenamedFilename, String picInfo, int clubphotoNum) {
+			String clubrenamedFilename, String picInfo, int clubphotoNum, List<Clubcomment> clubComments) {
 		super();
 		this.photorowNum = photorowNum;
 		this.clubcontentCode = clubcontentCode;
@@ -24,6 +26,7 @@ public class Clubphoto implements Serializable{
 		this.clubrenamedFilename = clubrenamedFilename;
 		this.picInfo = picInfo;
 		this.clubphotoNum = clubphotoNum;
+		this.clubComments = clubComments;
 	}
 	public int getPhotorowNum() {
 		return photorowNum;
@@ -67,12 +70,20 @@ public class Clubphoto implements Serializable{
 	public void setClubphotoNum(int clubphotoNum) {
 		this.clubphotoNum = clubphotoNum;
 	}
+	public List<Clubcomment> getClubComments() {
+		return clubComments;
+	}
+	public void setClubComments(List<Clubcomment> clubComments) {
+		this.clubComments = clubComments;
+	}
 	@Override
 	public String toString() {
 		return "Clubphoto [photorowNum=" + photorowNum + ", clubcontentCode=" + clubcontentCode + ", clubCode="
 				+ clubCode + ", cluboriginalFilename=" + cluboriginalFilename + ", clubrenamedFilename="
-				+ clubrenamedFilename + ", picInfo=" + picInfo + ", clubphotoNum=" + clubphotoNum + "]";
+				+ clubrenamedFilename + ", picInfo=" + picInfo + ", clubphotoNum=" + clubphotoNum + ", clubComments="
+				+ clubComments + "]";
 	}
+	
 	
 	
 }

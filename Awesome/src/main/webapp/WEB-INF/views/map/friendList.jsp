@@ -18,19 +18,22 @@ div.friend-view{
 
 </head>
 <body>
-나랑 친구인 사람 목록 보여주는 곳
-<p>${list }</p>
-<div class="friend-view-container">
-
-</div>
 <input type="hidden" name="list" value="${list }" />
-<input type="hidden" name="memberLoggedIn" value="124" />
+<input type="hidden" name="memberLoggedIn" value="${memberCode }" />
 
-<script type="text/javascript">
+<c:if test="${empty list }">
+	<p>등록된 친구가 없습니다.</p>
+</c:if>
+
+<c:if test="${not empty list }">
+<div class="friend-view-container"></div>
+</c:if>
+
+<script>
 $(function(){
 	var param = $("input[name=list]").val().replace("[","").replace("]","");
-	console.log(param);
 	
+	if(param != ""){
 	$.ajax({
 		url:"${pageContext.request.contextPath}/map/showMyFriend",
 		data:{param:param},
@@ -52,7 +55,7 @@ $(function(){
 			$("div.friend-view-container").append(HTML);
 		}
 	});
-	
+	}
 });
 </script>
 

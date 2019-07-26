@@ -16,7 +16,8 @@
 	</select>
 	
 	<select id="schoolList" resultType="map">
-		select * from school_club where school_code in
+		select * from school_club S left join member M using(member_code) 
+		where school_code in
 		<foreach collection="list" item="p" open="(" close=")" separator=",">
 			#{p}
 		</foreach>
@@ -64,6 +65,10 @@
 	
 	<select id="totalClubContent" resultType="_int">
 		select count(*) from club_content where club_code = #{clubCode} and (write_level = 0 or write_level = 1)
+	</select>
+	
+	<select id="AllContentCode" resultType="string">
+		select club_content_code from club_content where club_code = #{clubCode}
 	</select>
 	
 	<select id="schoolPhoto" resultType="map">
@@ -154,5 +159,24 @@
 		where club_content_code = #{clubContentCode} 
 	</update>
 	
+	<delete id="deleteSchoolContent">
+		delete from club_content where club_content_code = #{clubContentCode} 
+	</delete>
+	
+	<select id="selectOneCalender" resultType="map">
+		select * from match_manager where interesting_code = #{clubCode} order by match_no desc
+	</select>
+
+	<delete id="deleteCalender">
+		delete from match_manager where match_no = #{matchNo}
+	</delete>
+	
+	<delete id="logoutClub">
+		delete from club_member where club_code = #{clubCode} and member_code = #{memberCode}
+	</delete>
+	
+	<delete id="deleteSchoolContent2">
+		delete from club_content where where club_code = #{clubCode} and member_code = #{memberCode}
+	</delete>
 	
 </mapper>

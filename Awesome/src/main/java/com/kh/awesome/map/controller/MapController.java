@@ -60,9 +60,10 @@ public class MapController {
 	}
 	
 	@RequestMapping("/map/enrollFriend")
-	public String enrollFriend(@RequestParam("infocheck") String infocheck, @RequestParam("interesting") String[] interesting,
+	public ModelAndView enrollFriend(@RequestParam("infocheck") String infocheck, @RequestParam("interesting") String[] interesting,
 			                   @RequestParam("memberLoggedIn") String memberCode) {
 		logger.info("/map/enrollFriend들어옴");
+		ModelAndView mav = new ModelAndView();
 		
 		String str = "";
 		for(int i=0; i<interesting.length; i++) {
@@ -81,7 +82,9 @@ public class MapController {
 		int result = mapService.enrollInfoCheck(param); // 동네친구에 자기정보 공개여부 'Y'로 바꾸기
 		int reuslt2 = mapService.enrollInteresting(param); // 개인관심분야정보 입력하기
 		
-		return "/map/maptest";
+		mav.addObject("memberCode", memberCode);
+		mav.setViewName("map/maptest");
+		return mav;
 	}
 	
 	@RequestMapping("/map/checkInfo")
@@ -125,13 +128,14 @@ public class MapController {
 	@RequestMapping("/map/friendList")
 	public ModelAndView friendList(@RequestParam("memberCode") String memberCode) {
 		ModelAndView mav = new ModelAndView();
-		
+		logger.info("friendList 들어옴");
 		
 		List<Integer> list = new ArrayList<>();
 		list = mapService.friendList(memberCode); // 내가 친구요청보낸 목록 확인
 		logger.info("친구목록 리스트:"+list);
 		
 		mav.addObject("list", list);
+		mav.addObject("memberCode", memberCode);
 		mav.setViewName("/map/friendList");
 		
 		return mav;
