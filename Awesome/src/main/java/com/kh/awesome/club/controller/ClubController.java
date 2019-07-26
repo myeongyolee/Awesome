@@ -2,6 +2,7 @@ package com.kh.awesome.club.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,17 +13,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,10 +36,8 @@ import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clubphoto;
 import com.kh.awesome.lightning.model.service.LightningService;
-
-
-
-
+import com.kh.awesome.matchManager.model.vo.MatchManager;
+import com.kh.awesome.school.model.service.SchoolService;
 
 @Controller
 @RequestMapping("/club")
@@ -53,21 +51,23 @@ public class ClubController {
 	private ClubService clubService;
 	@Autowired
 	private LightningService lightningService;
+	@Autowired
+	private SchoolService schoolService;
+	
 	
 	@RequestMapping("/clubList.do")
 	public ModelAndView clubList(@RequestParam(value="cPage", required=false, defaultValue="1") int cPage){
 		ModelAndView mav = new ModelAndView();
-		
 		int numPerPage =7;
+				String matchingType = "C";
+				Map<String, String> search = new HashMap();
+				search.put("matchingType", matchingType);
+				
 		
-		List<Club> clubList = clubService.selectClubList(cPage,numPerPage);
+		List<Club> clubList = clubService.selectClubList(search,cPage,numPerPage);
 		
 		int totalContents = clubService.totalclubCount();
-		
-		System.out.println("clubList="+clubList);
-		System.out.println("club@totalContents="+totalContents);
-		
-		
+	
 		//도시목록 가져오기
 		List<String> cityList = lightningService.selectCityList();
 		//분류목록 가져오기
@@ -85,6 +85,82 @@ public class ClubController {
 		mav.addObject("clubList",clubList);
 		
 		return mav;
+	}
+	
+	//클럽검색
+	@PostMapping(value="/clubsearchList.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Map<String, Object> clubsearchList(@RequestBody Map<String, Object> requestMap,HttpServletRequest request,@RequestParam(value="cPage", required=false, defaultValue="1") int cPage){
+
+		/*ModelAndView mav = new ModelAndView();*/
+		
+		int numPerPage =7;
+		
+		//RequestBody 파라미터 핸들링
+		String title = "";
+		String city = "";
+		String local = "";
+		String nickName = "";
+		String interesting = "";
+		
+		
+		if(requestMap.get("title")!=null) title = (String)requestMap.get("title");
+			System.out.println(title);
+		if(requestMap.get("city")!=null || !((String)requestMap.get("city")).equals("0")) 
+			city = (String)requestMap.get("city");
+		
+		if(requestMap.get("local")!=null || !((String)requestMap.get("local")).equals("0")) 
+			local = (String)requestMap.get("local");
+		
+		if(requestMap.get("memberId")!=null) nickName = (String)requestMap.get("nickName");
+		System.out.println("memberId"+requestMap.get("memberId"));
+		System.out.println(requestMap.get("nickName"));
+		if(requestMap.get("interesting")!=null || !((String)requestMap.get("interesting")).equals("0")) 
+			interesting = (String)requestMap.get("interesting");
+		
+				String matchingType = "C";
+				Map<String, String> search = new HashMap();
+				search.put("title", title);
+				search.put("city", city);
+				search.put("local", local);
+				search.put("nickName", nickName);
+				search.put("interesting", interesting);
+				search.put("matchingType", matchingType);
+				
+		
+		List<Club> clubList = clubService.selectClubList(search,cPage,numPerPage);
+		System.out.println("clubsearchList"+clubList);
+		
+		int totalContents = clubService.totalclubCount();
+		
+		
+		//도시목록 가져오기
+		List<String> cityList = lightningService.selectCityList();
+		//분류목록 가져오기
+		List<String> interestingList = lightningService.selectInterestingList();
+		
+		logger.info("cityList={}",cityList);
+		logger.info("interestingList={}",interestingList);
+		
+	
+		/*mav.addObject("cityList", cityList);
+		mav.addObject("interestingList", interestingList);
+	
+		mav.addObject("cPage",cPage);
+		mav.addObject("numPerPage", numPerPage);
+		mav.addObject("totalContents",totalContents);
+		mav.addObject("clubList",clubList);*/
+		
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("cityList", cityList);
+		map.put("interestingList", interestingList);
+		map.put("cPage", cPage);
+		map.put("numPerPage", numPerPage);
+		map.put("totalContents",totalContents);
+		map.put("clubList",clubList);
+		
+		return map;
 	}
 	
 	@RequestMapping("/clubMake")
@@ -139,7 +215,6 @@ public class ClubController {
 		
 		int cityCode = Integer.parseInt(request.getParameter("cityName"));
 		int localCode = Integer.parseInt(request.getParameter("localCode"));
-		System.out.println("!!^"+cityCode+","+localCode);
 		club.setLocalCode(localCode);
 		
 		
@@ -184,8 +259,6 @@ public class ClubController {
 		List<Clubcontent> contentList = clubService.selectcontentList(clubCode,cPage,numPerPage);
 		int totalContents = clubService.totalclubCount();
 		
-		System.out.println("contentList="+contentList);
-		
 		mav.addObject("cPage",cPage);
 		mav.addObject("numPerPage", numPerPage);
 		mav.addObject("totalContents",totalContents);
@@ -195,7 +268,6 @@ public class ClubController {
 		
 		//club_photo테이블
 		List<Clubcontent> photocontentList = clubService.selectphotocontentList(clubCode);
-		System.out.println("club@photoList="+photocontentList);
 		mav.addObject("photoList",photocontentList);
 		
 		return mav;
@@ -292,9 +364,7 @@ public class ClubController {
 		clubcontent.setWriteLevel(Integer.parseInt(request.getParameter("writeLevel")));
 		
 		int result = clubService.insertclubContent2(clubcontent);
-		System.out.println("sijoon:"+clubcontent.getClubcontentCode());
-		
-		
+	
 		String picinfo1 = request.getParameter("content1");
 		String picinfo2 = request.getParameter("content2");
 		String picinfo3 = request.getParameter("content3");
@@ -392,8 +462,7 @@ public class ClubController {
 	        
 	        // 해당 게시물 댓글
 	        List<Clubcomment> commentVO = clubService.selectBoardCommentByCode(clubComment);
-	        System.out.println("qqqqq"+clubComment);
-	        
+	       
 	        if(commentVO.size() > 0){
 	            for(int i=0; i<commentVO.size(); i++){
 	                HashMap hm = new HashMap();
@@ -418,17 +487,143 @@ public class ClubController {
 	 @RequestMapping("/seePhoto.do")
 		@ResponseBody
 		public List<Clubcontent> selectlocalList(@RequestBody Map contentCode){
-		 System.out.println("ajax안");
+		
 		 int seephotoCode = Integer.parseInt((String)contentCode.get("contentCode"));
-		 System.out.println("ajax에서 받아온 contentCode값"+seephotoCode);
 			
 		 List<Clubcontent> seephotoList = clubService.selectseephotoList(seephotoCode);
 		
 		 logger.info("seephotoList={}",seephotoList);
 			
-			System.out.println("^^^^^**="+seephotoList);
-			
 			return seephotoList;
 		}
+	 
+	 @RequestMapping("/clubimgDelete.do")
+	 public String clubimgDelete(HttpServletRequest request,HttpSession session) {
+		 int contentCode =Integer.parseInt(request.getParameter("contentCode"));
+		 int clubCode = Integer.parseInt(request.getParameter("clubCode"));
+		 int result =0;
+		 
+		 result = clubService.deleteclubContent(contentCode);
+		 
+		 if(result>0) {
+			 result = clubService.deleteclubImg(contentCode);
+		 }
+		 
+		 	String msg = result>0?"사진 삭제 성공":"사진 삭제 오류";
+			String loc = "/club/clubView.do?no="+request.getParameter("clubCode");
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+		 return "/common/msg";
+	 }
+	 
+	 @RequestMapping("/clubCalendar")
+		public ModelAndView clubCalendar(@RequestParam("clubCode") int clubCode) {
+			ModelAndView mav = new ModelAndView();
+			
+			mav.addObject("clubCode", clubCode);
+			mav.setViewName("school/clubCalendar");
+			return mav;
+		}
+	 
+	 @RequestMapping("/lightningWriteEnd.do")
+	 @ResponseBody
+	 public int insertLightning(MatchManager matchManager, HttpSession session, HttpServletRequest request,
+			 					   @RequestParam("matchTitle") String matchTitle, @RequestParam("placeName") String placeName,
+			                       @RequestParam("lightningEndDate") String lightningEndDate, @RequestParam("lightningEndTime") String lightningEndTime,
+			                       @RequestParam("placeLat") int placeLat, @RequestParam("placeLng") int placeLng,
+			                       @RequestParam("matchingType") char matchingType, @RequestParam("clubCode") int clubCode) throws ParseException {
+			//세션에서 memberCode가져오기
+//			session.getAttribute("memberLoggedIn");
+			matchManager.setMemberCode(1);
+			matchManager.setInterestingCode(clubCode); // 쉿! 사실 클럽코드임!
+			matchManager.setLocalCode(999999);
+			matchManager.setMatchContent("클럽일정테스트");
+			
+			matchManager.setMatchTitle(matchTitle);
+			matchManager.setPlaceName(placeName);
+			matchManager.setPlaceLat(placeLat);
+			matchManager.setPlaceLng(placeLng);
+			matchManager.setMatchingType(matchingType);
+			
+			//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기	
+/*			String lightningEndDate = request.getParameter("lightningEndDate");
+			String lightningEndTime = request.getParameter("lightningEndTime");*/
+			logger.info("lightningEndDate={}, lightningEndTime={}", lightningEndDate, lightningEndTime);
+			
+			String matchEndDate = lightningEndDate+" "+lightningEndTime;
+			
+			Map<String, Object> map = new HashMap();
+			map.put("matchManager", matchManager);
+			map.put("matchEndDate" ,matchEndDate);
+			
+			logger.info("matchManager="+matchManager);
+			int result = lightningService.insertLightning(map);
+			logger.info("result="+result);
+			
+			return result;
+		}
+	 
+	 //클럽뷰에서 클럽가입대기목록
+	 @RequestMapping("/waitingEnroll")
+		public ModelAndView waitingEnroll(@RequestParam("clubCode") int clubCode) {
+			logger.info("waitingEnroll 들어옴");
+			ModelAndView mav = new ModelAndView();
+			
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.put("clubCode", clubCode);
+			param.put("clubJoinCheck", "N");
+			
+			List<Map<String,Object>> waitingList = schoolService.waitingList(param);
+			logger.info("가입대기명단 확인:" + waitingList);
+			
+			mav.addObject("waitingList", waitingList);
+			mav.addObject("clubCode", clubCode);
+			mav.setViewName("club/clubwaitingList");
+			
+			return mav;
+		}
+	 
+	 @RequestMapping("/checkClubMember")
+		public ModelAndView checkClubMember(@RequestParam("clubCode") int clubCode) {
+			logger.info("checkClubMember 들어옴");
+			ModelAndView mav = new ModelAndView();
+			
+			Map<String,Object> param = new HashMap<String,Object>();
+			param.put("clubCode", clubCode);
+			param.put("clubJoinCheck", "Y");
+			
+			List<Map<String,Object>> clubMemberList = schoolService.checkClubMember(param);
+			
+			mav.addObject("clubCode", clubCode);
+			mav.addObject("clubMemberList", clubMemberList);
+			mav.setViewName("club/checkClubMember");
+			
+			return mav;
+		}
 	
+	 //마이페이지
+	 @RequestMapping("/myclubList.do")
+	 public void myclubList(HttpServletRequest request,HttpSession session) {
+		 //session.getAttribute("memberLoggedIn");
+		 int memberCode=1;
+		 System.out.println("마이클럽");
+		 List<Map<String,Object>> myclubCode= clubService.selectmyclubCode(memberCode);
+		 System.out.println("myclubCode"+myclubCode);
+		 
+		 Map<String,List<String>> param = new HashMap();
+		 List<String> clubCode= new ArrayList<>();
+			 for(Map<String, Object> map: myclubCode) {
+				 String no = String.valueOf(map.get("clubCode"));
+				clubCode.add(no);
+			 }
+			 param.put("clubCode",clubCode);
+			 System.out.println("clubCode"+clubCode);
+			 List<Map<String,Object>> myclubList = clubService.selectmyclubList(param);
+			 System.out.println("myclubList"+myclubList);
+			 
+			 request.setAttribute("myclubList", myclubList);
+		
+	 }
+
 }

@@ -101,11 +101,50 @@
 			</collection>
 		</resultMap>
 		
+		<resultMap type="map" id="myclubList">
+			<result column="CLUB_CODE" property="clubCode"/>
+			<result column="INTERESTING_CODE" property="interestingCode"/>
+			<result column="MEMBER_CODE" property="memberCode"/>
+			<result column="LOCAL_CODE" property="localCode"/>
+			<result column="CLUB_NAME" property="clubName"/>
+			<result column="CLUB_SIMPLE_INFO" property="clubsimpleInfo"/>
+			<result column="CLUB_INFO" property="clubInfo"/>
+			<result column="MAIN_ORIGINAL_FILENAME" property="mainoriginalFilename"/>
+			<result column="MAIN_RENAMED_FILENAME" property="mainrenamedFilename"/>
+			<result column="CLUB_MEMBER_COUNT" property="clubmemberCount"/>
+			<result column="CLUB_ADMIN" property="clubAdmin"/>
+		</resultMap>
+		
+		<resultMap type="map" id="myclubCode">
+			<result column="CLUB_CODE" property="clubCode"/>
+		</resultMap>
+		
+		
 		
 		
 	<select id="selectClubList" resultMap="clubListMap">
 	select C.*,(select count(*) from club_member where CLUB_CODE = C.CLUB_CODE AND CLUB_JOIN_CHECK ='Y') CLUB_MEMBER_COUNT,(select NICKNAME FROM MEMBER WHERE MEMBER_CODE = C.MEMBER_CODE) CLUB_ADMIN
 	from club C 
+		left join member M on C.MEMBER_CODE = M.MEMBER_CODE
+		 left join interesting I on C.interesting_code = I.interesting_code
+		 left join local L on C.local_code = L.local_code
+		  left join city T on L.city_code = T.city_code
+	where 1=1
+	<if test="title != null and title != ''">
+		and C.CLUB_NAME like '%'||#{title}||'%'
+	</if>
+	<if test="local != null and local != 0">
+		and C.local_code = #{local}
+	</if>
+	<if test="nickName != null and nickName != ''">
+		and M.nickname like '%'||#{nickName}||'%'
+	</if>
+	<if test="interesting != null and interesting != 0">
+		and C.interesting_code = #{interesting}
+	</if>
+	<if test="city != null and city != 0">
+		and L.city_code = #{city}
+	</if>
 	order by CLUB_CODE DESC
 	</select>
 	
@@ -209,5 +248,28 @@
 		where c.write_level=2 and c.club_content_code=#{seephotoCode}
 	</select>
 	
+	<delete id="deleteclubContent">
+		delete from club_content where club_content_code =#{contentCode}
+	</delete>
+	
+	<delete id="deleteclubImg">
+		delete from club_photo where club_content_code=#{contentCode}
+	</delete>
+	
+	<select id="selectmyclubCode" resultMap="myclubCode">
+		select CM.club_code
+		from club_member CM
+		where CM.club_member_code =#{memberCode}
+	</select>
+	
+	<select  id="selectmyclubList" resultMap="clubListMap">
+		select C.*,(select count(*) from club_member where CLUB_CODE = C.CLUB_CODE AND CLUB_JOIN_CHECK ='Y') CLUB_MEMBER_COUNT,(select NICKNAME FROM MEMBER WHERE MEMBER_CODE = C.MEMBER_CODE) CLUB_ADMIN
+		from club C 
+		where C.club_code in
+		<foreach item="e" collection="clubCode" open="(" separator="," close=")">
+			#{e}
+		</foreach>
+		
+	</select>
 </mapper>
 
