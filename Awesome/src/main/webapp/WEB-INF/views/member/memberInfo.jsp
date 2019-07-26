@@ -84,8 +84,6 @@
 		$(function(){
 			$("#memberInfoUpdate").on("click",function(){
 				
-				
-				
 	      		  $.ajax({
 	      			url:"${pageContext.request.contextPath}/member/memberInfoUpdate.do", 
 	      			success : function(data){
