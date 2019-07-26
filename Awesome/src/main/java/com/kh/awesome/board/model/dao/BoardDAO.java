@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.awesome.board.model.vo.QuestionBoard;
+import com.kh.awesome.board.model.vo.QuestionComment;
 
 public interface BoardDAO {
 
@@ -18,5 +19,9 @@ public interface BoardDAO {
 	int deleteQuestion(int no);
 
 	int updateBoard(QuestionBoard qBoard);
+	
+	int insertComment(QuestionComment questionComment);
+
+	List<Map<String, String>> showCmt(int questionNo);
 
 }

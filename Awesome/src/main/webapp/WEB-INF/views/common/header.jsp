@@ -55,9 +55,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     <!-- 구글 폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Jua|Luckiest+Guy&display=swap" rel="stylesheet">
 	<style>
 		.mdl-layout__header-row{background: white;}
-		.mdl-layout__content{overflow-y:hidden;}
+		
 		.mdl-layout__header-row .mdl-navigation__link{color:black;}
 		.mdl-layout-title{color:black;}
 		#awe-logo-img{height:30px;}
@@ -66,37 +67,23 @@
 		#modalBody #modalList .btn{flex : 1 1 0; margin : auto;margin-top : 1%; width:100%;}
 		#modalBody .modal-body{flex : 1 1 0; margin : auto; }
 		#login{font-size: 16px;  right: 50px; width:90px;  }
-		.mdl-badge{ border: 1px solid white; background: white;}
 		#draggable{position: fixed;z-index: 10; left:50px; top: 100px;}
-	</style>
-    <link href="https://fonts.googleapis.com/css?family=Jua|Luckiest+Guy&display=swap" rel="stylesheet">
-    
-    <style>
-    
-    *{
-		font-family: 'Jua', sans-serif;
-    }
-        .mdl-layout__header-row{background: white;}
-        .mdl-layout__content{overflow-y:hidden;}
-        .mdl-layout__header-row .mdl-navigation__link{color:black;}
-        .mdl-layout-title{color:black;}
-        #awe-logo-img{height:30px;}
-        #modalBody{ flex-direction : row; justify-content : space-between; align-items : center;align-content : center;max-width : 100%;     }
-        #modalBody #modalList{flex : 1 1 0; margin : auto; display : flex; flex-direction : column;justify-content : space-between; }
-        #modalBody #modalList .btn{flex : 1 1 0; margin : auto;margin-top : 1%; width:100%;}
-        #modalBody .modal-body{flex : 1 1 0; margin : auto; }
-        #login{font-size: 16px;  right: 50px; width:90px;  }
+	    *{
+			font-family: 'Jua', sans-serif;
+	    }
         .mdl-badge{ border: 1px solid white; background: white;}
       		.flex{
 			display : flex; 
           		flex-direction : row;
           		justify-content : flex-end;
 		}
-		
 		#titleLogo:hover{
 			cursor:pointer;
 		}
-    </style>
+		.mdl-badge{ border: 1px solid white; background: white;}
+		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;}
+	</style>
+    
 </head>
 <body>
        <!-- Modal -->
@@ -273,27 +260,28 @@ function findMember(){
 
 <!-- 20190705 12:54 김용빈  -->
 <!-- 회원가입 모달 추가 - -->
-    $(function(){
-        $("#signUp").on("click",function(){
-        	
-            $.ajax({ 
-                 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
-                 data:"memberId=${param.memberId}",
-                success : function(data){
-                    $("#memberEnrollModal .modal-content").empty();
-                    $("#memberEnrollModal .modal-content").append(data);
-                    
-                },
-                error: function(jqxhr, textStatus, errorThrown){
-                    console.log("ajax처리실패! : "+jqxhr.status);
-                    console.log(jqxhr);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                }
-            });
-        });
-    })
-    
+
+
+	$(function(){
+		$( ".dragcomponent" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
+		
+		$("#signUp").on("click",function(){
+			$.ajax({ 
+				 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
+				 data:"memberId=${param.memberId}",
+				success : function(data){
+					$("#memberEnrollModal .modal-content").empty();
+					$("#memberEnrollModal .modal-content").append(data);
+				},
+				error: function(jqxhr, textStatus, errorThrown){
+					console.log("ajax처리실패! : "+jqxhr.status);
+					console.log(jqxhr);
+					console.log(textStatus);
+					console.log(errorThrown);
+				}
+			});
+	    });
+	})
 <!--20190711 09:34 김용빈-->
     $("#logOut").on("click",function(){
         

@@ -3,15 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="Awesome" name="번개모임"/>
-</jsp:include>
-<script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
+
+<jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
+
 <style>
 #form-container{width:700px;}
 #matchContent{min-height: 200px; resize: none;}
@@ -19,6 +13,7 @@
 #selectPlace{width:150px;}
 #img-viewer{width:344px; height: 300px;}
 #map{width:465px; height:350px;}
+.modal-content div{z-index: 1050;}
 </style>
 <script>
 $(function(){
@@ -234,6 +229,9 @@ function insertData(btn){
 			</div>
 		</form>
 	</div>
+</div>
+</main>
+</div>
 	<div class="modal fade" id="searchMap" tabindex="-1" role="dialog" aria-labelledby="searchMap" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
@@ -258,4 +256,6 @@ function insertData(btn){
 			</div>
 		</div>
 	</div>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+</body>
+</html>
+

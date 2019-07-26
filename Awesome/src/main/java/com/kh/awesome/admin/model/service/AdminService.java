@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.awesome.admin.model.vo.Report;
+import com.kh.awesome.board.model.vo.QuestionComment;
 import com.kh.awesome.club.model.vo.Clubmember;
 import com.kh.awesome.member.model.vo.Member;
 
@@ -21,11 +22,11 @@ public interface AdminService {
 
 	int insertReport(Report report);
 
-	Member seeOneMember(int memberCode);
+	Map<String, Object> seeOneMember(int memberCode);
 
 	List<Map<String, Object>> searchPpl(Map<String, String> search, int cPage, int numPerPage);
 
-	/*Clubmember seeClubJoined(int memberCode);*/
+	String seeClubJoined(int memberCode);
 
-
+	
 }

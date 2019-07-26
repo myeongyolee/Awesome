@@ -25,6 +25,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
 <style>
 #chart-container{width:800px; height:500px;}
+div#member_age_div{border:none;}
 </style>
 <title>홈페이지 통계</title>
 <script>

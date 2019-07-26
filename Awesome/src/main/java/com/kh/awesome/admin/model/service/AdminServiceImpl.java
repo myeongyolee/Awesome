@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.awesome.admin.model.dao.AdminDAO;
 import com.kh.awesome.admin.model.vo.Report;
+import com.kh.awesome.board.model.vo.QuestionComment;
 import com.kh.awesome.club.model.vo.Clubmember;
 import com.kh.awesome.member.model.vo.Member;
 
@@ -51,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.insertReport(report);
 	}
 
-	public Member seeOneMember(int memberCode) {
+	public Map<String, Object> seeOneMember(int memberCode) {
 		return adminDAO.seeOneMember(memberCode);
 	}
 
@@ -60,10 +61,12 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.searchPpl(search, cPage, numPerPage);
 	}
 
-	/*@Override
-	public Clubmember seeClubJoined(int memberCode) {
+	@Override
+	public String seeClubJoined(int memberCode) {
 		return adminDAO.seeClubJoined(memberCode);
-	}*/
+	}
+
+	
 
 	
 }

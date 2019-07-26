@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.awesome.board.model.vo.QuestionBoard;
+import com.kh.awesome.board.model.vo.QuestionComment;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO {
@@ -52,7 +53,15 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlSession.update("qBoard.updateQuestion",qBoard);
 	}
 
-	
+	@Override
+	public int insertComment(QuestionComment questionComment) {
+		return sqlSession.insert("qBoard.insertComment", questionComment);
+	}
+
+	@Override
+	public List<Map<String, String>> showCmt(int questionNo) {
+		return sqlSession.selectList("qBoard.showCmt", questionNo);
+	}
 	
 	
 }

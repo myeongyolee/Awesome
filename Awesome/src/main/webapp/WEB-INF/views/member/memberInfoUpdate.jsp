@@ -28,6 +28,8 @@
     
     
 	<style>
+			
+			
 		#info-container{
 			display : flex; 
             flex-direction : row;
@@ -41,16 +43,10 @@
            		
            		height:97%;
            		
-           		overflow: scroll;
-           		
-           		
            		display : flex; 
             	flex-direction : column;
 			}
 				
-			#info-body::-webkit-scrollbar { 
-			    display: none; 
-			}
 				 #basic-info-head{
 					text-align: right;
 				}  
@@ -134,18 +130,27 @@
 	    $(function(){
     	  $("#phoneAuthBtn").on("click",function(){
       		var userPhoneNumber = $("#phoneAuth").val();
-      		$(".smsAuth").slideToggle(1000, 'easeInBack');
-      		$("#smsAuth").val("");
-      		$("#phoneUpdate").hide(300);
+
       		
-      		/*  $.ajax({        //운영시에 주석해제
+      		  $.ajax({        //운영시에 주석해제
       			 url:"${pageContext.request.contextPath}/member/sendSMS", 
       			type: "POST",
       			data: "userPhoneNumber="+userPhoneNumber,
 				dataType : 'text',
       			success : function(data){
-      				$(".smsAuth").show();
-      				alert(data);
+      				if(data !="전송 실패"){
+      					$(".smsAuth").slideToggle(1000, 'easeInBack');
+          	      		$("#smsAuth").val("");
+          	      		$("#phoneUpdate").hide(300);
+	
+						$.confirm.show({
+						  "message": data,
+						  "yes": function (){
+						  },
+						  "hideNo":true,
+						  "type":"warning" // default or success, danger, warning
+						})
+      				}
       			},
       			error: function(jqxhr, textStatus, errorThrown){
       				console.log("ajax처리실패! : "+jqxhr.status);
@@ -153,7 +158,7 @@
       				console.log(textStatus);
       				console.log(errorThrown);
       			}
-      		});  */
+      		});  
     	  });
     	  
     	  $("#smsAuthBtn").on("click",function(){

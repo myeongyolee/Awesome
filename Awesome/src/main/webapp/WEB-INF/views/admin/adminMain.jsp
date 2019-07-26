@@ -39,12 +39,11 @@ chart();
 </head>
 <body>
 <div id="admin_board">
-	<h2>관리자님 안녕하세요? </h2>
   <div id="main_board">
   <!--메뉴 탭  -->
 	  <div class="tab">
 	  <button class="tablinks" onclick="${pageContext.request.contextPath}/">
-	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/>
+ 	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/> 
 	  	<span class="text_">&nbsp;
 	  	 전체보기
 	  	</span>

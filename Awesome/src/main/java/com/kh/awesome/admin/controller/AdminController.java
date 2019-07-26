@@ -13,14 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.admin.model.service.AdminService;
 import com.kh.awesome.admin.model.vo.Report;
+import com.kh.awesome.board.model.vo.QuestionComment;
 
 
 @Controller
@@ -40,27 +41,33 @@ public class AdminController {
 	
 	//회원 정보 모두 보기 
 	@RequestMapping("/manageMembers")
-	public ModelAndView selectAllMembers(
-			@RequestParam(value = "cPage", required=false
-			, defaultValue = "1") int cPage) {
+	public void manageMembers() {
 		
-		ModelAndView mav = new ModelAndView();
+	}
+	@RequestMapping("/showAll.do")
+	@ResponseBody
+	public Map<String,Object> selectAllMembers(
+			@RequestParam(value = "cPage", required=false, defaultValue = "1") int cPage) {
+		Map<String,Object> map = new HashMap<String,Object>();
 		//한페이지당 10명씩 데리고 오기
-		int numPerPage = 10;
-		
+		int numPerPage = 12;
+		logger.info("cPage@Controller== "+cPage);
 		List<Map<String, String>> list =
 				adminService.selectAllMembers(cPage, numPerPage); 
 		
 		//전체 컨텐츠수 구하기 
 		int totalMemberNum = adminService.selectTotalMemberNum();
+		int totalPage = (int)(Math.ceil(totalMemberNum*1.0/numPerPage));
 		logger.info("총 멤버수@Controller == " + totalMemberNum);
 		
-		mav.addObject("list", list);
-		mav.addObject("totalMemberNum", totalMemberNum);
-		mav.addObject("numPerPage", numPerPage);
-		mav.addObject("cPage", cPage);
+		map.put("list", list);
+		map.put("totalMemberNum", totalMemberNum);
+		map.put("numPerPage", numPerPage);
+		map.put("totalPage", totalPage);
+		map.put("cPage", cPage);
 		
-		return mav;
+		
+		return map;
 	}
 	
 	@RequestMapping("/chart.do")
@@ -86,19 +93,18 @@ public class AdminController {
 		List<Report> reportList = adminService.selectReportList(memberCode);
 	}
 	
-	/*@RequestMapping("/seeOneMember")
-	public ModelAndView seeOneMember(
-			@RequestParam("memberCode") int memberCode) {
-		
-		ModelAndView mav = new ModelAndView();
-		Map<String, Object>
-		Member m = adminService.seeOneMember(memberCode);
-		Clubmember cm = adminService.seeClubJoined(memberCode);
-		mav.addObject("member", m);
-		mav.addObject("clubjoined", cm);
-		mav.setViewName("admin/seeOneMember");
-		return mav;
-	}*/
+	@RequestMapping("/seeOneMember")
+	@ResponseBody
+	public  Map<String,Object> seeOneMember(
+			@RequestParam(value = "memberCode") int memberCode) {
+		logger.info("memberCode"+memberCode);
+		Map<String, Object> oneM = adminService.seeOneMember(memberCode);
+		String cm = adminService.seeClubJoined(memberCode);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("oneM", oneM);
+		map.put("cm", cm);
+		return map;
+	}
 	
 	@RequestMapping("/report.do")
 	public void report(HttpServletRequest request, HttpSession session) {
@@ -124,31 +130,37 @@ public class AdminController {
 	
 	@RequestMapping("/searchPpl.do")
 	@ResponseBody
-	public List<Map<String, Object>> searchPpl(@RequestBody Map requestMap){
+	public Map<String, Object> searchPpl(@RequestBody Map requestMap){
 		logger.info("requestMap={}", requestMap);
 		int cPage = Integer.parseInt((String)requestMap.get("cPage"));
 		String byName = "";
 		String byMid = "";
 		String nickname = "";
-//		char gender = '';
+		String gender="";
 		
 		if(requestMap.get("byName")!=null) byName = (String)requestMap.get("byName");
 		if(requestMap.get("byMid")!=null) byMid = (String)requestMap.get("byMid");
 		if(requestMap.get("nickname")!=null) nickname = (String)requestMap.get("nickname");
+		if(requestMap.get("gender")!=null) gender = String.valueOf(requestMap.get("gender"));
 		Map<String, String> search = new HashMap();
 		
 		search.put("byName", byName);
 		search.put("byMid", byMid);
 		search.put("nickname", nickname);
+		search.put("gender", gender);
 		
-		
-		int numPerPage = 5;
+		int numPerPage = 12;
 		logger.info("search==@controller"+ search);
 		List<Map<String, Object>> searchPplList = adminService.searchPpl(search, cPage, numPerPage);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("searchPplList", searchPplList);
+		map.put("numPerPage", numPerPage);
+		map.put("cPage", cPage);
+		
 		logger.info("searchPplList={}", searchPplList);
 		logger.info("searchPplList.size= " + searchPplList.size());		
 		
-		return searchPplList;
+		return map;
 	}
 	
 }

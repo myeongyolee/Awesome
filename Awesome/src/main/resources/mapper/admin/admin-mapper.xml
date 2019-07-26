@@ -106,8 +106,20 @@
 	<if test="nickname !=null and nickname != ''">
 	and nickname like '%'||#{nickname}||'%'
 	</if>
+	<if test="gender !=null and gender != ''">
+	and gender = #{gender}
+	</if>
 	order by member_code desc
 	</select>
-	
-	
+	 <select id="seeOneMember" resultMap = "member">
+		select * 
+		from member 
+		where member_code = #{memberCode}
+	 </select> 
+	 <select id="seeClubJoined" resultType='String'>
+		select club_name 
+		from club C join club_member M on c.club_code = M.club_code 
+		where M.club_member_code = #{memberCode}
+	 </select>
+
 </mapper>
