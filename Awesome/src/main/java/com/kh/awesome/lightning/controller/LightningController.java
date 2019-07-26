@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.awesome.lightning.model.service.LightningService;
 import com.kh.awesome.matchManager.model.vo.MatchManager;
+import com.kh.awesome.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/lightning")
@@ -250,8 +252,29 @@ public class LightningController {
 		return response.toString();
 	}
 	
-	@RequestMapping("/lightningWirteUpdate.do")
-	public void lightningUpdate() {
+	//나의 번개모임 리스트 페이지
+	@RequestMapping("/lightningInfo.do")
+	public void lightningInfo() {}
+	
+	//나의 번개모임 리스트 호출
+	@RequestMapping("/myLightningList.do")
+	@ResponseBody
+	public void myLightningList(HttpSession session, Model model, @RequestBody int cPage) {
+		int numPerPage = 3;
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = member.getMemberCode();
 		
+		//리스트 가져오기
+		List<Map<String, String>> lightningList = lightningService.selectMyLightningList(memberCode, numPerPage, cPage);
+		
+		model.addAttribute("lightningList", lightningList);
+	}
+	
+	@RequestMapping("/lightningWirteUpdate.do")
+	public void lightningUpdate(Model model, @RequestBody int matchNo) {
+		//번개모임정보 가져오기
+		Map<String, String> lightningMatch = lightningService.selectLightningMatch(matchNo);
+		
+		model.addAttribute("lightningMatch", lightningMatch);
 	}
 }

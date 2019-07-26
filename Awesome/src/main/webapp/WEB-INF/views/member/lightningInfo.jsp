@@ -19,19 +19,19 @@ $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리�
 	}
 });
 
-function lightningUpdate(matchCode){
-	location.href='${pageContext.request.contextPath}/lightning/lightningWirteUpdate.do?matchCode='+matchCode;
+function lightningUpdate(matchNo){
+	location.href='${pageContext.request.contextPath}/lightning/lightningWirteUpdate.do?matchNo='+matchNo;
 }
 
-function lightningDelete(){
-	location.href='${pageContext.request.contextPath}/lightning/lightningDelete.do';
+function lightningDelete(matchNo){
+	location.href='${pageContext.request.contextPath}/lightning/lightningDelete.do?matchNo='+matchNo;
 }
 
 function lightningListAjax(){
 	var cPage = $("#cPage").val();
 	
 	$.ajax({
-		url: "${pageContext.request.contextPath}/member/myLightningList.do",
+		url: "${pageContext.request.contextPath}/lightning/myLightningList.do",
 		data: cPage,
 		success: function(data){
 			for(var i=0; i<data.length; i++){
@@ -39,26 +39,24 @@ function lightningListAjax(){
 				html += '<li class="list-group-item">';
 				html += '<div class="card w-50 border-light">';
 				html += '<div class="card-body">';
-				html += '<div class="card-body">';
 				html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 				html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
 				html += '<p class="card-text>"'+data[i].matchContent+'</p>';
-				html += '<button class="btn btn-primary" onclick="lightningUpdate('+data[i].matchCode+');">수정</button>';
-				html += '<button class="btn btn-primary" onclick="lightningDelete();">삭제</button>';				    
+				html += '<button class="btn btn-primary" onclick="lightningUpdate('+data[i].matchNo+');">수정</button>';
+				html += '<button class="btn btn-primary" onclick="lightningDelete('+data[i].matchNo+');">삭제</button>';				    
 				html += "</div></div></li>";
 				$("#lightningList-body").append(html);
 			}
 			$("#cPage").val(Number($("#cPage").val())+1);
 		},
-		error: function(){
-			
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
 		}
 	});
 }
 </script>
 </head>
 <body>
-<input type="hidden" name="" />
 	<div id="lightningList-container">
 		<input type="hidden" id="cPage" value="1"/>
 		<ul id="lightningList-body" class="list-group">

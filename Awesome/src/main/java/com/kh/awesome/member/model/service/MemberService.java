@@ -34,8 +34,6 @@ public interface MemberService {
      
     // 이전에 로그인한 적이 있는지, 즉 유효시간이 넘지 않은 세션을 가지고 있는지 체크한다.
     public Member checkUserWithSessionKey(String sessionId);
-
-	List<Map<String, String>> selectLightningList(int memberCode, int numPerPage, int cPage);
 	
 	int deleteMember(Member member);
 

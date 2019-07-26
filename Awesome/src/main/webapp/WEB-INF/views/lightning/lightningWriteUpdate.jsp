@@ -72,9 +72,13 @@ function selectLocalList(){
 		success : function(data){
 			$("#localCode").html("");
 			var html = "";
-			html += '<option id="defaultLocal" disabled selected>지역을 선택해주세요</option>';
+			html += '<option id="defaultLocal" disabled >지역을 선택해주세요</option>';
 			for(var i=0; i<data.length; i++){
-				html += '<option value='+data[i].localCode+'>'+data[i].localName+'</option>';					
+				html += '<option value='+data[i].localCode;
+				if(${lightningMatch.localCode}==data[i].localCode){
+					html += 'selected';
+				}
+				html += '>'+data[i].localName+'</option>';
 			}
 			$("#localCode").append(html);
 		},
@@ -217,51 +221,59 @@ function insertData(btn){
 		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do" method="post" enctype="multipart/form-data" onsubmit="return writeCheck();">
 			<div class="form-row">
 				<div class="form-group col-md-6">
-					<img src="${pageContext.request.contextPath}/resources/images/sampleimage.png" id="img-viewer" class="img-thumbnail">
+					<c:if test="${lightningMatch.matchRenamedImg}!=null">
+					<img src="${pageContext.request.contextPath}/resources/images/${lightningMatch.matchRenamedImg}" id="img-viewer" class="img-thumbnail">					
+					</c:if>
+					<c:if test="${lightningMatch.matchRenamedImg}==null">
+					<img src="${pageContext.request.contextPath}/resources/images/sampleimage.png" id="img-viewer" class="img-thumbnail">					
+					</c:if>
 					<input type="file" name="uploadProfile" id="uploadProfile" style="display:none;" onchange="loadProfile(this);"/>
 					<label for="placeName">지도에서 장소 선택하기</label>
-					<input type="text" class="form-control" name="placeName" placeholder="장소 선택하기" data-toggle="modal" data-target="#searchMap" readonly>
+					<input type="text" class="form-control" name="placeName" placeholder="장소 선택하기" 
+							data-toggle="modal" data-target="#searchMap" readonly <c:if test="${lightningMatch.placeName}!=null"> value="${lightningMatch.placeName}"</c:if>>
 				</div>
 				<div class="form-group col-md-6">
 					<label for="matchTitle">Title</label>
 					<input type="text" class="form-control" name="matchTitle" placeholder="title입력">
 					<label for="city">도시검색</label>
 					<select class="form-control" id="cityCode" onchange="selectLocalList();">
-						<option id="defaultCity" value="0" disabled selected>도시를 선택해주세요</option>
+						<option id="defaultCity" value="0" disabled>도시를 선택해주세요</option>
 						<c:forEach items="${cityList}" var="city">
-						<option value=${city.cityCode } <c:if test="${matchManage.cityCode}==${city.cityCode }">selected</c:if>>${city.cityName }</option>						
+						<option value=${city.cityCode } <c:if test="${lightningMatch.cityCode}==${city.cityCode }">selected</c:if>>${city.cityName }</option>						
 						</c:forEach>
 					</select>
 					<label for="local">지역검색</label>
 					<select class="form-control" name="localCode" id="localCode">
-						<option id="defaultLocal" value="0" disabled selected>지역을 선택해주세요</option>
+						<option id="defaultLocal" value="0" disabled>지역을 선택해주세요</option>
 					</select>
 					<label for="interesting-search">분류검색</label>
 					<select class="form-control" name="interestingCode" id="interestingCode">
-						<option id="defaultInteresting" value="0" disabled selected>분류를 선택해주세요</option>
+						<option id="defaultInteresting" value="0" disabled>분류를 선택해주세요</option>
 						<c:forEach items="${interestingList}" var="interesting">
-						<option value=${interesting.interestingCode }>${interesting.interestingName }</option>						
+						<option value=${interesting.interestingCode } <c:if test="${lightningMatch.interestingCode}==${interesting.interestingCode }">selected</c:if>>${interesting.interestingName }</option>						
 						</c:forEach>
 					</select>
 					<div class="form-row">
 						<div class="form-group col-md-6">
 							<label for="lightningEndDate">모집마감일자</label>
-							<input type="date" class="form-control" name="lightningEndDate">
+							<input type="date" class="form-control" name="lightningEndDate" value="${lightningMatch.lightningEndDate}">
 						</div>
 						<div class="form-group col-md-6">
 							<label for="lightningEndTime">모집마감시각</label>
-							<input type="time" class="form-control" name="lightningEndTime"/>					
+							<input type="time" class="form-control" name="lightningEndTime" value="${lightningMatch.lightningEndTime}"/>			
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="form-group">
-				<textarea class="form-control" name="matchContent" id="matchContent" placeholder="내용을 입력해주세요."></textarea>
+				<textarea class="form-control" name="matchContent" id="matchContent" placeholder="내용을 입력해주세요.">
+				${lightningMatch.matchContent}
+				</textarea>
 			</div>
-			<button id="btn" type="submit" class="btn btn-primary float-right">등록</button>
+			<button id="btn" type="submit" class="btn btn-primary float-right">수정</button>
 			<button id="btn" type="button" class="btn btn-primary float-right">이전</button>
 			<div id="hidden-container">
-				<input type="hidden" name="placeLat" value="0"/>
+				<input type="hidden" name="placeLat" <c:if test="${lightningMatch.placeLat}==0"> value="0" </c:if>/>
 				<input type="hidden" name="placeLng" value="0"/>
 				<input type="hidden" name="matchingType" value="L"/>
 			</div>
@@ -294,6 +306,9 @@ function insertData(btn){
 			</div>
 		</div>
 	</div>
+<script>
+selectLocalList();
+</script>
 </body>
 </html>
 

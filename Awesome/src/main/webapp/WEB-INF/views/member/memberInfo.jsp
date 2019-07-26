@@ -122,6 +122,20 @@
 			
 			$("#memberInfoUpdate").trigger("click");
 			
+		  $("#myLightningInfo").on("click",function(){
+      		  $.ajax({
+      			url:"${pageContext.request.contextPath}/lightning/lightningInfo.do", 
+      			success : function(data){
+      				$("#item-body").html(data);
+      			},
+      			error: function(jqxhr, textStatus, errorThrown){
+      				console.log("ajax처리실패! : "+jqxhr.status);
+      				console.log(jqxhr);
+      				console.log(textStatus);
+      				console.log(errorThrown);
+      			}
+      		  });
+		  })
 		})
 		
 	</script>
@@ -144,7 +158,7 @@
 				<ul id="item-list">
 					<li><input type="button" class="btn btn-light" id="memberInfoUpdate" value="내정보수정" /></li> 
 					<li><input type="button" class="btn btn-light" id="menu2" value="메뉴2" /></li>
-					<li><input type="button" class="btn btn-light" id="menu3" value="메뉴3" /></li>
+					<li><input type="button" class="btn btn-light" id="myLightningInfo" value="나의 번개모임" /></li>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br /><hr />
 					<li><input type="button" class="btn btn-light" id="memberSecession" value="회원탈퇴" /></li>
 

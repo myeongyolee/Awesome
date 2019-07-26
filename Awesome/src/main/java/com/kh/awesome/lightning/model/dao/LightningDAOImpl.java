@@ -54,4 +54,17 @@ public class LightningDAOImpl implements LightningDAO {
 		return sqlSession.selectList("selectInterestingList");
 	}
 
+	@Override
+	public List<Map<String, String>> selectMyLightningList(int memberCode, int numPerPage, int cPage) {
+		// TODO Auto-generated method stub
+		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
+		return sqlSession.selectList("selectMyLightningList", memberCode, rowBounds);
+	}
+
+	@Override
+	public Map<String, String> selectLightningMatch(int matchNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("selectLightningMatch", matchNo);
+	}
+
 }

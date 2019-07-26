@@ -128,11 +128,6 @@ public class MemberServiceImpl implements MemberService {
 	public Member checkUserWithSessionKey(String sessionId) {
 		return memberDAO.checkUserWithSessionKey(sessionId);
 	}
-
-	@Override
-	public List<Map<String, String>> selectLightningList(int memberCode, int numPerPage, int cPage) {
-		return memberDAO.selectLightningList(memberCode, numPerPage, cPage);
-	}
 	
 	@Override
 	public int deleteMember(Member member) {

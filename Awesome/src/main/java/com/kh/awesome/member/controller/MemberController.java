@@ -276,24 +276,6 @@ public class MemberController {
 		
 	}
 	
-	//나의 번개모임 리스트 페이지
-	@RequestMapping("/lightningInfo.do")
-	public void lightningInfo() {}
-	
-	//나의 번개모임 리스트 호출
-	@RequestMapping("/myLightningList.do")
-	@ResponseBody
-	public void myLightningList(HttpSession session, Model model, @RequestBody int cPage) {
-		int numPerPage = 5;
-		Member member = (Member)session.getAttribute("memberLoggedIn");
-		int memberCode = member.getMemberCode();
-		
-		//리스트 가져오기
-		List<Map<String, String>> lightningList = memberService.selectLightningList(memberCode, numPerPage, cPage);
-		
-		model.addAttribute("lightningList", lightningList);
-	}
-	
 	//회원가입
 	@RequestMapping(value="/memberEnrollEnd.do", method = RequestMethod.POST )
 	public String memberEnrollEnd(Address address,

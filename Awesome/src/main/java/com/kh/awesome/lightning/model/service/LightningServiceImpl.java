@@ -52,4 +52,16 @@ public class LightningServiceImpl implements LightningService {
 
 	}
 
+	@Override
+	public List<Map<String, String>> selectMyLightningList(int memberCode, int numPerPage, int cPage) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectMyLightningList(memberCode, numPerPage, cPage);
+	}
+
+	@Override
+	public Map<String, String> selectLightningMatch(int matchNo) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectLightningMatch(matchNo);
+	}
+
 }
