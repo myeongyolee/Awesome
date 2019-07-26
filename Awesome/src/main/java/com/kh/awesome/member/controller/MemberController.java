@@ -129,6 +129,19 @@ public class MemberController {
 		if(logger.isInfoEnabled()) logger.info("회원 찾기 페이지 요청!");
 	}
 	
+	@RequestMapping("/memberSecession.do")
+	public void memberSecession(HttpSession session,Model model) {
+		if(logger.isInfoEnabled()) logger.info("회원 탈퇴 페이지 요청!");
+		Member member=(Member) session.getAttribute("memberLoggedIn");
+		
+		member=memberService.selectOneMember(member);
+		Address address=memberService.memberAddress(member.getMemberCode());
+		
+		model.addAttribute("member", member);
+		model.addAttribute("address", address);
+		
+	}
+	
 	//회원 아이디 가져오기
 	@RequestMapping("/getMemberId.do")
 	@ResponseBody
@@ -151,6 +164,7 @@ public class MemberController {
 		if(logger.isInfoEnabled()) logger.info("회원 정보 페이지 요청!");
 		
 		Member member=(Member) session.getAttribute("memberLoggedIn");
+		System.out.println("test member!!!!!+"+member);
 		member=memberService.selectOneMember(member);
 		
 		model.addAttribute("member", member);
@@ -168,8 +182,39 @@ public class MemberController {
 		
 		model.addAttribute("member", member);
 		model.addAttribute("address", address);
+	}
+	
+	//회원 탈퇴
+	@RequestMapping("/sucessionMemberEnd.do")
+	public String sucessionMember(Member member,HttpSession session,Model model,
+							@RequestParam(value="reason",required=false) String reason) {
+		if(logger.isInfoEnabled()) logger.info("회원 탈퇴 엔드 요청!");
 		
-		System.out.println(member.getMemberId());
+		String msg = "";
+		String loc = "";
+		
+		Member memberLoggedIn=(Member) session.getAttribute("memberLoggedIn");
+		
+		if(member.getMemberId().equals(memberLoggedIn.getMemberId()) && member.getMemberCode() == memberLoggedIn.getMemberCode()) {
+			int result=memberService.deleteMember(member);
+			if(result>0) {
+				
+				memberService.updateReason(member.getMemberCode(),reason);
+				
+				session.removeAttribute("memberLoggedIn");
+				session.invalidate();
+				
+				msg="회원 탈퇴 성공! 안녕히 가세요. ";
+				loc="/index";
+			}else {
+				msg="회원 탈퇴 실패! 관리자에게 문의하세요. ";
+				loc="/index";				
+			}
+		}
+		
+		model.addAttribute("msg",msg);
+		model.addAttribute("loc",loc);
+		return "common/msg";
 	}
 	
 	//회원 정보 수정
@@ -443,7 +488,7 @@ public class MemberController {
 				}
 			}
 				
-				String referer= request.getHeader("Referer");  //http://localhost/awesome/index
+	/*			String referer= request.getHeader("Referer");  //http://localhost/awesome/index
 				String origin= request.getHeader("Origin"); // http://localhost (port)
 				String url = request.getRequestURL().toString(); //url=http://localhost/awesome/member/memberLogin.do
 				String uri = request.getRequestURI(); //uri=/awesome/member/memberLogin.do
@@ -452,7 +497,8 @@ public class MemberController {
 					origin = url.replace(uri, "");
 				}
 				
-				loc = referer.replace(origin+request.getContextPath(),"");
+				loc = referer.replace(origin+request.getContextPath(),"");*/
+			loc= "/index";
 				
 				model.addAttribute("msg",msg);
 				model.addAttribute("loc",loc);
@@ -574,10 +620,11 @@ public class MemberController {
 						System.out.println("로그인 성공");
 						msg="로그인성공!"+m.getMemberName()+"님, 반갑습니다.";
 						model.addAttribute("memberLoggedIn",m);
+						loc="/index";
 						returnResult="common/msg";
 					}
 						
-						String referer= request.getHeader("Referer");  //http://localhost/awesome/index
+						/*String referer= request.getHeader("Referer");  //http://localhost/awesome/index
 						String origin= request.getHeader("Origin"); // http://localhost (port)
 						String url = request.getRequestURL().toString(); //url=http://localhost/awesome/member/memberLogin.do
 						String uri = request.getRequestURI(); //uri=/awesome/member/memberLogin.do
@@ -586,7 +633,7 @@ public class MemberController {
 							origin = url.replace(uri, "");
 						}
 						
-						loc = referer.replace(origin+request.getContextPath(),"");
+						loc = referer.replace(origin+request.getContextPath(),"");*/
 						
 						model.addAttribute("msg",msg);
 						model.addAttribute("loc",loc);
@@ -663,7 +710,7 @@ public class MemberController {
 					if(m ==null) {
 						msg="해당 아이디의 회원이 존재하지 않습니다. 가입이 필요합니다.";
 						model.addAttribute("OAuth","NoMember");
-						loc="http://localhost/awesome/index";
+						//loc="http://localhost/awesome/index";
 						returnResult="redirect:/index";
 					}else {
 						msg="로그인성공!"+m.getMemberName()+"님, 반갑습니다.";
@@ -672,7 +719,7 @@ public class MemberController {
 						returnResult="common/msg";
 					}
 						
-						String referer= request.getHeader("Referer");  //http://localhost/awesome/index
+						/*String referer= request.getHeader("Referer");  //http://localhost/awesome/index
 						String origin= request.getHeader("Origin"); // http://localhost (port)
 						String url = request.getRequestURL().toString(); //url=http://localhost/awesome/member/memberLogin.do
 						String uri = request.getRequestURI(); //uri=/awesome/member/memberLogin.do
@@ -680,7 +727,8 @@ public class MemberController {
 						logger.info("naver Login="+referer+","+origin+","+url);
 						if(origin ==null) {
 							origin = url.replace(uri, "");
-						}
+						}*/
+					
 						
 						model.addAttribute("msg",msg);
 						model.addAttribute("loc",loc);
@@ -856,7 +904,7 @@ public class MemberController {
 	        }
 	    }
 	    
-		// mailSending 코드
+		// mailSending 임시비번 코드
 		@RequestMapping("/mailSending.do")
 		@ResponseBody
 		public String mailSending(String email) {
@@ -876,7 +924,58 @@ public class MemberController {
 			
 			int result = memberService.updateMember(member,null);
 			System.out.println("멤버 업데이트 후:"+result);
-			String content = "임시비밀번호는 "+tempPwd+"입니다."; // 내용
+			String content = "임시비밀번호는 "+tempPwd+"입니다. 로그인 후 보안을 위해 암호을 변경하세요."; // 내용
+
+			if(result==1) {
+				try {
+					MimeMessage message = mailSender.createMimeMessage();
+					MimeMessageHelper messageHelper = new MimeMessageHelper(message,true, "UTF-8");
+	
+					messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
+					messageHelper.setTo(tomail); // 받는사람 이메일
+					messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+					messageHelper.setText(content); // 메일 내용
+	
+					mailSender.send(message);
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+	
+				return "success";
+			}
+			return "fail";
+		}
+		
+		
+		// mailSending 이메일 인증 코드
+		@RequestMapping("/authMailSending.do")
+		@ResponseBody
+		public String authMailSending(String memberId,@CookieValue(value="JSESSIONID", required=false) Cookie jid) {
+			
+			System.out.println("이메일 인증 코드 발송");
+			System.out.println(memberId);
+
+			String setfrom = "AwesomeAdmin@awesome.com";
+			String tomail = memberId; // 받는 사람 이메일
+			String title = "안녕하세요 awsome 입니다."; // 제목
+			
+	    	int result=0;
+	    	String jsessionid="";
+	    	String msg="";
+			
+			Member member = new Member();
+			String key = new TempKey().getKey(4); // 인증키 생성
+	    	
+	    	if(jid != null)
+	    		jsessionid=jid.getValue();
+	    	
+	    	Map<String, String> map = new HashMap<>();
+	    	map.put("jsessionid", jsessionid);
+	    	map.put("sms", key);
+	    	
+	    	result = memberService.insertSms(map);
+			
+			String content = "인증코드는  "+key+"입니다. 탈퇴을 진행하시려면 해당 코드을 입력하세요"; // 내용
 
 			if(result==1) {
 				try {

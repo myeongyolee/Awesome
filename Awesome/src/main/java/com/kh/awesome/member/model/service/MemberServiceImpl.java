@@ -133,5 +133,15 @@ public class MemberServiceImpl implements MemberService {
 	public List<Map<String, String>> selectLightningList(int memberCode, int numPerPage, int cPage) {
 		return memberDAO.selectLightningList(memberCode, numPerPage, cPage);
 	}
+	
+	@Override
+	public int deleteMember(Member member) {
+		return memberDAO.deleteMember(member);
+	}
+
+	@Override
+	public void updateReason(int memberCode, String reason) {
+		memberDAO.updateReason(memberCode,reason);
+	}
 
 }

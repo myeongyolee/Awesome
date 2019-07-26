@@ -21,11 +21,6 @@ create table member(
     constraint unique_member_id unique(member_id),
     constraint unique_nickname unique(nickname)
 );
-drop table member;
-
-select * from member;
-delete from member where member_name='김용빈';
-commit;
 
 comment on table member is '회원테이블';
 comment on column member.member_code is '회원코드';
@@ -43,6 +38,73 @@ comment on column member.search_open is '검색공개여무';
 comment on column member.introduce is '자기소개';
 comment on column member.verify is '회원분류';
 comment on column member.enroll_date is '가입일';
+
+
+-- 탈퇴멤버테이블
+create table secession_member(
+    member_code number primary key,
+    member_id varchar2(100) not null,
+    nickname varchar2(100) not null,
+    password varchar2(500) not null,
+    member_name varchar2(50) not null,
+    birthday date not null,
+    phone varchar2(30) not null,
+    gender char(1) check(gender in ('M','F')),
+    profile varchar2(1000) not null,
+    renamed_profile varchar2(1000) not null,
+    blind_date_open char(1) default 'Y' check(blind_date_open in ('Y','N')),
+    friend_open char(1) default 'Y' check(friend_open in ('Y','N')),
+    search_open char(1) default 'Y' check(search_open in ('Y','N')),
+    introduce varchar2(4000),
+    verify char(1) default 'M' check(verify in ('A', 'M')),
+    enroll_date date default sysdate,
+    reason varchar2(2000),
+    constraint unique_secession_member_id unique(member_id),
+    constraint unique_secession_nickname unique(nickname)
+);
+
+comment on table secession_member is '탈퇴회원테이블';
+comment on column secession_member.member_code is '회원코드';
+comment on column secession_member.member_id is '아이디';
+comment on column secession_member.password is '비밀번호';
+comment on column secession_member.member_name is '이름';
+comment on column secession_member.phone is '전화번호';
+comment on column secession_member.gender is '성별';
+comment on column secession_member.profile is '프로필사진';
+comment on column secession_member.renamed_profile is 'DB프로필사진이름';
+comment on column secession_member.blind_date_open is '소개팅공개여부';
+comment on column secession_member.friend_open is '친구공개여부';
+comment on column secession_member.search_open is '검색공개여무';
+comment on column secession_member.introduce is '자기소개';
+comment on column secession_member.verify is '회원분류';
+comment on column secession_member.enroll_date is '가입일';
+comment on column secession_member.reason is '탈퇴 사유';
+
+create or replace trigger delete_member
+    before
+    delete on member
+    for each row
+begin
+    insert into secession_member(member_code,member_id,nickname,password,member_name,birthday,phone,gender,profile,renamed_profile,blind_date_open,friend_open,search_open,introduce,verify,enroll_date)
+                values (:old.member_code,:old.member_id,:old.nickname,:old.password,:old.member_name,:old.birthday,:old.phone,:old.gender,:old.profile,:old.renamed_profile,:old.blind_date_open,:old.friend_open,:old.search_open,:old.introduce,:old.verify,:old.enroll_date);
+    delete from address where member_code=:old.member_code;
+end;
+/
+
+create or replace trigger delete_address
+    before
+    delete on address
+    for each row
+begin
+    insert into delete_address(member_code,post_no,address,road_address,detail_address,place_lat,place_lng)
+                values (:old.member_code,:old.post_no,:old.address,:old.road_address,:old.detail_address,:old.place_lat,:old.place_lng);
+
+end;
+/
+
+select * from secession_member;
+insert into secession_member(reason) values('dsds') where member_code=265;
+update secession_member set reason='dsds' where member_code=265;
 
 --주소테이블
 create table address(
@@ -65,6 +127,26 @@ comment on column address.road_address is '도로명주소';
 comment on column address.detail_address is '상세주소';
 comment on column address.place_lat is '위도';
 comment on column address.place_lng is '경도';
+
+--삭제 주소테이블
+create table delete_address(
+    member_code number,
+    post_no varchar2(30) not null,
+    address varchar2(100) not null,
+    road_address varchar2(100) not null,
+    detail_address varchar2(100) not null,
+    place_lat number not null,
+    place_lng number not null
+);
+
+comment on table delete_address is '삭제주소테이블';
+comment on column delete_address.member_code is '회원코드';
+comment on column delete_address.post_no is '우편번호';
+comment on column delete_address.address is '지번주소';
+comment on column delete_address.road_address is '도로명주소';
+comment on column delete_address.detail_address is '상세주소';
+comment on column delete_address.place_lat is '위도';
+comment on column delete_address.place_lng is '경도';
 
 --출신학교테이블
 create table school(
@@ -472,11 +554,16 @@ comment on column userTable.sessionlimit is '세션제한시간';
 
 select * from member;
 
-insert into smsauth values(20,'B52EF24080AC9AE6B0541FBF54D3BDDD',1111);
+insert into smsauth values(23,'C85AE517EDE52452FC39D3797B0024AE',1111);
 commit;
 
 select * from member;
-delete from member where member_code=210;
+delete from member where member_code=211;
+commit;
+
+delete from member;
+delete from address;
+
 commit;
 
 update address 
@@ -490,6 +577,9 @@ update address
         
         select * from address;
         select * from member;
-        
-        insert into address values(211,'16875','경기도 용인시 수지구 죽전동 1165 새터마을죽전힐스테이트','경기도 용인시 수지구 현암로125번길 11','ㅂㅈㅍㄷㅂㅈㄷㅍㅂㅈㄷㅍ',127.1209373,37.3330944);
+        delete from member where member_code=262;
         commit;
+        insert into address values(241,'16875','경기도 용인시 수지구 죽전동 1165 새터마을죽전힐스테이트','경기도 용인시 수지구 현암로125번길 11','ㅂㅈㅍㄷㅂㅈㄷㅍㅂㅈㄷㅍ',127.1209373,37.3330944);
+        commit;
+        
+        delete from member where member_code=279;

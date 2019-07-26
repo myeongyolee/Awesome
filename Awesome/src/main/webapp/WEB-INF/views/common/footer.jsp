@@ -12,6 +12,7 @@
 		</div>
 	  </main>
 	</div>
+<<<<<<< HEAD
 
 	<div id="draggable" class="ui-widget-content dragcomponent">
 	  <div id="chat_head">
@@ -25,6 +26,10 @@
 	  		<input type="text" name="message" id="msg" /> <button>전송</button>
 	  	</div>
 	  </div>
+=======
+	<div id="draggable" class="ui-widget-content">
+	  <p>我总是在中间（相对于鼠标）</p>
+>>>>>>> refs/remotes/origin/bins
 	</div>
 
 </body>

@@ -102,6 +102,19 @@ public class MemberDAOImpl implements MemberDAO {
 		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
 		return sqlSession.selectList("lightning.selectMyLightningList", memberCode, rowBounds);
 	}
+	@Override
+	public int deleteMember(Member member) {
+        return sqlSession.delete("member.deleteMember",member);
+	}
+
+	@Override
+	public void updateReason(int memberCode,String reason) {
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("memberCode", memberCode);
+        map.put("reason", reason);
+        
+        sqlSession.update("member.updateReason",map);
+	}
 
 
 	

@@ -39,4 +39,9 @@ public interface MemberDAO {
 
 	List<Map<String, String>> selectLightningList(int memberCode, int numPerPage, int cPage);
 
+	int deleteMember(Member member);
+
+	void updateReason(int memberCode, String reason);
+
+
 }
