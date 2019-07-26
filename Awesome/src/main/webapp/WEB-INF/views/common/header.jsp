@@ -59,7 +59,7 @@
 	<style>
 		.mdl-layout__header-row{background: white;}
 		.mdl-layout__content{overflow-y:hidden;}
-		.mdl-layout__header-row .mdl-navigation__link{color:black;}
+		.mdl-layout__header-row .mdl-navigation__link{color:black; padding: 0px 13px;}
 		.mdl-layout-title{color:black;}
 		#awe-logo-img{height:30px;}
 		#modalBody{ flex-direction : row; justify-content : space-between; align-items : center;align-content : center;max-width : 100%;     }
@@ -159,7 +159,7 @@
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <nav class="mdl-navigation">
             <!-- Icon badge -->
             <c:if test="${ memberLoggedIn != null}">
                 <button id="demo-menu-lower-left" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>

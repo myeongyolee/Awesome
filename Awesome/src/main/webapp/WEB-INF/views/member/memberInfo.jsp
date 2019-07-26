@@ -34,6 +34,7 @@
            		display : flex; 
             	flex-direction : column;
             	justify-content :flex-start;
+            	
 			}
 				#item-head-main{
 	           		flex : 1; 
@@ -68,6 +69,7 @@
 	           		margin : 10%;
 	           	
 	           		height:100%;
+	           		width:100%;
 				}
            		
         		#item-body{
@@ -145,7 +147,7 @@
 					<li><input type="button" class="btn btn-light" id="memberInfoUpdate" value="내정보수정" /></li> 
 					<li><input type="button" class="btn btn-light" id="menu2" value="메뉴2" /></li>
 					<li><input type="button" class="btn btn-light" id="menu3" value="메뉴3" /></li>
-					<br /><br /><br /><br /><br /><br /><br /><br /><br /><hr />
+					<br /><br /><br /><br /><br /><hr />
 					<li><input type="button" class="btn btn-light" id="memberSecession" value="회원탈퇴" /></li>
 
 				</ul>
