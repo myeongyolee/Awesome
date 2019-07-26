@@ -24,6 +24,7 @@
 	<typeAlias type="com.kh.awesome.admin.model.vo.Report" alias="report"/>
 	<typeAlias type="com.kh.awesome.socket.stomp.model.vo.Msg" alias="msg"/>
 	<typeAlias type="com.kh.awesome.socket.stomp.model.vo.ChatRoom" alias="chatRoom"/>
+	<typeAlias type="com.kh.awesome.util.model.vo.Chat" alias="chatting"/>
   </typeAliases> 
 
   
