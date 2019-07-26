@@ -104,6 +104,7 @@
 	      		  $.ajax({
 	      			url:"${pageContext.request.contextPath}/member/memberSecession.do", 
 	      			success : function(data){
+	      				console.log(data);
 	      				$("#item-body").html(data);
 	      			},
 	      			error: function(jqxhr, textStatus, errorThrown){

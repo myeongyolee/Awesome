@@ -254,18 +254,22 @@ public class LightningController {
 	
 	//나의 번개모임 리스트 페이지
 	@RequestMapping("/lightningInfo.do")
-	public void lightningInfo() {}
+	public void lightningInfo() {
+		logger.info("나의 번개모임 정보 호출");
+	}
 	
 	//나의 번개모임 리스트 호출
 	@RequestMapping("/myLightningList.do")
 	@ResponseBody
-	public void myLightningList(HttpSession session, Model model, @RequestBody int cPage) {
+	public void myLightningList(HttpSession session, Model model, @RequestParam int cPage) {
+//		int cPage = Integer.parseInt(cpage);
 		int numPerPage = 3;
 		Member member = (Member)session.getAttribute("memberLoggedIn");
 		int memberCode = member.getMemberCode();
-		
+		logger.info("memberCode="+memberCode);
 		//리스트 가져오기
 		List<Map<String, String>> lightningList = lightningService.selectMyLightningList(memberCode, numPerPage, cPage);
+		logger.info("lightningList={}",lightningList);
 		
 		model.addAttribute("lightningList", lightningList);
 	}

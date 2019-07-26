@@ -91,7 +91,7 @@
 	        left join interesting I on M.interesting_code = I.interesting_code
 	        left join local L on M.local_code = L.local_code
 	        left join city C on L.city_code = C.city_code
-		where matching_type = 'L' and member_code = #{memberCode}
+		where matching_type = 'L' and M.member_code = #{memberCode}
 		order by match_no desc
 	</select>
 	
