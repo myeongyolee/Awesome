@@ -65,6 +65,7 @@
 		#login{font-size: 16px;  right: 50px; width:90px;  }
 		.mdl-badge{ border: 1px solid white; background: white;}
 		*{font-family: 'Jua', sans-serif;}
+		#titleLogo:hover{cursor:pointer;}
 		<%-- socket chat --%>
 		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;width: 280px; height:450px;border-radius:21px;}
 		#chat_head{height:43px; padding-top:10px; padding-left:10px; border-bottom: 1px solid #e1e1e1; width:100%}
@@ -83,60 +84,61 @@
 </head>
 <body>
 
-<%-- Modal --%>
-<div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">로그인</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form action="${pageContext.request.contextPath}/member/memberLogin.do" method="post" onsubmit="return validate();">
-    
-    <div class="modal-body">
-        <span>아이디</span>
-        <input type="text" class="form-control" name="memberId" id="memberId" placeholder="아이디입력" required>  <br>
-        <input type="checkbox" name="saveMemberId" id="saveMemberId" />
-    	<label for="saveMemberId">아이디저장</label> <br />
-        <span>비밀번호</span>
-        <input type="password" class="form-control" name="password" id="password" required>  <br>
-        <input type="checkbox" name="autoLogin" id="autoLogin" />
-    	<label for="autoLogin">자동로그인</label> <br />
-        <a href="http://localhost/awesome/member/findMember.do">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br>
-        <button type="button">nav</button> 
-        
-    </div>
-    
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-        <button type="submit" class="btn btn-primary">로그인</button>
-    </div>
-</form>
-        <%-- 20190706 23:48  --%>
-        <%-- google login 김용빈 --%>
-		<a href="${google_url}">
-			<button id="btnJoinGoogle" class="btn btn-primary btn-round" style="width: 100%">
-                        <i class="fa fa-google" aria-hidden="true"></i>
-                        Google Login
-            </button>
-        </a>
-        <%-- 20190709 09:36  --%>
-        <%-- naver login 김용빈 --%>             
-         <div id="naver_id_login" style="text-align:center">
-        	 <a href="${naver_url}">
-			<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a>
-		</div>
-		<br>   
-
+     <!-- Modal -->
+        <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">로그인</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="${pageContext.request.contextPath}/member/memberLogin.do" method="post" onsubmit="return validate();">
+            
+            <div class="modal-body">
+                <span>아이디</span>
+                <input type="text" class="form-control" name="memberId" id="memberId" placeholder="이메일 형태의 아이디 입력" required>  <br>
+                <span>비밀번호</span>
+                <input type="password" class="form-control" name="password" id="password" required>  <br>
+                <div class="flex">
+	            	<div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" name="saveMemberId" id="saveMemberId">
+					  <label class="custom-control-label" for="saveMemberId">Save Id</label>
+					</div> &nbsp;&nbsp;&nbsp;
+					<div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" name="autoLogin" id="autoLogin">
+					  <label class="custom-control-label" for="autoLogin">Auto Login</label>
+					</div>
+            	</div>
+            	<br />
+                <!-- <a href="http://localhost/awesome/member/findMember.do">아이디/비밀번호를 잃어버렸습니까?.</a> <br> <br> -->
+                <a href="#" id="findMember" onclick="findMember()">아이디/비밀번호를 잃어버렸습니까?.</a>
+            </div>
+            
+            
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">로그인</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </form>
+                <!-- 20190706 23:48  -->
+                <!-- google login 김용빈 -->
+               	    <div id="btnJoinGoogle" style="text-align:center"><a href="${google_url}">
+					<img width="223" src="${pageContext.request.contextPath}/resources/images/btn_google.png"/></a></div>
+					<br>  
+                <!-- 20190709 09:36  -->
+                <!-- naver login 김용빈 -->             
+	                <div id="naver_id_login" style="text-align:center"><a href="${naver_url}">
+					<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a></div>
+					<br>  
+                       
      </div>
    </div>
  </div>
        
-<%-- 20190705 12:54 김용빈  --%>
-<%-- 회원가입 모달 추가 --%>
-
+   <!-- 20190705 12:54 김용빈  -->
+<!-- 회원가입 모달 추가 -->
 <div class="modal fade" id="memberEnrollModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -145,89 +147,129 @@
     </div>
   </div>
 </div>
-<%-- 회원가입 모달 끝 --%>
+<!-- 회원가입 모달 끝 -->
 
-	<%-- Always shows a header, even in smaller screens. --%>
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-	  <header class="mdl-layout__hea.der">
-	    <div class="mdl-layout__header-row">
-	      <%-- Title --%>
-	      <span class="mdl-layout-title"><img id="awe-logo-img" src="${pageContext.request.contextPath }/resources/images/awesome-nontext.png" alt="" /> &nbsp;&nbsp;Awesome</span>
-	      <%-- Add spacer, to align navigation to the right --%>
-	      <div class="mdl-layout-spacer"></div>
-	      <%-- Navigation. We hide it in small screens. --%>
-	      <nav class="mdl-navigation mdl-layout--large-screen-only">
-	        <%-- Icon badge --%>
-	        <c:if test="${ memberLoggedIn != null}">
-				<button id="demo-menu-lower-left" data-badge="♥"
-			        class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
-					
-					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
-					    for="demo-menu-lower-left" id="chatBox">
-					</ul>
-	        </c:if>
+
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      <header class="mdl-layout__hea.der">
+        <div class="mdl-layout__header-row">
+          <!-- Title -->
+          <span id="titleLogo" class="mdl-layout-title"><img id="awe-logo-img" src="${pageContext.request.contextPath }/resources/images/awesome-nontext.png" alt="" /> &nbsp;&nbsp;Awesome</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation. We hide it in small screens. -->
+          <nav class="mdl-navigation">
+            <!-- Icon badge -->
+            <c:if test="${ memberLoggedIn != null}">
+                <button id="demo-menu-lower-left" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
+                    
+                    <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left" id="chatBox">
+                    </ul>
+            </c:if>
 	        
-	        <a class="mdl-navigation__link" href="">소개팅</a>
-	        <a class="mdl-navigation__link" href="${pageContext.request.contextPath}/lightning/lightningList.do">번개팅</a>
-	        <a class="mdl-navigation__link" href="">동네 친구</a>
-	        <a class="mdl-navigation__link" href="">소모임</a>
-	        
-	        <c:if test="${memberLoggedIn == null }">
-	        	<span class="mdl-navigation__link" id="login" data-toggle="modal" data-target="#loginmodal" href="#">Login</span>
-	        </c:if>
-	        <c:if test="${memberLoggedIn != null }">
-	        <a class="mdl-navigation__link" href="${pageContext.request.contextPath}/member/memberInfo.do">My Info</a>
-	        <span class="mdl-navigation__link" id="logOut">Logout</span>
-	        </c:if>
-	      </nav>
-	    </div>
+            <c:if test="${memberLoggedIn == null }">
+            	<input type="button" class="btn btn-light mdl-navigation__link" onclick="signUp()" value="Sign Up"></input>
+            </c:if>
+            
+            <script>
+            	function signUp(){
+    				$("#signUp").trigger("click");
+    			}
+            </script>
+            
+            <c:if test="${memberLoggedIn != null }">
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소개팅" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동네 친구" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소모임" />
+            </c:if>
+            
+            <c:if test="${memberLoggedIn == null }">
+                <input type="button" class="btn btn-light mdl-navigation__link" id="login" data-toggle="modal" data-target="#loginmodal" value="Login"></input>
+            </c:if>
+            <c:if test="${memberLoggedIn != null }">
+            	<input type="button" class="btn btn-light mdl-navigation__link" onclick="myInfo()" value="My Info"></input>
+            	<input type="button" class="btn btn-light mdl-navigation__link" id="logOut" value="LogOut"></input>
+            </c:if>
+          </nav>
+        </div>
 	  </header>
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
 	    	
 <script>
-<%-- 20190705 12:54 김용빈  --%>
-<%-- 회원가입 모달 추가 - --%>
-	$(function(){
-		$( ".dragcomponent" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
-		$(".dragcomponent").css("position","fixed").css("z-index","10").css("top","100px")
-			.css("border","1px solid white").css("border-radius","20px")
-		
-		
-		$("#signUp").on("click",function(){
-			$.ajax({ 
-				 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
-				 data:"memberId=${param.memberId}",
-				success : function(data){
-					$("#memberEnrollModal .modal-content").empty();
-					$("#memberEnrollModal .modal-content").append(data);
-				},
-				error: function(jqxhr, textStatus, errorThrown){
-					console.log("ajax처리실패! : "+jqxhr.status);
-					console.log(jqxhr);
-					console.log(textStatus);
-					console.log(errorThrown);
-				}
-			});
-	    });
-	})
-
-
-<%--20190711 09:34 김용빈--%>
-	$("#logOut").on("click",function(){
-		
-		var logout=confirm("정말로 로그아웃?");
-		
-		if(logout){
-			location.href='${pageContext.request.contextPath}/member/memberLogout.do';
-		}
-    });
+$(function(){
+	$("#titleLogo").on("click",function(){
+		location.href="${pageContext.request.contextPath}/index";
+   });
 	
-<%-- 20190715 12:35 김용빈  --%>
-<%-- 아이디 저장 --%>
+})
 
-	$(function(){
-		$("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));		
+function myInfo(){
+	location.href="${pageContext.request.contextPath}/member/memberInfo.do";
+}
+
+function findMember(){
+	window.open("/awesome/member/findMember.do","pop","width=570,height=420, scrollbars=yes, resizable=yes");
+}
+
+<!-- 20190705 12:54 김용빈  -->
+<!-- 회원가입 모달 추가 - -->
+    $(function(){
+        $("#signUp").on("click",function(){
+        	
+            $.ajax({ 
+                 url:"${pageContext.request.contextPath}/member/memberEnroll.do", 
+                 data:"memberId=${param.memberId}",
+                success : function(data){
+                    $("#memberEnrollModal .modal-content").empty();
+                    $("#memberEnrollModal .modal-content").append(data);
+                    
+                },
+                error: function(jqxhr, textStatus, errorThrown){
+                    console.log("ajax처리실패! : "+jqxhr.status);
+                    console.log(jqxhr);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+        });
+    })
+    
+<!--20190711 09:34 김용빈-->
+    $("#logOut").on("click",function(){
+        
+        var logout=confirm("정말로 로그아웃?");
+        
+        if(logout){
+            location.href='${pageContext.request.contextPath}/member/memberLogout.do';
+        }
+    });
+    
+<!-- 20190715 12:35 김용빈  -->
+<!-- 아이디 저장 -->
+    $(function(){
+        $("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
+        
+    });
+    
+    function validate(){
+        if($("#saveMemberId").prop("checked")){
+            var value = $("#memberId").val();
+            localStorage.setItem("awesomeSaveMemberId", value);
+        }else{
+            localStorage.setItem("awesomeSaveMemberId", "");
+        }
+        
+        return true;
+    }
+    
+    
+	/* 20190721 김용빈 */
+	//자동로그인 경고창
+	$("#autoLogin").on("click",function(){
+		
 		if($("#autoLogin").prop("checked")){
 			$.confirm.show({
 				  "message": "개인정보보호를 위해 주의해주세요 <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;자동로그인 쿠키는 일주일간 보관됩니다. ",
@@ -237,9 +279,8 @@
 					  $("#autoLogin").prop("checked",false);
 				  },
 				})
-		return true;
-		};
-		
+		}
+
 	});
 	
 	$(function(){
@@ -331,8 +372,11 @@
 </script>
 <script type="text/javascript">
 
-	if(<%= member != null%>){
+ <%if( member != null){%>
 		
+	function onClose(evt){
+		console.log("연결 끊김")
+	}
 	
 	var sock = new SockJS("<c:url value='/echo'/>");
 	
@@ -379,12 +423,7 @@
 		}else if(messageTpye =="alarm"){
 			
 		}
-	}
+	<%}%>
 	
-	function onClose(evt){
-		console.log("연결 끊김")
-	}
-	
-	}
 </script>
 
