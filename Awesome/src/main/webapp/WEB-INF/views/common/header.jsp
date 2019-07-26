@@ -333,52 +333,52 @@
 
 	if(<%= member != null%>){
 		
-	
-	var sock = new SockJS("<c:url value='/echo'/>");
-	
-	//web socket 메세지보내면 자동 실행
-	sock.onmessage = onMessage;
-	sock.onclose = onClose;
-	
-	function sendMessage(msg){
-		sock.send(msg);
-	}
-	
-	function onMessage(evt){
-		console.log("onMessage 호출됨")
-		var data = evt.data;
-		var memberCode = null;
-		var message = null;
+		var sock = new SockJS("<c:url value='/echo'/>");
 		
-		//문자열을 split
-		var strArray = data.split("|");
+		//web socket 메세지보내면 자동 실행
+		sock.onmessage = onMessage;
+		sock.onclose = onClose;
 		
-		for(var i=0; i<strArray.length; i++){
-			console.log("str["+i+"]" + strArray[i])
+		function sendMessage(msg){
+			sock.send(msg);
 		}
 		
-		messageType = strArray[0];
-		sender = strArray[1];
-		memberCode = strArray[2];
-		message = strArray[3];
-		
-		console.log("멤버 코드 :" +memberCode)
-		console.log("메시지 : "+message)
-		
-		if(msessageType == "message"){
-			if($("ul#"+sender).length() > 0){
-				var html = "";
-				if(sender == <%=member.getMemberCode()%>){
-	  				html = '<li class="My"><span>'+message+'</span></li>';
-	  			}else{
-	  				html = '<li class="other"><span>'+message+'</span></li>';
-	  				
-	  			}
-				$("ul#"+sender).append(html)
-			}
-		}else if(messageTpye =="alarm"){
+		function onMessage(evt){
+			console.log("onMessage 호출됨")
+			var data = evt.data;
+			var memberCode = null;
+			var message = null;
 			
-		}
+			
+			//문자열을 split
+			var strArray = data.split("|");
+			
+			for(var i=0; i<strArray.length; i++){
+				console.log("str["+i+"]" + strArray[i])
+			}
+			
+			messageType = strArray[0];
+			sender = strArray[1];
+			memberCode = strArray[2];
+			message = strArray[3];
+			
+			console.log("멤버 코드 :" +memberCode)
+			console.log("메시지 : "+message)
+			
+			if(msessageType == "message"){
+				if($("ul#"+sender).length() > 0){
+					var html = "";
+					if(sender == <%=member.getMemberCode()%>){
+		  				html = '<li class="My"><span>'+message+'</span></li>';
+		  			}else{
+		  				html = '<li class="other"><span>'+message+'</span></li>';
+		  				
+		  			}
+					$("ul#"+sender).append(html)
+				}
+			}else if(messageTpye =="alarm"){
+				
+			}
 	}
 	
 	function onClose(evt){
