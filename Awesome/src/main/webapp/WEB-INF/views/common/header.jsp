@@ -251,7 +251,6 @@ function findMember(){
 <!-- 아이디 저장 -->
     $(function(){
         $("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
-        
     });
     
     function validate(){
