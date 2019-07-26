@@ -104,8 +104,9 @@ function getLightningList(){
 	if($("#local>option:selected").not("#defaultLocal")) param.local = $("#local>option:selected").val();
 	if($("#interesting>option:selected").not("#defaultInteresting")) param.interesting = $("#interesting>option:selected").val();
 	
+	console.log(param);
 	var str = JSON.stringify(param);
-	
+	console.log(str);
 	$.ajax({
 		url : '${pageContext.request.contextPath}/lightning/lightningListPage.do',
 		dataType: "json",

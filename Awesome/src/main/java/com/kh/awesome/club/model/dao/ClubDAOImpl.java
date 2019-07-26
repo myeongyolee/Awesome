@@ -24,9 +24,9 @@ public class ClubDAOImpl implements ClubDAO {
 	SqlSession sqlSession;
 	
 	@Override
-	public List<Club> selectClubList(int cPage, int numPerPage) {
+	public List<Club> selectClubList(Map<String, String> search,int cPage, int numPerPage) {
 		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
-		return sqlSession.selectList("selectClubList",null,rowBounds);
+		return sqlSession.selectList("selectClubList",search,rowBounds);
 	}
 
 	@Override
@@ -118,6 +118,26 @@ public class ClubDAOImpl implements ClubDAO {
 	@Override
 	public List<Clubcontent> selectseephotoList(int seephotoCode) {
 		return sqlSession.selectList("selectseephotoList",seephotoCode);
+	}
+
+	@Override
+	public int deleteclubContent(int contentCode) {
+		return sqlSession.delete("deleteclubContent",contentCode);
+	}
+
+	@Override
+	public int deleteclubImg(int contentCode) {
+		return sqlSession.delete("deleteclubImg",contentCode);
+	}
+
+	@Override
+	public List<Map<String,Object>> selectmyclubCode(int memberCode) {
+		return sqlSession.selectList("selectmyclubCode",memberCode);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectmyclubList(Map<String, List<String>> param) {
+		return sqlSession.selectList("selectmyclubList",param);
 	}
 
 	

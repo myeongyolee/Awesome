@@ -14,7 +14,7 @@ import com.kh.awesome.club.model.vo.Clubphoto;
 
 public interface ClubDAO {
 
-	List<Club> selectClubList(int cPage, int numPerPage);
+	List<Club> selectClubList(Map<String, String> search, int cPage, int numPerPage);
 
 	int totalclubCount();
 
@@ -51,6 +51,14 @@ public interface ClubDAO {
 	List<Clubcomment> selectBoardCommentByCode(Clubcomment clubComment);
 
 	List<Clubcontent> selectseephotoList(int seephotoCode);
+
+	int deleteclubContent(int contentCode);
+
+	int deleteclubImg(int contentCode);
+
+	List<Map<String,Object>> selectmyclubCode(int memberCode);
+
+	List<Map<String, Object>> selectmyclubList(Map<String, List<String>> param);
 
 
 }
