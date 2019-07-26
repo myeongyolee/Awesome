@@ -164,8 +164,8 @@ public class LightningController {
 	public String insertLightning(MatchManager matchManager, HttpSession session, 
 								@RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
 		//세션에서 memberCode가져오기
-//		session.getAttribute("memberLoggedIn");
-		matchManager.setMemberCode(124);
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		matchManager.setMemberCode(member.getMemberCode());
 		
 		logger.info("uploadProfile="+uploadProfile);
 //		file

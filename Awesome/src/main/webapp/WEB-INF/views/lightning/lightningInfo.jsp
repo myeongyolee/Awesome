@@ -60,11 +60,12 @@ lightningListAjax();
 </script>
 </head>
 <body>
-	<div id="lightningList-container">
+	<div id="lightningList-container" class="p-5">
 		<input type="hidden" id="cPage" value="1"/>
 		<ul id="lightningList-body" class="list-group">
 		
 		</ul>
+		
 	</div>
 </body>
 </html>

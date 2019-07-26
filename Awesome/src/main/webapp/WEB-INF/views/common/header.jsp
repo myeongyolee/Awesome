@@ -51,7 +51,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
     <%-- 구글 폰트 --%>
-    <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Jua|Luckiest+Guy&display=swap" rel="stylesheet">
 	<style>
 		.mdl-layout__header-row{background: white;}
 		.mdl-layout__header-row .mdl-navigation__link{color:black;}
@@ -63,7 +64,7 @@
 		#modalBody .modal-body{flex : 1 1 0; margin : auto; }
 		#login{font-size: 16px;  right: 50px; width:90px;  }
 		.mdl-badge{ border: 1px solid white; background: white;}
-		 
+		*{font-family: 'Jua', sans-serif;}
 		<%-- socket chat --%>
 		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;width: 280px; height:450px;border-radius:21px;}
 		#chat_head{height:43px; padding-top:10px; padding-left:10px; border-bottom: 1px solid #e1e1e1; width:100%}
@@ -167,7 +168,7 @@
 	        </c:if>
 	        
 	        <a class="mdl-navigation__link" href="">소개팅</a>
-	        <a class="mdl-navigation__link" href="">번개팅</a>
+	        <a class="mdl-navigation__link" href="${pageContext.request.contextPath}/lightning/lightningList.do">번개팅</a>
 	        <a class="mdl-navigation__link" href="">동네 친구</a>
 	        <a class="mdl-navigation__link" href="">소모임</a>
 	        
@@ -176,7 +177,7 @@
 	        </c:if>
 	        <c:if test="${memberLoggedIn != null }">
 	        <a class="mdl-navigation__link" href="${pageContext.request.contextPath}/member/memberInfo.do">My Info</a>
-	        <span class="mdl-navigation__link" id="logOut">로그아웃</span>
+	        <span class="mdl-navigation__link" id="logOut">Logout</span>
 	        </c:if>
 	      </nav>
 	    </div>
@@ -236,12 +237,12 @@
 					  $("#autoLogin").prop("checked",false);
 				  },
 				})
-		}
-		
 		return true;
-	}
-	$(function(){
+		};
 		
+	});
+	
+	$(function(){
 	
 	<%-- socket 관련 ajax --%>
 	$("#demo-menu-lower-left").on("click",function(){
