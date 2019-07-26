@@ -19,6 +19,19 @@
 	<select id="selectChat" resultType="map">
 		select DISTINCT member_code from chat_log where receive_member_code = #{mCode}
 	</select>
+	
+	<select id="selectMyChat" resultType="map">
+		select *
+		from chat_log
+		where member_Code = #{memberCode}
+			and recevice_member_code = #{receiveMemberCode}
+		order by log_Date
+	</select>
+	
+	<insert id="insertAlarm">
+		INSERT INTO alarm_log
+		VALUES(#{memberCode}, #{otherMemberCode}, #{message}, sysdate, 'N')
+	</insert>
 	<select id="findRecentList" resultType="map">
 		select *
 		from (
@@ -55,6 +68,8 @@
 		where chat_id = #{chatId}
 		order by chat_no
 	</select>
+	
+	
 	
 	
 </mapper>

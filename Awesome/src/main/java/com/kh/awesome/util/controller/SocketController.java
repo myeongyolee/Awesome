@@ -9,11 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kh.awesome.member.model.vo.Member;
 import com.kh.awesome.socket.stomp.model.service.StompService;
 import com.kh.awesome.util.model.service.SocketService;
+import com.kh.awesome.util.model.vo.Chat;
 
 @Controller
 public class SocketController {
@@ -45,5 +49,22 @@ public class SocketController {
 	
 	public String codeToId(String memberCode) {
 		return stompService.codeToId(memberCode);
+	}
+	
+	@RequestMapping("/sock/selectMyChat")
+	@ResponseBody
+	public ModelAndView selectMyChat(ModelAndView mav,
+					@RequestParam("mCode") String mCode,
+									@SessionAttribute Member memberLoggedIn){
+		Map<String,String> map = new HashMap<>();
+		map.put("receiveMemberCode", mCode);
+		map.put("memberCode", ""+memberLoggedIn.getMemberCode());
+		
+		
+		List<Chat> chat_log = socketService.selectMyChat(map);
+		
+		mav.addObject("receiveMember", codeToId(mCode));
+		mav.addObject("list", chat_log);
+		return mav;
 	}
 }

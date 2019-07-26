@@ -21,6 +21,7 @@
 	<typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>
 	<typeAlias type="com.kh.awesome.socket.stomp.model.vo.Msg" alias="msg"/>
 	<typeAlias type="com.kh.awesome.socket.stomp.model.vo.ChatRoom" alias="chatRoom"/>
+	<typeAlias type="com.kh.awesome.util.model.vo.Chat" alias="chatting"/>
   </typeAliases> 
 
   
