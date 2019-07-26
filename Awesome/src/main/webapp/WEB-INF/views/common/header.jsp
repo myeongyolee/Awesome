@@ -58,7 +58,6 @@
     <link href="https://fonts.googleapis.com/css?family=Jua|Luckiest+Guy&display=swap" rel="stylesheet">
 	<style>
 		.mdl-layout__header-row{background: white;}
-		
 		.mdl-layout__header-row .mdl-navigation__link{color:black;}
 		.mdl-layout-title{color:black;}
 		#awe-logo-img{height:30px;}
@@ -160,7 +159,7 @@
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <nav class="mdl-navigation">
             <!-- Icon badge -->
             <c:if test="${ memberLoggedIn != null}">
                 <button id="demo-menu-lower-left" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>

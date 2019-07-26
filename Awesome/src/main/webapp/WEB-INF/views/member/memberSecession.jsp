@@ -56,6 +56,7 @@
             	flex-direction : column;
             	justify-content: flex-start;
 	            margin-top: 10%;
+	            margin-bottom: 20%;
 	            margin-left:25%;
 	            width:50%;
 	            display:none;
@@ -378,7 +379,7 @@
 				</div>
 			<hr />
 			
-			<div id="sucessionMemberDiv" class="nodisplay">
+			<div id="sucessionMemberDiv" class="">
 				<form action="${pageContext.request.contextPath}/member/sucessionMemberEnd.do" onsubmit="return sucessionMemberValidate();">
 				<div><span class="nameHead">탈퇴 사유</span></div>
 				<p> - 보다 나은 서비스 개선을 위해 작성해 주세요.</p>

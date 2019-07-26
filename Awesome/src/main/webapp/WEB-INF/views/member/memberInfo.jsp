@@ -34,6 +34,7 @@
            		display : flex; 
             	flex-direction : column;
             	justify-content :flex-start;
+            	
 			}
 				#item-head-main{
 	           		flex : 1; 
@@ -68,6 +69,7 @@
 	           		margin : 10%;
 	           	
 	           		height:100%;
+	           		width:100%;
 				}
            		
         		#item-body{

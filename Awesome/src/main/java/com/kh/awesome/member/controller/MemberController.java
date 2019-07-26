@@ -186,24 +186,50 @@ public class MemberController {
 	
 	//회원 탈퇴
 	@RequestMapping("/sucessionMemberEnd.do")
-	public String sucessionMember(Member member,HttpSession session,Model model,
-							@RequestParam(value="reason",required=false) String reason) {
+	public String sucessionMember(Member member,Model model,
+							@RequestParam(value="reason",required=false) String reason,
+							SessionStatus sessionStatus,HttpSession session,
+							HttpServletRequest request, HttpServletResponse response
+							) {
 		if(logger.isInfoEnabled()) logger.info("회원 탈퇴 엔드 요청!");
-		
 		String msg = "";
 		String loc = "";
+		
+		int memberCode = member.getMemberCode();
+		logger.info("회원 탈퇴 엔드1111(memberCode,reason)= "+memberCode+", "+reason);
 		
 		Member memberLoggedIn=(Member) session.getAttribute("memberLoggedIn");
 		
 		if(member.getMemberId().equals(memberLoggedIn.getMemberId()) && member.getMemberCode() == memberLoggedIn.getMemberCode()) {
 			int result=memberService.deleteMember(member);
 			if(result>0) {
+				logger.info("회원 탈퇴 엔드2222(memberCode,reason)= "+memberCode+", "+reason);
+				memberService.updateReason(memberCode,reason);
 				
-				memberService.updateReason(member.getMemberCode(),reason);
+				if(session.getAttribute("memberLoggedIn")!=null) {
+					session.removeAttribute("memberLoggedIn");
+					session.invalidate();
+					
+					Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+		            if ( loginCookie != null ){
+		                // null이 아니면 존재하면!
+		                loginCookie.setPath("/");
+		                // 쿠키는 없앨 때 유효시간을 0으로 설정하는 것 !!! invalidate같은거 없음.
+		                loginCookie.setMaxAge(0);
+		                // 쿠키 설정을 적용한다.
+		                response.addCookie(loginCookie);
+		                 
+		                // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
+		                java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+		                memberService.keepLogin(member.getMemberId(), session.getId(), date);
+		            }
+				}
 				
-				session.removeAttribute("memberLoggedIn");
-				session.invalidate();
-				
+				//로그인하였을때HttpSession객체 .setAttribute을 통해 
+				//로그인 사용자 정보을 담았다면, httpSession .invalidate() 호출하여야한다.
+				if(!sessionStatus.isComplete()) {
+					sessionStatus.setComplete();
+				}
 				msg="회원 탈퇴 성공! 안녕히 가세요. ";
 				loc="/index";
 			}else {

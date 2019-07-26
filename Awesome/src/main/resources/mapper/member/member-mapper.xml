@@ -170,7 +170,7 @@
     </delete>
 	  
 	<update id="updateReason"  parameterType="map">
-	  	update secession_member set reason=#{reason} where member_code=#{memberCode};
+	  	update secession_member set reason=#{reason} where member_code=#{memberCode}
 	  </update>
 	  
   </mapper>
