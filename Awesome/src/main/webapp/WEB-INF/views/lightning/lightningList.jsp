@@ -100,7 +100,7 @@ function getLightningList(){
 		}
 	}
 	
-	if($("#city>option:selected").not("#defaultCity")) param.city = $("#city>option:selected").val();
+	if($("#city>option:selected").not("#default City")) param.city = $("#city>option:selected").val();
 	if($("#local>option:selected").not("#defaultLocal")) param.local = $("#local>option:selected").val();
 	if($("#interesting>option:selected").not("#defaultInteresting")) param.interesting = $("#interesting>option:selected").val();
 	

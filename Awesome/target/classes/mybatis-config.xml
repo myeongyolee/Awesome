@@ -18,6 +18,7 @@
 	<typeAlias type="com.kh.awesome.club.model.vo.Clubphoto" alias="clubphoto"/>
 	<typeAlias type="com.kh.awesome.club.model.vo.Clubcomment" alias="clubcomment"/>
 	<typeAlias type="com.kh.awesome.board.model.vo.QuestionBoard" alias="qBoard"/>
+	<typeAlias type="com.kh.awesome.board.model.vo.QuestionComment" alias="qComment"/>
 	<typeAlias type="com.kh.awesome.common.typeHandler.StringToLongTypeHandler" alias="StringToLongTypeHandler"/>
 	<typeAlias type="com.kh.awesome.member.model.vo.Member" alias="member"/>
 	<typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>

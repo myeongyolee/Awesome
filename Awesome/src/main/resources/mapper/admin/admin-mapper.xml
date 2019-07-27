@@ -78,7 +78,6 @@
 	<result column="introduce" property="introduce"/>
 	<result column="verify" property="verify"/>
 	<result column="enroll_date" property="enrollDate"/>
-	<result column="email" property="email"/>
 	
 	<!-- <collection property="clubMember" ofType="clubmember" >
 			<result column="CLUB_CODE" 	property="clubCode"/>
@@ -94,12 +93,33 @@
 	 <select id="selectTotalMemberNum" resultType="_int">
 	 select count(*) from member
 	 </select>
-	 <!-- <select id="seeOneMember" resultMap = "member">
-		select M.*, C.* 
-		from member M left join club_member C
-	 on M.member_code = C.club_member_code
-	 where M.member_code = #{memberCode}
-	 order by M.member_code
-	 </select> -->
+	
+	<select id="searchPplList" resultMap = "member">
+	select * from member 
+	where 1=1
+	<if test = "byName != null and byName != ''">
+	and member_name like '%'||#{byName}||'%'
+	</if>
+	<if test="byMid != null and byMid != ''">
+	and member_id like '%'||#{byMid}||'%'
+	</if>
+	<if test="nickname !=null and nickname != ''">
+	and nickname like '%'||#{nickname}||'%'
+	</if>
+	<if test="gender !=null and gender != ''">
+	and gender = #{gender}
+	</if>
+	order by member_code desc
+	</select>
+	 <select id="seeOneMember" resultMap = "member">
+		select * 
+		from member 
+		where member_code = #{memberCode}
+	 </select> 
+	 <select id="seeClubJoined" resultType='String'>
+		select club_name 
+		from club C join club_member M on c.club_code = M.club_code 
+		where M.club_member_code = #{memberCode}
+	 </select>
 
 </mapper>

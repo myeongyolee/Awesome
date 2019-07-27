@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.awesome.admin.model.vo.Report;
+import com.kh.awesome.board.model.vo.QuestionComment;
 import com.kh.awesome.club.model.vo.Clubmember;
 import com.kh.awesome.member.model.vo.Member;
 
@@ -94,14 +95,23 @@ public class AdminDAOImpl implements AdminDAO {
 
 
 	@Override
-	public Member seeOneMember(int memberCode) {
+	public Map<String, Object> seeOneMember(int memberCode) {
 		return sqlSession.selectOne("admin.seeOneMember", memberCode);
 	}
-	/*
+	
 	@Override
-	public Clubmember seeClubJoined(int memberCode) {
+	public String seeClubJoined(int memberCode) {
 		return sqlSession.selectOne("admin.seeClubJoined", memberCode);
-	}*/
+	}
+
+	@Override
+	public List<Map<String, Object>> searchPpl(Map<String, String> search, int cPage, int numPerPage) {
+		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
+		System.out.println("search@DAOimpl== " + search);
+		return sqlSession.selectList("admin.searchPplList", search, rowBounds);
+	}
+
+	
  
  
  

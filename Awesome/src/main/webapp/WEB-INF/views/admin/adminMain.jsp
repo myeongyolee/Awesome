@@ -17,6 +17,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.css">
+ <!--Plugin CSS file with desired skin-->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+ <!--Plugin JavaScript file-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+ 
 <script>
 function chart(){
 	$.ajax({
@@ -34,12 +39,11 @@ chart();
 </head>
 <body>
 <div id="admin_board">
-	<h2>관리자님 안녕하세요? </h2>
   <div id="main_board">
   <!--메뉴 탭  -->
 	  <div class="tab">
 	  <button class="tablinks" onclick="${pageContext.request.contextPath}/">
-	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/>
+ 	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/> 
 	  	<span class="text_">&nbsp;
 	  	 전체보기
 	  	</span>
