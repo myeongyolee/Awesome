@@ -87,8 +87,7 @@ public class LightningController {
 			local = (String)requestMap.get("local");
 		
 		if(requestMap.get("memberId")!=null) nickName = (String)requestMap.get("nickName");
-		System.out.println("memberId"+requestMap.get("memberId"));
-		System.out.println(requestMap.get("nickName"));
+		
 		if(requestMap.get("interesting")!=null || !((String)requestMap.get("interesting")).equals("0")) 
 			interesting = (String)requestMap.get("interesting");
 		
@@ -114,7 +113,7 @@ public class LightningController {
 			matchNo.add(no);
 		}
 		param.put("matchNo", matchNo);
-		System.out.println(param);
+		
 		List<Map<String, Object>> joinMemberList = lightningService.selectJoinMemberList(param);
 		logger.info("joinMemberList={}",joinMemberList);
 		

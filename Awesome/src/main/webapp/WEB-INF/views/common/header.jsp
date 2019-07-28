@@ -136,9 +136,8 @@
      </div>
    </div>
  </div>
-       
-   <!-- 20190705 12:54 김용빈  -->
-<!-- 회원가입 모달 추가 -->
+<!-- 20190705 12:54 김용빈 
+회원가입 모달 추가 -->
 <div class="modal fade" id="memberEnrollModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -214,8 +213,9 @@ function findMember(){
 	window.open("/awesome/member/findMember.do","pop","width=570,height=420, scrollbars=yes, resizable=yes");
 }
 
-<!-- 20190705 12:54 김용빈  -->
-<!-- 회원가입 모달 추가 - -->
+
+/* <!-- 20190705 12:54 김용빈  --> */
+/* <!-- 회원가입 모달 추가 - --> */
     $(function(){
         $("#signUp").on("click",function(){
         	
@@ -236,7 +236,6 @@ function findMember(){
             });
         });
     })
-    
 <!--20190711 09:34 김용빈-->
     $("#logOut").on("click",function(){
         
@@ -247,8 +246,8 @@ function findMember(){
         }
     });
     
-<!-- 20190715 12:35 김용빈  -->
-<!-- 아이디 저장 -->
+/* <!-- 20190715 12:35 김용빈  -->
+<!-- 아이디 저장 --> */
     $(function(){
         $("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
     });
@@ -364,11 +363,8 @@ function findMember(){
 		
 		
 	})
-	
-  
 </script>
 <script type="text/javascript">
-
  <%if( member != null){%>
 		
 	function onClose(evt){

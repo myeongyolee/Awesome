@@ -41,5 +41,7 @@ public interface MemberDAO {
 
 	void updateReason(int memberCode, String reason);
 
+	void updateKeepLogin(String memberId, String sessionId, Date date);
+
 
 }

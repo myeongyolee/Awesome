@@ -221,7 +221,7 @@ public class MemberController {
 		                 
 		                // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
 		                java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-		                memberService.keepLogin(member.getMemberId(), session.getId(), date);
+		                memberService.updateKeepLogin(member.getMemberId(), session.getId(), date);
 		            }
 				}
 				
@@ -460,11 +460,6 @@ public class MemberController {
 				boolean bool = bCryptPasswordEncoder.matches(password, m.getPassword());
 				
 				if(bool) {
-					
-					/* 20190714 김용빈
-		            *
-		             *  [   세션 추가되는 부분      ]
-		             */
 		            // 1. 로그인이 성공하면, 그 다음으로 로그인 폼에서 쿠키가 체크된 상태로 로그인 요청이 왔는지를 확인한다.
 		            if ( autoLogin !=null ){ 
 		                // 쿠키 사용한다는게 체크되어 있으면...
@@ -543,7 +538,7 @@ public class MemberController {
                  
                 // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
                 java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
-                memberService.keepLogin(member.getMemberId(), session.getId(), date);
+                memberService.updateKeepLogin(member.getMemberId(), session.getId(), date);
             }
 		}
 		
@@ -771,10 +766,7 @@ public class MemberController {
 	    	Message coolsms = new Message(api_key, api_secret); // 메시지보내기 객체 생성
 	    	
 	    	String key = new TempKey().getKey(4); // 인증키 생성
-	    	//userService.insertAuthCode(userPhoneNumber, key); // 휴대폰 인증 관련 서비스
 	    	
-	    	 //* Parameters 관련정보 : http://www.coolsms.co.kr/SDK_Java_API_Reference_ko#toc-0
-	    	 
 	    	HashMap<String, String> set = new HashMap<String, String>();
 	    	set.put("to", userPhoneNumber); // 수신번호
 	    	set.put("from", "01089721172"); // 발신번호
@@ -958,10 +950,8 @@ public class MemberController {
 		// mailSending 이메일 인증 코드
 		@RequestMapping("/authMailSending.do")
 		@ResponseBody
-		public String authMailSending(String memberId,@CookieValue(value="JSESSIONID", required=false) Cookie jid) {
-			
-			System.out.println("이메일 인증 코드 발송");
-			System.out.println(memberId);
+		public String authMailSending(String memberId,
+				@CookieValue(value="JSESSIONID", required=false) Cookie jid) {
 
 			String setfrom = "AwesomeAdmin@awesome.com";
 			String tomail = memberId; // 받는 사람 이메일

@@ -68,6 +68,11 @@
 				#sucessionMemberBtn{
 					width:100%;
 				}
+				
+				.flex{
+					display : flex; 
+            		flex-direction : row;
+				}
 	</style>
 	
 	<script>
@@ -379,7 +384,7 @@
 				</div>
 			<hr />
 			
-			<div id="sucessionMemberDiv" class="">
+			<div id="sucessionMemberDiv" class="nodisplay">
 				<form action="${pageContext.request.contextPath}/member/sucessionMemberEnd.do" onsubmit="return sucessionMemberValidate();">
 				<div><span class="nameHead">탈퇴 사유</span></div>
 				<p> - 보다 나은 서비스 개선을 위해 작성해 주세요.</p>
