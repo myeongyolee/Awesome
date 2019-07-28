@@ -1,9 +1,13 @@
+<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
+<%
+	Map<String, Object> lightningMatch = (Map<String, Object>)request.getAttribute("lightningMatch");
+	int localCode = Integer.parseInt(String.valueOf(lightningMatch.get("localCode")));
+%>
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 <style>
@@ -75,8 +79,8 @@ function selectLocalList(){
 			html += '<option id="defaultLocal" disabled >지역을 선택해주세요</option>';
 			for(var i=0; i<data.length; i++){
 				html += '<option value='+data[i].localCode;
-				if(${lightningMatch.localCode}==data[i].localCode){
-					html += 'selected';
+				if(<%=localCode%>==data[i].localCode){
+					html += ' selected';
 				}
 				html += '>'+data[i].localName+'</option>';
 			}
@@ -218,28 +222,28 @@ function insertData(btn){
 </script>
 
 	<div id="form-container" class="card mx-auto">
-		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do" method="post" enctype="multipart/form-data" onsubmit="return writeCheck();">
+		<form action="${pageContext.request.contextPath}/lightning/lightningWriteUpdateEnd.do" method="post" enctype="multipart/form-data" onsubmit="return writeCheck();">
 			<div class="form-row">
 				<div class="form-group col-md-6">
-					<c:if test="${lightningMatch.matchRenamedImg}!=null">
+					<c:if test="${lightningMatch.matchRenamedImg!=null}">
 					<img src="${pageContext.request.contextPath}/resources/images/${lightningMatch.matchRenamedImg}" id="img-viewer" class="img-thumbnail">					
 					</c:if>
-					<c:if test="${lightningMatch.matchRenamedImg}==null">
+					<c:if test="${lightningMatch.matchRenamedImg==null}">
 					<img src="${pageContext.request.contextPath}/resources/images/sampleimage.png" id="img-viewer" class="img-thumbnail">					
 					</c:if>
 					<input type="file" name="uploadProfile" id="uploadProfile" style="display:none;" onchange="loadProfile(this);"/>
 					<label for="placeName">지도에서 장소 선택하기</label>
 					<input type="text" class="form-control" name="placeName" placeholder="장소 선택하기" 
-							data-toggle="modal" data-target="#searchMap" readonly <c:if test="${lightningMatch.placeName}!=null"> value="${lightningMatch.placeName}"</c:if>>
+							data-toggle="modal" data-target="#searchMap" readonly <c:if test="${lightningMatch.placeName!=null}"> value="${lightningMatch.placeName}"</c:if>>
 				</div>
 				<div class="form-group col-md-6">
 					<label for="matchTitle">Title</label>
-					<input type="text" class="form-control" name="matchTitle" placeholder="title입력">
+					<input type="text" class="form-control" name="matchTitle" placeholder="title입력" value="${lightningMatch.matchTitle}">
 					<label for="city">도시검색</label>
 					<select class="form-control" id="cityCode" onchange="selectLocalList();">
 						<option id="defaultCity" value="0" disabled>도시를 선택해주세요</option>
 						<c:forEach items="${cityList}" var="city">
-						<option value=${city.cityCode } <c:if test="${lightningMatch.cityCode}==${city.cityCode }">selected</c:if>>${city.cityName }</option>						
+						<option value=${city.cityCode } <c:if test="${lightningMatch.cityCode==city.cityCode }">selected</c:if>>${city.cityName }</option>						
 						</c:forEach>
 					</select>
 					<label for="local">지역검색</label>
@@ -250,7 +254,7 @@ function insertData(btn){
 					<select class="form-control" name="interestingCode" id="interestingCode">
 						<option id="defaultInteresting" value="0" disabled>분류를 선택해주세요</option>
 						<c:forEach items="${interestingList}" var="interesting">
-						<option value=${interesting.interestingCode } <c:if test="${lightningMatch.interestingCode}==${interesting.interestingCode }">selected</c:if>>${interesting.interestingName }</option>						
+						<option value=${interesting.interestingCode } <c:if test="${lightningMatch.interestingCode==interesting.interestingCode }">selected</c:if>>${interesting.interestingName }</option>						
 						</c:forEach>
 					</select>
 					<div class="form-row">
@@ -273,9 +277,10 @@ function insertData(btn){
 			<button id="btn" type="submit" class="btn btn-primary float-right">수정</button>
 			<button id="btn" type="button" class="btn btn-primary float-right">이전</button>
 			<div id="hidden-container">
-				<input type="hidden" name="placeLat" <c:if test="${lightningMatch.placeLat}==0"> value="0" </c:if>/>
-				<input type="hidden" name="placeLng" value="0"/>
+				<input type="hidden" name="placeLat" <c:if test="${lightningMatch.placeLat==0}"> value="0" </c:if>/>
+				<input type="hidden" name="placeLng" <c:if test="${lightningMatch.placeLng==0}"> value="0" </c:if>/>
 				<input type="hidden" name="matchingType" value="L"/>
+				<input type="hidden" name="matchNo" value="${lightningMatch.matchNo}"/>
 			</div>
 		</form>
 	</div>

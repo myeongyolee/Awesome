@@ -309,7 +309,7 @@ function seeOneM(memberCode_){
  /*회원 검색   */
  function getPplList(){
 	 var param = {cPage: $("#cPage").val() };
-	 
+	 console.log($("#byName"));
 	 if($("[name=byName]:checked")){
 		 var byName = $("#byName").val();
 	 };

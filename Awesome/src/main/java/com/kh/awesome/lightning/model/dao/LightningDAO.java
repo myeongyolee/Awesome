@@ -20,9 +20,21 @@ public interface LightningDAO {
 
 	List<String> selectInterestingList();
 
-	List<Map<String, String>> selectMyLightningList(int memberCode, int numPerPage, int cPage);
+	List<Map<String, Object>> selectMyLightningList(int memberCode, int numPerPage, int cPage);
 
-	Map<String, String> selectLightningMatch(int matchNo);
+	Map<String, Object> selectLightningMatch(int matchNo);
+
+	int updateLightning(Map<String, Object> map);
+
+	int deleteLightning(int matchNo);
+
+	List<Integer> selectJoinMatchCode(int memberCode, int numPerPage, int cPage);
+
+	List<Map<String, Object>> selectJoinLightningList(List<Integer> matchCodeList);
+
+	int insertMatchJoin(Map<String, Integer> map);
+
+	List<Map<String, Object>> selectMyMatchJoinMemberList(Map<String, List<String>> param);
 
 
 }

@@ -180,7 +180,7 @@
             
             <c:if test="${memberLoggedIn != null }">
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소개팅" />
-	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'"/>
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동네 친구" />
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소모임" />
             </c:if>
@@ -422,6 +422,7 @@ function findMember(){
 		}else if(messageTpye =="alarm"){
 			
 		}
+	}
 	<%}%>
 	
 </script>

@@ -28,8 +28,8 @@
 
 </style>
 <script>
-
-$(function(){  //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+//페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+$(function(){  
 	getLightningList();
 	
 	$(":text").focus(function(){
@@ -50,6 +50,27 @@ $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리�
 		getLightningList();
 	}
 });
+
+//참여신청
+function joinApplication(matchNo){
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/matchJoin.do?matchNo='+matchNo,
+		success : function(data){
+			if(data){
+				$("#btn-"+matchNo).addClass("btn-lg");
+				alert("참여신청이 완료되었습니다.");				
+				//모임작성자에게 메세지 보내기
+				var sendMsg = "message|"+receiveMemberCode+"|"+msg;
+				sendMessage(sendMsg);
+			}else{
+				alert("이미 참여했거나 참여 신청중인 모임입니다.");
+			}
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+}
 
 function selectLocalList(){
 	var param = {city: $("#city>option:selected").val()}
@@ -147,7 +168,13 @@ function getLightningList(){
 				if(data[i].memberCount>=1){
 					html +=	'<div class="carousel-item p-5">';
 					html +=	'<div class="card border-light">';
-					html +=	'<div id="ContentView" class="card-body">'+data[i].joinMemberNickName+'</div></div></div>';
+					html +=	'<div id="ContentView" class="card-body">';
+					html += '<ul class="list-group list-group-flush">';
+					var joinMemberList = data[i].joinMemberNickName.split(", ");
+					for(var k=0; k<joinMemberList.length; k++){
+						html += '<li class="list-group-item">'+joinMemberList[i]+'</li>';
+					}
+					html += '</ul></div></div></div>';
 				}
 				if(data[i].placeName!=null){
 					html +=	'<div class="carousel-item p-5">';
@@ -160,7 +187,8 @@ function getLightningList(){
 				html +=	'<a class="carousel-control-next" href="#carousel'+data[i].matchNo+'" role="button" data-slide="next">';
 				html +=	'<span class="carousel-control-next-icon bg-dark" aria-hidden="false"></span>';
 				html +=	'<span class="sr-only">Next</span></a></div></div>';
-				html +=	'<button type="button" class="btn btn-primary float-right">참가신청</button></div>';
+				html +=	'<button type="button" id="btn-'+data[i].matchNo+'" class="btn btn-primary float-right" onclick="joinApplication('+data[i].matchNo;
+				html += ')">참가신청</button></div>';
 				$("#lightningList-content").append(html);
 				if(data[i].placeName!=null) insertMap(i, data[i].placeLat, data[i].placeLng);
 			}
