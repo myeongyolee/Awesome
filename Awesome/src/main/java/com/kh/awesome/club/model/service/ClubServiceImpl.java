@@ -24,8 +24,8 @@ public class ClubServiceImpl implements ClubService{
 	ClubDAO clubDAO;
 
 	@Override
-	public List<Club> selectClubList(Map<String, String> search,int cPage, int numPerPage) {
-		return clubDAO.selectClubList(search,cPage,numPerPage);
+	public List<Club> selectClubList(int cPage, int numPerPage) {
+		return clubDAO.selectClubList(cPage,numPerPage);
 	}
 
 	@Override
@@ -123,29 +123,6 @@ public class ClubServiceImpl implements ClubService{
 	public List<Clubcontent> selectseephotoList(int seephotoCode) {
 		return clubDAO.selectseephotoList(seephotoCode);
 	}
-
-	@Override
-	public int deleteclubContent(int contentCode) {
-		return clubDAO.deleteclubContent(contentCode);
-	}
-
-	@Override
-	public int deleteclubImg(int contentCode) {
-		return clubDAO.deleteclubImg(contentCode);
-	}
-
-
-	@Override
-	public List<Map<String,Object>> selectmyclubCode(int memberCode) {
-		return clubDAO.selectmyclubCode(memberCode);
-	}
-
-	@Override
-	public List<Map<String, Object>> selectmyclubList(Map<String, List<String>> param) {
-		return clubDAO.selectmyclubList(param);
-	}
-
-	
 
 
 	

@@ -186,17 +186,6 @@ $(function(){
 				html+='<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">';
 				html+='<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a>';
 				$("#carouselExampleIndicators").append(html);
-				
-				
-				var html2 ="";
-				html2+='<form action="${pageContext.request.contextPath}/club/clubimgDelete.do" method="post">';
-				html2+='<input type="hidden" name="contentCode" value="'+data[0].clubcontentCode+'"  readonly>';
-				html2+='<input type="hidden" name="clubCode" value="'+data[0].clubPhotos[0].clubCode+'"  readonly>';
-				html2+='<button type="button" class="btn btn-default float-right" data-dismiss="modal">닫기</button>';
-				/* if(data[0].memberNickname==memberLogined.getmemberId()) */
-				html2+='<button  type="submit" class="btn btn-primary float-right">사진삭제</button></form>';
-				$("#clubmodal-footer").html("");
-				$("#clubmodal-footer").append(html2); 
 			
 			},
 			error:function(jqxhr, textStatus, errorThrown){
@@ -206,16 +195,6 @@ $(function(){
 		
 	}); 
 });
-
-function enrollCalendar(){
-	var clubCode = $("input[name=clubCode]").val();
-	
- 	var url = "${pageContext.request.contextPath}/club/clubCalendar?clubCode="+clubCode;
-	var title = "클럽모임 일정 등록 페이지";
-	var spec = "width=500px, height=600px, left=500px, top=100px";
-		
-	var popup = open(url, title, spec);
-}
 
 
 </script>
@@ -238,7 +217,6 @@ function enrollCalendar(){
 			</c:if>
 		</div>
 		
-		<c:if test="${not empty club}">
 		<div style="margin: 20px 50px 20px 60px; width: ">
 			<div style="display: inline-block; ">
 				<h3 style="width: 450px;">"${club.clubName}"</h3>
@@ -250,43 +228,21 @@ function enrollCalendar(){
 			
 			<div class="clubview-info-css" style="text-align: center;">
  				<h3 class="box-header" style="display: inline-block;">클럽상세소개</h3>
- 				<button onclick="enrollList(${club.clubCode}); ">가입 대기 목록 확인</button> <!-- 클럽장인경우에만 보여주도록 할 것 -->
-				<button onclick="acceptList(${club.clubCode}); ">회원 목록 확인</button> <!-- 클럽장인경우에만 보여주도록 할 것 -->
+ 				<button>클럽가입신청</button>
+ 				<button>클럽관리</button>
  				<button>클럽탈퇴하기</button>
  				<div class="box-wrap">
  					<div class="box right">${club.clubInfo }</div>
  				</div>
 			</div>
 		</div>
-		</c:if>
 	</table>
 
 	<!-- 다음일정 있을시 출력 -->
 	<hr>
 	<h2>다음일정</h2>
-	<button class="btn1" onclick="enrollCalendar();" style="position:relative; left:150px; top:-40px;">새로운 일정 등록</button> <!-- 클럽장인경우에만 보여주도록 할 것 -->
-	<c:if test="${empty Calender }">
-		<div class="schedule-view">
-			<p>등록된 일정이 없습니다</p>
-		</div>
-	</c:if>
-	<c:if test="${not empty Calender }">
-	<div class="schedule-view">
 	
-	<div id="map">
-	</div>
 	
-	<div id="map-content" style="margin-left:100px; padding-top:70px; font-size:1.5em;">
-	<p>타이틀 : ${Calender.MATCH_TITLE}</p>
-	<p>모임 장소 : ${Calender.PLACE_NAME }</p>
-	<p>등록일 : ${Calender.MATCH_WRITE_DATE }</p>
-	<p>D-day : ${Calender.MATCH_END_DATE } </p>
-	<input type="hidden" name="placelng" value="${Calender.PLACE_LNG }" />
-	<input type="hidden" name="placelat" value="${Calender.PLACE_LAT }" />
-	</div>
-	
-	</div>
-</c:if>
 	
 	
 	<!-- 게시글 -->
@@ -305,7 +261,6 @@ function enrollCalendar(){
 	<h2 style="display: inline-block;">게시글</h2>
 	<div class="club_contentview-css">
 	
-	<c:if test="${not empty contentList }">
 	<table class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
@@ -330,7 +285,6 @@ function enrollCalendar(){
           </c:forEach>
         </tbody>
       </table>
-      </c:if>
 	
 	<%
 		int totalContents = Integer.parseInt(String.valueOf(request.getAttribute("totalContents")));
@@ -376,7 +330,7 @@ function enrollCalendar(){
 			<c:forEach items="${photoList}" var="photo" varStatus="vs">	
 				<c:forEach items="${photo.clubPhotos }" var="photos" varStatus="vss">
 						
-						<c:if test="${vss.first }">
+						<c:if test="${vss.last }">
      					<div class="swiper-slide" no="${photos.clubcontentCode }">
      						<a href="#myModal" data-toggle="modal" data-target="#myModal"><img src="${pageContext.request.contextPath }/resources/upload/club/${photos.clubrenamedFilename}" class="d-block" alt="..." style="width: 200px; height: 200px;"></a>
      					</div>
@@ -408,8 +362,12 @@ function enrollCalendar(){
       						</div>
       					</div> <!-- carouselExampleIndicators-div-end -->
       					
-      				<div class="modal-footer" id="clubmodal-footer">
+      				<div class="modal-footer">
       					
+      					<form action="${pageContext.request.contextPath}/club/clubcontentImg.do" method="post">
+      						
+      					</form>
+        				<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
       				</div>
     				</div>
   				</div>
@@ -425,30 +383,6 @@ function enrollCalendar(){
 	<br>
 <!-- Initialize Swiper -->
   <script>
-  /* 가입대기목록확인*/
-  function enrollList(Code){
-	var clubCode = Code;
-	
-	var url = "${pageContext.request.contextPath}/club/waitingEnroll?clubCode="+clubCode;
-	var title = "가입 대기 리스트";
-	var spec = "width=500px, height=600px, left=500px, top=100px";
-		
-	var popup = open(url, title, spec); 
-}
-  
-  /*가입회원리스트*/
-  function acceptList(Code){
-	var clubCode = Code;
-	
-	var url = "${pageContext.request.contextPath}/club/checkClubMember?clubCode="+clubCode;
-	var title = "가입된 회원 리스트";
-	var spec = "width=500px, height=600px, left=500px, top=100px";
-		
-	var popup = open(url, title, spec); 
-}
-  
-  
- 	/* 클럽뷰사진게시판css */  
     var swiper = new Swiper('.swiper-container', {
       slidesPerView: 5,
       spaceBetween: 30,

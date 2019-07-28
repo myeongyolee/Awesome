@@ -101,7 +101,7 @@
 	
 		//스마트 에디터 연결(자기소개 작성)
 		function introducePopup(){
-			var pop = window.open("/awesome/member/smartEditor","pop","width=610,height=380, scrollbars=yes, resizable=yes");
+			var pop = window.open("/awesome/member/smartEditor","pop","width=610,height=450, scrollbars=yes, resizable=yes");
 		}
 
 		/*
@@ -190,7 +190,6 @@
                 type: 'post',
                 async: false,
                 data: {
-                	
                     recaptcha: $("#g-recaptcha-response").val()
                 },
                 success: function(data) {

@@ -51,7 +51,7 @@
 			   I.interesting_name, 
 			   L.local_name ,
 			   C.city_name,
-			   (select count(*) from matching_join_member where match_no = M.match_no) member_count,
+			   (select count(*) from matching_join_member where match_no = M.match_no and join_check = 'Y' and permit_check = 'Y') member_count,
 			   M.match_content
 		from match_manager M 
 	        left join member A on M.member_code = A.member_code
@@ -84,7 +84,7 @@
 			   I.interesting_name, 
 			   L.local_name ,
 			   C.city_name,
-			   (select count(*) from matching_join_member where match_no = M.match_no) member_count,
+			   (select count(*) from matching_join_member where match_no = M.match_no and join_check = 'Y' and permit_check = 'Y') member_count,
 			   M.match_content
 		from match_manager M 
 	        left join member A on M.member_code = A.member_code
@@ -102,7 +102,7 @@
 			   I.interesting_name, 
 			   L.local_name ,
 			   C.city_name,
-			   (select count(*) from matching_join_member where match_no = M.match_no) member_count,
+			   (select count(*) from matching_join_member where match_no = M.match_no and join_check = 'Y' and permit_check = 'Y') member_count,
 			   M.match_content
 		from match_manager M 
 	        left join member A on M.member_code = A.member_code
@@ -112,12 +112,44 @@
 		where matching_type = 'L' and match_no = #{matchNo}
 	</select>
 	
+	<select id="selectJoinLightningList" resultMap="matchManagerMap">
+		select M.match_no, M.match_title, M.member_code, M.interesting_code, M.local_code, M.place_name, M.place_lat, 
+			   M.place_lng, M.matching_type, to_char(M.match_end_date,'yyyy-mm-dd hh24:mi') match_end_date, M.match_renamed_img,
+			   A.nickname, 
+			   I.interesting_name, 
+			   L.local_name ,
+			   C.city_name,
+			   (select count(*) from matching_join_member where match_no = M.match_no and join_check = 'Y' and permit_check = 'Y') member_count,
+			   M.match_content
+		from match_manager M 
+	        left join member A on M.member_code = A.member_code
+	        left join interesting I on M.interesting_code = I.interesting_code
+	        left join local L on M.local_code = L.local_code
+	        left join city C on L.city_code = C.city_code
+		where matching_type = 'L' 
+		<if test="matchCodeList != null">
+			<foreach collection="matchCodeList" item="e" open="and " separator=" or " >
+			match_no = #{e.matchNo}
+			</foreach>
+		</if>
+		order by M.match_no desc
+	</select>
+	
 	<insert id="insertLightning">
 		insert into match_manager 
 		values(seq_match_no.nextval, #{matchManager.matchTitle}, #{matchManager.memberCode}, #{matchManager.interestingCode}, #{matchManager.localCode}, 
 				#{matchManager.placeName}, #{matchManager.placeLat}, #{matchManager.placeLng}, #{matchManager.matchingType}, 
 				#{matchManager.matchContent}, #{matchManager.matchOriginalImg}, #{matchManager.matchRenamedImg}, sysdate, to_date(#{matchEndDate}, 'yyyy-mm-dd hh24:mi'))
 	</insert>
+	
+	<update id="updateLightning">
+		update match_manager 
+		set match_title = #{matchManager.matchTitle}, interesting_code = #{matchManager.interestingCode}, local_code = #{matchManager.localCode}, 
+			place_name = #{matchManager.placeName}, place_lat = #{matchManager.placeLat}, place_lng = #{matchManager.placeLng}, 
+			match_content = #{matchManager.matchContent}, match_original_img = #{matchManager.matchOriginalImg}, 
+			match_renamed_img = #{matchManager.matchRenamedImg}, match_write_date = sysdate, match_end_date = to_date(#{matchEndDate}, 'yyyy-mm-dd hh24:mi')
+		where match_no = #{matchManager.matchNo}
+	</update>
 	
 	<select id="selectJoinMemberList" resultMap="joinMember">
 		select J.match_no, M.nickname
@@ -129,6 +161,34 @@
 		#{e}
 		</foreach>
 		</if>
+	</select>
+	
+	<select id="selectMyMatchJoinMemberList" resultMap="joinMember">
+		select J.match_no, M.nickname
+		from matching_join_member J left join member M on J.member_code = M.member_code
+		where J.join_check = 'Y' and J.permit_check = 'Y'
+		<if test="joinMemberList != null">
+		and J.match_no in 
+		<foreach collection="matchNo" item="e" open="(" close=")" separator=",">
+		#{e}
+		</foreach>
+		</if>
+	</select>
+	
+	<select id="selectMyMatchNoPermitMemberList" resultMap="joinMember">
+		select J.match_no, M.nickname
+		from matching_join_member J left join member M on J.member_code = M.member_code
+		where J.join_check = 'Y' and J.permit_check = 'N'
+		<if test="joinMemberList != null">
+		and J.match_no in 
+		<foreach collection="matchNo" item="e" open="(" close=")" separator=",">
+		#{e}
+		</foreach>
+		</if>
+	</select>
+	
+	<select id="selectJoinMatchCode" resultMap="joinMember">
+		select match_no from matching_join_member where member_code = #{memberCode} and join_check = 'Y' order by match_no desc
 	</select>
 	
 	<select id="selectCityList" resultMap="cityMap">
@@ -144,5 +204,13 @@
 		from local L left join city C on L.city_code = C.city_code
 		where C.city_code = #{city}
 	</select>
-
+	
+	<delete id="deleteLightning">
+		delete from match_manager where match_no = #{matchNo}
+	</delete>
+	
+	<insert id="insertMatchJoin">
+		insert into matching_join_member values (#{matchNo}, #{memberCode}, 'Y', 'N');
+	</insert>
+	
 </mapper>

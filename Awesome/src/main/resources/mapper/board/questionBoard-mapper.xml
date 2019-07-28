@@ -12,6 +12,12 @@
 		<result column="question_date" property="questionDate"/>
 		<result column="question_open" property="questionOpen"/>
 	</resultMap> 
+	<resultMap type = "map" id="qComment">
+	 	<result column="question_comment_no" property="questionCommentNo"/>
+		<result column="question_no" property="questionNo"/>
+		<result column="question_comment_content" property="questionCommentContent"/>
+		<result column="question_comment_date" property="questionCommentDate"/>
+	</resultMap> 
 	<select id="selectBoardList" resultMap = "qBoard">
 		select Q.question_no, Q.member_code, Q.question_title, 
 		Q.question_original_filename, Q.question_renamed_filename, 
@@ -60,5 +66,13 @@
 							  question_open = #{questionOpen}
 				where question_no = #{questionNo}
 	</update>
+	<insert id="insertComment" parameterType = "qComment">
+	insert into question_comment
+	values(qcomment_no.nextval, #{questionNo}, #{questionCommentContent}, sysdate)
+	</insert>
+	<select id="showCmt" resultMap="qComment">
+	select * from question_comment 
+	where question_no=#{questionNo}
+	</select>
 	
 </mapper>

@@ -139,4 +139,9 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.updateReason(memberCode,reason);
 	}
 
+	@Override
+	public void updateKeepLogin(String memberId, String sessionId, Date date) {
+		memberDAO.updateKeepLogin(memberId, sessionId, date);
+	}
+
 }

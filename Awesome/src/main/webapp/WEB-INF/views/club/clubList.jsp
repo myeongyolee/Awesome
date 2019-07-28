@@ -60,106 +60,6 @@ $(function(){
 	
 });
 
-function serchAjax(){
-	$("#clubList-container").html("");
-	getClubList();
-}
-
-function getClubList(){
-	var param={};
-	var check = $(":checkbox:checked");
-	if(check!=null){
-		for(var i=0; i<check.length; i++){
-			var id = $(check[i]).attr('name');
-			console.log($("#"+id).val());
-			switch(id){
-				case "title" : 
-					param.title = $(":text#"+id).val(); 
-					break;
-				case "nickName" : 
-					param.nickName = $(":text#"+id).val(); 
-					break;
-			}
-		}
-}
-	if($("#city>option:selected").not("#defaultCity")) param.city = $("#city>option:selected").val();
-	if($("#local>option:selected").not("#defaultLocal")) param.local = $("#local>option:selected").val();
-	if($("#interesting>option:selected").not("#defaultInteresting")) param.interesting = $("#interesting>option:selected").val();
-	
-	console.log(param);
-	var str = JSON.stringify(param);
-	console.log(str);
-	
-	
-	$.ajax({
-		url : '${pageContext.request.contextPath}/club/clubsearchList.do',
-		dataType: "json",
-		type : 'POST',
-		data : str,
-		contentType: "application/json; charset=UTF-8",
-		success : function(data) {
-			console.log("ajax통신와료!");
-			console.log(data);
-			
-			var html ="";
-			
-			html+='<table>';
-			html+='<tr>';
-			html+=	'<th>클럽이미지</th>';
-			html+=	'<th>클럽이름</th>';
-			html+=	'<th>클럽장</th>';
-			html+=	'<th>회원수</th>';
-			html+=	'<th>클럽한줄소개</th>';
-			
-			html+='</tr>';
-		
-			if(data!=null){
-				
-				for(var i=0; i<data.clubList.length; i++){
-					html+='<table id="'+data.clubList[i].clubCode+'" class="clubslist">';	
-					html+='<tr no="'+data.clubList[i].clubCode+'">';
-					html+='<td rowspan="4" colspan="1">';
-					if(data.clubList[i].mainrenamedFilename.empty){
-						html+='<img src="${pageContext.request.contextPath }/resources/images/log.jpg"  alt="awesome로고"  style="width: 100px; height: 100px; "  />';
-					}
-					if(!data.clubList[i].mainrenamedFilename.empty){
-						html+='<img src="${pageContext.request.contextPath }/resources/upload/club/'+data.clubList[i].mainrenamedFilename+'"  alt="awesome로고"  style="width: 100px; height: 100px;" />';
-					}
-					html+='</td>';
-					html+='<td style="font-weight: 800;">  클럽이름: '+data.clubList[i].clubName+'</td></tr>';			
-					html+='<tr no="'+data.clubList[i].clubCode+'">';
-					if(data.clubList[i].interestingCode==1){
-						html+='<td>  카테고리: 운동</td>';
-					}
-					if(data.clubList[i].interestingCode==21){
-						html+='<td>  카테고리: 음식</td>';
-					}
-					if(data.clubList[i].interestingCode==22){
-						html+='<td>  카테고리: 여행</td>';
-					}
-					if(data.clubList[i].interestingCode==23){
-						html+='<td>  카테고리: 기타</td>';
-					}
-					html+='</tr><tr no="'+data.clubList[i].clubCode+'">';
-					html+='<td>  클럽장: '+data.clubList[i].clubAdmin+'</td>';
-					html+='<td>회원수: '+data.clubList[i].clubmemberCount+'</td></tr>';
-					
-					html+='<tr no="'+data.clubList[i].clubCode+'">';
-					html+='<td>  클럽한줄소개: '+data.clubList[i].clubsimpleInfo+'</td></tr></table><br>';
-				
-				}
-			}
-			html+='</table>';
-			
-		
-		$("#clubList-container").append(html);
-		},
-		error:function(jqxhr, textStatus, errorThrown){
-			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
-		}
-	}); 
-}
-
 </script>
 <style>
 .clubslist:hover
@@ -180,9 +80,6 @@ function getClubList(){
 		<h2>클럽리스트</h2>
 		${clubList }
 		
-		<a href="${pageContext.request.contextPath }/club/myclubList.do">마이클럽</a>
-		
-		<div id="clubList-container">
 		<table>
 			<tr>
 				<th>클럽이미지</th>
@@ -238,8 +135,6 @@ function getClubList(){
 		</c:if>
 	
 		</table>
-		</div>
-		
 		
 		<div id="search-container" class="card p-4 mb-4 bg-white">
 		<ul class="list-group list-group-flush">

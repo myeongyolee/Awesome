@@ -39,6 +39,7 @@ comment on column member.introduce is '자기소개';
 comment on column member.verify is '회원분류';
 comment on column member.enroll_date is '가입일';
 
+drop table secession_member;
 
 -- 탈퇴멤버테이블
 create table secession_member(
@@ -58,9 +59,7 @@ create table secession_member(
     introduce varchar2(4000),
     verify char(1) default 'M' check(verify in ('A', 'M')),
     enroll_date date default sysdate,
-    reason varchar2(2000),
-    constraint unique_secession_member_id unique(member_id),
-    constraint unique_secession_nickname unique(nickname)
+    reason varchar2(2000)
 );
 
 comment on table secession_member is '탈퇴회원테이블';
@@ -102,10 +101,8 @@ begin
 end;
 /
 
-select * from secession_member;
-insert into secession_member(reason) values('dsds') where member_code=265;
-update secession_member set reason='dsds' where member_code=265;
 
+drop table address;
 --주소테이블
 create table address(
     member_code number,
@@ -117,7 +114,6 @@ create table address(
     place_lng number not null
 );
 
-drop table address;
 
 comment on table address is '주소테이블';
 comment on column address.member_code is '회원코드';

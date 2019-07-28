@@ -16,7 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.awesome.board.model.exception.BoardException;
 import com.kh.awesome.board.model.service.BoardService;
 import com.kh.awesome.board.model.vo.QuestionBoard;
+import com.kh.awesome.board.model.vo.QuestionComment;
 
 @Controller
 @RequestMapping("/questionBoard")
@@ -165,7 +167,7 @@ public class BoardController {
 	@RequestMapping(value="/boardView.do", method=RequestMethod.POST,
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)	
 	@ResponseBody
-	public Map<String, String> selectOneBoard(
+	public Map<String, Object> selectOneBoard(
 			@RequestParam ("questionNo") int questionNo, HttpServletRequest request) {
 		Map<String, String> b = new HashMap<>();
 				b= boardService.selectOneQuestion(questionNo);
@@ -179,10 +181,13 @@ public class BoardController {
 		String questionOriginalFilename = b.get("questionOriginalFilename");
 		String questionRenamedFilename = b.get("questionRenamedFilename");
 		
-		html += "<img src='"+request.getContextPath()+"/resources/upload/qBoard/"+b.get("questionRenamedFilename")
-		+"' style=\"width: 250px; height: 250px; position: block;\"/>";
+		List<Map<String, String>>showCmt =boardService.showCmt(questionNo); 
+//		String questionCommentContent = showCmt.get("questionCommentContent");
 		
-		Map<String, String> htmlMap = new HashMap<String, String>();
+		html += "<img src='"+request.getContextPath()+"/resources/upload/qBoard/"+b.get("questionRenamedFilename")
+		+"' id='board_img' style=\"width: 250px; height: 250px; position: block;\"/>";
+		
+		Map<String, Object> htmlMap = new HashMap<String, Object>();
 		htmlMap.put("html", html);
 		htmlMap.put("question_No", question_No);
 		htmlMap.put("memberCode", memberCode);
@@ -191,6 +196,7 @@ public class BoardController {
 		htmlMap.put("memberName", memberName);
 		htmlMap.put("questionOriginalFilename", questionOriginalFilename);
 		htmlMap.put("questionRenamedFilename", questionRenamedFilename);
+		htmlMap.put("showCmt", showCmt);
 		
 		return htmlMap;
 	}
@@ -222,6 +228,26 @@ public class BoardController {
 			return "redirect:/questionBoard/questionBoard.do";
 		}
 
-	
+	 	@RequestMapping("/insertComment.do")
+		@ResponseBody
+		public int addComment(@RequestBody Map requestMap)
+		throws Exception{
+	 		logger.info("requestMap={}", requestMap);
+	 	   int questionNo = Integer.parseInt((String)requestMap.get("questionNo"));
+	       String questionCommentContent = (String)requestMap.get("questionCommentContent");
+	       
+			QuestionComment questionComment = new QuestionComment();
+			questionComment.setQuestionNo(questionNo);
+			questionComment.setQuestionCommentContent(questionCommentContent);
+			
+			int result = 0;
+			try { 
+				result = boardService.insertComment(questionComment);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
 	
 }

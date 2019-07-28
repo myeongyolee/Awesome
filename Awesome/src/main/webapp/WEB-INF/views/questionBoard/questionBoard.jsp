@@ -45,12 +45,18 @@ top:100px;
 			type: "post", 
 			dataType: "json",
 			success: function(data){
-				console.log(data);
+				console.log(data.questionCommentContent);
 				$("div#oneQ").toggle()
 				.html("제목: "+data.questionTitle+"<br/>")
 				.append("작성자: "+data.memberName+"<br/>")
 				.append("제목: "+data.questionContent+"<br/>")
 				.append(data.html)
+				.append('<form id="commentForm" name="commentForm" method="post">')
+				.append('<textarea style="width: 700px" rows="3" cols="30" id="commentContent" name="questionCommentContent" placeholder="댓글을 입력하세요"></textarea>')
+				.append('<input type="hidden" name="questionNo" value="'+data.question_No+'">')
+				.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글')
+				.append("</button> &nbsp&nbsp")
+				.append('</form>')
 				.append('<br/><br/><button id="deleteButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="delete_validate('+data.question_No+');"> 삭제하기')
 				.append("</button> &nbsp&nbsp")
 				.append('<button id="modifyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="position:inline-block;" onclick="update_question('+data.question_No+');"> 수정하기')
@@ -63,6 +69,35 @@ top:100px;
 		})
 	}); 
 });  
+  function insertComment(){
+	  var param = 
+		  {questionCommentContent: $("[name=questionCommentContent]").val(), 
+			  questionNo :$("[name=questionNo]").val()
+		  }		
+	  var str = JSON.stringify(param);
+	  $.ajax({
+		  url: "${pageContext.request.contextPath}/questionBoard/insertComment.do", 
+		  dataType:"json",
+		  type: 'POST',
+		  data: str, 
+		  contentType: "application/json; charset=UTF-8",
+		  success: function(data){
+			  console.log("data:  "+data);
+			  if(data != 0)
+				  {
+				  console.log($("[name=questionCommentContent]").val());
+				  
+				  $("img#board_img").append('<div id="qcomment" style="position:fixed; left:0;z-index:99;">')
+				  .append($("[name=questionCommentContent]").val())
+				  .append('</div>');
+				  $("[name=questionCommentContent]").val('');	  
+				  }
+		  }, 
+		  error: function(request, status, error){
+	
+		  }
+	  });
+  };
   function delete_validate(question_No){
 		if(!confirm("정말 삭제하시겠습니까?")) return;
 		location.href="${pageContext.request.contextPath}/questionBoard/deleteQuestion.do?questionNo="+question_No;

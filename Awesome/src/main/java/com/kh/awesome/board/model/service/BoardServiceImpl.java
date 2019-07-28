@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kh.awesome.board.model.dao.BoardDAO;
 import com.kh.awesome.board.model.exception.BoardException;
 import com.kh.awesome.board.model.vo.QuestionBoard;
+import com.kh.awesome.board.model.vo.QuestionComment;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -61,6 +62,14 @@ public class BoardServiceImpl implements BoardService{
 		return boardDAO.updateBoard(qBoard);
 	}
 
+	@Override
+	public int insertComment(QuestionComment questionComment) {
+		return boardDAO.insertComment(questionComment);
+	}
 
+	@Override
+	public List<Map<String, String>> showCmt(int questionNo) {
+		return boardDAO.showCmt(questionNo);
+	}
 }
 

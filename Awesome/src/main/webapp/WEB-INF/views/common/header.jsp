@@ -136,9 +136,8 @@
      </div>
    </div>
  </div>
-       
-   <!-- 20190705 12:54 김용빈  -->
-<!-- 회원가입 모달 추가 -->
+<!-- 20190705 12:54 김용빈 
+회원가입 모달 추가 -->
 <div class="modal fade" id="memberEnrollModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -180,7 +179,7 @@
             
             <c:if test="${memberLoggedIn != null }">
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소개팅" />
-	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'"/>
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동네 친구" />
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소모임" />
             </c:if>
@@ -197,8 +196,8 @@
 	  </header>
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
-	    	
 <script>
+
 $(function(){
 	$("#titleLogo").on("click",function(){
 		location.href="${pageContext.request.contextPath}/index";
@@ -214,8 +213,9 @@ function findMember(){
 	window.open("/awesome/member/findMember.do","pop","width=570,height=420, scrollbars=yes, resizable=yes");
 }
 
-<!-- 20190705 12:54 김용빈  -->
-<!-- 회원가입 모달 추가 - -->
+
+/* <!-- 20190705 12:54 김용빈  --> */
+/* <!-- 회원가입 모달 추가 - --> */
     $(function(){
         $("#signUp").on("click",function(){
         	
@@ -236,8 +236,7 @@ function findMember(){
             });
         });
     })
-    
-<!--20190711 09:34 김용빈-->
+/* <!--20190711 09:34 김용빈--> */
     $("#logOut").on("click",function(){
         
         var logout=confirm("정말로 로그아웃?");
@@ -247,8 +246,8 @@ function findMember(){
         }
     });
     
-<!-- 20190715 12:35 김용빈  -->
-<!-- 아이디 저장 -->
+/* <!-- 20190715 12:35 김용빈  -->
+<!-- 아이디 저장 --> */
     $(function(){
         $("#memberId").val(localStorage.getItem("awesomeSaveMemberId"));
     });
@@ -279,7 +278,6 @@ function findMember(){
 				  },
 				})
 		}
-
 	});
 	
 	$(function(){
@@ -303,7 +301,7 @@ function findMember(){
 	
 	$("li.mdl-menu__item").on("click",function(){
 		var mCode = $(this).attr("id");
-		console.log("mCode = "+mCode)
+		console.log("mCode = "+mCode);
 		
 		$.ajax({
 			url : "${pageContext.request.contextPath}/sock/selectMyChat",
@@ -365,12 +363,8 @@ function findMember(){
 		
 		
 	})
-	
-
-  
 </script>
 <script type="text/javascript">
-
  <%if( member != null){%>
 		
 	function onClose(evt){
@@ -399,7 +393,7 @@ function findMember(){
 		for(var i=0; i<strArray.length; i++){
 			console.log("str["+i+"]" + strArray[i])
 		}
-		
+		 
 		messageType = strArray[0];
 		sender = strArray[1];
 		memberCode = strArray[2];
@@ -422,7 +416,8 @@ function findMember(){
 		}else if(messageTpye =="alarm"){
 			
 		}
-	<%}%>
-	
-</script>
+	}
 
+	<%}%>
+
+</script>
