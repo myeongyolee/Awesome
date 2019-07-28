@@ -57,15 +57,14 @@ div#board-container label.custom-file-label{text-align:left;}
 	font-weight:bold;
 }
  #writeButton{
-/*  position:absolute; */
- left: 100px;
+	position: absolute;
+    left: 850px;
  } 
  
 #a_box{
 border:1px gray; width: 950px; height: 50px;z-index:3;
 margin-top:100px; background-color: #f2f2f2;
 }
-
 #selectedQ{
 border: 1px solid gray;
 background: white;

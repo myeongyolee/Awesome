@@ -60,46 +60,49 @@ i#right,i#left:hover{
  cursor:pointer;
 }
 
-/* div#btn-more-container{
-	
-} */
 
    </style>
  
 <div id="admin_board">
   <div id="main_board">
-  <!--메뉴 탭  -->
-<!-- 	  <div class="tab"> -->
-	  <button class="tablinks" onclick="${pageContext.request.contextPath}/">
-	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/>
+ <!--메뉴 탭  -->
+	  <div class="tab">
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/adminMain.do'">
+ 	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/> 
 	  	<span class="text_">&nbsp;
 	  	 전체보기
 	  	</span>
 	  </button>
-	  <button class="tablinks" onclick="${pageContext.request.contextPath}/admin/manageMembers">
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/manageMembers'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/group.png"/>
 	  	<span class="text_">&nbsp;
-	  	 회원찾기
+	  	 회원찾기 
 	  	</span>
 	  </button>
-	  <button class="tablinks" onclick="${pageContext.request.contextPath}/admin/FindMembers">
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/FindMembers'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/network.png"/>
 	  	<span class="text_">&nbsp;
 	  	 회원관리
 	  	</span>
 	  </button>
-	  <button class="tablinks" onclick="${pageContext.request.contextPath}/admin/answersToQuestions">
+	  <%-- <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/reportBoard'">
+	  <img src="${pageContext.request.contextPath}/resources/images/icons/search.png"/>
+	  	<span class="text_">&nbsp;
+	  	신고관리
+	  	</span>
+	  </button>
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/answersToQuestions'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/october.png"/>
 	  	<span class="text_">&nbsp;
 	  	문의 게시판
 	  	</span>
 	  </button>
-	  <button class="tablinks" onclick="${pageContext.request.contextPath}/admin/answersToQuestions">
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/answersToQuestions'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/search.png"/>
 	  	<span class="text_">&nbsp;
 	  	문의 게시판
 	  	</span>
-	  </button>
+	  </button> --%>
 	</div>
 	
 	<div id="Home" class="tabcontent">
@@ -155,10 +158,10 @@ i#right,i#left:hover{
 			</li>
 			<li class="list-group-item">
 	 			<label for="age">나이 </label>
-				  <input type="text" class="js-range-slider" name="age" value="20" />
+				  <input type="text" class="js-range-slider" name="age" value="" />
 			</li>
 			<li class="list-group-item">
-				<button class="btn btn-outline-secondary" type="button" onclick="searchPpl();">검색하기</button>
+				<button class="btn btn-outline-secondary" type="button" onclick="getPplList(1);">검색하기</button>
 			</li>
 		</ul>
 	</div>
@@ -170,8 +173,8 @@ i#right,i#left:hover{
 	<!--pplList 끝  -->
 	<div id="btn-more-container">
  <input type="hidden" id="cPage" value="1"/>
-		<i class="fa fa-angle-double-left fa-3x" id="left"></i>	
-		<i class="fa fa-angle-double-right fa-3x" id="right"></i>
+<!-- 		<i class="fa fa-angle-double-left fa-3x" id="left"></i>	 -->
+		<i class="fa fa-angle-double-down fa-3x" id="right"></i>
 </div>
 	</div>
 	
@@ -215,17 +218,17 @@ i#right,i#left:hover{
 				 
 				 //// 현재 요청 페이지가 마지막 페이지라면, 더보기 버튼을 비 활성화  
 				 if(data.cPage == data.totalPage){
-						$("i#right").css("color","black");
+						$("i#right").css("display","none");
+// 						$("i#right").css("pointer-events","none").append("더이상 조회된 회원이 없습니다. ");
 					}
 					else{
 						$("i#right").css("display","inline-block");				
 					}
 					if(data.cPage == 1){
- 						$("i#left").css("color","black");				
-					}
-					else{
-						$("i#left").css("display","inline-block");								
-					}
+ 						$("i#left").css("opacity","0.8");				
+						$("i#left").css("pointer-events","none")
+						.append("멤버 더보기");
+					} 
 
 			 }//end of success	
 			 
@@ -233,15 +236,6 @@ i#right,i#left:hover{
 		
 	  };
 	  //the end of function
-//왼쪽클릭 
-  $(function(){
-	  $("i#left").click(function(){
-		console.log("왼쪽 클릭~!!")
-		console.log(Number($(this).val()));
-		getMore(Number($(this).val())-1);	 
-		  
-	  })
-  })
 
 function seeOneM(memberCode_){
 		  var param = {memberCode: memberCode_};
@@ -260,17 +254,17 @@ function seeOneM(memberCode_){
 					 html += '<div id ="onem-head">';
 					 html += '<img class="oneM_img" style="width: 580px; height: 500px; text-align:center;" src="${pageContext.request.contextPath}/resources/upload/member/'+data.oneM.renamedProfile+'">';
 					 html += '<p class="text-sm-left">';
-					 html += '회원 코드: '+data.oneM.memberCode+'<br>';
-					 html += '회원아이디: '+data.oneM.memberId+'<br>';
-					 html += '회원 이름: '+data.oneM.memberName+'<br>';
-					 html += '생년월일: '+data.oneM.birthday+'<br>';
-					 html += '전화번호: '+data.oneM.phone+'<br>';
-					 html += '소개팅 공개 여부: '+data.oneM.blindDateOpen+'<br>';
-					 html += '친구 공개 여부: '+data.oneM.friendOpen+'<br>';
-					 html += '검색 공개 여부: '+data.oneM.searchOpen+'<br>';
-					 html += '가입일: '+data.oneM.enrollDate+'<br>';
-					 html += '별명: '+data.oneM.nickName+'<br>';
-					 html += '자기소개 : '+data.oneM.introduce+'<br>';
+					 html += '회원 코드: '+data.oneM.memberCode+'<br>'+'<br>';
+					 html += '회원아이디: '+data.oneM.memberId+'<br>'+'<br>';
+					 html += '회원 이름: '+data.oneM.memberName+'<br>'+'<br>';
+					 html += '생년월일: '+data.oneM.birthday+'<br>'+'<br>';
+					 html += '전화번호: '+data.oneM.phone+'<br>'+'<br>';
+					 html += '소개팅 공개 여부: '+data.oneM.blindDateOpen+'<br>'+'<br>';
+					 html += '친구 공개 여부: '+data.oneM.friendOpen+'<br>'+'<br>';
+					 html += '검색 공개 여부: '+data.oneM.searchOpen+'<br>'+'<br>';
+					 html += '가입일: '+data.oneM.enrollDate+'<br>'+'<br>';
+					 html += '별명: '+data.oneM.nickName+'<br>'+'<br>';
+					 html += '자기소개 : '+data.oneM.introduce+'<br>'+'<br>';
 					 html += '</p>';
 					 
 					 if(data.cm==null)
@@ -290,32 +284,35 @@ function seeOneM(memberCode_){
       grid: true,
       min: 0,
       max: 100,
-      from: 25,
-      to: 35,
-      step: 1, 
-      onChange: function(data){
+      from: 18,
+      to: 45,
+      step: 1
+     /*  onChange: function(data){
     	  var from = data.from;
     	  var to = data.to;
-    	  console.dir("data.from"+ from);
-    	  console.dir("data.to"+ to);
-      }
+    	  console.dir("data.from=="+ from);
+    	  console.dir("data.to=="+ to);
+    }
+    */
   });
   
+ /*
+$(function(){
  function searchPpl(){
 	 $("#pplList").html("");
-	 $("#cPage").val();
-	 getPplList();
+	 $("#cPage").val(); 
+	 getPplList(1);
  };
+	 */
  /*회원 검색   */
- function getPplList(){
-	 var param = {cPage: $("#cPage").val() };
-	 
+ function getPplList(cPage_){
+	 var param = {cPage: cPage_ };
+	 console.log("cPage== " + param.cPage);
 	 if($("[name=byName]:checked")){
-		 var byName = $("#byName").val();
+		 var byName = $("input#byName").val();
 	 };
-	 
-	 console.log('$("#byName").val()== '+ $("#byName").val());
-	 console.log("checkbox="+$(":checkbox:checked"));
+	 console.log("param.cPage==" + param.cPage);
+	 console.log('$("#byName").val()== '+ $("input#byName").val());
 	 
 	  var check = $(":checkbox:checked");
 	 console.log("check="+check); 
@@ -337,13 +334,18 @@ function seeOneM(memberCode_){
 			 }
 		 }
 		 }
-	 
-	
+	 	
 	 if($("#gender>option:selected").not("#defaultGender")) 
 		 param.gender = $("#gender>option:selected").val();
 	 console.log("parma의 gender는 : " + param.gender);
+	 	 
+ 	 param.age = $("[name=age]").val();
+ 	 console.log("ageRange==",param.age);
+ 	 
 	 var str = JSON.stringify(param);
 	 console.log(param);
+	 
+	  
 	 $.ajax({
 		 url: '${pageContext.request.contextPath}/admin/searchPpl.do',
 		 dataType: "json", 
@@ -357,26 +359,40 @@ function seeOneM(memberCode_){
 					
 					 $("#byName" && "#byMid" && "#nickname").val("");
 				 }
-				 if(data !== "")
-			 		{for(var i=0; i<data.length; i++){
-				 	var html = "";
-				 	html += '<div id="m_contentInner" style = "z-index:50;">';
+				 if(data !== ""){
+					 $("#pplList").html("");
+					 console.log(data);
+					 for(var i=0; i<data.searchPplList.length; i++){
+							$("#t_title>h3").html("검색된 회원입니다."); 
+							
+					var html = "";
+					html += '<div id="m_contentInner" style = "z-index:50;">';
 					html += '<div id="m-head">';
-					html += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/member/'+data[i].renamedProfile+'" onclick="seeOneM('+data[i].memberCode+');">';
-					html += '<input type="hidden" value="'+data[i].memberCode+'"/>';
-					html +=	'<h5 class="card-title">'+data[i].memberName+' </h5></div></div>';	 	
-			 }}
+					html += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/member/'+data.searchPplList[i].renamedProfile+'" onclick="seeOneM('+data.searchPplList[i].memberCode+');">';
+					html += '<input type="hidden" value="'+data.searchPplList[i].memberCode+'"/>';
+					html +=	'<h5 class="card-title">'+data.searchPplList[i].memberName+' </h5></div></div>';
+						
+					$("#pplList").append(html);	
+					}//end of for
+					
+					$("#byName" && "#byMid" && "#nickname").val("");
+			 }
+				 console.log("ajax 안에서 cPage:  "+data.cPage);
+				 $("i#right").val(data.cPage);
+				 $("i#left").val(data.cPage);
 				 
-				 $("#t_title>h3").html("검색한 결과입니다."); 
-				 $("#pplList").html(html);	
-				
-			$("#cPage").val(Number($("#cPage").val())+1);	
+				 //// 현재 요청 페이지가 마지막 페이지라면, 더보기 버튼을 비 활성화  
+				 if(data.cPage == data.totalPage){
+						$("i#right").css("display", "none");
+					}
+					else{
+						$("i#right").css("display","inline-block");				
+					}
 		 }, 
 			 error: function(jqxhr, textStatus, errorThrown){
 				 console.log("ajax 처리 실패: " , jqxhr.statu, textStatus, errorThrown);
 			 }
 	 });
 	 };
- 
  </script>
    

@@ -111,6 +111,16 @@ public class AdminDAOImpl implements AdminDAO {
 		return sqlSession.selectList("admin.searchPplList", search, rowBounds);
 	}
 
+	@Override
+	public Map<String, Object> seeHotPpl(int hottestM) {
+		return sqlSession.selectOne("admin.seeHotPpl", hottestM);
+	}
+
+	@Override
+	public int hottestOne() {
+		return sqlSession.selectOne("admin.getHottestM");
+	}
+
 	
  
  

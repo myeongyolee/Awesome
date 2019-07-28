@@ -24,8 +24,49 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
 <style>
-#chart-container{width:800px; height:500px;}
-div#member_age_div{border:none;}
+#chart-container{width: 400px;
+    height: 580px;
+    border: none;
+    position: relative;
+    left: 0px;
+    top: 30px;
+/*     background-color: gray; */
+    position: relative;
+    display: block;
+    /* margin-left: 300px; */
+    /* margin-right: auto; */
+    width: auto;
+    padding: 80px;
+    margin:50px;}
+div#member_age_div{border:black;}
+div#most_like{position: relative;
+    border: 3px solid green;
+    display: block;
+    margin-top:150px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom:100px;
+    width: 50%;
+    z-index: 50;
+    padding: 10px;
+    padding-left: 100px;
+    border-radius: 3%;
+    }
+div#today_count{
+
+	position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align:center;
+    color:white;
+/*     text-shadow: 2px 2px #ff0000; */
+    font-size: 40px;
+    padding:20px;
+    background-image:url("${pageContext.request.contextPath}/resources/images/board_image/beach.jpg");
+     background-repeat: no-repeat; background-size: cover;
+}
 </style>
 <title>홈페이지 통계</title>
 <script>
@@ -59,8 +100,8 @@ function drawMemberGender() {
 
     // Set options for 회원 성비's pie chart.
     var options = {title:'회원 남여 성비',
-                   width:400,
-                   height:200,
+                   width:600,
+                   height:450,
                    is3D: true};
 
     // Instantiate and draw the chart for 회원 성비.
@@ -87,8 +128,8 @@ function drawMemberAge() {
 	
 	var options = {
 		title: "연령대별 회원수",
-		width: 400,
-		height: 200,
+		width: 600,
+		height: 450,
 		bar: {groupWidth: "95%"},
 		legend: { position: "none" },
 	};
@@ -115,8 +156,8 @@ function drawLightningByCity() {
 	
 	var options = {
 		title: "도시별 번개모임 숫자",
-		width: 400,
-		height: 400,
+		width: 600,
+		height: 600,
 		bar: {groupWidth: "95%"},
 		legend: { position: "none" },
 	};
@@ -154,23 +195,25 @@ function drawClubByCity() {
 </script>
 </head>
 <body>
-<div id="chart-container">
 	<div id="today_count">
-		오늘 접속자
-		<br />
-		현재 접속한 회원
+		<h4>오늘의 통계</h4>
+		<br/>
 	</div>
+<div id="chart-container">
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
-			<div id="member-chart-container" class="row swiper-slide">
-				<div id="member_gender_div" class="col-sm" style="border: 1px solid #ccc"></div>
-				<div id="member_age_div" class="col-sm" style="border: 1px solid #ccc"></div>
+<!-- 			<div id="member-chart-container" class="row swiper-slide"> -->
+			<div id="member-chart-container" class="swiper-slide">
+				<div id="member_gender_div" style="border: none"></div>
+				
 			</div>
 			<div id="lightning-chart-container" class="swiper-slide">
-				<div id="lightning_div" style="border: 1px solid #ccc"></div>
+				<div id="lightning_div" style="border: none"></div>
 			</div>
 			<div id="club-chart-conatainer" class="swiper-slide">
-				<div id="club_div" style="border: 1px solid #ccc"></div>
+			<div id="member_age_div"  style="border: none"></div>
+			<!-- class="col-sm" -->
+<!-- 				<div id="club_div" style="border: none"></div> -->
 			</div>
 		</div>
 		<!-- Add Pagination -->
@@ -180,7 +223,10 @@ function drawClubByCity() {
 	    <div class="swiper-button-prev"></div>
 	</div>
 </div>
+<div id="most_like">
+</div>
 <script>
+
 var swiper = new Swiper('.swiper-container', {
     slidesPerView: 1,
     spaceBetween: 30,
@@ -194,6 +240,21 @@ var swiper = new Swiper('.swiper-container', {
       prevEl: '.swiper-button-prev',
     },
 }); 
+/* 가장 인기 있는 사람 보기  */
+$(function(){
+	$.ajax({
+		url: '${pageContext.request.contextPath}/admin/seeMostLike.do',
+		success:function(data){
+			console.log(data);
+			var html = "오늘 가장 많은 표를 받은 회원입니다. <br/><br/><br/>";
+		 	html += '<div id="m_contentInner" style = "z-index:50;">';
+			html += '<div id="m-head">';
+			html += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/member/'+data.renamedProfile+'" style="width: 200px; height: 200px; border-radius:50%;">';
+			html +=	'<h5 class="card-title">'+data.memberCode+'   ' + data.memberName+' </h5></div></div>';	
+			$("#most_like").append(html);	
+		}
+	})
+});
 </script>
 </body>
 </html>

@@ -45,16 +45,23 @@ top:100px;
 			type: "post", 
 			dataType: "json",
 			success: function(data){
-				console.log(data.questionCommentContent);
+				console.log(data)
 				$("div#oneQ").toggle()
-				.html("제목: "+data.questionTitle+"<br/>")
-				.append("작성자: "+data.memberName+"<br/>")
-				.append("제목: "+data.questionContent+"<br/>")
-				.append(data.html)
-				.append('<form id="commentForm" name="commentForm" method="post">')
+				.html("제목:  "+data.questionTitle+"<br/>")
+				.append("작성자:  "+data.memberName+"<br/>")
+				.append("질문 내용:  "+data.questionContent+"<br/>")
+				.append(data.html + '<br/>');
+				
+// 					if(data.showCmt!= null){
+						for(var i=0; i< data.showCmt.length;i++){							
+						console.log("댓글 내용"+data.showCmt[i].questionCommentContent);
+						$("div#oneQ").append('<p id="comToQ"> 질문 답변: '  + data.showCmt[i].questionCommentContent +'<p/><br/>');
+						}
+// 						}						
+				$("div#oneQ").append('<form id="commentForm" name="commentForm" method="post">')
 				.append('<textarea style="width: 700px" rows="3" cols="30" id="commentContent" name="questionCommentContent" placeholder="댓글을 입력하세요"></textarea>')
 				.append('<input type="hidden" name="questionNo" value="'+data.question_No+'">')
-				.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글')
+				.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글 저장')
 				.append("</button> &nbsp&nbsp")
 				.append('</form>')
 				.append('<br/><br/><button id="deleteButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="delete_validate('+data.question_No+');"> 삭제하기')
@@ -87,9 +94,10 @@ top:100px;
 				  {
 				  console.log($("[name=questionCommentContent]").val());
 				  
-				  $("img#board_img").append('<div id="qcomment" style="position:fixed; left:0;z-index:99;">')
-				  .append($("[name=questionCommentContent]").val())
-				  .append('</div>');
+				  $("p#comToQ")
+// 				  .append('<div id="qcomment" style="position:fixed; left:0;z-index:99;">')
+				  .append('<br/><br/>'+$("[name=questionCommentContent]").val())
+// 				  .append('</div>');
 				  $("[name=questionCommentContent]").val('');	  
 				  }
 		  }, 
@@ -160,7 +168,7 @@ top:100px;
   		var privateQ= $(this).attr("value", 'N');  		
   		console.log("openQ: " + privateQ.val());
   	
-  	$("#openCheck").on("click", function(){
+  	$("[name=questionOpen]").on("click", function(){
   		var privateQ= $(this).attr("value", 'Y');  
   		console.log("checked: " + privateQ);
   		$("p1").html("비공개 질문입니다. ");
@@ -204,15 +212,16 @@ top:100px;
 </div>
 
 <div class="main">
-  	<div id=a_box style="position: static; 
-  	border: solid 1px black;height: auto">
+  	<div id=a_box style="position: static;width: 800px; margin:20px;
+  	/* border: solid #007bff 3px; */height: auto;">
 		 고객센터 <br>
 		 문의 전화&nbsp;&nbsp; 1600-9000<br>
 		   월-금 9:00am - 6:00pm<br>
 		   토요일, 일요일, 공휴일은 쉽니다. 		
 	</div>
-	<div id="oneQ" style="border: gray 1px; position: inline-block center; top:25px; height: auto; width: 800px;
-	">
+	<div id="oneQ" style="border: solid yellowgreen 3px; 
+	border-radius:5%;position: inline-block center; top:25px; height: auto; width: 800px;
+	padding:15px; margin:10px;">
 	</div>
   <br/><br/><br/>
   	<div id="qboard-container"> 
@@ -306,15 +315,7 @@ top:100px;
 		<div class="form-group row">
 	    <div class="col-sm-10">
 	      <div class="form-check">
-	        <input class="form-check-input" type="checkbox" 
-	         id="openCheck"
-	        value='N'
-	        name="questionOpen">
-	        <!-- <c:if test="[type=checkbox]:checked">
-	        </c:if>
-	        <c:if test="[type=checkbox]:unchecked">
-	        value='N'
-	        </c:if> -->
+	       
 	        <label class="form-check-label" for="openCheck">
 	          	<p1></p1>
 	        </label>
