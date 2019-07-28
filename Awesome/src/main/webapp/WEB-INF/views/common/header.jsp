@@ -236,7 +236,7 @@ function findMember(){
             });
         });
     })
-<!--20190711 09:34 김용빈-->
+/* <!--20190711 09:34 김용빈--> */
     $("#logOut").on("click",function(){
         
         var logout=confirm("정말로 로그아웃?");
