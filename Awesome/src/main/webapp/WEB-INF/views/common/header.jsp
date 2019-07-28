@@ -197,8 +197,8 @@
 	  </header>
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
-	    	
 <script>
+
 $(function(){
 	$("#titleLogo").on("click",function(){
 		location.href="${pageContext.request.contextPath}/index";
@@ -279,7 +279,6 @@ function findMember(){
 				  },
 				})
 		}
-
 	});
 	
 	$(function(){
@@ -366,7 +365,6 @@ function findMember(){
 		
 	})
 	
-
   
 </script>
 <script type="text/javascript">
@@ -399,7 +397,7 @@ function findMember(){
 		for(var i=0; i<strArray.length; i++){
 			console.log("str["+i+"]" + strArray[i])
 		}
-		
+		 
 		messageType = strArray[0];
 		sender = strArray[1];
 		memberCode = strArray[2];
@@ -423,7 +421,7 @@ function findMember(){
 			
 		}
 	}
-	<%}%>
-	
-</script>
 
+	<%}%>
+
+</script>
