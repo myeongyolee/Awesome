@@ -49,15 +49,32 @@ function lightningListAjax(){
 				for(var i=0; i<data.length; i++){
 					var html = "";
 					html += '<li class="list-group-item">';
-					html += '<div class="card w-50 border-light">';
+					html += '<div class="card-group">'
+					html += '<div class="card border-light">';
 					html += '<div class="card-body">';
 					html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 					html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
-					html += '<p class="card-text>"'+data[i].matchContent+'</p>';
-					html += '<button class="btn btn-primary" onclick="lightningUpdate('+data[i].matchNo+');">수정</button>';
-					html += '<button class="btn btn-primary" onclick="lightningDelete('+data[i].matchNo+');">삭제</button>';				    
-					html += '<input type="hidden" id='+data[i].matchNo+'"-memberCount" value="'+data[i].memberCount+'"';
-					html += "</div></div></li>";
+					html += '<button class="btn btn-primary mr-1" onclick="lightningUpdate('+data[i].matchNo+');">수정</button>';
+					html += '<button class="btn btn-primary" onclick="lightningDelete('+data[i].matchNo+');">삭제</button>';
+					html += "</div></div>";
+					html += '<div class="card border-light">';
+					html += '<div class="card-body">';
+					html += '<h5 class="card-title">참여한 회원</h5>';
+					html +=	'<ul class="list-group list-group-flush">';
+					
+					var joinMemberList = data[i].joinMemberNickName.split(", ");
+					for(var j=0; j<joinMemberList.length; j++){
+						html += '<li class="list-group-item">'+joinMemberList[j]+'</li>';
+					}
+					
+					var noPermitMemberList = data[i].noPermitMemberNickName.split(", ");
+					for(var j=0; j<noPermitMemberList.length; j++){
+						html += '<li class="list-group-item">'+noPermitMemberList[j];
+						html += '<button type="button" class="btn btn-outline-danger btn-sm float-right ml-1" onclick="noPermit('+noPermitMemberList[j]+');">참여 거부</button>';
+						html += '<button type="button" class="btn btn-outline-success btn-sm float-right" onclick="permit('+noPermitMemberList[j]+');">참여 허가</button>';
+						html += '</li>';
+					}
+					html += "</ul></div></div></div></li>";
 					$("#lightningList-body").append(html);
 				}
 				$("#cPage").val(Number($("#cPage").val())+1);				
@@ -69,6 +86,7 @@ function lightningListAjax(){
 	});
 }
 
+//참여한 모임 리스트
 function joinLightningListAjax(){
 	var cPage = $("#cPage").val();
 	
@@ -82,13 +100,12 @@ function joinLightningListAjax(){
 				for(var i=0; i<data.length; i++){
 					var html = "";
 					html += '<li class="list-group-item">';
-					html += '<div class="card w-50 border-light">';
+					html += '<div class="card border-light">';
 					html += '<div class="card-body">';
 					html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 					html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
 					html += '<p class="card-text>"'+data[i].matchContent+'</p>';
-					html += '<button class="btn btn-primary" onclick="lightningUpdate('+data[i].matchNo+');">수정</button>';
-					html += '<button class="btn btn-primary" onclick="lightningDelete('+data[i].matchNo+');">삭제</button>';				    
+					html += '<button class="btn btn-primary float-right" onclick="joinCancle('+data[i].matchNo+');">참여 취소</button>';
 					html += '<input type="hidden" id='+data[i].matchNo+'"-memberCount" value="'+data[i].memberCount+'"';
 					html += "</div></div></li>";
 					$("#lightningList-body").append(html);
@@ -124,7 +141,6 @@ function joinLightningMatchList(){
 		</div>
 		<input type="hidden" id="cPage" value="1"/>
 		<ul id="lightningList-body" class="list-group">
-		
 		</ul>
 		
 	</div>

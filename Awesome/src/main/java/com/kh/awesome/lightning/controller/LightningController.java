@@ -299,7 +299,6 @@ public class LightningController {
 			matchNo.add(no);
 		}
 		param.put("matchNo", matchNo);
-		System.out.println(param);
 		List<Map<String, Object>> joinMemberList = lightningService.selectMyMatchJoinMemberList(param);
 		logger.info("joinMemberList={}",joinMemberList);
 		
@@ -317,7 +316,6 @@ public class LightningController {
 				joinMemberMap.put(k, value);
 			}
 		}
-		
 //		logger.info("joinMemberMap={}",joinMemberMap);
 //		logger.info("key="+key);
 		
@@ -330,6 +328,32 @@ public class LightningController {
 			}
 		}
 		
+		key.clear();
+		//미허가인 맴버리스트 가져오기
+		List<Map<String, Object>> noPermitMemberList = lightningService.selectMyMatchNoPermitMemberList(param);
+		Map<String, String> noPermitMemberMap = new HashMap();
+		
+		for(Map<String, Object> map : noPermitMemberList) {
+			String k = String.valueOf(map.get("matchNo"));
+			if(noPermitMemberMap.isEmpty() || !noPermitMemberMap.containsKey(k)) {
+				noPermitMemberMap.put(k, String.valueOf(map.get("nickName")));
+				key.add(k);
+			}else if(noPermitMemberMap.containsKey(k)) {
+				String value = noPermitMemberMap.get(k);
+				value += ", "+String.valueOf(map.get("nickName"));
+				noPermitMemberMap.put(k, value);
+			}
+		}
+		
+		for(String k : key) {
+			for(Map<String,Object> map : lightningList) {
+				if(String.valueOf(map.get("matchNo")).equals(k)) {
+					map.put("noPermitMemberNickName", noPermitMemberMap.get(k));
+				}
+//				logger.info("map={}",map);
+			}
+		}
+		logger.info("lightningList={}", lightningList);
 		return lightningList;
 	}
 	
@@ -343,13 +367,24 @@ public class LightningController {
 		int memberCode = member.getMemberCode();
 		logger.info("memberCode="+memberCode);
 		//참여한 모임코드리스트 가져오기
-		List<Integer> matchCodeList = lightningService.selectJoinMatchCode(memberCode, numPerPage, cPage);
+		List<String> matchCodeList = lightningService.selectJoinMatchCode(memberCode, numPerPage, cPage);
+		logger.info("matchCodeList={}", matchCodeList);
 		
-		//참여한 모임들 상세정보 가져오기
-		List<Map<String, Object>> lightningList = lightningService.selectJoinLightningList(matchCodeList);
-		logger.info("lightningList={}",lightningList);
+		Map<String,List<String>> param = new HashMap();
+		param.put("matchCodeList", matchCodeList);
 		
-		return lightningList;
+		if(matchCodeList.isEmpty()) {
+			
+			List<Map<String, Object>> lightningList = new ArrayList<>();
+			return lightningList;
+			
+		}else {
+			//참여한 모임들 상세정보 가져오기
+			List<Map<String, Object>> lightningList = lightningService.selectJoinLightningList(param);
+			logger.info("lightningList={}",lightningList);
+			
+			return lightningList;			
+		}
 	}
 	
 	@RequestMapping("lightningDelete.do")

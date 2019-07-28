@@ -28,13 +28,15 @@ public interface LightningDAO {
 
 	int deleteLightning(int matchNo);
 
-	List<Integer> selectJoinMatchCode(int memberCode, int numPerPage, int cPage);
+	List<String> selectJoinMatchCode(int memberCode, int numPerPage, int cPage);
 
-	List<Map<String, Object>> selectJoinLightningList(List<Integer> matchCodeList);
+	List<Map<String, Object>> selectJoinLightningList(Map<String,List<String>> param);
 
 	int insertMatchJoin(Map<String, Integer> map);
 
 	List<Map<String, Object>> selectMyMatchJoinMemberList(Map<String, List<String>> param);
+
+	List<Map<String, Object>> selectMyMatchNoPermitMemberList(Map<String, List<String>> param);
 
 
 }

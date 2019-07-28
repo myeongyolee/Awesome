@@ -60,8 +60,8 @@ function joinApplication(matchNo){
 				$("#btn-"+matchNo).addClass("btn-lg");
 				alert("참여신청이 완료되었습니다.");				
 				//모임작성자에게 메세지 보내기
-				var sendMsg = "message|"+receiveMemberCode+"|"+msg;
-				sendMessage(sendMsg);
+				/* var sendMsg = "alarm|"+receiveMemberCode+"|"+msg;
+				sendMessage(sendMsg); */
 			}else{
 				alert("이미 참여했거나 참여 신청중인 모임입니다.");
 			}
@@ -171,7 +171,7 @@ function getLightningList(){
 					html += '<ul class="list-group list-group-flush">';
 					var joinMemberList = data[i].joinMemberNickName.split(", ");
 					for(var k=0; k<joinMemberList.length; k++){
-						html += '<li class="list-group-item">'+joinMemberList[i]+'</li>';
+						html += '<li class="list-group-item">'+joinMemberList[k]+'</li>';
 					}
 					html += '</ul></div></div></div>';
 				}

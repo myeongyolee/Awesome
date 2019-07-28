@@ -77,15 +77,15 @@ public class LightningServiceImpl implements LightningService {
 	}
 
 	@Override
-	public List<Integer> selectJoinMatchCode(int memberCode, int numPerPage, int cPage) {
+	public List<String> selectJoinMatchCode(int memberCode, int numPerPage, int cPage) {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectJoinMatchCode(memberCode, numPerPage, cPage);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectJoinLightningList(List<Integer> matchCodeList) {
+	public List<Map<String, Object>> selectJoinLightningList(Map<String,List<String>> param) {
 		// TODO Auto-generated method stub
-		return lightningDAO.selectJoinLightningList(matchCodeList);
+		return lightningDAO.selectJoinLightningList(param);
 	}
 
 	@Override
@@ -98,6 +98,12 @@ public class LightningServiceImpl implements LightningService {
 	public List<Map<String, Object>> selectMyMatchJoinMemberList(Map<String, List<String>> param) {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectMyMatchJoinMemberList(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMyMatchNoPermitMemberList(Map<String, List<String>> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectMyMatchNoPermitMemberList(param);
 	}
 
 }

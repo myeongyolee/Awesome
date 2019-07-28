@@ -80,16 +80,16 @@ public class LightningDAOImpl implements LightningDAO {
 	}
 
 	@Override
-	public List<Integer> selectJoinMatchCode(int memberCode, int numPerPage, int cPage) {
+	public List<String> selectJoinMatchCode(int memberCode, int numPerPage, int cPage) {
 		// TODO Auto-generated method stub
 		RowBounds rowBounds = new RowBounds(numPerPage*(cPage-1), numPerPage);
 		return sqlSession.selectList("selectJoinMatchCode", memberCode, rowBounds);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectJoinLightningList(List<Integer> matchCodeList) {
+	public List<Map<String, Object>> selectJoinLightningList(Map<String,List<String>> param) {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("selectJoinLightningList", matchCodeList);
+		return sqlSession.selectList("selectJoinLightningList", param);
 	}
 
 	@Override
@@ -102,6 +102,12 @@ public class LightningDAOImpl implements LightningDAO {
 	public List<Map<String, Object>> selectMyMatchJoinMemberList(Map<String, List<String>> param) {
 		// TODO Auto-generated method stub
 		return sqlSession.selectList("selectMyMatchJoinMemberList", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMyMatchNoPermitMemberList(Map<String, List<String>> param) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList("selectMyMatchNoPermitMemberList", param);
 	}
 
 }

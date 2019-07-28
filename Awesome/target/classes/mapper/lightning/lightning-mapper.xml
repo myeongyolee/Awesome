@@ -128,8 +128,8 @@
 	        left join city C on L.city_code = C.city_code
 		where matching_type = 'L' 
 		<if test="matchCodeList != null">
-			<foreach collection="matchCodeList" item="e" open="and " separator=" or ">
-			match_no = #{e}
+			<foreach collection="matchCodeList" item="e" open="and " separator=" or " >
+			match_no = #{e.matchNo}
 			</foreach>
 		</if>
 		order by M.match_no desc
@@ -166,7 +166,19 @@
 	<select id="selectMyMatchJoinMemberList" resultMap="joinMember">
 		select J.match_no, M.nickname
 		from matching_join_member J left join member M on J.member_code = M.member_code
-		where J.join_check = 'Y' 
+		where J.join_check = 'Y' and J.permit_check = 'Y'
+		<if test="joinMemberList != null">
+		and J.match_no in 
+		<foreach collection="matchNo" item="e" open="(" close=")" separator=",">
+		#{e}
+		</foreach>
+		</if>
+	</select>
+	
+	<select id="selectMyMatchNoPermitMemberList" resultMap="joinMember">
+		select J.match_no, M.nickname
+		from matching_join_member J left join member M on J.member_code = M.member_code
+		where J.join_check = 'Y' and J.permit_check = 'N'
 		<if test="joinMemberList != null">
 		and J.match_no in 
 		<foreach collection="matchNo" item="e" open="(" close=")" separator=",">
