@@ -301,7 +301,7 @@ function findMember(){
 	
 	$("li.mdl-menu__item").on("click",function(){
 		var mCode = $(this).attr("id");
-		console.log("mCode = "+mCode)
+		console.log("mCode = "+mCode);
 		
 		$.ajax({
 			url : "${pageContext.request.contextPath}/sock/selectMyChat",
