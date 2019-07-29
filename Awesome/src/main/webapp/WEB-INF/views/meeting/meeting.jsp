@@ -177,7 +177,7 @@
         $("#non-like").on("click",function(){
         	changeUser("N");
         });
-        
+         
         /* 나를 좋아한 사람 */
         function likeMeUser(){
         	var memberCode = ${sessioScope.memberCode}
