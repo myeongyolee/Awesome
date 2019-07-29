@@ -802,23 +802,25 @@ function test3(){
 }
 
 function selectPrimary(num){
-	console.log("selectPrimary 들어옴");
-	console.log(num);
-	
-	var result = $("a.p"+num)[0].innerHTML;
-	var result2 = $("input[name=pid"+num+"]").val();
-	var result3 = $("input[name=padd"+num+"]").val();
-	
-	console.log(result);
-	console.log(result2);
-	console.log(result3);
-	
-	$("input[name=primary]").val(result);
-	$("input[name=primary_id]").val(result2);
-	$("input[name=primary_address]").val(result3);
-	
-	$("div.primary-div").hide();
-	
+    console.log("selectPrimary 들어옴");
+    console.log(num);
+    $("input[name=primary]").removeClass("text-success");
+    
+    var result = $("a.p"+num)[0].innerHTML;
+    var result2 = $("input[name=pid"+num+"]").val();
+    var result3 = $("input[name=padd"+num+"]").val();
+    
+    console.log(result);
+    console.log(result2);
+    console.log(result3);
+    
+    $("input[name=primary]").val(result);
+    $("input[name=primary]").addClass("text-success");
+    $("input[name=primary_id]").val(result2);
+    $("input[name=primary_address]").val(result3);
+    
+    $("div.primary-div").hide();
+    
 }
 
 function selectMiddle(num){
@@ -865,5 +867,5 @@ function summitFrm(){
 	console.log("summitFrm들어옴");
 	$("form[name=school-frm]").submit();
 }
-<!-- 동창찾기 관련 script END-->
+/* <!-- 동창찾기 관련 script END--> */
 </script>
