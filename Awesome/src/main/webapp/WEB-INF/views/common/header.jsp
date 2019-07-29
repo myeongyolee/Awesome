@@ -68,7 +68,7 @@
 		#titleLogo:hover{cursor:pointer;}
 		<%-- socket chat --%>
 		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;width: 280px; height:450px;border-radius:21px;}
-		#chat_head{height:43px; padding-top:10px; padding-left:10px; border-bottom: 1px solid #e1e1e1; width:100%}
+		#chat_head{height:43px; padding-top:10px; padding-left:10px; border-bottom: 1px solid #e1e1e1; width:100%;}
 		#chat_log{width:279px;  height: 358px; overflow-y: auto; padding: 10px 9px; border-bottom:1px solid #e1e1e1;background:#1aaec5a6;}
 		#chat_com{text-align:center; padding-top: 11px;}
 		ul>li{list-style: none;}
