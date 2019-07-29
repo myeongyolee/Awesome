@@ -125,7 +125,5 @@ public class MemberDAOImpl implements MemberDAO {
        sqlSession.update("member.updateKeepLogin",map);
 		
 	}
-
-
 	
 }

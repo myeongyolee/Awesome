@@ -16,7 +16,8 @@
 	</select>
 	
 	<select id="schoolList" resultType="map">
-		select * from school_club where school_code in
+		select * from school_club S left join member M using(member_code) 
+		where school_code in
 		<foreach collection="list" item="p" open="(" close=")" separator=",">
 			#{p}
 		</foreach>
@@ -29,8 +30,11 @@
 		</foreach>
 	</select>
 	
-	<insert id="makeSchoolEnd">
+	<insert id="makeSchoolEnd" parameterType="schoolClub">
 		insert into school_club values(seq_club_code.nextval, #{memberCode}, #{schoolClubTitle}, #{club_info}, #{club_info_long}, #{originalFileName}, #{renamedFileName}, #{schoolId}, #{schoolName}, #{schoolAddress})
+		<selectKey keyProperty="schoolClubCode" resultType="_int" order="AFTER">
+	  		select seq_club_code.currval from dual
+	  	</selectKey>
 	</insert>
 	
 	<select id="MyList" resultType="map">
@@ -45,10 +49,124 @@
 		select count(*) from member M join school S using(member_code) where school_code = #{schoolCode} and search_open = #{open} and member_code not in #{memberCode}
 	</select>
 	
+	<select id="totalClubContent" resultType="_int">
+		select count(*) from club_content where club_code = #{clubCode} and (write_level = 0 or write_level = 1)
+	</select>
 	
+	<select id="AllContentCode" resultType="string">
+		select club_content_code from club_content where club_code = #{clubCode}
+	</select>
 	
+	<select id="schoolPhoto" resultType="map">
+		select * from club_photo where club_content_code in 
+		<foreach collection="list" item="p" open="(" close=")" separator=",">
+			#{p}
+		</foreach>
+	</select>
 	
+	<insert id="insertSchoolContent">
+		insert into club_content values(seq_club_content_code.nextval, #{clubCode}, #{memberCode}, #{contentTitle}, #{content}, #{writeLevel}, sysdate )
+	</insert>
 	
+	<select id="checkClubSchool" resultType="string">
+		select count(*) from club_member where club_code = #{clubCode} and club_member_code = #{memberCode}
+	</select>
 	
+	<select id="checkClubSchool2" resultType="string">
+		select club_join_check from club_member where club_code = #{clubCode} and club_member_code = #{memberCode}
+	</select>
+	
+	<insert id="enrollSchoolClub">
+		insert into club_member values(#{clubCode}, #{memberCode}, #{grade}, #{clubJoinCheck})
+	</insert>
+	
+	<select id="waitingList" resultType="map">
+		select * 
+		from club_member C join member M on C.club_member_code = M.member_code
+		where club_code = #{clubCode} and club_join_check = #{clubJoinCheck}
+	</select>
+	
+	<update id="acceptMember">
+		update club_member set club_join_check = #{accpet} 
+		where club_code = #{clubCode} and club_member_code in
+		<foreach collection="memberCode" item="p" open="(" close=")" separator=",">
+			#{p}
+		</foreach>
+	</update>
+	
+	<select id="checkClubMember" resultType="map">
+		select * 
+		from club_member C join member M on C.club_member_code = M.member_code
+		where club_code = #{clubCode} and club_join_check = #{clubJoinCheck}
+	</select>
+	
+	<update id="updateGrade">
+		update club_member set club_mem_grade = #{memberGrade}
+		where club_code = #{clubCode} and club_member_code = #{memberCode}
+	</update>
+	
+	<select id="searchMySchoolClub" resultType="map">
+		select * from club_member C join school_club S using(club_code)
+		where club_member_code = #{memberCode} and club_join_check = #{clubJoinCheck}
+	</select>
+	
+	<insert id="insertSchoolImg" parameterType="clubcontent">
+		insert into club_content values(seq_club_content_code.nextval, #{clubCode}, #{memberCode}, #{contentTitle}, #{content}, #{writeLevel}, sysdate)
+	  	<selectKey keyProperty="clubcontentCode" resultType="_int" order="AFTER">
+	  		select seq_club_content_code.currval from dual
+	  	</selectKey>
+	</insert>
+	  
+	<insert id="insertSchoolImg2">
+		insert into club_photo values(#{clubcontentCode},#{clubCode},#{cluboriginalFilename},#{clubrenamedFilename},#{picInfo},seq_club_photo.nextval)
+	</insert>
+	
+	<select id="schoolContentView" resultType="map">
+		select * from club_content where club_code = #{clubCode} and club_content_code = #{clubContentCode}
+	</select>
+	
+	<insert id="insertSchoolComment">
+		insert into club_comment values(seq_meeting_comment_code.nextval, #{commentWriter}, #{commentContent}, sysdate, #{meetingcontentCode})
+	</insert>
+	
+	<select id="schoolCommentList" resultType="map">
+		select comment_content, nickname, comment_date 
+		from club_comment C join member M on C.comment_writer = M.member_code 
+		where meeting_content_code = #{meetingcontentCode}
+	</select>
+	
+	<select id="updateSchoolContent" resultType="map">
+		select * from club_content where club_content_code = #{clubContentCode}
+	</select>
+	
+	<update id="updateContentEnd">
+		update club_content 
+		set content_title = #{contentTitle}, content = #{content}
+		where club_content_code = #{clubContentCode} 
+	</update>
+	
+	<delete id="deleteSchoolContent">
+		delete from club_content where club_content_code = #{clubContentCode} 
+	</delete>
+	
+	<select id="selectOneCalender" resultType="map">
+		select * from match_manager where interesting_code = #{clubCode} order by match_no desc
+	</select>
+
+	<delete id="deleteCalender">
+		delete from match_manager where match_no = #{matchNo}
+	</delete>
+	
+	<delete id="logoutClub">
+		delete from club_member where club_code = #{clubCode} and member_code = #{memberCode}
+	</delete>
+	
+	<delete id="deleteSchoolContent2">
+		delete from club_content where where club_code = #{clubCode} and member_code = #{memberCode}
+	</delete>
+	
+	<insert id="insertClubZzang">
+		insert into club_member values(#{clubCode}, #{memberCode}, #{clubMemGrade}, #{clubJoinCheck})
+	</insert>
 	
 </mapper>

@@ -41,5 +41,4 @@ public interface MemberService {
 
 	void updateKeepLogin(String memberId, String sessionId, Date date);
 
-
 }

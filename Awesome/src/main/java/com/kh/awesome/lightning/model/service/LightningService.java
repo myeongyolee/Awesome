@@ -43,5 +43,4 @@ public interface LightningService {
 
 	int deleteJoinCancle(Map<String, Integer> param);
 
-
 }

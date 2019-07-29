@@ -89,9 +89,5 @@
     <!-- naver login -->
     <beans:bean id="naverLoginBO" class="com.kh.awesome.member.model.vo.NaverLoginBO" />
     
-   
-
-
-
     
 </beans:beans>

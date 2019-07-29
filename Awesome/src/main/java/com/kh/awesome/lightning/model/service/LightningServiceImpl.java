@@ -49,7 +49,6 @@ public class LightningServiceImpl implements LightningService {
 	public List<String> selectInterestingList() {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectInterestingList();
-
 	}
 
 	@Override

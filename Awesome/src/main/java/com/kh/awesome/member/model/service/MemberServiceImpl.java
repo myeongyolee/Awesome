@@ -128,7 +128,7 @@ public class MemberServiceImpl implements MemberService {
 	public Member checkUserWithSessionKey(String sessionId) {
 		return memberDAO.checkUserWithSessionKey(sessionId);
 	}
-	
+
 	@Override
 	public int deleteMember(Member member) {
 		return memberDAO.deleteMember(member);

@@ -226,5 +226,4 @@
 		delete from matching_join_member where match_no = #{matchNo} and member_code = #{memberCode}
 	</delete>
 	
-	
 </mapper>
