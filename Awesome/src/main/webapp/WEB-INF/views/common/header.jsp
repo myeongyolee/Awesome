@@ -79,6 +79,37 @@
 		#chat_com button{border-radius: 20px;border: 1px solid #f0d5d5;background: #dedede;}
 		div#chat_head img{ width: 10px;float: right;margin-right: 20px;}
 	</style>
+	<script>
+	$(function(){
+		$(window).scroll(function(){
+			var page = $(location).attr('pathname');
+			console.log($(document).scrollTop());
+			if(page == '/awesome/lightning/lightningList.do'){
+				if($(window).scrollTop() >= $(document).height() - $(window).height()){
+					getLightningList();
+				}			
+			}
+			else if(page == '/awesome/member/memberInfo.do'){
+				
+				var name = $("#lightningList-body").attr('name');
+				
+				if(name == 'lightningListAjax'){
+					
+					if($(window).scrollTop() >= $(document).height() - $(window).height()){
+						lightningListAjax();
+					}
+					
+				}else if(name == 'joinLightningListAjax'){
+					
+					if($(window).scrollTop() >= $(document).height() - $(window).height()){
+						joinLightningListAjax();
+					}
+					
+				}
+			}
+		});
+	});
+	</script>
 </head>
 <body>
 
@@ -301,37 +332,6 @@ $(function(){
 		location.href="${pageContext.request.contextPath}/index";
    });
 	
-	
-	$(".mdl-layout__content").on("scroll",function(){   
-		var page = $(location).attr('pathname');
-		console.log(page);
-		
-		if(page == '/awesome/lightning/lightningList.do'){
-			
-			if($(window).scrollTop() >= $(document).height() - $(window).height()){
-				getLightningList();
-			}
-			
-		}
-		else if(page == '/awesome/member/memberInfo.do'){
-			
-			var name = $("#lightningList-body").attr('name');
-			
-			if(name == 'lightningListAjax'){
-				
-				if($(window).scrollTop() >= $(document).height() - $(window).height()){
-					lightningListAjax();
-				}
-				
-			}else if(name == 'joinLightningListAjax'){
-				
-				if($(window).scrollTop() >= $(document).height() - $(window).height()){
-					joinLightningListAjax();
-				}
-				
-			}
-		}
-	});
 })
 
 function myInfo(){
@@ -588,9 +588,9 @@ function summitFrm2(){
 		alert("수락버튼은 확인해주세요.");
 	}
 }
-<!-- 동네친구 관련 script END-->
+/* <!-- 동네친구 관련 script END--> */
 
-<!-- 동창찾기 관련 script -->
+/* <!-- 동창찾기 관련 script --> */
 function searchSchool(){
 	console.log("동창찾기 버튼누름");
 	var memberCode = $("input[name=memberLoggedIn]").val();

@@ -78,7 +78,6 @@ p{display:inline;}
 				<c:set var="high_code" value="${my.SCHOOL_CODE }"></c:set>
 			</c:if>
 		</c:forEach>
-	</c:if>	
 </div>	
 <%=com.kh.awesome.common.util.Utils.getPageBar3(totalContent, cPage, numPerPage, memberCode, "schoolList") %>
 
