@@ -213,8 +213,18 @@
 		insert into matching_join_member values (#{matchNo}, #{memberCode}, 'Y', 'N');
 	</insert>
 	
-	<!-- <update id="updatePermit">
-		update matching_join_member set 
-	</update> -->
+	<update id="updatePermit">
+		update matching_join_member set permit_check = 'Y' 
+			where match_no = #{matchNo} and member_code = (select member_code from member where nickname = #{nickName})
+	</update>
+	
+	<delete id="deleteNoPermit">
+		delete from matching_join_member where match_no = #{matchNo} and member_code = (select member_code from member where nickname = #{nickName})
+	</delete>
+	
+	<delete id="deleteJoinCancle">
+		delete from matching_join_member where match_no = #{matchNo} and member_code = #{memberCode}
+	</delete>
+	
 	
 </mapper>

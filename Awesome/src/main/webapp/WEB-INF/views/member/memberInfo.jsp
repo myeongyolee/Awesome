@@ -161,6 +161,7 @@
 					<li><input type="button" class="btn btn-light" id="menu2" value="메뉴2" /></li>
 					<li><input type="button" class="btn btn-light" id="myLightningInfo" value="나의 번개모임" /></li>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br /><hr />
+					<li><input type="button" class="btn btn-light" id="" value="문의하기" /></li>
 					<li><input type="button" class="btn btn-light" id="memberSecession" value="회원탈퇴" /></li>
 
 				</ul>

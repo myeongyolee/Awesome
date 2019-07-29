@@ -1,5 +1,12 @@
+<%@page import="com.kh.awesome.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	Member member = (Member)session.getAttribute("memberLoggedIn");
+%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,11 +17,11 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script>
-$(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+/* $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 	if($(window).scrollTop() >= $(document).height() - $(window).height()){
 		lightningListAjax();
 	}
-});
+}); */
 
 function lightningUpdate(matchNo){
 	if($("#"+matchNo+"-memberCount").val()>=1){
@@ -37,6 +44,8 @@ function lightningDelete(matchNo){
 }
 
 function lightningListAjax(){
+	$("#lightningList-body").removeAttr('name');
+	$("#lightningList-body").attr('name', 'lightningListAjax');
 	var cPage = $("#cPage").val();
 	
 	$.ajax({
@@ -54,6 +63,7 @@ function lightningListAjax(){
 					html += '<div class="card-body">';
 					html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 					html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
+					html += '<input type="hidden" id="'+data[i].matchNo+'-memberCount" value="'+data[i].memberCount+'"</input>';
 					html += '<button class="btn btn-primary mr-1" onclick="lightningUpdate('+data[i].matchNo+');">수정</button>';
 					html += '<button class="btn btn-primary" onclick="lightningDelete('+data[i].matchNo+');">삭제</button>';
 					html += "</div></div>";
@@ -92,6 +102,8 @@ function lightningListAjax(){
 
 //참여한 모임 리스트
 function joinLightningListAjax(){
+	$("#lightningList-body").removeAttr('name');
+	$("#lightningList-body").attr('name', 'joinLightningListAjax');
 	var cPage = $("#cPage").val();
 	
 	$.ajax({
@@ -110,7 +122,6 @@ function joinLightningListAjax(){
 					html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
 					html += '<p class="card-text>"'+data[i].matchContent+'</p>';
 					html += '<button class="btn btn-primary float-right" value="'+data[i].matchNo+'" onclick="joinCancle(this);">참여 취소</button>';
-					html += '<input type="hidden" id='+data[i].matchNo+'"-memberCount" value="'+data[i].memberCount+'"';
 					html += "</div></div></li>";
 					$("#lightningList-body").append(html);
 				}
@@ -148,7 +159,14 @@ function permit(e){
 	$.ajax({
 		url: '${pageContext.request.contextPath}/lightning/memberPermit.do',
 		data: param,
+		type: "POST",
+		dataType: "json",
+		contentType: "application/json; charset=UTF-8",
 		success: function(data){
+			
+			<%-- var sendMsg = "alarm|<%=member.getMemberCode()%>|"+$(e).val()+"|"+matchNo+"번 번개모임글에 참여신청을한 회원이 있습니다.";
+			sendMessage(sendMsg); --%>
+			
 			if(data){
 				$(e).hide();
 				$(e).siblings().hide();
@@ -156,28 +174,48 @@ function permit(e){
 		}
 	});
 }
-//참여 불허
+//참여 거부
 function noPermit(e){
-	$.ajax({
-		url: '${pageContext.request.contextPath}/lightning/memberNoPermit.do?nickName='+$(e).val(),
-		success: function(data){
-			if(data){
-				$(e).parent().hide();
+	var result = confirm("정말 거부하시겠습니까?");
+	
+	if(result){
+		var param = {
+				matchNo: $(e).attr("id"),
+				nickName: $(e).val()
+		};
+			
+		param = JSON.stringify(param);
+		
+		$.ajax({
+			url: '${pageContext.request.contextPath}/lightning/memberNoPermit.do',
+			data: param,
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json; charset=UTF-8",
+			success: function(data){
+				if(data){
+					$(e).parent().hide();
+				}
 			}
-		}
-	});
+		});
+	}
+	
 }
 
 //참가 취소
 function joinCancle(e){
-	$.ajax({
-		url: '${pageContext.request.contextPath}/lightning/matchJoinCancle.do?matchNo='+$(e).val(),
-		success: function(data){
-			if(data){
-				$(e).parent().parent().parent().hide();
+	var result = confirm("정말 취소하시겠습니까?");
+	
+	if(result){
+		$.ajax({
+			url: '${pageContext.request.contextPath}/lightning/matchJoinCancle.do?matchNo='+$(e).val(),
+			success: function(data){
+				if(data){
+					$("li#"+$(e).val()).hide();
+				}
 			}
-		}
-	});
+		});		
+	}
 }
 </script>
 </head>

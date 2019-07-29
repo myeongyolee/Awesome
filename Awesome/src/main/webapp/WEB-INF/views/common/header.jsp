@@ -179,7 +179,7 @@
             
             <c:if test="${memberLoggedIn != null }">
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소개팅" />
-	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'"/>
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개모임" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'"/>
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동네 친구" />
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소모임" />
             </c:if>
@@ -197,12 +197,56 @@
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
 <script>
+/* $(window).scroll(function(){
+	var height = $(document).scrollTop();
+	log(height);
+	
+});
+
+function log(str){
+console.log(str);
+} */
+
+
+
+
 
 $(function(){
 	$("#titleLogo").on("click",function(){
 		location.href="${pageContext.request.contextPath}/index";
    });
 	
+	
+	$(".mdl-layout__content").on("scroll",function(){   
+		var page = $(location).attr('pathname');
+		console.log(page);
+		
+		if(page == '/awesome/lightning/lightningList.do'){
+			
+			if($(window).scrollTop() >= $(document).height() - $(window).height()){
+				getLightningList();
+			}
+			
+		}
+		else if(page == '/awesome/member/memberInfo.do'){
+			
+			var name = $("#lightningList-body").attr('name');
+			
+			if(name == 'lightningListAjax'){
+				
+				if($(window).scrollTop() >= $(document).height() - $(window).height()){
+					lightningListAjax();
+				}
+				
+			}else if(name == 'joinLightningListAjax'){
+				
+				if($(window).scrollTop() >= $(document).height() - $(window).height()){
+					joinLightningListAjax();
+				}
+				
+			}
+		}
+	});
 })
 
 function myInfo(){
