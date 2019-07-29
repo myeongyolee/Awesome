@@ -305,7 +305,7 @@ $(function(){
  };
 	 */
  /*회원 검색   */
-<<<<<<< HEAD
+
  function getPplList(cPage_){
 	 var param = {cPage: cPage_ };
 	 console.log("cPage== " + param.cPage);
