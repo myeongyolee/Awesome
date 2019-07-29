@@ -263,6 +263,8 @@ public class LightningController {
 		map.put("matchNo", matchNo);
 		map.put("memberCode", memberCode);
 		
+		logger.info("map={}", map);
+		
 		int result = lightningService.insertMatchJoin(map);
 		
 		if(result > 0) {

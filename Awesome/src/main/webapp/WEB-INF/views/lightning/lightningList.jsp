@@ -58,7 +58,7 @@ $(function(){
 
 //참여신청
 function joinApplication(e){
-	var id = $(e).attr(id).split("-");
+	var id = $(e).attr("id").split("-");
 	var matchNo = id[1];
 	
 	$.ajax({
@@ -66,7 +66,7 @@ function joinApplication(e){
 		success : function(data){
 			if(data){
 				$("#btn-"+matchNo).addClass("btn-lg");
-				alert("참여신청이 완료되었습니다.");				
+				alert("참여신청이 완료되었습니다.");	
 				//모임작성자에게 알람 보내기
 				var sendMsg = "alarm|<%=member.getMemberCode()%>|"+$(e).val()+"|"+matchNo+"번 번개모임글에 참여신청을한 회원이 있습니다";
 				sendMessage(sendMsg);

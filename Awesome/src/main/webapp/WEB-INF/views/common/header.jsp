@@ -628,6 +628,8 @@ function test(){
 		data:{schoolName1:ch1},
 		success:function(data){	
 			if(data.response.header.resultCode == '00'){
+				$("div.primary-div").html("");
+				$("input[name=primary]").removeClass("text-success");
 				var HTML = "";
 				
 				if(data.response.body.items.length > 1) {
@@ -660,6 +662,7 @@ function test(){
 					console.log(result3);
 					
 					$("input[name=primary]").val(result);
+					$("input[name=primary]").addClass("text-success");
 					$("input[name=primary_id]").val(result2);
 					$("input[name=primary_address]").val(result3);
 					
@@ -686,7 +689,9 @@ function test2(){
 		url:"${pageContext.request.contextPath}/school/test",
 		data:{schoolName1:ch1},
 		success:function(data){
-			console.log(data);
+			/* console.log(data); */
+			$("div.middle-div").html("");
+			$("input[name=middle]").removeClass("text-success");
 			
 			if(data.response.header.resultCode == '00'){
 				var HTML = "";
@@ -720,6 +725,7 @@ function test2(){
 					console.log(result3);
 					
 					$("input[name=middle]").val(result);
+					$("input[name=middle]").addClass("text-success");
 					$("input[name=middle_id]").val(result2);
 					$("input[name=middle_address]").val(result3);
 				}
@@ -745,7 +751,9 @@ function test3(){
 		url:"${pageContext.request.contextPath}/school/test",
 		data:{schoolName1:ch1},
 		success:function(data){
-			console.log(data);
+			/* console.log(data); */
+			$("div.high-div").html("");
+			$("input[name=high]").removeClass("text-success");
 			
 			if(data.response.header.resultCode == '00'){
 				var HTML = "";
@@ -779,6 +787,7 @@ function test3(){
 					console.log(result3);
 					
 					$("input[name=high]").val(result);
+					$("input[name=high]").addClass("text-success");
 					$("input[name=high_id]").val(result2);
 					$("input[name=high_address]").val(result3);
 				}

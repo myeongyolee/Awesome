@@ -210,7 +210,7 @@
 	</delete>
 	
 	<insert id="insertMatchJoin">
-		insert into matching_join_member values (#{matchNo}, #{memberCode}, 'Y', 'N');
+		insert into matching_join_member values (#{matchNo}, #{memberCode}, default, default)
 	</insert>
 	
 	<update id="updatePermit">
