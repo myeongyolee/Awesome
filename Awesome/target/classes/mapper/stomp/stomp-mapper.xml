@@ -30,8 +30,15 @@
 	
 	<insert id="insertAlarm">
 		INSERT INTO alarm_log
-		VALUES(#{memberCode}, #{otherMemberCode}, #{message}, sysdate, 'N')
+		VALUES(#{memberCode}, #{receiveMemberCode}, 'N', #{message} ,sysdate)
 	</insert>
+	
+	<select id="selectAlarm" resultType="alarm">
+		select * 
+		from alarm_log
+		where receive_member_code = #{mCode}
+		order by log_date desc
+	</select>
 	<select id="findRecentList" resultType="map">
 		select *
 		from (

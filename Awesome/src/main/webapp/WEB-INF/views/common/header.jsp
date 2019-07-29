@@ -1,6 +1,7 @@
 <%@page import="com.kh.awesome.member.model.vo.Member,
 			java.util.List.*,
-			com.kh.awesome.util.model.vo.Chat"%>
+			com.kh.awesome.util.model.vo.Chat,
+			com.kh.awesome.util.model.vo.Alarm"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -162,9 +163,15 @@
           <nav class="mdl-navigation">
             <!-- Icon badge -->
             <c:if test="${ memberLoggedIn != null}">
-                <button id="demo-menu-lower-left" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
+                <button id="demo-menu-lower-left-message" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
                     
                     <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left" id="chatBox">
+                    </ul>
+            </c:if>
+            <c:if test="${ memberLoggedIn != null}">
+                <button id="demo-menu-lower-left-alarm" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">N</button>
+                    
+                    <ul id="alarm-ul" class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left" >
                     </ul>
             </c:if>
 	        
@@ -285,7 +292,7 @@ function findMember(){
 	$(function(){
 	
 	<%-- socket 관련 ajax --%>
-	$("#demo-menu-lower-left").on("click",function(){
+	$("#demo-menu-lower-left-message").on("click",function(){
 		var mCode = ${memberLoggedIn.memberCode}
 		console.log("hello chatBox")
 		$.ajax({ 
@@ -299,6 +306,20 @@ function findMember(){
 			}
 		})
 		
+	})
+	$("#demo-menu-lower-left-alarm").on("click",function(){
+		var mCode = ${memberLoggedIn.memberCode}
+		
+		$.ajax({ 
+		 	url:"${pageContext.request.contextPath}/sock/selectAlarm", 
+		 	data: mCode,
+		success : function(data){
+			$("ul#alarm-ul").html(data.alarm.alarmContent)
+		},
+		error: function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패! : "+jqxhr.status);
+		}
+	})
 	})
 	
 	$("li.mdl-menu__item").on("click",function(){
@@ -321,7 +342,6 @@ function findMember(){
 			  				html += '<li class="other"><span>'+data.list.get(i).getChatContent()+'</span></li>';
 			  			}else{
 			  				html += '<li class="My"><span>'+data.list.get(i).getChatContent()+'</span></li>';
-			  				
 			  			}
 			  		}
 			  			
@@ -418,10 +438,15 @@ function findMember(){
 	  				
 	  			}
 				$("ul#"+sender).append(html)
+			}else{
+				$("ul#alarm-ul").append(html)
+				$("#demo-menu-lower-left-alarm").attr("data-badge","N")
 			}
-		}else if(messageTpye =="alarm"){
-			
+		}else if(messageType =="alarm"){
+			$("ul#alarm-ul").append(html)
+			$("#demo-menu-lower-left-alarm").attr("data-badge","N")
 		}
+	}
 	<%}%>
 	
 </script>

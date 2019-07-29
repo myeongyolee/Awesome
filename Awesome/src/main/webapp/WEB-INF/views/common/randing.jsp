@@ -85,39 +85,39 @@
             <div id="page-introduce" class="section" >
             	<div id="select-info" class="inline-div">
             	<br />
-            		<img id="sel-1st" src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" /> <br /><br />
-            		<img id="sel-2nd" src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" /> <br /><br />
-            		<img id="sel-3rd" src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" /> <br /><br />
-            		<img id="sel-4th" src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" /> <br /><br />
-            		<img id="sel-5th" src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" /> <br /><br />
+            		<img id="sel-1st" src="${pageContext.request.contextPath }/resources/images/소개팅.PNG" alt="" /> <br /><br />
+            		<img id="sel-2nd" src="${pageContext.request.contextPath }/resources/images/동네.PNG" alt="" /> <br /><br />
+            		<img id="sel-3rd" src="${pageContext.request.contextPath }/resources/images/번개.PNG" alt="" /> <br /><br />
+            		<img id="sel-4th" src="${pageContext.request.contextPath }/resources/images/클럽.PNG" alt="" /> <br /><br />
+            		<img id="sel-5th" src="${pageContext.request.contextPath }/resources/images/동창.PNG" alt="" /> <br /><br />
             	</div>
             	<div id="select-page-introduce" class="inline-div">
             		<div class="intro-img" id="intro-1st">
             			<h2>소개팅</h2><br />
             			<h4>설렘을 찾아보세요!</h4> <br />
-            			<img src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" />
+            			<img src="${pageContext.request.contextPath }/resources/images/소개팅.PNG" alt="" />
             		</div>
             		<div class="intro-img" id="intro-2nd">
             			<h2>동네친구</h2> <br />
             			<h4>내 근처 친구를 만나보세요!</h4> <br />
-            			<img src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" />
+            			<img src="${pageContext.request.contextPath }/resources/images/동네.PNG" alt="" />
             			
             		</div>
             		<div class="intro-img" id="intro-3rd">
 						<h2>번개팅</h2> <br />
 						<h4>약속과 약속사이 비는 시간에 새로운 만남!</h4> <br />    			
-            			<img src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" />
+            			<img src="${pageContext.request.contextPath }/resources/images/번개.PNG" alt="" />
             		</div>
             		<div class="intro-img" id="intro-4th">
             			<h2>모임</h2> <br />
             			<h4>나의 취미를 공유 하는 모임</h4> <br />
-            			<img src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" />
+            			<img src="${pageContext.request.contextPath }/resources/images/클럽.PNG" alt="" />
             			
             		</div>
             		<div class="intro-img" id="intro-5th">
             			<h2>동창</h2> <br />
             			<h4>학교 친구들을 찾을 수있게 도와드립니다.</h4> <br />
-            			<img src="${pageContext.request.contextPath }/resources/images/sampleimage.png" alt="" />
+            			<img src="${pageContext.request.contextPath }/resources/images/동창.PNG" alt="" />
             		</div>
             	</div>
 		  </div>
@@ -156,7 +156,7 @@
                 //video 사이즈 조절
                 $("video").width($(window).innerWidth())
                 
-                if(${empty memberLoggedIn}){
+                <%if(member == null){%>
                 	
 	                $("#logo").css("top",$("video").innerHeight()/2)
 	                    .css("left",$("video").innerWidth()/2 -95)
@@ -167,13 +167,13 @@
 	                        $("#loginAfter").css("top","0px").css("display");
 	                        $("html").css("overflow-y","auto");
                     })
-                }else{
+                <%}else{%>
                 	$("video").remove();
                 	$("#content-container").fadeIn(1500);
-                	$("#login").css("top","0px").css("display","block");
-                    $("#loginAfter").css("top","0px").css("display");
+                	/* $("#login").css("top","0px").css("display","block");
+                    $("#loginAfter").css("top","0px").css("display"); */
                     $("html").css("overflow-y","auto");
-                }
+                <%}%>
                 
                     
 				$(".page-introduce .fp-tableCell").width("100%");	

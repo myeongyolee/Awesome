@@ -59,8 +59,8 @@ public class EchoHandler extends TextWebSocketHandler {
 		Map<String,String> info = new HashMap<>();
 		info.put("memberCode", sender);
 		info.put("receiveMemberCode", receiveMemberCode);
-		
 		info.put("message", realMessage);
+		
 		if(m[0].equals("message")) {
 			socketService.insertChatLog(info);
 		}
