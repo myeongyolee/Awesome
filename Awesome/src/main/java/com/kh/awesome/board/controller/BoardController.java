@@ -76,6 +76,7 @@ public class BoardController {
 	public String insertBoard(QuestionBoard qBoard, 
 								   MultipartFile upFile,
 			HttpServletRequest request) {
+		logger.info("qBoard={}", qBoard);
 		if(logger.isDebugEnabled())
 		logger.debug("게시판 페이지 등록 요청~!");
 		logger.debug("boardFormEnd' qBoard@Controller== " + qBoard);

@@ -4,6 +4,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="title"/>
+</jsp:include>
+
 <!-- 부트스트랩관련 라이브러리 -->
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -26,7 +30,27 @@ top:100px;
 </style> 
 
 <script>
-	
+/* $(function(){
+$("#memberSecession").on("click",function(){
+	  $.ajax({
+		url:"${pageContext.request.contextPath}/member/memberSecession.do", 
+		success : function(data){
+			console.log("로그인 확인:" + data);
+			$("#item-body").html(data);
+		},
+		error: function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패! : "+jqxhr.status);
+			console.log(jqxhr);
+			console.log(textStatus);
+			console.log(errorThrown);
+		}
+	});
+});
+});
+
+ */
+ var memberLoggedIn = ${memberLoggedIn.memberCode};
+ console.log("로긴 코드: " + memberLoggedIn);
 	$(function(){
 		$("div#oneQ").hide();
 		
@@ -44,8 +68,10 @@ top:100px;
 			url:"${pageContext.request.contextPath}/questionBoard/boardView.do",
 			type: "post", 
 			dataType: "json",
-			success: function(data){
-				console.log(data)
+			success: function(data){				
+				/* 자기가 쓴글만 보여주기 */
+ 				if(memberLoggedIn == data.memberCode)
+ 				{
 				$("div#oneQ").toggle()
 				.html("제목:  "+data.questionTitle+"<br/>")
 				.append("작성자:  "+data.memberName+"<br/>")
@@ -68,10 +94,14 @@ top:100px;
 				.append("</button> &nbsp&nbsp")
 				.append('<button id="modifyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="position:inline-block;" onclick="update_question('+data.question_No+');"> 수정하기')
 				.append("<br/></button>");				 
+				}
+ 				else{
+ 					$("div#oneQ").toggle()
+ 					.html("언제든 질문해주세요~  ")
+ 					}
 				},
 			error: function(jqxhr, textStatus, errorThrown){
 				console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
-				
 			}
 		})
 	}); 
@@ -196,9 +226,9 @@ top:100px;
  
 </script>
 
-<div class="sidenav">
+<%-- <div class="sidenav">
   <a href="${pageContext.request.contextPath}/questionBoard/questionBoard.do">
-  <img src="${pageContext.request.contextPath}/resources/images/icons/air-horn.png"  /> &nbsp; &nbsp;고객 문의
+ 
   </a>
   <a href="${pageContext.request.contextPath}/questionBoard/questionBoard.do">
   <img src="${pageContext.request.contextPath}/resources/images/icons/notes.png"  /> &nbsp; &nbsp;공지사항
@@ -210,8 +240,10 @@ top:100px;
   <img src="${pageContext.request.contextPath}/resources/images/icons/contract.png" /> &nbsp; &nbsp;자주묻는 질문
   </a>
 </div>
-
-<div class="main">
+ --%>
+<div class="main"><!-- 
+  <h2 style="display: inline-block; text-align: center;"> -->고객 문의
+ &nbsp; &nbsp;<img src="${pageContext.request.contextPath}/resources/images/icons/air-horn.png" style="width:35px; height: 35px; display: inline-block;" />
   	<div id=a_box style="position: static;width: 800px; margin:20px;
   	/* border: solid #007bff 3px; */height: auto;">
 		 고객센터 <br>
@@ -229,25 +261,24 @@ top:100px;
 	<thead>
 	<tr id="qBoard_header">
       <th scope="col">문의번호</th>
-      <th scope="col">회원아이디</th>
+      <th scope="col">회원이름</th>
       <th scope="col">문의 제목</th>
       <th scope="col">작성일</th>
-      <th scope="col">공개 여부</th>
      </tr>
  	</thead>
  	<tbody>
 		<c:forEach items="${list}" var="l">
-	    <tr id="qBoard_body" no="${l.questionNo}">    
+		 	<c:if test="${memberLoggedIn.memberCode== l.memberCode}">
+		    <tr id="qBoard_body" no="${l.questionNo}">    
 	      <td>${l.questionNo }</td>
-	      <td>${l.memberName }</td>
+	      <td>${memberLoggedIn.memberName }</td>
 	      <td>${l.questionTitle }</td>
 	      <td>${l.questionDate }</td>
-	      <td>
-	      <c:if test="${l.questionOpen eq 'Y'}">
+	      <%-- <c:if test="${l.questionOpen eq 'Y'}">
 	      <span><img id="locked" src="${pageContext.request.contextPath}/resources/images/icons/locked.png"/></span>
-	      </c:if>
-	      </td>
+	      </c:if> --%>
 		  </tr>
+		  </c:if>
 		</c:forEach>
  	</tbody>
 </table>
@@ -265,10 +296,10 @@ top:100px;
 <button id="writeButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
   질문 작성
 </button>
-
-<img id="kakao_Q" src="${pageContext.request.contextPath}/resources/images/icons/q_counsel.png" alt=""> 
+<%-- <img id="kakao_Q" src="${pageContext.request.contextPath}/resources/images/icons/q_counsel.png" alt=""> 
 <a href="${pageContext.request.contextPath}"></a><img/>
-</div>
+ --%>
+ </div>
 </p>
 
 </div>
@@ -295,8 +326,7 @@ top:100px;
 		<input type="text" class="form-control" 
 			name="questionTitle" id="boardTitle"> 
 		<input type="text" class="form-control"
-			name="memberName" id="boardWriter">
-		<%-- value="${memberLoggedIn.memberId}" --%>
+			name="memberName" id="boardWriter" value="${memberLoggedIn.memberName}" >
 		<!-- input:file소스 : https://getbootstrap.com/docs/4.1/components/input-group/#custom-file-input -->
 		<div class="input-group mb-3" style="padding: 0px;">
 			<div class="input-group-prepend" style="padding: 0px;">
@@ -305,7 +335,6 @@ top:100px;
 			<div class="custom-file">
 				<input type="file" class="custom-file-input"
 					name="upFile" id="upFile"> 
-<!-- 					onchange="loadImg(this);"> -->
 					 <label class="custom-file-label" for="upFile">파일을 선택하세요</label>
 					 
 					 <input type="hidden" name="questionOriginalFilename"/>
@@ -317,7 +346,7 @@ top:100px;
 	      <div class="form-check">
 	       
 	        <label class="form-check-label" for="openCheck">
-	          	<p1></p1>
+<!-- 	          	<p1></p1> -->
 	        </label>
 	      </div>
 	    </div>
@@ -354,10 +383,14 @@ top:100px;
 		enctype="multipart/form-data">
 		<input type="text" class="form-control" placeholder="제목"
 			name="questionTitle" id="boardTitle"> 
+			
 			<input type="text"
-			class="form-control" placeholder="로그인한 아이디"
-			name="memberCode">
-		<%-- value="${memberLoggedIn.memberId}" --%>
+			class="form-control" placeholder="${memberLoggedIn.memberName}">
+			<input type="hidden"
+			class="form-control"
+			name="memberCode"
+	 		value="${memberLoggedIn.memberCode}" 
+			>
 		<!-- input:file소스 : https://getbootstrap.com/docs/4.1/components/input-group/#custom-file-input -->
 		<div class="input-group mb-3" style="padding: 0px;">
 			<div class="input-group-prepend" style="padding: 0px;">
@@ -374,7 +407,7 @@ top:100px;
 	    <div class="col-sm-10">
 	      <div class="form-check">
 	        <input class="form-check-input" type="checkbox" 
-	         id="openCheck"
+	         id="openCheck" checked
 	        value='N'
 	        name="questionOpen">
 	        <!-- <c:if test="[type=checkbox]:checked">
