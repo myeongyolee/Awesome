@@ -59,12 +59,16 @@ public class MeetingController {
 		
 		Map<String, String> machting = mService.selectRandomUser(userMap);
 		
+		String img = request.getContextPath()+"/resources/images/upload/member/";
+		if(machting.get("RENAMED_PROFILE") != null) img += machting.get("RENAMED_PROFILE");
+		else img += "sampleimage.png";
+		
 		String html ="";
-		html += "<img src='"+request.getContextPath()+"/resources/images/sampleimage.png' alt='' width='300px' height='504px'>";
+		html += "<img src='"+img+"' alt='' width='300px' height='504px'>";
 		html += "<div class='user-id-addr'>";
 		html += 	"<input type='hidden' id='memberCode' name='memberCode' value='"+String.valueOf(machting.get("MCODE"))+"' />";
 		html += 	"<input type='hidden' name='receiveMemberCode' id='receiveMemberCode' value='"+machting.get("RECEIVE_MEMBERCODE")+"'/>";
-		html += 	"<p id='userId'>"+machting.get("MEMBER_ID")+"</p>";
+		html += 	"<p id='userId'>"+machting.get("MEMBER_ID")==null?"더이상회원이없습니다":machting.get("MEMBER_ID")+"</p>";
 		html += 	"<p id='address'>"+machting.get("ROAD_ADDRESS")+"</p>";
 		html += "</div>";
 		 

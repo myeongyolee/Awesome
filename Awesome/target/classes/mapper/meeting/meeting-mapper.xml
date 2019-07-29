@@ -20,7 +20,6 @@
 				<if test="gender == 'F'">
 					and gender = 'M'
 				</if>
-					and blind_date_open = 'Y'
 					and verify = 'M'
 					<if test="showMember != null and showMember !=''">
 					

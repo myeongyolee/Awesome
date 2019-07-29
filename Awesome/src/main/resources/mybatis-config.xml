@@ -27,6 +27,7 @@
 	<typeAlias type="com.kh.awesome.socket.stomp.model.vo.ChatRoom" alias="chatRoom"/>
 	<typeAlias type="com.kh.awesome.util.model.vo.Chat" alias="chatting"/>
 	<typeAlias alias="schoolClub" type="com.kh.awesome.school.model.vo.SchoolClub"/>
+	<typeAlias type="com.kh.awesome.util.model.vo.Alarm" alias="alarm"/>
   </typeAliases> 
 
 
