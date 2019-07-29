@@ -132,11 +132,19 @@ public class AdminController {
 	@ResponseBody
 	public Map<String, Object> searchPpl(@RequestBody Map requestMap){
 		logger.info("requestMap={}", requestMap);
-		int cPage = Integer.parseInt((String)requestMap.get("cPage"));
+		int cPage = Integer.parseInt(String.valueOf(requestMap.get("cPage")));
 		String byName = "";
 		String byMid = "";
 		String nickname = "";
 		String gender="";
+		String ageFrom="";
+		String toAge="";
+		
+		logger.info("넘어오는 age값"+(String)requestMap.get("age"));
+		ageFrom = ((String)requestMap.get("age")).substring(0,2);
+		toAge = ((String)requestMap.get("age")).substring(3,5);
+		logger.info("ageFrom=="+ageFrom);
+		logger.info("toage=="+toAge);
 		
 		if(requestMap.get("byName")!=null) byName = (String)requestMap.get("byName");
 		if(requestMap.get("byMid")!=null) byMid = (String)requestMap.get("byMid");
@@ -148,19 +156,37 @@ public class AdminController {
 		search.put("byMid", byMid);
 		search.put("nickname", nickname);
 		search.put("gender", gender);
+		search.put("ageFrom", ageFrom);
+		search.put("toAge", toAge);
 		
 		int numPerPage = 12;
+
 		logger.info("search==@controller"+ search);
 		List<Map<String, Object>> searchPplList = adminService.searchPpl(search, cPage, numPerPage);
 		Map<String, Object> map = new HashMap<String, Object>();
+		int totalMemberNum = searchPplList.size();
+		int totalPage = (int)(Math.ceil(totalMemberNum*1.0/numPerPage));
+
 		map.put("searchPplList", searchPplList);
 		map.put("numPerPage", numPerPage);
 		map.put("cPage", cPage);
+		map.put("totalPage", totalPage);
 		
 		logger.info("searchPplList={}", searchPplList);
 		logger.info("searchPplList.size= " + searchPplList.size());		
 		
 		return map;
+	}
+	@RequestMapping("/seeMostLike.do")
+	@ResponseBody
+	public Map<String, Object> seeHotPpl(){
+		
+		int hottestM = adminService.hottestOne();
+		
+		Map<String, Object> hotOne = adminService.seeHotPpl(hottestM);
+		
+		return hotOne;
+		
 	}
 	
 }

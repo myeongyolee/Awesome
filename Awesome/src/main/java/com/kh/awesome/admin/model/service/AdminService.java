@@ -28,5 +28,9 @@ public interface AdminService {
 
 	String seeClubJoined(int memberCode);
 
+	Map<String, Object> seeHotPpl(int hottestM);
+
+	int hottestOne();
+
 	
 }

@@ -66,6 +66,17 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.seeClubJoined(memberCode);
 	}
 
+
+	@Override
+	public Map<String, Object> seeHotPpl(int hottestM) {
+		return adminDAO.seeHotPpl(hottestM);
+	}
+
+	@Override
+	public int hottestOne() {
+		return adminDAO.hottestOne();
+	}
+
 	
 
 	

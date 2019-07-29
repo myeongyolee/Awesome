@@ -10,6 +10,8 @@ import com.kh.awesome.member.model.vo.Member;
 
 public interface AdminDAO {
 
+	Map<String, Object> seeHotPpl(int hottestM);
+
 	List<Map<String, String>> selectAllMembers(int cPage, int numPerPage);
 
 	int selectTotalMemberNum();
@@ -27,6 +29,8 @@ public interface AdminDAO {
 	List<Map<String, Object>> searchPpl(Map<String, String> search, int cPage, int numPerPage);
 
 	String seeClubJoined(int memberCode);
+
+	int hottestOne();
 
 	
 

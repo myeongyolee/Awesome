@@ -294,6 +294,9 @@
             </c:if>
             <c:if test="${memberLoggedIn != null }">
             	<input type="button" class="btn btn-light mdl-navigation__link" onclick="myInfo()" value="My Info"></input>
+            <c:if test='${fn:contains(memberLoggedIn.verify, "A")}'>
+            	<input type="button" class="btn btn-light mdl-navigation__link" onclick="location.href='${pageContext.request.contextPath}/admin/adminMain.do'" value="Admin Page"></input>
+             </c:if>	 
             	<input type="button" class="btn btn-light mdl-navigation__link" id="logOut" value="LogOut"></input>
             </c:if>
           </nav>
@@ -334,6 +337,7 @@
 
 
 $(function(){
+	console.log("memberLoggedIn + " + memberLoggedIn);
 	$("#titleLogo").on("click",function(){
 		location.href="${pageContext.request.contextPath}/index";
    });

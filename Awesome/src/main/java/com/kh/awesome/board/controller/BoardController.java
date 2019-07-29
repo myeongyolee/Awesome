@@ -76,6 +76,7 @@ public class BoardController {
 	public String insertBoard(QuestionBoard qBoard, 
 								   MultipartFile upFile,
 			HttpServletRequest request) {
+		logger.info("qBoard={}", qBoard);
 		if(logger.isDebugEnabled())
 		logger.debug("게시판 페이지 등록 요청~!");
 		logger.debug("boardFormEnd' qBoard@Controller== " + qBoard);
@@ -183,9 +184,9 @@ public class BoardController {
 		
 		List<Map<String, String>>showCmt =boardService.showCmt(questionNo); 
 //		String questionCommentContent = showCmt.get("questionCommentContent");
-		
+		logger.info("showCmt={}",showCmt );
 		html += "<img src='"+request.getContextPath()+"/resources/upload/qBoard/"+b.get("questionRenamedFilename")
-		+"' id='board_img' style=\"width: 250px; height: 250px; position: block;\"/>";
+		+"' id='board_img' style=\"width: 250px; height: 250px; position: block; padding: 10px;margin:10px;\"/>";
 		
 		Map<String, Object> htmlMap = new HashMap<String, Object>();
 		htmlMap.put("html", html);
@@ -196,7 +197,8 @@ public class BoardController {
 		htmlMap.put("memberName", memberName);
 		htmlMap.put("questionOriginalFilename", questionOriginalFilename);
 		htmlMap.put("questionRenamedFilename", questionRenamedFilename);
-		htmlMap.put("showCmt", showCmt);
+		if (showCmt != null) {
+		htmlMap.put("showCmt", showCmt);}
 		
 		return htmlMap;
 	}

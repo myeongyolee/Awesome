@@ -109,8 +109,14 @@
 	<if test="gender !=null and gender != ''">
 	and gender = #{gender}
 	</if>
+	<if test="ageFrom != null and toAge !=''">
+	and to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[<]]> #{toAge}
+			and to_char(sysdate, 'yyyy')-to_char(birthday, 'yyyy')+1 <![CDATA[>=]]> #{ageFrom}
+	</if>
 	order by member_code desc
 	</select>
+	
+	
 	 <select id="seeOneMember" resultMap = "member">
 		select * 
 		from member 
@@ -122,4 +128,19 @@
 		where M.club_member_code = #{memberCode}
 	 </select>
 
+	<select id="getHottestM" resultType = "_int">
+	select B. hotppl
+	from (select rownum hottest, A.*
+	from(
+	select count(*) like_, receive_member_code hotPpl
+	from blind_date_like
+	group by receive_member_code
+	order by like_ desc) A where rownum = 1) B	
+	</select>
+
+ 	<select id="seeHotPpl" resultMap = "member">
+		select * 
+		from member 
+		where member_code = #{hottestM}
+	 </select> 
 </mapper>

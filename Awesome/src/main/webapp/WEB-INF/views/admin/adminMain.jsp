@@ -35,6 +35,7 @@ function chart(){
 	});
 };
 chart();
+
 </script>
 </head>
 <body>
@@ -42,7 +43,7 @@ chart();
   <div id="main_board">
   <!--메뉴 탭  -->
 	  <div class="tab">
-	  <button class="tablinks" onclick="${pageContext.request.contextPath}/">
+	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/adminMain.do'">
  	  <img src="${pageContext.request.contextPath}/resources/images/icons/home.png"/> 
 	  	<span class="text_">&nbsp;
 	  	 전체보기
@@ -60,7 +61,7 @@ chart();
 	  	 회원관리
 	  	</span>
 	  </button>
-	  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/reportBoard'">
+	 <%--  <button class="tablinks" onclick="location.href='${pageContext.request.contextPath}/admin/reportBoard'">
 	  <img src="${pageContext.request.contextPath}/resources/images/icons/search.png"/>
 	  	<span class="text_">&nbsp;
 	  	신고관리
@@ -77,7 +78,7 @@ chart();
 	  	<span class="text_">&nbsp;
 	  	문의 게시판
 	  	</span>
-	  </button>
+	  </button> --%>
 	</div>
 	
 	<div id="Home" class="tabcontent">

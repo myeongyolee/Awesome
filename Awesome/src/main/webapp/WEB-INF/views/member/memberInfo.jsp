@@ -78,7 +78,8 @@
         		 overflow:scroll;
 			}
 			#item-body::-webkit-scrollbar { 
-			    display: none !important; // 윈도우 크롬 등
+			    display: none !important; 
+			    /* // 윈도우 크롬 등 */
 			}
 	</style>
 		
@@ -197,7 +198,8 @@
 					<li><input type="button" class="btn btn-light" id="friendList" value="친구목록" /></li>
 					<li><input type="button" class="btn btn-light" id="schoolClubList" value="내가 가입한 동창모임" /></li>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br /><hr />
-					<li><input type="button" class="btn btn-light" id="" value="문의하기" /></li>
+					<li><input type="button" class="btn btn-light" id="questionBoard" value="문의하기" />
+					<a href="${pageContext.request.contextPath}/questionBoard/questionBoard.do">
 					<li><input type="button" class="btn btn-light" id="memberSecession" value="회원탈퇴" /></li>
 
 				</ul>
