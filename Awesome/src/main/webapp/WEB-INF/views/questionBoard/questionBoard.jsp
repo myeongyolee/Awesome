@@ -62,7 +62,6 @@ $("#memberSecession").on("click",function(){
 		
 		var questionNo = $(this).attr("no");		
 		if(questionNo == undefined) return;
-		console.log("아무거나");
 		$.ajax({
 			data: param, 		
 			url:"${pageContext.request.contextPath}/questionBoard/boardView.do",
@@ -81,19 +80,24 @@ $("#memberSecession").on("click",function(){
 // 					if(data.showCmt!= null){
 						for(var i=0; i< data.showCmt.length;i++){							
 						console.log("댓글 내용"+data.showCmt[i].questionCommentContent);
-						$("div#oneQ").append('<p id="comToQ"> 질문 답변: '  + data.showCmt[i].questionCommentContent +'<p/><br/>');
+						$("div#oneQ").append('<p id="comToQ" style="position:inline-block"> 질문 답변: '  + data.showCmt[i].questionCommentContent +'<p/>');
+						
+						/*관리자 이면 댓글 수정 삭제 가능하게 함.   */
+						if(memberLoggedIn = '361'){
+						$("div#oneQ").append('<button type="button" class="btn btn-outline-info" >댓글 삭제</button> &nbsp&nbsp')
+						.append('<button type="button" class="btn btn-outline-info">댓글 수정</button><br/><br/><br/>');
+						$("div#oneQ").append('<form id="commentForm" name="commentForm" method="post">')
+						.append('<textarea style="width: 700px" rows="3" cols="30" id="commentContent" name="questionCommentContent" placeholder="댓글을 입력하세요"></textarea>')
+						.append('<input type="hidden" name="questionNo" value="'+data.question_No+'">')
+						.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글 저장')
+						.append("</button> &nbsp&nbsp")
+						.append('</form>')
+						.append('<br/><br/><button id="deleteButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="delete_validate('+data.question_No+');"> 삭제하기')
+						.append("</button> &nbsp&nbsp")
+						.append('<button id="modifyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="position:inline-block;" onclick="update_question('+data.question_No+');"> 수정하기')
+						.append("<br/></button>");				 
 						}
-// 						}						
-				$("div#oneQ").append('<form id="commentForm" name="commentForm" method="post">')
-				.append('<textarea style="width: 700px" rows="3" cols="30" id="commentContent" name="questionCommentContent" placeholder="댓글을 입력하세요"></textarea>')
-				.append('<input type="hidden" name="questionNo" value="'+data.question_No+'">')
-				.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글 저장')
-				.append("</button> &nbsp&nbsp")
-				.append('</form>')
-				.append('<br/><br/><button id="deleteButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="delete_validate('+data.question_No+');"> 삭제하기')
-				.append("</button> &nbsp&nbsp")
-				.append('<button id="modifyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="position:inline-block;" onclick="update_question('+data.question_No+');"> 수정하기')
-				.append("<br/></button>");				 
+						}
 				}
  				else{
  					$("div#oneQ").toggle()
