@@ -53,5 +53,4 @@ public interface ClubDAO {
 
 	List<Clubcontent> selectseephotoList(int seephotoCode);
 
-
 }

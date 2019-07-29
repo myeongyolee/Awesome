@@ -53,10 +53,6 @@ public interface ClubService {
 
 	List<Clubcontent> selectseephotoList(int seephotoCode);
 
-	
 
-	
-
-	
 
 }

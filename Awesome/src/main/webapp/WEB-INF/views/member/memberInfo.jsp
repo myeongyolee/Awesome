@@ -116,6 +116,40 @@
 	      		});
 			})
 			
+			$("#friendList").on("click",function(){
+			var memberCode = $("input[name=memberLoggedIn]").val();
+			console.log(memberCode+"zzz");
+	      		  $.ajax({
+	      			url:"${pageContext.request.contextPath}/map/friendList?memberCode="+memberCode,
+	      			success : function(data){
+	      				$("#item-body").html(data);  
+	      			},
+	      			error: function(jqxhr, textStatus, errorThrown){
+	      				console.log("ajax처리실패! : "+jqxhr.status);
+	      				console.log(jqxhr);
+	      				console.log(textStatus);
+	      				console.log(errorThrown);
+	      			}
+	      		});
+			})
+			
+			$("#schoolClubList").on("click",function(){
+			var memberCode = $("input[name=memberLoggedIn]").val();
+			console.log(memberCode+"zzz");
+	      		  $.ajax({
+	      			url:"${pageContext.request.contextPath}/school/searchMySchoolClub?memberCode="+memberCode,
+	      			success : function(data){
+	      				$("#item-body").html(data);  
+	      			},
+	      			error: function(jqxhr, textStatus, errorThrown){
+	      				console.log("ajax처리실패! : "+jqxhr.status);
+	      				console.log(jqxhr);
+	      				console.log(textStatus);
+	      				console.log(errorThrown);
+	      			}
+	      		});
+			})
+			
 		  $("#info-head li").on("click",function(){
     		 //$("#"+$(this)[0].className).slideToggle(1000, 'easeInBack');
     		  $("#"+$(this)[0].className).show(1000);
@@ -160,7 +194,10 @@
 					<li><input type="button" class="btn btn-light" id="memberInfoUpdate" value="내정보수정" /></li> 
 					<li><input type="button" class="btn btn-light" id="menu2" value="메뉴2" /></li>
 					<li><input type="button" class="btn btn-light" id="myLightningInfo" value="나의 번개모임" /></li>
+					<li><input type="button" class="btn btn-light" id="friendList" value="친구목록" /></li>
+					<li><input type="button" class="btn btn-light" id="schoolClubList" value="내가 가입한 동창모임" /></li>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br /><hr />
+					<li><input type="button" class="btn btn-light" id="" value="문의하기" /></li>
 					<li><input type="button" class="btn btn-light" id="memberSecession" value="회원탈퇴" /></li>
 
 				</ul>
@@ -175,4 +212,3 @@
 	</div>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-	

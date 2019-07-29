@@ -1,8 +1,12 @@
+<%@page import="com.kh.awesome.member.model.vo.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%
+	Member member = (Member)session.getAttribute("memberLoggedIn");
+%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Awesome" name="번개모임"/>
 </jsp:include>
@@ -17,9 +21,9 @@
 #lightningList-content{width:600px; }
 #lightning{width:500px; margin-bottom: 10px;}
 #search-container{
-	width:300px;
+	width:265px;
 	position: fixed;
-	right: 0;
+	right: 20px;
 	top: 50px;
 }
 #ContentView{height:290px;}
@@ -28,6 +32,7 @@
 
 </style>
 <script>
+
 //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
 $(function(){  
 	getLightningList();
@@ -43,25 +48,28 @@ $(function(){
 		}
 	});
 	
+	/* $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+		if($(window).scrollTop() >= $(document).height() - $(window).height()){
+			getLightningList();
+		}
+	}); */
 });
 
-$(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
-	if($(window).scrollTop() >= $(document).height() - $(window).height()){
-		getLightningList();
-	}
-});
 
 //참여신청
-function joinApplication(matchNo){
+function joinApplication(e){
+	var id = $(e).attr("id").split("-");
+	var matchNo = id[1];
+	
 	$.ajax({
 		url : '${pageContext.request.contextPath}/lightning/matchJoin.do?matchNo='+matchNo,
 		success : function(data){
 			if(data){
 				$("#btn-"+matchNo).addClass("btn-lg");
-				alert("참여신청이 완료되었습니다.");				
-				//모임작성자에게 메세지 보내기
-				/* var sendMsg = "alarm|"+receiveMemberCode+"|"+msg;
-				sendMessage(sendMsg); */
+				alert("참여신청이 완료되었습니다.");	
+				//모임작성자에게 알람 보내기
+				var sendMsg = "alarm|<%=member.getMemberCode()%>|"+$(e).val()+"|"+matchNo+"번 번개모임글에 참여신청을한 회원이 있습니다";
+				sendMessage(sendMsg);
 			}else{
 				alert("이미 참여했거나 참여 신청중인 모임입니다.");
 			}
@@ -186,8 +194,7 @@ function getLightningList(){
 				html +=	'<a class="carousel-control-next" href="#carousel'+data[i].matchNo+'" role="button" data-slide="next">';
 				html +=	'<span class="carousel-control-next-icon bg-dark" aria-hidden="false"></span>';
 				html +=	'<span class="sr-only">Next</span></a></div></div>';
-				html +=	'<button type="button" id="btn-'+data[i].matchNo+'" class="btn btn-primary float-right" onclick="joinApplication('+data[i].matchNo;
-				html += ')">참가신청</button></div>';
+				html +=	'<button type="button" id="btn-'+data[i].matchNo+'" class="btn btn-primary float-right" value="'+data[i].memberCode+'" onclick="joinApplication(this)">참가신청</button></div>';
 				$("#lightningList-content").append(html);
 				if(data[i].placeName!=null) insertMap(i, data[i].placeLat, data[i].placeLng);
 			}

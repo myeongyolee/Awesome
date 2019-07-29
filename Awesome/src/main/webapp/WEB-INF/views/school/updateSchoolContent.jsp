@@ -16,9 +16,8 @@
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 </head>
 <body>
-게시글 수정 페이지
-<p>${Content }</p>
-<input type="text" name="clubCode" value="${Content.CLUB_CODE }" /> 
+
+<input type="hidden" name="clubCode" value="${Content.CLUB_CODE }" /> 
 
   <div class="form-group row">
     <label for="club_content_code" class="col-sm-2 col-form-label">글 번호</label>
@@ -28,14 +27,14 @@
   </div>
   
   <div class="form-group row">
-    <label for="content_title" class="col-sm-2 col-form-label">Password</label>
+    <label for="content_title" class="col-sm-2 col-form-label">글제목</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="content_title" value="${Content.CONTENT_TITLE }">
     </div>
   </div>
    
    <div class="form-group row">
-    <label for="content" class="col-sm-2 col-form-label">Password</label>
+    <label for="content" class="col-sm-2 col-form-label">글내용</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="content" value="${Content.CONTENT }">
     </div>

@@ -263,6 +263,8 @@ public class LightningController {
 		map.put("matchNo", matchNo);
 		map.put("memberCode", memberCode);
 		
+		logger.info("map={}", map);
+		
 		int result = lightningService.insertMatchJoin(map);
 		
 		if(result > 0) {
@@ -477,4 +479,67 @@ public class LightningController {
 		
 		return "/common/msg";
 	}
+	
+	//참여 허가
+	@RequestMapping("/memberPermit.do")
+	@ResponseBody
+	public boolean memberPermit(@RequestBody Map map) {
+		/*String nickName = String.valueOf(map.get("nickName"));
+		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
+		logger.info("nickName="+nickName);
+		logger.info("matchNo="+matchNo);
+		logger.info("map={}",map);*/
+		
+		int result = lightningService.updatePermit(map);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	//참여 거부
+	@RequestMapping("/memberNoPermit.do")
+	@ResponseBody
+	public boolean memberNoPermit(@RequestBody Map map) {
+		/*String nickName = String.valueOf(map.get("nickName"));
+		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
+		logger.info("nickName="+nickName);
+		logger.info("matchNo="+matchNo);
+		logger.info("map={}",map);*/
+		
+		int result = lightningService.deleteNoPermit(map);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	//참여 거부
+	@RequestMapping("/matchJoinCancle.do")
+	@ResponseBody
+	public boolean matchJoinCancle(@RequestParam int matchNo, HttpSession session) {
+		/*String nickName = String.valueOf(map.get("nickName"));
+		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
+		logger.info("nickName="+nickName);
+		logger.info("matchNo="+matchNo);
+		logger.info("map={}",map);*/
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = m.getMemberCode();
+		Map<String, Integer> param = new HashMap<>();
+		param.put("memberCode", memberCode);
+		param.put("matchNo", matchNo);
+		
+		int result = lightningService.deleteJoinCancle(param);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
 }

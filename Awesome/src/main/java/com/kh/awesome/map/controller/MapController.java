@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.awesome.map.model.service.MapService;
 
@@ -58,9 +60,10 @@ public class MapController {
 	}
 	
 	@RequestMapping("/map/enrollFriend")
-	public String enrollFriend(@RequestParam("infocheck") String infocheck, @RequestParam("interesting") String[] interesting,
+	public ModelAndView enrollFriend(@RequestParam("infocheck") String infocheck, @RequestParam("interesting") String[] interesting,
 			                   @RequestParam("memberLoggedIn") String memberCode) {
 		logger.info("/map/enrollFriend들어옴");
+		ModelAndView mav = new ModelAndView();
 		
 		String str = "";
 		for(int i=0; i<interesting.length; i++) {
@@ -79,7 +82,9 @@ public class MapController {
 		int result = mapService.enrollInfoCheck(param); // 동네친구에 자기정보 공개여부 'Y'로 바꾸기
 		int reuslt2 = mapService.enrollInteresting(param); // 개인관심분야정보 입력하기
 		
-		return "/map/maptest";
+		mav.addObject("memberCode", memberCode);
+		mav.setViewName("map/maptest");
+		return mav;
 	}
 	
 	@RequestMapping("/map/checkInfo")
@@ -120,6 +125,55 @@ public class MapController {
 	}	
 	
 	
+	@RequestMapping("/map/friendList")
+	public ModelAndView friendList(@RequestParam("memberCode") String memberCode) {
+		ModelAndView mav = new ModelAndView();
+		logger.info("friendList 들어옴");
+		
+		List<Integer> list = new ArrayList<>();
+		list = mapService.friendList(memberCode); // 내가 친구요청보낸 목록 확인
+		logger.info("친구목록 리스트:"+list);
+		
+		mav.addObject("list", list);
+		mav.addObject("memberCode", memberCode);
+		mav.setViewName("/map/friendList");
+		
+		return mav;
+	}
+	
+	@RequestMapping("/map/showMyFriend")
+	@ResponseBody
+	public List<Map<String,Object>> showMyFriend(@RequestParam("param") String[] param) {
+		logger.info("showMyFriend들어옴");
+		
+		List<String> list = new ArrayList<String>();
+		for(int i=0; i<param.length; i++) {
+			list.add(param[i]);
+		}
+		logger.info("보여줄 친구목록코드:" + list);
+		
+		List<Map<String,Object>> result = mapService.showMyFriend(list);
+		logger.info("result확인:"+result);
+		
+		return result;
+	}
+	
+	@RequestMapping("/map/deleteFriend")
+	@ResponseBody
+	public int deleteFriend(@RequestParam("memberCode") String memberCode ,@RequestParam("friendCode") String friendCode) {
+		logger.info("deleteFriend 들어옴");
+		Map<String,String> param = new HashMap<String,String>();
+		param.put("memberCode", memberCode);
+		param.put("friendCode", friendCode);
+		
+		int result = mapService.deleteFriend(param);
+		
+		return result;
+		
+	}
+	
+	
+	
 	@RequestMapping(value="/map/findPosition", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public String findPosition(@RequestParam("param") String position) throws Exception {
@@ -129,8 +183,7 @@ public class MapController {
       
 		String text = URLEncoder.encode(position, "UTF-8");
 		String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text; // json 결과
-		// String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text;
-		// // xml 결과
+
 		URL url = new URL(apiURL);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");

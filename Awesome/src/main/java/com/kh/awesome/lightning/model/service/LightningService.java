@@ -37,5 +37,10 @@ public interface LightningService {
 
 	List<Map<String, Object>> selectMyMatchNoPermitMemberList(Map<String, List<String>> param);
 
+	int updatePermit(Map map);
+
+	int deleteNoPermit(Map map);
+
+	int deleteJoinCancle(Map<String, Integer> param);
 
 }
