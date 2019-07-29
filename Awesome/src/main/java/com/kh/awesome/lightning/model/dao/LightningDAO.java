@@ -38,5 +38,7 @@ public interface LightningDAO {
 
 	List<Map<String, Object>> selectMyMatchNoPermitMemberList(Map<String, List<String>> param);
 
+	int updatePermit(String nickName);
+
 
 }
