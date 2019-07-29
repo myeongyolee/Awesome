@@ -305,9 +305,16 @@ $(function(){
  };
 	 */
  /*회원 검색   */
+<<<<<<< HEAD
  function getPplList(cPage_){
 	 var param = {cPage: cPage_ };
 	 console.log("cPage== " + param.cPage);
+/* =======
+ function getPplList(){
+	 var param = {cPage: $("#cPage").val() };
+	 console.log($("#byName"));
+>>>>>>> refs/remotes/origin/master
+	 */
 	 if($("[name=byName]:checked")){
 		 var byName = $("input#byName").val();
 	 };

@@ -22,6 +22,44 @@ $(function(){
 	});	
 });
 
+function writeCheck(){
+	//title채크
+	if($("[name=matchTitle]").val().trim()==""){
+		alert("제목을 입력하세요.");
+		$("[name=matchTitle]").focus();
+		return false;
+	}
+	//지역선택 채크
+	if($("#localCode").val()==null){
+		alert("지역을 선택해주세요.");
+		return false;
+	}
+	
+	//분류선택 채크
+	if($("#interestingCode").val()==null){
+		alert("분류를 선택해주세요.");
+		return false;
+	}
+	
+	//일자 채크
+	if($("[name=lightningEndDate]").val()==""){
+		alert("마감일자를 입력해주세요.");
+		return false;
+	}
+	//시간 채크
+	if($("[name=lightningEndTime]").val()==""){
+		alert("마감시간을 입력해주세요.");
+		return false;
+	}
+	
+	//내용 채크
+	if($("[name=matchContent]").val().trim()==""){
+		alert("내용을 입력하세요.");
+		$("[name=matchContent]").focus();
+		return false;
+	}
+}
+
 function selectLocalList(){
 	var param = {city: $("#cityCode>option:selected").val()}
 	var city = JSON.stringify(param);
@@ -176,7 +214,7 @@ function insertData(btn){
 </script>
 
 	<div id="form-container" class="card mx-auto">
-		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do" method="post" enctype="multipart/form-data">
+		<form action="${pageContext.request.contextPath}/lightning/lightningWriteEnd.do" method="post" enctype="multipart/form-data" onsubmit="return writeCheck();">
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<img src="${pageContext.request.contextPath}/resources/images/sampleimage.png" id="img-viewer" class="img-thumbnail">

@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.awesome.lightning.model.service.LightningService;
 import com.kh.awesome.matchManager.model.vo.MatchManager;
+import com.kh.awesome.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/lightning")
@@ -130,14 +132,15 @@ public class LightningController {
 			}
 		}
 		
-		logger.info("joinMemberMap={}",joinMemberMap);
-		logger.info("key="+key);
+//		logger.info("joinMemberMap={}",joinMemberMap);
+//		logger.info("key="+key);
 		
 		for(String k : key) {
 			for(Map<String,Object> map : lightningList) {
 				if(String.valueOf(map.get("matchNo")).equals(k)) {
 					map.put("joinMemberNickName", joinMemberMap.get(k));
 				}
+//				logger.info("map={}",map);
 			}
 		}
 		
@@ -162,8 +165,8 @@ public class LightningController {
 	public String insertLightning(MatchManager matchManager, HttpSession session, 
 								@RequestParam("uploadProfile") MultipartFile uploadProfile, HttpServletRequest request) throws ParseException {
 		//세션에서 memberCode가져오기
-//		session.getAttribute("memberLoggedIn");
-		matchManager.setMemberCode(124);
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		matchManager.setMemberCode(member.getMemberCode());
 		
 		logger.info("uploadProfile="+uploadProfile);
 //		file
@@ -249,5 +252,229 @@ public class LightningController {
 		
 		return response.toString();
 	}
-
+	
+	//참여신청하기
+	@RequestMapping("/matchJoin.do")
+	@ResponseBody
+	public boolean matchJoin(HttpSession session, @RequestParam int matchNo) {
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = m.getMemberCode();
+		Map<String, Integer> map = new HashMap<>();
+		map.put("matchNo", matchNo);
+		map.put("memberCode", memberCode);
+		
+		int result = lightningService.insertMatchJoin(map);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+	
+	//나의 번개모임 리스트 페이지
+	@RequestMapping("/lightningInfo.do")
+	public void lightningInfo() {
+		logger.info("나의 번개모임 정보 호출");
+	}
+	
+	//나의 번개모임 리스트 호출
+	@RequestMapping("/myLightningList.do")
+	@ResponseBody
+	public List<Map<String, Object>> myLightningList(HttpSession session, @RequestParam int cPage) {
+//		int cPage = Integer.parseInt(cpage);
+		int numPerPage = 5;
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = member.getMemberCode();
+		logger.info("memberCode="+memberCode);
+		//리스트 가져오기
+		List<Map<String, Object>> lightningList = lightningService.selectMyLightningList(memberCode, numPerPage, cPage);
+		logger.info("lightningList={}",lightningList);
+		
+		Map<String,List<String>> param = new HashMap();
+		List<String> matchNo = new ArrayList();
+		for(Map<String, Object> map : lightningList) {
+			String no = String.valueOf(map.get("matchNo"));
+			matchNo.add(no);
+		}
+		param.put("matchNo", matchNo);
+		List<Map<String, Object>> joinMemberList = lightningService.selectMyMatchJoinMemberList(param);
+		logger.info("joinMemberList={}",joinMemberList);
+		
+		Map<String, String> joinMemberMap = new HashMap();
+		List<String> key = new ArrayList();
+		
+		for(Map<String, Object> map : joinMemberList) {
+			String k = String.valueOf(map.get("matchNo"));
+			if(joinMemberMap.isEmpty() || !joinMemberMap.containsKey(k)) {
+				joinMemberMap.put(k, String.valueOf(map.get("nickName")));
+				key.add(k);
+			}else if(joinMemberMap.containsKey(k)) {
+				String value = joinMemberMap.get(k);
+				value += ", "+String.valueOf(map.get("nickName"));
+				joinMemberMap.put(k, value);
+			}
+		}
+//		logger.info("joinMemberMap={}",joinMemberMap);
+//		logger.info("key="+key);
+		
+		for(String k : key) {
+			for(Map<String,Object> map : lightningList) {
+				if(String.valueOf(map.get("matchNo")).equals(k)) {
+					map.put("joinMemberNickName", joinMemberMap.get(k));
+				}
+//				logger.info("map={}",map);
+			}
+		}
+		
+		key.clear();
+		//미허가인 맴버리스트 가져오기
+		List<Map<String, Object>> noPermitMemberList = lightningService.selectMyMatchNoPermitMemberList(param);
+		Map<String, String> noPermitMemberMap = new HashMap();
+		
+		for(Map<String, Object> map : noPermitMemberList) {
+			String k = String.valueOf(map.get("matchNo"));
+			if(noPermitMemberMap.isEmpty() || !noPermitMemberMap.containsKey(k)) {
+				noPermitMemberMap.put(k, String.valueOf(map.get("nickName")));
+				key.add(k);
+			}else if(noPermitMemberMap.containsKey(k)) {
+				String value = noPermitMemberMap.get(k);
+				value += ", "+String.valueOf(map.get("nickName"));
+				noPermitMemberMap.put(k, value);
+			}
+		}
+		
+		for(String k : key) {
+			for(Map<String,Object> map : lightningList) {
+				if(String.valueOf(map.get("matchNo")).equals(k)) {
+					map.put("noPermitMemberNickName", noPermitMemberMap.get(k));
+				}
+//				logger.info("map={}",map);
+			}
+		}
+		logger.info("lightningList={}", lightningList);
+		return lightningList;
+	}
+	
+	//내가 참여한 번개모임 리스트 호출
+	@RequestMapping("/myJoinLightningList.do")
+	@ResponseBody
+	public List<Map<String, Object>> myJoinLightningList(HttpSession session, @RequestParam int cPage) {
+//		int cPage = Integer.parseInt(cpage);
+		int numPerPage = 5;
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = member.getMemberCode();
+		logger.info("memberCode="+memberCode);
+		//참여한 모임코드리스트 가져오기
+		List<String> matchCodeList = lightningService.selectJoinMatchCode(memberCode, numPerPage, cPage);
+		logger.info("matchCodeList={}", matchCodeList);
+		
+		Map<String,List<String>> param = new HashMap();
+		param.put("matchCodeList", matchCodeList);
+		
+		if(matchCodeList.isEmpty()) {
+			
+			List<Map<String, Object>> lightningList = new ArrayList<>();
+			return lightningList;
+			
+		}else {
+			//참여한 모임들 상세정보 가져오기
+			List<Map<String, Object>> lightningList = lightningService.selectJoinLightningList(param);
+			logger.info("lightningList={}",lightningList);
+			
+			return lightningList;			
+		}
+	}
+	
+	@RequestMapping("lightningDelete.do")
+	public String lightningDelete(HttpServletRequest request ,@RequestParam int matchNo) {
+		int result = lightningService.deleteLightning(matchNo);
+		
+		String msg = result>0?"게시물 삭제 성공":"게시물 삭제 오류";
+		String loc = "/member/memberInfo.do";
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		
+		return "/common/msg";
+	}
+	
+	@RequestMapping("/lightningWriteUpdate.do")
+	public void lightningWriteUpdate(HttpServletRequest request, @RequestParam int matchNo) {
+		//번개모임정보 가져오기
+		Map<String, Object> lightningMatch = lightningService.selectLightningMatch(matchNo);
+		//도시목록 가져오기
+		List<String> cityList = lightningService.selectCityList();
+		//분류목록 가져오기
+		List<String> interestingList = lightningService.selectInterestingList();
+		
+		String[] matchEndDate = String.valueOf(lightningMatch.get("matchEndDate")).split(" ");
+		String lightningEndDate = matchEndDate[0];
+		String lightningEndTime = matchEndDate[1];
+		lightningMatch.put("lightningEndDate", lightningEndDate);
+		lightningMatch.put("lightningEndTime", lightningEndTime);
+		
+		logger.info("cityList={}",cityList);
+		logger.info("interestingList={}",interestingList);
+		logger.info("lightningMatch={}",lightningMatch);
+		
+		logger.info("번개모임 수정");
+		request.setAttribute("cityList", cityList);
+		request.setAttribute("interestingList", interestingList);
+		request.setAttribute("lightningMatch", lightningMatch);
+		
+	}
+	
+	@RequestMapping("/lightningWriteUpdateEnd.do")
+	public String lightningWriteUpdateEnd(MatchManager matchManager, @RequestParam("uploadProfile") MultipartFile uploadProfile, 
+										HttpServletRequest request) throws ParseException {
+		
+		logger.info("uploadProfile="+uploadProfile);
+		//file
+		if(!uploadProfile.isEmpty()) {
+			String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/match");
+			String originalFileName = uploadProfile.getOriginalFilename();
+			String ext = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
+			SimpleDateFormat fileSdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSSS");
+			int rndNum = (int)(Math.random()*1000);
+			String renamedFileName = fileSdf.format(new java.util.Date())+"_"+rndNum+"."+ext;
+			//서버 지정위치에 파일 보관
+		
+			try {
+			uploadProfile.transferTo(new File(saveDirectory+"/"+renamedFileName));
+			} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		
+			matchManager.setMatchOriginalImg(originalFileName);
+			matchManager.setMatchRenamedImg(renamedFileName);
+		
+		}
+		
+		//form에서 가져온 일자와 시간을 합쳐서 sqlDate로 변경후 vo객체에 저장하기	
+		String lightningEndDate = request.getParameter("lightningEndDate");
+		String lightningEndTime = request.getParameter("lightningEndTime");
+		logger.info("lightningEndDate={}, lightningEndTime={}", lightningEndDate, lightningEndTime);
+		
+		String matchEndDate = lightningEndDate+" "+lightningEndTime;
+		
+		Map<String, Object> map = new HashMap();
+		map.put("matchManager", matchManager);
+		map.put("matchEndDate" ,matchEndDate);
+		
+		logger.info("matchManager="+matchManager);
+		int result = lightningService.updateLightning(map);
+		logger.info("result="+result);
+		
+		String msg = result>0?"게시물 수정 성공":"게시물 수정 오류";
+		String loc = "/member/memberInfo.do";
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		
+		return "/common/msg";
+	}
 }

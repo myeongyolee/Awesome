@@ -10,16 +10,32 @@
 	<title>smart Editor</title>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/smartEditor/js/service/HuskyEZCreator.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
 	
 	<style>
 		#rev{display:none;}
+		
+		    #flex{
+				display : flex; 
+				flex-direction : row;
+				justify-content : flex-end; 
+			}
+			
+			 #flex .btn{
+			 	margin:0 1%;
+			 }
 	</style>
 
 </head>
 <body>
-    <textarea rows="13" cols="40" id="textTest" name="textTest"></textarea>
-    <button type = "submit" onclick="submitContents()">전송</button>
-	
+    <textarea rows="13" cols="20" id="textTest" name="textTest"></textarea>
+    <div id="flex">
+	    <button type ="button" class="btn btn-outline-success" onclick="submitContents()">작성완료</button>
+	    <button type="button" class="btn btn-outline-success" onclick="close()">취소</button>
+	</div>
 	<script type="text/javascript"> 
 		var oEditors = [];
 		nhn.husky.EZCreator.createInIFrame({

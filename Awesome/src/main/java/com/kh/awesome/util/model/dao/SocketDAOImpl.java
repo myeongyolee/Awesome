@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.awesome.util.model.vo.Chat;
+
 @Repository
 public class SocketDAOImpl implements SocketDAO{
 
@@ -23,4 +25,12 @@ public class SocketDAOImpl implements SocketDAO{
 		return sqlSession.selectList("stomp.selectChat");
 	}
 	
+	@Override
+	public List<Chat> selectMyChat(Map<String, String> map) {
+		return sqlSession.selectList("stomp.selectMyChat",map);
+	}
+	@Override
+	public void insertAlarmLog(Map<String, String> info) {
+		sqlSession.insert("stomp.insertAlarm", info);
+	}
 }

@@ -1,6 +1,7 @@
 package com.kh.awesome.member.model.service;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +127,21 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member checkUserWithSessionKey(String sessionId) {
 		return memberDAO.checkUserWithSessionKey(sessionId);
+	}
+	
+	@Override
+	public int deleteMember(Member member) {
+		return memberDAO.deleteMember(member);
+	}
+
+	@Override
+	public void updateReason(int memberCode, String reason) {
+		memberDAO.updateReason(memberCode,reason);
+	}
+
+	@Override
+	public void updateKeepLogin(String memberId, String sessionId, Date date) {
+		memberDAO.updateKeepLogin(memberId, sessionId, date);
 	}
 
 }

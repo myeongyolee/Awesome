@@ -52,4 +52,58 @@ public class LightningServiceImpl implements LightningService {
 
 	}
 
+	@Override
+	public List<Map<String, Object>> selectMyLightningList(int memberCode, int numPerPage, int cPage) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectMyLightningList(memberCode, numPerPage, cPage);
+	}
+
+	@Override
+	public Map<String, Object> selectLightningMatch(int matchNo) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectLightningMatch(matchNo);
+	}
+
+	@Override
+	public int updateLightning(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return lightningDAO.updateLightning(map);
+	}
+
+	@Override
+	public int deleteLightning(int matchNo) {
+		// TODO Auto-generated method stub
+		return lightningDAO.deleteLightning(matchNo);
+	}
+
+	@Override
+	public List<String> selectJoinMatchCode(int memberCode, int numPerPage, int cPage) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectJoinMatchCode(memberCode, numPerPage, cPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectJoinLightningList(Map<String,List<String>> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectJoinLightningList(param);
+	}
+
+	@Override
+	public int insertMatchJoin(Map<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return lightningDAO.insertMatchJoin(map);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMyMatchJoinMemberList(Map<String, List<String>> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectMyMatchJoinMemberList(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMyMatchNoPermitMemberList(Map<String, List<String>> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.selectMyMatchNoPermitMemberList(param);
+	}
+
 }

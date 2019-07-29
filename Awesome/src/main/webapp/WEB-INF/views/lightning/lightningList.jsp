@@ -13,7 +13,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx"></script>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=gf3hncw6qx&submodules=geocoder"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
 <style>
 #lightningList-content{width:600px; }
 #lightning{width:500px; margin-bottom: 10px;}
@@ -23,23 +22,14 @@
 	right: 0;
 	top: 50px;
 }
-#swiperContainer{height:350px; position: relative;}
+#ContentView{height:290px;}
+#match{height:375px; position: relative;}
 .myMap{width:334px; height:250px; position: relative;}
-#swiper-container {
-      width: 100%;
-      height: 100%;
-      margin-left: auto;
-      margin-right: auto;
-}
-#swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #fff;
-}
+
 </style>
 <script>
-
-$(function(){  //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+//페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+$(function(){  
 	getLightningList();
 	
 	$(":text").focus(function(){
@@ -60,6 +50,27 @@ $(window).scroll(function(){   //스크롤이 최하단 으로 내려가면 리�
 		getLightningList();
 	}
 });
+
+//참여신청
+function joinApplication(matchNo){
+	$.ajax({
+		url : '${pageContext.request.contextPath}/lightning/matchJoin.do?matchNo='+matchNo,
+		success : function(data){
+			if(data){
+				$("#btn-"+matchNo).addClass("btn-lg");
+				alert("참여신청이 완료되었습니다.");				
+				//모임작성자에게 메세지 보내기
+				/* var sendMsg = "alarm|"+receiveMemberCode+"|"+msg;
+				sendMessage(sendMsg); */
+			}else{
+				alert("이미 참여했거나 참여 신청중인 모임입니다.");
+			}
+		},
+		error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	});
+}
 
 function selectLocalList(){
 	var param = {city: $("#city>option:selected").val()}
@@ -126,36 +137,60 @@ function getLightningList(){
 			for(var i=0; i<data.length; i++){
 				var j = 0;
 				var html = "";
-				html +=	'<div id="lightning" class="card">';
-				html +=	'<div id="lightningTest-head" class="card-header">';
-				html +=	'<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/match/'+data[i].matchRenamedImg+'" alt="Card image cap">';
-				html +=	'<div class="card-body" data-toggle="collapse" data-target="#'+data[i].matchNo+'" aria-expanded="true" aria-controls="lightningTest-body">';
+				html +=	'<div id="lightning" class="card border-success">';
+				html +=	'<div id="'+data[i].matchNo+'-head" class="card-header">';
+				if(data[i].matchRenamedImg!=null){
+				html +=	'<img class="card-img-top" src="${pageContext.request.contextPath}/resources/upload/match/'+data[i].matchRenamedImg+'" alt="Card image cap">';					
+				}
+				html +=	'<div class="card-body" data-toggle="collapse" data-target="#'+data[i].matchNo+'" aria-expanded="true" aria-controls="'+data[i].matchNo+'">';
 				html +=	'<h5 class="card-title"> '+data[i].matchTitle+' </h5></div></div>';
 				html +=	'<ul class="list-group list-group-flush">';
 				html +=	'<li class="list-group-item"> '+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+'</li>';
 				html +=	'<li class="list-group-item"> 작성자:'+data[i].nickName+' | 참여회원수: '+(Number(data[i].memberCount)+1)+' </li></ul>';
-				html +=	'<div id="'+data[i].matchNo+'" class="collapse container" aria-labelledby="lightningTest-head" data-parent="#lightning">';
-				html += '<div id="swiperContainer"  class="card-body">';
-				html +=	'<div id="swiper-container" class="swiper-container'+data[i].matchNo+'">';
-				html +=	'<div class="swiper-wrapper">';
-				html +=	'<div id="swiper-slide" class="swiper-slide card-body">'+data[i].matchContent+'</div>';
+				html +=	'<div id="'+data[i].matchNo+'" class="collapse container" aria-labelledby="'+data[i].matchNo+'-head" data-parent="#lightning">';
+				html +=	'<div id="carousel'+data[i].matchNo+'" class="carousel slide mb-3" data-ride="carousel">';
+				html +=	'<ol id="indicators" class="carousel-indicators">';
+				html +=	'<li data-target="#carousel'+data[i].matchNo+'" data-slide-to="'+j+'" class="active"></li>';
 				if(data[i].memberCount>=1){
-					html +=	'<div id="swiper-slide" class="swiper-slide card-body">'+data[i].joinMemberNickName+'</div>';
+					j++;
+					html += '<li data-target="#carousel'+data[i].matchNo+'" data-slide-to="'+j+'"></li>';
 				}
 				if(data[i].placeName!=null){
-					html +=	'<div id="swiper-slide" class="swiper-slide card-body">'+data[i].placeName+'<div id="map_'+i+'" class="myMap"></div></div>';
+					j++;
+					html += '<li data-target="#carousel'+data[i].matchNo+'" data-slide-to="'+j+'"></li>';					
 				}
-				html += '</div><div class="swiper-pagination'+data[i].matchNo+'"></div></div></div>';
-				/* html += '<div class="swiper-button-prev'+data[i].matchNo+'"></div>';
-				html += '<div class="swiper-button-next'+data[i].matchNo+'"></div></div></div>'; */
-				html +=	'<button type="button" class="btn btn-primary float-right">참가신청</button></div>';
+				html += '</ol>'
+				html +=	'<div id="match" class="carousel-inner">';
+				html +=	'<div class="carousel-item active p-5">';
+				html +=	'<div class="card border-light">';
+				html +=	'<div id="ContentView" class="card-body">'+data[i].matchContent+'</div></div></div>';
+				if(data[i].memberCount>=1){
+					html +=	'<div class="carousel-item p-5">';
+					html +=	'<div class="card border-light">';
+					html +=	'<div id="ContentView" class="card-body">';
+					html += '<ul class="list-group list-group-flush">';
+					var joinMemberList = data[i].joinMemberNickName.split(", ");
+					for(var k=0; k<joinMemberList.length; k++){
+						html += '<li class="list-group-item">'+joinMemberList[k]+'</li>';
+					}
+					html += '</ul></div></div></div>';
+				}
+				if(data[i].placeName!=null){
+					html +=	'<div class="carousel-item p-5">';
+					html +=	'<div class="card">';
+					html +=	'<div id="ContentView" class="card-body border-light">'+data[i].placeName+'<div id="map_'+i+'" class="myMap"></div></div></div></div>';
+				}
+				html +=	'<a class="carousel-control-prev" href="#carousel'+data[i].matchNo+'" role="button" data-slide="prev">';
+				html +=	'<span class="carousel-control-prev-icon bg-dark" aria-hidden="false"></span>';
+				html +=	'<span class="sr-only">Previous</span></a>';
+				html +=	'<a class="carousel-control-next" href="#carousel'+data[i].matchNo+'" role="button" data-slide="next">';
+				html +=	'<span class="carousel-control-next-icon bg-dark" aria-hidden="false"></span>';
+				html +=	'<span class="sr-only">Next</span></a></div></div>';
+				html +=	'<button type="button" id="btn-'+data[i].matchNo+'" class="btn btn-primary float-right" onclick="joinApplication('+data[i].matchNo;
+				html += ')">참가신청</button></div>';
 				$("#lightningList-content").append(html);
-				if(data[i].placeName!=null){
-					insertMap(i, data[i].placeLat, data[i].placeLng);
-				}
-				insertSlide(data[i].matchNo);
+				if(data[i].placeName!=null) insertMap(i, data[i].placeLat, data[i].placeLng);
 			}
-			
 			$("#cPage").val(Number($("#cPage").val())+1);
 		},
 		error:function(jqxhr, textStatus, errorThrown){
@@ -192,21 +227,6 @@ function insertMap(i, mapx, mapy){
 
 };
 
-function insertSlide(no){
-	var swiper = new Swiper('.swiper-container'+no, {
-	      effect: 'cube',
-	      grabCursor: true,
-	      cubeEffect: {
-	        shadow: true,
-	        slideShadows: true,
-	        shadowOffset: 20,
-	        shadowScale: 0.94,
-	      },
-	      pagination: {
-	        el: '.swiper-pagination'+no,
-	      },
-	    });
-}
 </script>
 
 	<input type="hidden" id="cPage" value="1"/>

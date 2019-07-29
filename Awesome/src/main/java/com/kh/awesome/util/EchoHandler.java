@@ -1,4 +1,4 @@
-package com.kh.awesome.util;
+ package com.kh.awesome.util;
 
 
 import java.util.ArrayList;
@@ -46,20 +46,27 @@ public class EchoHandler extends TextWebSocketHandler {
 		//client단 기본 websocket은 
 		logger.info("{}로 부터 {} 받음", session.getId(), message.getPayload());
 		
+		//세션을 memberCode로 바꿔주는 메소드
 		String sender = returnMemberCode(session);
-		// m[0] : 메시지 받는 상대의 memberCode
+		// m[1] : 메시지 받는 상대의 memberCode
 		String[] m = message.getPayload().split("|");
-		String reception = m[0];
+		String receiveMemberCode = m[1];
 		String realMessage ="";
 		
 		// | 이 포함된 메세지 대비 코드
-		for(int i=1;i<m.length;i++) realMessage += m[i];
+		for(int i=2;i<m.length;i++) realMessage += m[i];
 		
 		Map<String,String> info = new HashMap<>();
 		info.put("memberCode", sender);
-		info.put("otherMemberCode", reception);
+		info.put("receiveMemberCode", receiveMemberCode);
+		
 		info.put("message", realMessage);
-		socketService.insertChatLog(info);
+		if(m[0].equals("message")) {
+			socketService.insertChatLog(info);
+		}
+		if(m[0].equals("alarm")) {
+			socketService.insertAlarmLog(info);
+		}
 		
 		
 		for (WebSocketSession sess : sessionList) {
@@ -67,9 +74,9 @@ public class EchoHandler extends TextWebSocketHandler {
 			String memberCode = returnMemberCode(sess);
 			
 			// 받는사람이 세션에 존재하는 사람과 나에게 메시지 전송
-			if(memberCode.equals(reception) || sess.getId().equals(session.getId())) {
-				// ex) memberCode | message 
-				sess.sendMessage(new TextMessage(memberlist.get(session.getId()).getMemberCode() + "|" + realMessage));
+			if(memberCode.equals(receiveMemberCode) || sess.getId().equals(session.getId())) {
+				// ex) alrem | memberCode | realMessage 
+				sess.sendMessage(new TextMessage(m[0]+"|"+sender +"|"+memberCode+ "|" + realMessage));
 			}
 		}
 	}

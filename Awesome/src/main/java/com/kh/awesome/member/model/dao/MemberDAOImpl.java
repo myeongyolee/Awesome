@@ -2,8 +2,10 @@ package com.kh.awesome.member.model.dao;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -94,6 +96,35 @@ public class MemberDAOImpl implements MemberDAO {
         // 유효시간이 남아있고(>now()) 전달받은 세션 id와 일치하는 사용자 정보를 꺼낸다.
         return sqlSession.selectOne("member.checkUserWithSessionKey",sessionId);
     }
+
+	@Override
+	public int deleteMember(Member member) {
+        return sqlSession.delete("member.deleteMember",member);
+	}
+
+	@Override
+	public void updateReason(int memberCode,String reason) {
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("memberCode", memberCode);
+        map.put("reason", reason);
+        
+        sqlSession.update("member.updateReason",map);
+	}
+
+	@Override
+	public void updateKeepLogin(String memberId, String sessionId, Date date) {
+        
+       Map<String, Object> map = new HashMap<String,Object>();
+       map.put("memberId", memberId);
+       map.put("sessionId", sessionId);
+       map.put("date", date);
+        
+       // Mapper.xml로 데이터를 전달할 때 한 객체밖에 전달 못함으로 map으로 묶어서 보내줌 단... 주의할 점은
+       // Mapper.xml 안에서 #{} 이 안에 지정한 이름이랑 같아야함.. 자동으로 매핑될 수 있도록
+       // 아래가 수행되면서, 사용자 테이블에 세션id와 유효시간이 저장됨
+       sqlSession.update("member.updateKeepLogin",map);
+		
+	}
 
 
 	

@@ -33,7 +33,6 @@
 		#info-container{
 			display : flex; 
             flex-direction : row;
-            
             height:100%;
            	width :100%;
 		}
@@ -60,6 +59,25 @@
            			margin : 5%;
 				}
 				
+					.info-body-item #accessMemberUpdate{
+	           			display : flex; 
+	            		flex-direction : column;
+	            		justify-content: center;
+	            		align-items : center;
+	            		margin-top: 20%;
+					}
+					
+					.info-body-item #accessMemberUpdate #accessMemberUpdateInput{
+	           			display : flex; 
+            			flex-direction : row;
+	           			width:50%;
+					}
+					
+					.info-body-item #accessMemberUpdate input{
+						width:100%;
+					}
+					
+					
 				.flex{
 					display : flex; 
             		flex-direction : row;
@@ -128,6 +146,47 @@
 
 	    
 	    $(function(){
+	    	
+	    	
+	    	  //최초암호확인
+	    	  $("#accessMemberUpdatePwdBtn").on("click",function(){
+	    		  
+	    		  var password = $("#accessMemberUpdatePwd").val();
+	    		  var memberCode = $("#memberCode").val();
+	    		  var memberId = $("#memberId_").val();
+				  
+	 			 $.ajax({ 
+					 url:"${pageContext.request.contextPath}/member/checkPwd.do", 
+					type: "POST",
+					data: "password="+password+"&memberId="+memberId+"&memberCode="+memberCode,
+					dataType : 'text',
+					success : function(data){
+						if(data !="fail"){
+							$("#accessMemberUpdate").slideToggle(700, 'easeInBack');
+							$("#basic-info").slideToggle(700, 'easeInBack');
+						}
+						if(data =="fail"){
+							$.confirm.show({
+								  "message": "패스워드가 틀렸습니다.",
+								  "yes": function (){
+								  },
+								  "hideNo":true,
+								  "type":"warning" // default or success, danger, warning
+								})
+								
+							$("#accessMemberUpdatePwd").val("");
+							$("#accessMemberUpdatePwd").focus();
+						}
+					},
+					error: function(jqxhr, textStatus, errorThrown){
+						console.log("ajax처리실패! : "+jqxhr.status);
+						console.log(jqxhr);
+						console.log(textStatus);
+						console.log(errorThrown);
+					}
+				});  
+			  });  //최초암호확인
+			  
     	  $("#phoneAuthBtn").on("click",function(){
       		var userPhoneNumber = $("#phoneAuth").val();
 
@@ -197,7 +256,6 @@
     		  var password = $("#password_").val();
     		  var memberCode = $("#memberCode").val();
     		  var memberId = $("#memberId_").val();
-    		  console.log(password,memberCode,memberId);
 			  
  			 $.ajax({ 
 				 url:"${pageContext.request.contextPath}/member/checkPwd.do", 
@@ -614,13 +672,24 @@
 <body>
 			<input type="hidden" name="memberCode" id="memberCode" value="${member.memberCode }"/>
 			<input type="hidden" name="memberId" id="memberId_" value="${member.memberId }"/>
+	
+
 
 	<div id="info-container">
 		
 		<div id="info-body">
 		
 			<div id="infomation" class="info-body-item">
-				<div id="basic-info">
+			
+				<div id="accessMemberUpdate">
+					<div>본인확인을 위해 패스워드을 입력해주세요!</div>
+					<br />
+					<div id="accessMemberUpdateInput">
+						<input type="password" id="accessMemberUpdatePwd" />
+						<button type="button" class="btn btn-outline-success " id="accessMemberUpdatePwdBtn"> 확인</button>
+					</div>
+				</div>
+				<div id="basic-info" class="nodisplay">
 					<div id="basic-info-head"><span class="nameHead">기본정보</span></div>
 						<hr />
 						<div><span class="nameHead">내 이미지</span> <button type="button" class="btn btn-outline-success" id="profileModiBtn">수정</button>
@@ -761,6 +830,7 @@
 						<div><span class="nameHead">자기소개</span> <button type="button" class="btn btn-outline-success" id="introduceModi">수정</button> <br />
 							<div id="introduce">${member.introduce}</div>
 						</div>
+						<br /><br />
 							 <div class="introduceModi nodisplay">
 								<div class="flex">
               						<textarea rows="13" cols="40" id="introduceArea" name="introduceArea"></textarea>
@@ -796,6 +866,7 @@
 									</script>
 								</div>
 							</div> 
+							<br /><br /><br /><br /><br /><br />
 							
 						<hr />
 				</div>
