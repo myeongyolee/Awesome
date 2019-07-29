@@ -80,37 +80,6 @@
 		#chat_com button{border-radius: 20px;border: 1px solid #f0d5d5;background: #dedede;}
 		div#chat_head img{ width: 10px;float: right;margin-right: 20px;}
 	</style>
-	<script>
-	$(function(){
-		$(window).scroll(function(){
-			var page = $(location).attr('pathname');
-			console.log($(document).scrollTop());
-			if(page == '/awesome/lightning/lightningList.do'){
-				if($(window).scrollTop() >= $(document).height() - $(window).height()){
-					getLightningList();
-				}			
-			}
-			else if(page == '/awesome/member/memberInfo.do'){
-				
-				var name = $("#lightningList-body").attr('name');
-				
-				if(name == 'lightningListAjax'){
-					
-					if($(window).scrollTop() >= $(document).height() - $(window).height()){
-						lightningListAjax();
-					}
-					
-				}else if(name == 'joinLightningListAjax'){
-					
-					if($(window).scrollTop() >= $(document).height() - $(window).height()){
-						joinLightningListAjax();
-					}
-					
-				}
-			}
-		});
-	});
-	</script>
 </head>
 <body>
 
@@ -333,6 +302,36 @@
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
 <script>
+    //스크롤 발생 이벤트 처리
+    $('.mdl-layout__content').scroll(function(){
+    	var scrollT = $(this).scrollTop(); //스크롤바의 상단위치
+        var scrollH = $(this).height(); //스크롤바를 갖는 div의 높이
+    	var page = $(location).attr('pathname');
+        
+        //현재 페이지로 ajax분기
+    	if(page == '/awesome/lightning/lightningList.do'){
+    		var contentH = $('#lightningList-content').height(); //문서 전체 내용을 갖는 div의 높이
+    		if(scrollT + scrollH -10 >= contentH){
+				getLightningList();	        
+			}
+    	}else if(page == '/awesome/member/memberInfo.do'){
+			var name = $("#lightningList-body").attr('name');
+			var contentH = $('#item-body').height(); //문서 전체 내용을 갖는 div의 높이
+			
+			if(name == 'lightningListAjax'){
+				if(scrollT + scrollH -10 >= contentH){
+					lightningListAjax();        
+				}
+				
+			}else if(name == 'joinLightningListAjax'){
+				if(scrollT + scrollH -10 >= contentH){
+					joinLightningListAjax();     
+				}
+			}
+        }
+        
+    });
+
 
 $(function(){
 	$("#titleLogo").on("click",function(){

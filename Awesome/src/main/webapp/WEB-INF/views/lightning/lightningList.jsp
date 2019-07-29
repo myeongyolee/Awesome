@@ -24,7 +24,7 @@
 	width:265px;
 	position: fixed;
 	right: 20px;
-	top: 50px;
+	top: 80px;
 }
 #ContentView{height:290px;}
 #match{height:375px; position: relative;}
@@ -207,7 +207,7 @@ function getLightningList(){
 }
 function insertMap(i, mapx, mapy){
 	var id = $("#map_"+i).attr('id');
-	console.log(mapx,mapy);
+	
 	var map = new naver.maps.Map(id, {
         center: new naver.maps.Point(mapx, mapy),
         zoom: 12,

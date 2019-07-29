@@ -101,7 +101,7 @@ public class LightningController {
 		search.put("matchingType", matchingType);
 		//파라미터 핸들링 종료
 		
-		int numPerPage = 5;
+		int numPerPage = 3;
 		List<Map<String, Object>> lightningList = lightningService.selectLightningList(search, cPage, numPerPage);
 		logger.info("lightningList={}", lightningList);
 		logger.info("lightningList.size="+lightningList.size());
