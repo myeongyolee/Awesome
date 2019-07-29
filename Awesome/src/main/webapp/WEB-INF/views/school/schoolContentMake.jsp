@@ -30,9 +30,6 @@ function validate(){
 	
 <div id="contentmake-container" style="padding:20px;">	
 	<h2>게시물 작성</h2>
-	${club }
-	<form name="contentmakeFrm" 
-		  action="${pageContext.request.contextPath}/school/schoolContentMakeEnd" onsubmit="return validate();">
 		<input type="hidden" name="clubCode" value="${schoolInfo[0].CLUB_CODE}" readonly>  
 		<input type="hidden" name="memberCode" value="<%=member.getMemberCode() %>" readonly>
 		<input type="text" name="contentTitle" placeholder="제목" required>
@@ -41,6 +38,33 @@ function validate(){
 	    <textarea name="content" cols="40" rows="3" placeholder="내용" required></textarea>
 		<input type="hidden" name="writeLevel" value="1" readonly>
 		<br />
-		<input type="submit" class="btn btn-outline-success" value="저장" >
-	</form>
+		<input type="submit" class="btn btn-outline-success" onclick="makecontent();" value="저장" >
 </div>
+
+<script>
+function makecontent(){
+	var clubCode = $("input[name=clubCode]").val();
+	var memberCode = $("input[name=memberCode]").val();
+	var contentTitle = $("input[name=contentTitle]").val();
+	var content = $("textarea[name=content]").val();
+	var writeLevel = $("input[name=writeLevel]").val();
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/school/schoolContentMakeEnd",
+		data:{clubCode:clubCode,memberCode:memberCode,contentTitle:contentTitle,content:content,writeLevel:writeLevel},
+		success:function(data){
+			if(data > 0){
+				alert("게시글 등록 성공");
+				window.opener.location.reload();
+				self.close();
+			}
+			else{
+				alert("게시글 등록 실패");
+				self.close();
+			}
+		}
+	});
+	
+	
+}
+</script>

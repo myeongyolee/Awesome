@@ -36,9 +36,8 @@ div.three{
 }
 
 input[name=upFile], input[name=submit]{
-	position:relative;
-	top: 430px;
-	
+	position:fixed;
+	top: 470px;
 }
 button[name=searchSchool]{
 	position:fixed;
@@ -52,35 +51,28 @@ button[name=searchSchool]{
 <form id="uploadForm" enctype="multipart/form-data" method="post">
 <input type="file" name="upFile" id="upFile" onchange="loadImg(this);">
 </form>
-<input type="button" id="btn-upload" value="전송" />
+<input type="button" id="btn-upload" style="position:fixed; top:470px; left:800px;" value="전송" />
 
 <div class="two">
 <img id="img-viewer" width=350 />
 </div>
-
 <div class="three">
 <input type="hidden" name="memberCode" value="<%=member.getMemberCode()%>"/>
 <hr />
-
 <input type="text" name="schoolClubTitle" placeholder="모임제목 입력" />
 <hr />
-
 <input type="text" name="schoolName" placeholder="학교등록하기"/>
 <div class="school-select">
 </div>
 <input type="hidden" name="schoolId" placeholder="학교id" />
 <input type="hidden" name="schoolAddress" placeholder="학교주소" />
 <hr />
-
 <input type="text" name="club_info" placeholder="클럽간단소개"/>
 <hr />
-
 <input type="text" name="club_info_long" placeholder="클럽상세소개"/>
 <hr />
 </div>
-
 <button name="searchSchool" onclick="enrollSchool();">확인</button>
-
 </div>
 	
 
@@ -89,24 +81,7 @@ button[name=searchSchool]{
 $(document).ready(function(){
 	$("#btn-upload").on("click", function(){
 		console.log('btn-upload');
-/* 		var memberCode = $("input[name=memberCode]").val();
-		var schoolClubTitle = $("input[name=schoolClubTitle]").val();
-		var schoolName = $("input[name=schoolName]").val();
-		var schoolId = $("input[name=schoolId]").val();
-		var schoolAddress = $("input[name=schoolAddress]").val();
-		var club_info = $("input[name=club_info]").val();
-		var club_info_long = $("input[name=club_info_long]").val();
-		{memberCode:memberCode, schoolClubTitle:schoolClubTitle, schoolName:schoolName,schoolId:schoolId,schoolAddress:schoolAddress,club_info:club_info,club_info_long:club_info_long
-		console.log(memberCode);
-		console.log(schoolClubTitle);
-		console.log(schoolName);
-		console.log(schoolId);
-		console.log(schoolAddress);
-		console.log(club_info);
-		console.log(club_info_long); */
-
 		var form = new FormData(document.getElementById('uploadForm'));
-		
 		$.ajax({
 			url:"${pageContext.request.contextPath}/school/imgupload",
 			data:form,
@@ -126,17 +101,7 @@ $(document).ready(function(){
 	        		var club_info_long = $("input[name=club_info_long]").val();
 	        		var originalFileName = data.originalFileName;
 	        		var renamedFileName = data.renamedFileName;
-	        		
-	        		console.log(memberCode);
-	        		console.log(schoolClubTitle);
-	        		console.log(schoolName);
-	        		console.log(schoolId);
-	        		console.log(schoolAddress);
-	        		console.log(club_info);
-	        		console.log(club_info_long);
-	        		console.log(originalFileName);
-	        		console.log(renamedFileName);
-	        		
+
 	        		$.ajax({
 	        			url:"${pageContext.request.contextPath}/school/makeSchoolEnd",
 	        			data:{memberCode:memberCode, schoolClubTitle:schoolClubTitle, schoolName:schoolName,schoolId:schoolId,schoolAddress:schoolAddress,club_info:club_info,club_info_long:club_info_long,originalFileName:originalFileName,renamedFileName:renamedFileName},
@@ -144,12 +109,10 @@ $(document).ready(function(){
 	        				if(data == 1){
 	        					window.opener.location.reload();
 	        					self.close();
-	        				}
-	        				
+	        				}	
 	        			}
 	        		});
 	        	}
- 	
 	        } // 첫번째 에이작스 석세스 끝
 		}); // 첫번째 에이작스 끝
 	});

@@ -58,7 +58,7 @@ p{display:inline;}
 			<c:forEach items="${schoolList }" var="s">
 				<tr>
 					<td no="${s.CLUB_CODE }"><img src="${pageContext.request.contextPath }/resources/upload/school/${s.MAIN_RENAMED_FILENAME }" 
-					                               style="padding-left:10px; width: 50%; position:relative; left:110px;" /></td>
+					                               style="padding-left:10px; width: 50%; height:300px; position:relative; left:110px;" /></td>
 					<td style="font-size:30px; text-align:center;">${s.CLUB_NAME }</td>
 					<td style="font-size:30px; text-align:center;">${s.MEMBER_NAME }</td>
 					<td style="font-size:30px; text-align:center;">${s.CLUB_SIMPLE_INFO }</td>
@@ -70,19 +70,15 @@ p{display:inline;}
 		<c:forEach var="my" items="${MyList }" varStatus="vs">
 			<c:if test="${fn:contains(my.SCHOOL_NAME, '초등학교') }">
 				<c:set var="primary_code" value="${my.SCHOOL_CODE }"></c:set>
-				<!-- <button id="friendbtn_primary">초등학교 친구 찾기</button> -->
 			</c:if>
 			<c:if test="${fn:contains(my.SCHOOL_NAME, '중학교') }">
 				<c:set var="middle_code" value="${my.SCHOOL_CODE }"></c:set>
-				<!-- <button id="friendbtn_middle">중학교 친구 찾기</button> -->
 			</c:if>
 			<c:if test="${fn:contains(my.SCHOOL_NAME, '고등학교') }">
 				<c:set var="high_code" value="${my.SCHOOL_CODE }"></c:set>
-				<!-- <button id="friendbtn_high">고등학교 친구 찾기</button> -->
 			</c:if>
 		</c:forEach>
 	</c:if>	
-		
 </div>	
 <%=com.kh.awesome.common.util.Utils.getPageBar3(totalContent, cPage, numPerPage, memberCode, "schoolList") %>
 
@@ -96,12 +92,7 @@ $(document).ready(function(){
 	var primaryCode = "<c:out value="${primary_code}"/>";
 	var middleCode = "<c:out value="${middle_code}"/>";
 	var highCode = "<c:out value="${high_code}"/>";
-	
-	console.log(memberCode);
-	console.log(primaryCode);
-	console.log(middleCode);
-	console.log(highCode);
-	
+		
 	var HTML = "";
 	HTML += "<div class='schoolfriend-container' style='position: fixed; top: 100px; left: 1600px;'>";
 	
@@ -142,19 +133,6 @@ function friendbtn_primary(num){
 	  $.ajax({
 			url:"${pageContext.request.contextPath}/school/findPeople?schoolCode="+schoolCode+"&memberCode="+memberCode+"&cPage="+cPage,
 			success : function(data){
-				var totalContent = data.totalContent; // 총 게시물 수
-				var pageBarSize = 5; // 페이지바에 표시할 수
-				var numPerPage = data.numPerPage;
-				var cPage = data.cPage;
-					
-				var totalPage = totalContent / numPerPage;
-				if (totalContent % numPerPage > 0) {
-					totalPage++;
-				}
-				//pageBar순회용변수
-				var pageNo = ((cPage-1)/pageBarSize) * pageBarSize + 1;
-				//마지막페이지 변수
-				var pageEnd = pageNo + pageBarSize - 1;
 				
 				var HTML = "";
 				for(var i=0; i<data.friendList.length; i++){
@@ -171,6 +149,20 @@ function friendbtn_primary(num){
 				}
 				
 				$("div.schoolfriend-list").append(HTML);
+				
+				var totalContent = data.totalContent; // 총 게시물 수
+				var pageBarSize = 5; // 페이지바에 표시할 수
+				var numPerPage = data.numPerPage;
+				var cPage = data.cPage;
+					
+				var totalPage = totalContent / numPerPage;
+				if (totalContent % numPerPage > 0) {
+					totalPage++;
+				}
+				//pageBar순회용변수
+				var pageNo = ((cPage-1)/pageBarSize) * pageBarSize + 1;
+				//마지막페이지 변수
+				var pageEnd = pageNo + pageBarSize - 1;
 				
 				var pageBar = "";
 				
@@ -532,4 +524,4 @@ $(function(){
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp">
 	<jsp:param value="동창모임보여주기" name="pageTitle"/>
-</jsp:include>
+</jsp:include> 

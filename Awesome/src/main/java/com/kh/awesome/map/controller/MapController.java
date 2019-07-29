@@ -183,8 +183,7 @@ public class MapController {
       
 		String text = URLEncoder.encode(position, "UTF-8");
 		String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text; // json 결과
-		// String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text;
-		// // xml 결과
+
 		URL url = new URL(apiURL);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");

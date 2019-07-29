@@ -14,6 +14,9 @@
 div.friend-view{
 	border: 1px solid black;
 }
+img#profileimg{
+	border: 1px solid black;
+}
 </style>
 
 </head>
@@ -43,7 +46,7 @@ $(function(){
 			var HTML = "";
 			for(var i in data){
 				HTML += "<div class='friend-view'>";
-				HTML += "<img src='${pageContext.request.contextPath }/resource/upload/member/"+data[i].RENAMED_PROFILE+"' alt='' />";
+				HTML += "<img src='${pageContext.request.contextPath }/resources/upload/member/"+data[i].RENAMED_PROFILE+"' width=200px; height=200px; id='profileimg'/>";
 				HTML += "<p id='"+i+"'>"+data[i].MEMBER_CODE+"</p>";
 				HTML += "<p>"+data[i].MEMBER_NAME+"</p>";
 				HTML += "<p>"+data[i].NICKNAME+"</p>";
@@ -74,7 +77,7 @@ function deleteFriend(num){
 			if(data == 1){
 				console.log("들어옴호가인");
 				alert("삭제 성공");
-				location.href="${pageContext.request.contextPath}/map/friendList?memberCode="+memberCode;
+				location.href="${pageContext.request.contextPath}/member/memberInfo.do";
 			}
 		}
 	});

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clubphoto;
+import com.kh.awesome.school.model.vo.SchoolClub;
 
 @Repository
 public class SchoolDAOImpl implements SchoolDAO {
@@ -52,9 +53,9 @@ public class SchoolDAOImpl implements SchoolDAO {
 	}
 
 	@Override
-	public int makeSchoolEnd(Map<String, String> param) {
+	public int makeSchoolEnd(SchoolClub sc) {
 		
-		return sqlSession.insert("school.makeSchoolEnd", param);
+		return sqlSession.insert("school.makeSchoolEnd", sc);
 	}
 
 	@Override
@@ -245,6 +246,12 @@ public class SchoolDAOImpl implements SchoolDAO {
 	public int deleteSchoolContent2(Map<String, Integer> param) {
 		
 		return sqlSession.delete("school.deleteSchoolContent2", param);
+	}
+
+	@Override
+	public int insertClubZzang(Map<String, Object> param2) {
+		
+		return sqlSession.insert("school.insertClubZzang", param2);
 	}
 
 

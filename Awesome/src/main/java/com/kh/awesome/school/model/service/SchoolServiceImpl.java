@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clubphoto;
 import com.kh.awesome.school.model.dao.SchoolDAO;
+import com.kh.awesome.school.model.vo.SchoolClub;
 
 @Service
 public class SchoolServiceImpl implements SchoolService {
@@ -48,9 +49,9 @@ public class SchoolServiceImpl implements SchoolService {
 	}
 
 	@Override
-	public int makeSchoolEnd(Map<String, String> param) {
+	public int makeSchoolEnd(SchoolClub sc) {
 		
-		return schoolDAO.makeSchoolEnd(param);
+		return schoolDAO.makeSchoolEnd(sc);
 	}
 
 	@Override
@@ -247,6 +248,12 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public int insertClubZzang(Map<String, Object> param2) {
+		
+		return schoolDAO.insertClubZzang(param2);
 	}
 
 

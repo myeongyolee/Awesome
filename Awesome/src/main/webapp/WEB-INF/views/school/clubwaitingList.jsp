@@ -12,9 +12,14 @@
 
 </head>
 <body>
-<input type="text" name="clubCode" value="${clubCode }" /> <!-- 안보임 처리할 것 -->
-<input type="text" name="length" value="${fn:length(waitingList) }" /> <!-- 안보임 처리할 것 -->
+<input type="hidden" name="clubCode" value="${clubCode }" /> <!-- 안보임 처리할 것 -->
+<input type="hidden" name="length" value="${fn:length(waitingList) }" /> <!-- 안보임 처리할 것 -->
 	
+	<c:if test="${empty waitingList }">
+		<p>가입대기자가 없습니다.</p>
+	</c:if>
+	
+	<c:if test="${not empty waitingList }">
 	<div class="enroll-container">
 	<c:forEach items="${waitingList }" var="list" varStatus="vs">
 		<p id="${vs.index }">멤버코드:${list.MEMBER_CODE }</p>
@@ -26,6 +31,7 @@
 	</c:forEach>
 	<button onclick="accept();">가입처리</button>
 	</div>
+	</c:if>
 	
 <script>
 function accept(){

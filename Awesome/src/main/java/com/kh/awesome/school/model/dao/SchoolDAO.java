@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clubphoto;
+import com.kh.awesome.school.model.vo.SchoolClub;
 
 public interface SchoolDAO {
 
@@ -19,7 +20,7 @@ public interface SchoolDAO {
 
 	int totalContent(List list);
 
-	int makeSchoolEnd(Map<String, String> param);
+	int makeSchoolEnd(SchoolClub sc);
 
 	List<Map<String, String>> MyList(String memberCode);
 
@@ -82,6 +83,8 @@ public interface SchoolDAO {
 	int logoutClub(Map<String, Integer> param);
 
 	int deleteSchoolContent2(Map<String, Integer> param);
+
+	int insertClubZzang(Map<String, Object> param2);
 
 	
 

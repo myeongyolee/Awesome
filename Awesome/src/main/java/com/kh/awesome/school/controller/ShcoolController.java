@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clubphoto;
 import com.kh.awesome.school.model.service.SchoolService;
+import com.kh.awesome.school.model.vo.SchoolClub;
 
 @Controller
 @RequestMapping("/school")
@@ -46,12 +47,10 @@ public class ShcoolController {
 	public ModelAndView schoolList(@RequestParam(value="cPage", required=false, defaultValue="1") int cPage,
 			                       @RequestParam("memberCode") String memberCode) {
 		logger.info("schoolList들어옴");
-		
 		ModelAndView mav = new ModelAndView();
-		
 		//자기자신 학교이름 + 학교ID가져오기
 		List<Map<String,String>> MyList = schoolService.MyList(memberCode);
-		
+
 		List list = new ArrayList<String>();
 		//자기자신 학교 아이디 가지고 오기
 		list = schoolService.MySchoolIdCheck(memberCode); // list:[B000003848, B000012508] 이런식으로 넘어옴
@@ -70,9 +69,7 @@ public class ShcoolController {
 			mav.addObject("cPage", cPage);
 			mav.addObject("numPerPage", numPerPage);
 			mav.addObject("memberCode", memberCode);
-			
 			mav.setViewName("school/schoolList");
-			
 			return mav;
 		}
 		else {
@@ -80,7 +77,6 @@ public class ShcoolController {
 			logger.info("schoolList:"+schoolList);
 			mav.addObject("schoolList", schoolList);
 			mav.setViewName("school/schoolList");
-
 			return mav;
 		}
 	}
@@ -162,43 +158,10 @@ public class ShcoolController {
 		return "school/makeSchool";
 	}
 	
-	
-/*	@RequestMapping("/findPeople")
-	public ModelAndView findPeople(@RequestParam("schoolCode") String schoolCode, @RequestParam("memberCode") String memberCode,
-								   @RequestParam(value="cPage", required=false, defaultValue="1") int cPage) {
-		logger.info("findPeople들어옴");
-		
-		ModelAndView mav = new ModelAndView();
-		
-		Map<String,String> param = new HashMap<String,String>();
-		param.put("memberCode", memberCode);
-		param.put("schoolCode", schoolCode);
-		param.put("open", "Y");
-		logger.info("param확인:"+param);
-		
-		int numPerPage = 1;
-		
-		List<Map<String,String>> friendList = schoolService.findPeople(cPage, numPerPage, param); // 해당학교ID에 해당하는 회원정보 가져오기
-		logger.info("가입되어있는 내 친구="+friendList);
-		int totalContent = schoolService.totalCountfindPeople(param);
-		logger.info("총검색된 수:"+totalContent);
-		
-		mav.addObject("totalContent", totalContent);
-		mav.addObject("friendList", friendList);
-		mav.addObject("cPage", cPage);
-		mav.addObject("numPerPage", numPerPage);
-		mav.addObject("memberCode", memberCode);
-		mav.addObject("schoolCode", schoolCode);
-
-		mav.setViewName("school/findPeople");
-		
-		return mav;
-	}*/
-	
 	@RequestMapping("/schoolView")
 	public ModelAndView schoolView(@RequestParam("clubCode") int clubCode, @RequestParam(value="cPage", required=false, defaultValue="1") int cPage) {
 		logger.info("schoolView 들어옴");
-		ModelAndView mav = new ModelAndView(); // "jsonView"
+		ModelAndView mav = new ModelAndView(); 
 		
 		List<Map<String,String>> schoolInfo = schoolService.selectSchoolOne(clubCode);//해당클럽에 대한 정보 전부 가져오기
 		logger.info("해당클럽정보:"+schoolInfo);
@@ -266,11 +229,11 @@ public class ShcoolController {
 	}
 	
 	@RequestMapping("/schoolContentMakeEnd")
-	public ModelAndView schoolContentMakeEnd(@RequestParam("clubCode") int clubCode, @RequestParam("memberCode") String memberCode, 
+	@ResponseBody
+	public int schoolContentMakeEnd(@RequestParam("clubCode") int clubCode, @RequestParam("memberCode") String memberCode, 
 			                         @RequestParam("contentTitle") String contentTitle, @RequestParam("content") String content,
 			                         @RequestParam("writeLevel") int writeLevel){
 		logger.info("schoolContentMakeEnd 들어옴");
-		ModelAndView mav = new ModelAndView();
 
 		Map<String,Object> param = new HashMap<String,Object>();
 		param.put("clubCode", clubCode);
@@ -281,14 +244,7 @@ public class ShcoolController {
 		
 		int result = schoolService.insertSchoolContent(param);
 		
-		String msg = result>0?"게시글등록성공":"게시글등록실패";
-		String loc = "/school/schoolView?clubCode="+clubCode;
-		
-		mav.addObject("msg", msg);
-		mav.addObject("loc", loc);
-		mav.setViewName("common/msg");
-		
-		return mav;
+		return result;
 	}
 	
 	@RequestMapping("/schoolContentNotice")
@@ -763,22 +719,29 @@ public class ShcoolController {
 			                  @RequestParam("renamedFileName") String renamedFileName){
 		
 		logger.info("makeSchoolEnd들어옴");
+		SchoolClub sc = new SchoolClub();
+		sc.setMemberCode(Integer.parseInt(memberCode));
+		sc.setSchoolClubTitle(schoolClubTitle);
+		sc.setSchoolName(schoolName);
+		sc.setSchoolId(schoolId);
+		sc.setSchoolAddress(schoolAddress);
+		sc.setClub_info(club_info);
+		sc.setClub_info_long(club_info_long);
+		sc.setOriginalFileName(originalFileName);
+		sc.setRenamedFileName(renamedFileName);
+				
+		int result = schoolService.makeSchoolEnd(sc);
 		
-		Map<String,String> param = new HashMap<String,String>();
-		param.put("memberCode", memberCode);
-		param.put("schoolClubTitle", schoolClubTitle);
-		param.put("schoolName", schoolName);
-		param.put("schoolId", schoolId);
-		param.put("schoolAddress", schoolAddress);
-		param.put("club_info", club_info);
-		param.put("club_info_long", club_info_long);
-		param.put("originalFileName", originalFileName);
-		param.put("renamedFileName", renamedFileName);
+		logger.info("result="+sc.getSchoolClubCode());
+		Map<String,Object> param2 = new HashMap<String,Object>();
+		param2.put("clubJoinCheck", "Y");
+		param2.put("clubMemGrade", 2);
+		param2.put("clubCode", sc.getSchoolClubCode());
+		param2.put("memberCode", memberCode);
+		logger.info("param2:"+param2);
+		int result2 = schoolService.insertClubZzang(param2);
 		
-		logger.info("파라미터 확인="+param);
-		int result = schoolService.makeSchoolEnd(param);
-		
-		return result;
+		return result2;
 	}
 	
 	@RequestMapping("/findPeople")

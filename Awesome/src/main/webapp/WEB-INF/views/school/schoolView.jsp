@@ -162,13 +162,6 @@ div.schedule-view{
 
 </head>
 <body>
-<span>해당 동창모임 정보 : ${schoolInfo}</span><br><br>
-<span>회원수 : ${totalMemberCount }</span><br><Br> 
-<span>회원정보 : ${memberInfo}</span><br><br>
-<span>게시글정보 : ${SchoolContentlist}</span><br><br>
-<span>사진정보 : ${SchoolPhoto}</span><br><br>
-<span>모임정보 : ${Calender}</span><br><br>
-
  	<h2>클럽뷰</h2>
  	<input type="hidden" name="clubCode" value="${schoolInfo[0].CLUB_CODE}" readonly>
  	<input type="hidden" name="memberCode" value="<%=member.getMemberCode() %>" readonly>
@@ -239,8 +232,8 @@ div.schedule-view{
 	<!-- 게시글 -->
 <hr>
 	<h2>게시글</h2>
-	<button type="submit" onclick="enrollcontent();" class="btn btn-primary float-right" style="position:absolute; left:100px; bottom:225px;">게시글작성</button>
-	<button type="submit" onclick="enrollNotice();" class="btn btn-primary float-right" style="position:absolute; left:200px; bottom:225px;">공지사항등록</button>
+	<button type="submit" onclick="enrollcontent();" class="btn btn-primary float-right" style="position:absolute; left:100px; bottom:35px;">게시글작성</button>
+	<button type="submit" onclick="enrollNotice();" class="btn btn-primary float-right" style="position:absolute; left:200px; bottom:35px;">공지사항등록</button>
 	
 	<div class="club_contentview-css">
 	<table class="table table-striped table-bordered table-hover">
@@ -304,7 +297,7 @@ div.schedule-view{
  	<!-- 사진 -->
 	<hr />
 	<h2>사진</h2>
-	<button  type="submit" onclick="enrollImg();" class="btn btn-primary float-right" style="position:absolute; left:70px; bottom:2px;">사진등록</button>
+	<button  type="submit" onclick="enrollImg();" class="btn btn-primary float-right" style="position:relative;">사진등록</button>
 
 	<table class="club-photoList">
 		<div class="swiper-container">
@@ -476,7 +469,7 @@ function updateContent(result){
 	
  	var url = "${pageContext.request.contextPath}/school/updateSchoolContent?clubContentCode="+clubContentCode;
 	var title = "게시글 수정 페이지";
-	var spec = "width=500px, height=600px, left=500px, top=100px";
+	var spec = "width=500px, height=400px, left=500px, top=100px";
 		
 	var popup = open(url, title, spec);
 }

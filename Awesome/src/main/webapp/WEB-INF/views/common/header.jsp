@@ -150,26 +150,22 @@
 	<!-- 동네친구찾기버튼 눌렀을 때, 나타나는 MODAL -->
     <div class="modal fade" id="searchfriend" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="position:absolute;">
       <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        
+        <div class="modal-content">      
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">동네친구찾기 추가정보 확인</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-           
           <form action="${pageContext.request.contextPath}/map/enrollFriend" name="friend-frm">
           <input type="hidden" name="memberLoggedIn" value="<%=member!=null?member.getMemberCode():""%>"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
           <div class="modal-body"> 
-			
 			<div class="">
 				<textarea name="" id="" cols="59" rows="3" readonly>해당 서비스를 이용하기 위해서는 사용자정보 공개를 허용해야 합니다. 사용 하시겠습니까?</textarea>
 				<br />
 				<input type="checkbox" name="infocheck" id="agree" value="Y" style="display:inline-block" />
 				<label for="agree">수락</label>
 			</div>
-			
 			<div class="">
 				<p>회원님의 관심분야를 선택하여 주세요!</p>
 				<input type="checkbox" name="interesting" id="1" value="음식"/>
@@ -183,15 +179,12 @@
 				<input type="checkbox" name="interesting" id="5" value="기타"/>
 				<label for="5">기타</label>
 			</div>
-			 
           </div>
-          
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-success" onclick="summitFrm2();">확인</button>
             <button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
           </div>
           </form>
-         
         </div>
       </div>
     </div>
@@ -426,22 +419,12 @@ function searchSchool(){
 }
 
 function test(){
-	
-	console.log("test함수 들어옴");
-	
 	var ch1 = $("input[name=primary]").val();
-	
-	console.log(ch1);
-	
 	$.ajax({
 		url:"${pageContext.request.contextPath}/school/test",
 		data:{schoolName1:ch1},
-		success:function(data){
-			console.log(data);
-			
+		success:function(data){	
 			if(data.response.header.resultCode == '00'){
-				
-				console.log(data.response.body.items.length);
 				var HTML = "";
 				
 				if(data.response.body.items.length > 1) {

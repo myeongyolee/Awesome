@@ -38,32 +38,26 @@ function initMap() {
 		url:"${pageContext.request.contextPath}/map/selectAddress",
 		data:{param:param},
 		success:function(data){
-			console.log(data);
-			
+			console.log(data);	
 			//지도 중앙에 표시할 자기좌표 가지고 오기
 			$.ajax({
 				url:"${pageContext.request.contextPath}/map/selectMyAddress",
 				data:{param:param},
 				success:function(result){
 					console.log(result);
-				
 				//Map의 중심지역설정 (로그인한 사용자를 기준으로 설정할 것)
 			    var map = new naver.maps.Map('naver-map', {
 			        center: new naver.maps.LatLng(result[0].PLACE_LNG, result[0].PLACE_LAT),
 			        zoom: 10
-			    });
-					
+			    });		
 				var markers = [];
 				var infowindows = [];
-					
 				//중심지역 주변으로 선택될 Marker
-				for(var i=0; i<data.length; i++){
-		    	        
+				for(var i=0; i<data.length; i++){     
 		    	     var marker = new naver.maps.Marker({
 		    	         position: new naver.maps.LatLng(data[i].PLACE_LNG, data[i].PLACE_LAT),
 		    	         map: map
-		    	     });
-		    	        
+		    	     });  
 		      	    var contentString = [
 		    	          '<div class="iw_inner">',
 		    	          '<img src="${pageContext.request.contextPath}/resources/upload/member/'+data[i].RENAMED_PROFILE+'" width="100" height="100" alt="" class="thumb" />',
@@ -73,8 +67,7 @@ function initMap() {
 		    	          '<p>관심분야:'+data[i].INTERESTING_CODE+'</p>',
 		    	          '<button type="button" onclick="sendFriend('+data[i].MEMBER_CODE+','+param+');">친구요청</button>',
 		    	          '</div>'
-		    	      ].join('');
-		    	        
+		    	      ].join(''); 
 		    	    var infowindow = new naver.maps.InfoWindow({
 		    	         content: contentString,
 		    	         maxWidth: 1000,
@@ -86,11 +79,9 @@ function initMap() {
 		    	         anchorColor: "#eee",
 		    	         pixelOffset: new naver.maps.Point(20, -20)
 		    	    });
-		    	        
 		    	    	markers.push(marker);
 		    	    	infowindows.push(infowindow);        	        
 					}
-				
 				//해당 Marker마다 정보창 보여주기
 		        function getClickHandler(seq){
 		        	return function(e){
@@ -103,14 +94,11 @@ function initMap() {
 		        		else{
 		        			infowindow.open(map,marker);
 		        		}
-		        		
 		        	}
 		        }
-		        
 				for(var i=0; i<markers.length; i++){
 	    	        naver.maps.Event.addListener(markers[i], "click", getClickHandler(i));
 				}
-				
 				}
 			});
 		},error:function(jqxhr, textStatus, errorThrown){

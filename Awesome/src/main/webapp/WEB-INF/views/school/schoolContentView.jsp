@@ -13,7 +13,6 @@
 
 <script src="${pageContext.request.contextPath }/resources/js/jquery-3.4.0.js"></script>
 
-<p>${detailContent }</p>
 <p>글 내용 : ${detailContent.CONTENT }</p>
 
 <hr />

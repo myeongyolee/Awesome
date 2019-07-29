@@ -17,6 +17,7 @@
 <typeAlias alias="clubcontent" type="com.kh.awesome.club.model.vo.Clubcontent"/>
 <typeAlias alias="clubphoto" type="com.kh.awesome.club.model.vo.Clubphoto"/>
 <typeAlias alias="clubcomment" type="com.kh.awesome.club.model.vo.Clubcomment"/>
+<typeAlias alias="schoolClub" type="com.kh.awesome.school.model.vo.SchoolClub"/>
 <!-- <typeAlias alias="qBoard" type="com.kh.awesome.board.model.vo.QuestionBoard"/> -->
 <typeAlias type="com.kh.awesome.member.model.vo.Member" alias="member"/>
 <typeAlias type="com.kh.awesome.member.model.vo.Address" alias="address"/>
