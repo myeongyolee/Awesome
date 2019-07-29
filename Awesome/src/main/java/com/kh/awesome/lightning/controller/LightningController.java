@@ -477,4 +477,21 @@ public class LightningController {
 		
 		return "/common/msg";
 	}
+	
+	//참여 허가
+	@RequestMapping("/memberPermit.do")
+	public boolean memberPermit(@RequestBody Map map) {
+		String nickName = String.valueOf(map.get("nickName"));
+		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
+//		logger
+		
+		/*int result = lightningService.updatePermit(nickName);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}*/
+		return false;
+	}
 }

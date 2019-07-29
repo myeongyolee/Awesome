@@ -213,4 +213,8 @@
 		insert into matching_join_member values (#{matchNo}, #{memberCode}, 'Y', 'N');
 	</insert>
 	
+	<!-- <update id="updatePermit">
+		update matching_join_member set 
+	</update> -->
+	
 </mapper>

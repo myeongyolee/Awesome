@@ -106,4 +106,10 @@ public class LightningServiceImpl implements LightningService {
 		return lightningDAO.selectMyMatchNoPermitMemberList(param);
 	}
 
+	@Override
+	public int updatePermit(String nickName) {
+		// TODO Auto-generated method stub
+		return lightningDAO.updatePermit(nickName);
+	}
+
 }

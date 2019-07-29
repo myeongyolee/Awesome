@@ -110,4 +110,10 @@ public class LightningDAOImpl implements LightningDAO {
 		return sqlSession.selectList("selectMyMatchNoPermitMemberList", param);
 	}
 
+	@Override
+	public int updatePermit(String nickName) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("updatePermit", nickName);
+	}
+
 }

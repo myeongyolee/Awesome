@@ -62,17 +62,21 @@ function lightningListAjax(){
 					html += '<h5 class="card-title">참여한 회원</h5>';
 					html +=	'<ul class="list-group list-group-flush">';
 					
-					var joinMemberList = data[i].joinMemberNickName.split(", ");
-					for(var j=0; j<joinMemberList.length; j++){
-						html += '<li class="list-group-item">'+joinMemberList[j]+'</li>';
+					if(data[i].joinMemberNickName!=null){
+						var joinMemberList = data[i].joinMemberNickName.split(", ");
+						for(var j=0; j<joinMemberList.length; j++){
+							html += '<li class="list-group-item">'+joinMemberList[j]+'</li>';
+						}						
 					}
 					
-					var noPermitMemberList = data[i].noPermitMemberNickName.split(", ");
-					for(var j=0; j<noPermitMemberList.length; j++){
-						html += '<li class="list-group-item">'+noPermitMemberList[j];
-						html += '<button type="button" class="btn btn-outline-danger btn-sm float-right ml-1" onclick="noPermit('+noPermitMemberList[j]+');">참여 거부</button>';
-						html += '<button type="button" class="btn btn-outline-success btn-sm float-right" onclick="permit('+noPermitMemberList[j]+');">참여 허가</button>';
-						html += '</li>';
+					if(data[i].noPermitMemberNickName!=null){
+						var noPermitMemberList = data[i].noPermitMemberNickName.split(", ");
+						for(var j=0; j<noPermitMemberList.length; j++){
+							html += '<li class="list-group-item">'+noPermitMemberList[j];
+							html += '<button type="button" id="'+data[i].matchNo+'" class="btn btn-outline-danger btn-sm float-right ml-1" value="'+noPermitMemberList[j]+'" onclick="noPermit(this);">참여 거부</button>';
+							html += '<button type="button" id="'+data[i].matchNo+'" class="btn btn-outline-success btn-sm float-right" value="'+noPermitMemberList[j]+'" onclick="permit(this);">참여 허가</button>';
+							html += '</li>';
+						}						
 					}
 					html += "</ul></div></div></div></li>";
 					$("#lightningList-body").append(html);
@@ -99,13 +103,13 @@ function joinLightningListAjax(){
 			}else{
 				for(var i=0; i<data.length; i++){
 					var html = "";
-					html += '<li class="list-group-item">';
+					html += '<li class="list-group-item" id="'+data[i].matchNo+'">';
 					html += '<div class="card border-light">';
 					html += '<div class="card-body">';
 					html += '<h5 class="card-title">'+data[i].matchTitle+'</h5>';
 					html += '<p class="card-text">'+data[i].interestingName+' | '+data[i].localName+' | '+data[i].matchEndDate+' | 참여회원수: '+(Number(data[i].memberCount)+1)+'</p>';
 					html += '<p class="card-text>"'+data[i].matchContent+'</p>';
-					html += '<button class="btn btn-primary float-right" onclick="joinCancle('+data[i].matchNo+');">참여 취소</button>';
+					html += '<button class="btn btn-primary float-right" value="'+data[i].matchNo+'" onclick="joinCancle(this);">참여 취소</button>';
 					html += '<input type="hidden" id='+data[i].matchNo+'"-memberCount" value="'+data[i].memberCount+'"';
 					html += "</div></div></li>";
 					$("#lightningList-body").append(html);
@@ -130,6 +134,50 @@ function joinLightningMatchList(){
 	$("#cPage").val(1);
 	$("#lightningList-body").html("");
 	joinLightningListAjax();
+}
+
+//참여 허가
+function permit(e){
+	var param = {
+		matchNo: $(e).attr("id"),
+		nickName: $(e).val()
+	};
+	
+	param = JSON.stringify(param);
+	
+	$.ajax({
+		url: '${pageContext.request.contextPath}/lightning/memberPermit.do',
+		data: param,
+		success: function(data){
+			if(data){
+				$(e).hide();
+				$(e).siblings().hide();
+			}
+		}
+	});
+}
+//참여 불허
+function noPermit(e){
+	$.ajax({
+		url: '${pageContext.request.contextPath}/lightning/memberNoPermit.do?nickName='+$(e).val(),
+		success: function(data){
+			if(data){
+				$(e).parent().hide();
+			}
+		}
+	});
+}
+
+//참가 취소
+function joinCancle(e){
+	$.ajax({
+		url: '${pageContext.request.contextPath}/lightning/matchJoinCancle.do?matchNo='+$(e).val(),
+		success: function(data){
+			if(data){
+				$(e).parent().parent().parent().hide();
+			}
+		}
+	});
 }
 </script>
 </head>
