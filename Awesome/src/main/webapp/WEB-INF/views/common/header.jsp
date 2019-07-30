@@ -1,13 +1,13 @@
 <%@page import="com.kh.awesome.member.model.vo.Member,
 			java.util.List.*,
-			com.kh.awesome.util.model.vo.Chat"%>
+			com.kh.awesome.util.model.vo.Chat,
+			com.kh.awesome.util.model.vo.Alarm"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <% Member member = (Member)session.getAttribute("memberLoggedIn"); %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,7 +68,7 @@
 		#titleLogo:hover{cursor:pointer;}
 		<%-- socket chat --%>
 		.dragcomponent{position: fixed;z-index: 10; left:50px; top: 100px;width: 280px; height:450px;border-radius:21px;}
-		#chat_head{height:43px; padding-top:10px; padding-left:10px; border-bottom: 1px solid #e1e1e1; width:100%}
+		#chat_head{height:43px; padding-top:10px; padding-left:10px; border-bottom: 1px solid #e1e1e1; width:100%;}
 		#chat_log{width:279px;  height: 358px; overflow-y: auto; padding: 10px 9px; border-bottom:1px solid #e1e1e1;background:#1aaec5a6;}
 		#chat_com{text-align:center; padding-top: 11px;}
 		ul>li{list-style: none;}
@@ -80,7 +80,6 @@
 		#chat_com button{border-radius: 20px;border: 1px solid #f0d5d5;background: #dedede;}
 		div#chat_head img{ width: 10px;float: right;margin-right: 20px;}
 	</style>
-    
 </head>
 <body>
 
@@ -148,6 +147,103 @@
 </div>
 <!-- 회원가입 모달 끝 -->
 
+<!-- 동네친구찾기버튼 눌렀을 때, 나타나는 MODAL -->
+    <div class="modal fade" id="searchfriend" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="position:absolute;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">      
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">동네친구찾기 추가정보 확인</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="${pageContext.request.contextPath}/map/enrollFriend" name="friend-frm">
+          <input type="hidden" name="memberLoggedIn" value="<%=member!=null?member.getMemberCode():""%>"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
+          <div class="modal-body"> 
+			<div class="">
+				<textarea name="" id="" cols="59" rows="3" readonly>해당 서비스를 이용하기 위해서는 사용자정보 공개를 허용해야 합니다. 사용 하시겠습니까?</textarea>
+				<br />
+				<input type="checkbox" name="infocheck" id="agree" value="Y" style="display:inline-block" />
+				<label for="agree">수락</label>
+			</div>
+			<div class="">
+				<p>회원님의 관심분야를 선택하여 주세요!</p>
+				<input type="checkbox" name="interesting" id="1" value="음식"/>
+				<label for="1">음식</label>
+				<input type="checkbox" name="interesting" id="2" value="여행"/>
+				<label for="2">여행</label>
+				<input type="checkbox" name="interesting" id="3" value="술"/>
+				<label for="3">술</label>
+				<input type="checkbox" name="interesting" id="4" value="영화"/>
+				<label for="4">영화</label>
+				<input type="checkbox" name="interesting" id="5" value="기타"/>
+				<label for="5">기타</label>
+			</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" onclick="summitFrm2();">확인</button>
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- 동네친구찾기 MODAL End -->
+    
+    <!-- 동창모임버튼 눌렀을 때, 나타나는 MODAL -->
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">나의 출신 학교</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          
+          <form action="${pageContext.request.contextPath}/school/enrollSchool" name="school-frm">
+          <input type="hidden" name="memberLoggedIn" value="<%=member!=null?member.getMemberCode():""%>"/> <!-- 로그인된 회원의 멤버코드라고 가정 -->
+          <div class="modal-body"> <!-- 내가 회원가입할 때 등록한 학교정보 가지고 와서 보여주기 -->
+                <input type="text" class="form-control" name="primary" placeholder="출신 초등학교" >
+                <input type="hidden" name="primary_id" />
+                <input type="hidden" name="primary_address" />
+                <button type="button" onclick="test();">확인</button>
+               
+                <div class="primary-div">
+                </div>
+                
+                <br /> 
+                <input type="text" class="form-control" name="middle" placeholder="출신 중학교" >
+                <input type="hidden" name="middle_id" />
+                <input type="hidden" name="middle_address" />
+                <button type="button" onclick="test2();">확인</button>
+                
+                <div class="middle-div">
+                </div>
+                
+                <br />
+                <input type="text" class="form-control" name="high" placeholder="출신 고등학교" >
+                <input type="hidden" name="high_id" />
+                <input type="hidden" name="high_address" />
+                <button type="button" onclick="test3();">확인</button>
+                
+                <div class="high-div">
+                </div>
+               
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" onclick="summitFrm();">확인</button>
+            <button type="button" class="btn btn-outline-success" data-dismiss="modal">취소</button>
+          </div>
+          </form>
+         
+        </div>
+      </div>
+    </div>
+    <!-- 동창찾기MODAL End -->
+
 
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -161,9 +257,15 @@
           <nav class="mdl-navigation">
             <!-- Icon badge -->
             <c:if test="${ memberLoggedIn != null}">
-                <button id="demo-menu-lower-left" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
+                <button id="demo-menu-lower-left-message" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">Mesaage</button>
                     
                     <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left" id="chatBox">
+                    </ul>
+            </c:if>
+            <c:if test="${ memberLoggedIn != null}">
+                <button id="demo-menu-lower-left-alarm" data-badge="♥" class="mdl-button mdl-js-button mdl-badge">N</button>
+                    
+                    <ul id="alarm-ul" class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-left" >
                     </ul>
             </c:if>
 	        
@@ -179,9 +281,12 @@
             
             <c:if test="${memberLoggedIn != null }">
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소개팅" />
-	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개팅" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'"/>
-	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동네 친구" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="번개모임" onclick="location.href='${pageContext.request.contextPath}/lightning/lightningList.do'"/>
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동네 친구" onclick="modaltest();" />
+	            <input type="button" value="동네친구찾기MODAL" class="modal" name="modal" data-toggle="modal" data-target="#searchfriend" style="display:none;" />
 	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="소모임" />
+	            <input type="button" class="btn btn-light mdl-navigation__link" id="menu2" value="동창모임" onclick="searchSchool();"/>
+	            <input type="button" value="동창찾기MODAL" name="schoolModal" data-toggle="modal" data-target="#searchModal" style="display:none;"/>
             </c:if>
             
             <c:if test="${memberLoggedIn == null }">
@@ -200,6 +305,36 @@
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
 <script>
+    //스크롤 발생 이벤트 처리
+    $('.mdl-layout__content').scroll(function(){
+    	var scrollT = $(this).scrollTop(); //스크롤바의 상단위치
+        var scrollH = $(this).height(); //스크롤바를 갖는 div의 높이
+    	var page = $(location).attr('pathname');
+        
+        //현재 페이지로 ajax분기
+    	if(page == '/awesome/lightning/lightningList.do'){
+    		var contentH = $('#lightningList-content').height(); //문서 전체 내용을 갖는 div의 높이
+    		if(scrollT + scrollH -10 >= contentH){
+				getLightningList();	        
+			}
+    	}else if(page == '/awesome/member/memberInfo.do'){
+			var name = $("#lightningList-body").attr('name');
+			var contentH = $('#item-body').height(); //문서 전체 내용을 갖는 div의 높이
+			
+			if(name == 'lightningListAjax'){
+				if(scrollT + scrollH -10 >= contentH){
+					lightningListAjax();        
+				}
+				
+			}else if(name == 'joinLightningListAjax'){
+				if(scrollT + scrollH -10 >= contentH){
+					joinLightningListAjax();     
+				}
+			}
+        }
+        
+    });
+
 
 $(function(){
 	console.log("memberLoggedIn + " + memberLoggedIn);
@@ -287,7 +422,7 @@ function findMember(){
 	$(function(){
 	
 	<%-- socket 관련 ajax --%>
-	$("#demo-menu-lower-left").on("click",function(){
+	$("#demo-menu-lower-left-message").on("click",function(){
 		var mCode = ${memberLoggedIn.memberCode}
 		console.log("hello chatBox")
 		$.ajax({ 
@@ -301,6 +436,20 @@ function findMember(){
 			}
 		})
 		
+	})
+	$("#demo-menu-lower-left-alarm").on("click",function(){
+		var mCode = ${memberLoggedIn.memberCode}
+		
+		$.ajax({ 
+		 	url:"${pageContext.request.contextPath}/sock/selectAlarm", 
+		 	data: mCode,
+		success : function(data){
+			$("ul#alarm-ul").html(data.alarm.alarmContent)
+		},
+		error: function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패! : "+jqxhr.status);
+		}
+	})
 	})
 	
 	$("li.mdl-menu__item").on("click",function(){
@@ -323,7 +472,6 @@ function findMember(){
 			  				html += '<li class="other"><span>'+data.list.get(i).getChatContent()+'</span></li>';
 			  			}else{
 			  				html += '<li class="My"><span>'+data.list.get(i).getChatContent()+'</span></li>';
-			  				
 			  			}
 			  		}
 			  			
@@ -416,12 +564,335 @@ function findMember(){
 	  				
 	  			}
 				$("ul#"+sender).append(html)
+			}else{
+				$("ul#alarm-ul").append(html)
+				$("#demo-menu-lower-left-alarm").attr("data-badge","N")
 			}
-		}else if(messageTpye =="alarm"){
-			
+		}else if(messageType =="alarm"){
+			$("ul#alarm-ul").append(html)
+			$("#demo-menu-lower-left-alarm").attr("data-badge","N")
 		}
 	}
 
 	<%}%>
 
+<!-- 동네친구 관련 script -->
+function modaltest(){
+	var memberCode = $("input[name=memberLoggedIn]").val();
+	console.log(memberCode);
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/map/checkInfo",
+		data:{memberCode:memberCode},
+		success:function(data){
+			console.log(data);
+			
+			if(data == 'Y'){
+				console.log("공개");
+				location.href = "${pageContext.request.contextPath}/map/searchMap";	
+			}
+			else{
+				console.log("비공개");
+				$("input[name=modal]").trigger("click");
+				
+			}
+
+		},error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패"+jqxhr.status);
+			console.log("ajax처리실패"+textStatus.status);
+			console.log("ajax처리실패"+errorThrown.status);
+		}
+	});
+}
+
+function summitFrm2(){
+	console.log("summitFrm2들어옴");
+	
+	if($("input[name=infocheck]").is(":checked")){
+		$("form[name=friend-frm]").submit();
+	}
+	else{
+		alert("수락버튼은 확인해주세요.");
+	}
+}
+/* <!-- 동네친구 관련 script END--> */
+
+/* <!-- 동창찾기 관련 script --> */
+function searchSchool(){
+	console.log("동창찾기 버튼누름");
+	var memberCode = $("input[name=memberLoggedIn]").val();
+	console.log(memberCode);
+	
+	//해당회원이 학교등록을 했는지 안했는지 여부 확인
+	$.ajax({
+		url:"${pageContext.request.contextPath}/school/checkSchool?memberCode="+memberCode,
+		success:function(data){
+			console.log(data);
+			
+			if(data == 0){
+				console.log("등록된 학교 없음. 학교등록 필수");
+				$("input[name=schoolModal]").trigger("click");
+				
+			}
+			else{
+				console.log("등록된 학교 있음. 동창리스트페이지로 이동");
+				location.href="${pageContext.request.contextPath}/school/schoolList?memberCode="+memberCode;
+			}
+			
+		},error:function(jqxhr, textStatus, errorThrown){
+			console.log("ajax처리실패"+jqxhr.status);
+			console.log("ajax처리실패"+textStatus.status);
+			console.log("ajax처리실패"+errorThrown.status);
+		}
+	});
+	
+}
+
+function test(){
+	var ch1 = $("input[name=primary]").val();
+	$.ajax({
+		url:"${pageContext.request.contextPath}/school/test",
+		data:{schoolName1:ch1},
+		success:function(data){	
+			if(data.response.header.resultCode == '00'){
+				$("div.primary-div").html("");
+				$("input[name=primary]").removeClass("text-success");
+				var HTML = "";
+				
+				if(data.response.body.items.length > 1) {
+					for(var i=0; i<data.response.body.items.length; i++){
+						console.log("반복문 들어옴 확인");
+						
+						$("div.primary-div").show();
+						
+						var result = data.response.body.items[i].schoolNm;
+						var result2 = data.response.body.items[i].schoolId;
+						var result3 = data.response.body.items[i].lnmadr;
+				
+						HTML += "<a href='#' onclick='selectPrimary("+i+");' class='p"+i+"'>"+result+"</a>";
+						HTML += "<input type='hidden' name='pid"+i+"' value='"+result2+"'>";
+						HTML += "<input type='hidden' name='padd"+i+"' value='"+result3+"' >";
+						HTML += "&nbsp;&nbsp;&nbsp;";
+						HTML += "<p>"+result3+"</p>";
+						HTML += "<br/>";
+					}
+					$("div.primary-div").append(HTML);
+				}
+				else if(data.response.body.items.length == 1){
+					
+					var result = data.response.body.items[0].schoolNm;
+					var result2 = data.response.body.items[0].schoolId;
+					var result3 = data.response.body.items[0].lnmadr;
+					
+					console.log(result);
+					console.log(result2);
+					console.log(result3);
+					
+					$("input[name=primary]").val(result);
+					$("input[name=primary]").addClass("text-success");
+					$("input[name=primary_id]").val(result2);
+					$("input[name=primary_address]").val(result3);
+					
+				}
+				
+			}
+			else{
+				console.log("해당데이터가 없습니다");
+				$("input[name=primary]").val("해당 학교가 존재하지 않습니다.");
+			}
+		}
+	});
+}
+
+function test2(){
+	
+	console.log("test2함수 들어옴");
+	
+	var ch1 = $("input[name=middle]").val();
+	
+	console.log(ch1);
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/school/test",
+		data:{schoolName1:ch1},
+		success:function(data){
+			/* console.log(data); */
+			$("div.middle-div").html("");
+			$("input[name=middle]").removeClass("text-success");
+			
+			if(data.response.header.resultCode == '00'){
+				var HTML = "";
+				
+				if(data.response.body.items.length > 1) {
+					for(var i=0; i<data.response.body.items.length; i++){
+						console.log("반복문 들어옴 확인");
+						
+						$("div.middle-div").show();
+						
+						var result = data.response.body.items[i].schoolNm;
+						var result2 = data.response.body.items[i].schoolId;
+						var result3 = data.response.body.items[i].lnmadr;
+				
+						HTML += "<a href='#' onclick='selectMiddle("+i+");' class='m"+i+"'>"+result+"</a>";
+						HTML += "<input type='hidden' name='mid"+i+"' value='"+result2+"'>";
+						HTML += "<input type='hidden' name='madd"+i+"' value='"+result3+"' >";
+						HTML += "&nbsp;&nbsp;&nbsp;";
+						HTML += "<p>"+result3+"</p>";
+						HTML += "<br/>";
+					}
+					$("div.middle-div").append(HTML);
+				}
+				else if(data.response.body.items.length == 1){
+					var result = data.response.body.items[0].schoolNm;
+					var result2 = data.response.body.items[0].schoolId;
+					var result3 = data.response.body.items[0].lnmadr;
+					
+					console.log(result);
+					console.log(result2);
+					console.log(result3);
+					
+					$("input[name=middle]").val(result);
+					$("input[name=middle]").addClass("text-success");
+					$("input[name=middle_id]").val(result2);
+					$("input[name=middle_address]").val(result3);
+				}
+				
+			}
+			else{
+				console.log("해당데이터가 없습니다");
+				$("input[name=middle]").val("해당 학교가 존재하지 않습니다.");
+			}
+		}
+	});
+}
+
+function test3(){
+	
+	console.log("test3함수 들어옴");
+	
+	var ch1 = $("input[name=high]").val();
+	
+	console.log(ch1);
+	
+	$.ajax({
+		url:"${pageContext.request.contextPath}/school/test",
+		data:{schoolName1:ch1},
+		success:function(data){
+			/* console.log(data); */
+			$("div.high-div").html("");
+			$("input[name=high]").removeClass("text-success");
+			
+			if(data.response.header.resultCode == '00'){
+				var HTML = "";
+				
+				if(data.response.body.items.length > 1) {
+					for(var i=0; i<data.response.body.items.length; i++){
+						console.log("반복문 들어옴 확인");
+						
+						$("div.high-div").show();
+						
+						var result = data.response.body.items[i].schoolNm;
+						var result2 = data.response.body.items[i].schoolId;
+						var result3 = data.response.body.items[i].lnmadr;
+				
+						HTML += "<a href='#' onclick='selectHigh("+i+");' class='h"+i+"'>"+result+"</a>";
+						HTML += "<input type='hidden' name='hid"+i+"' value='"+result2+"'>";
+						HTML += "<input type='hidden' name='hadd"+i+"' value='"+result3+"' >";
+						HTML += "&nbsp;&nbsp;&nbsp;";
+						HTML += "<p>"+result3+"</p>";
+						HTML += "<br/>";
+					}
+					$("div.high-div").append(HTML);
+				}
+				else if(data.response.body.items.length == 1){
+					var result = data.response.body.items[0].schoolNm;
+					var result2 = data.response.body.items[0].schoolId;
+					var result3 = data.response.body.items[0].lnmadr;
+					
+					console.log(result);
+					console.log(result2);
+					console.log(result3);
+					
+					$("input[name=high]").val(result);
+					$("input[name=high]").addClass("text-success");
+					$("input[name=high_id]").val(result2);
+					$("input[name=high_address]").val(result3);
+				}
+				
+			}
+			else{
+				console.log("해당데이터가 없습니다");
+				$("input[name=high]").val("해당 학교가 존재하지 않습니다.");
+			}
+		}
+	});
+}
+
+function selectPrimary(num){
+    console.log("selectPrimary 들어옴");
+    console.log(num);
+    $("input[name=primary]").removeClass("text-success");
+    
+    var result = $("a.p"+num)[0].innerHTML;
+    var result2 = $("input[name=pid"+num+"]").val();
+    var result3 = $("input[name=padd"+num+"]").val();
+    
+    console.log(result);
+    console.log(result2);
+    console.log(result3);
+    
+    $("input[name=primary]").val(result);
+    $("input[name=primary]").addClass("text-success");
+    $("input[name=primary_id]").val(result2);
+    $("input[name=primary_address]").val(result3);
+    
+    $("div.primary-div").hide();
+    
+}
+
+function selectMiddle(num){
+	console.log("selectMiddle 들어옴");
+	console.log(num);
+	
+	var result = $("a.m"+num)[0].innerHTML;
+	var result2 = $("input[name=mid"+num+"]").val();
+	var result3 = $("input[name=madd"+num+"]").val();
+	
+	console.log(result);
+	console.log(result2);
+	console.log(result3);
+	
+	$("input[name=middle]").val(result);
+	$("input[name=middle_id]").val(result2);
+	$("input[name=middle_address]").val(result3);
+	
+	$("div.middle-div").hide();
+	
+}
+
+function selectHigh(num){
+	console.log("selectHigh 들어옴");
+	console.log(num);
+	
+	var result = $("a.h"+num)[0].innerHTML;
+	var result2 = $("input[name=hid"+num+"]").val();
+	var result3 = $("input[name=hadd"+num+"]").val();
+	
+	console.log(result);
+	console.log(result2);
+	console.log(result3);
+	
+	$("input[name=high]").val(result);
+	$("input[name=high_id]").val(result2);
+	$("input[name=high_address]").val(result3);
+	
+	$("div.high-div").hide();
+	
+}
+
+function summitFrm(){
+	console.log("summitFrm들어옴");
+	$("form[name=school-frm]").submit();
+}
+/* <!-- 동창찾기 관련 script END--> */
 </script>

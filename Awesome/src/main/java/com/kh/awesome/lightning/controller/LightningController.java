@@ -101,7 +101,7 @@ public class LightningController {
 		search.put("matchingType", matchingType);
 		//파라미터 핸들링 종료
 		
-		int numPerPage = 5;
+		int numPerPage = 3;
 		List<Map<String, Object>> lightningList = lightningService.selectLightningList(search, cPage, numPerPage);
 		logger.info("lightningList={}", lightningList);
 		logger.info("lightningList.size="+lightningList.size());
@@ -262,6 +262,8 @@ public class LightningController {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("matchNo", matchNo);
 		map.put("memberCode", memberCode);
+		
+		logger.info("map={}", map);
 		
 		int result = lightningService.insertMatchJoin(map);
 		
@@ -480,18 +482,64 @@ public class LightningController {
 	
 	//참여 허가
 	@RequestMapping("/memberPermit.do")
+	@ResponseBody
 	public boolean memberPermit(@RequestBody Map map) {
-		String nickName = String.valueOf(map.get("nickName"));
+		/*String nickName = String.valueOf(map.get("nickName"));
 		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
-//		logger
+		logger.info("nickName="+nickName);
+		logger.info("matchNo="+matchNo);
+		logger.info("map={}",map);*/
 		
-		/*int result = lightningService.updatePermit(nickName);
+		int result = lightningService.updatePermit(map);
 		
 		if(result > 0) {
 			return true;
 		}else {
 			return false;
-		}*/
-		return false;
+		}
 	}
+	
+	//참여 거부
+	@RequestMapping("/memberNoPermit.do")
+	@ResponseBody
+	public boolean memberNoPermit(@RequestBody Map map) {
+		/*String nickName = String.valueOf(map.get("nickName"));
+		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
+		logger.info("nickName="+nickName);
+		logger.info("matchNo="+matchNo);
+		logger.info("map={}",map);*/
+		
+		int result = lightningService.deleteNoPermit(map);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	//참여 거부
+	@RequestMapping("/matchJoinCancle.do")
+	@ResponseBody
+	public boolean matchJoinCancle(@RequestParam int matchNo, HttpSession session) {
+		/*String nickName = String.valueOf(map.get("nickName"));
+		int matchNo = Integer.parseInt(String.valueOf(map.get("matchNo")));
+		logger.info("nickName="+nickName);
+		logger.info("matchNo="+matchNo);
+		logger.info("map={}",map);*/
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		int memberCode = m.getMemberCode();
+		Map<String, Integer> param = new HashMap<>();
+		param.put("memberCode", memberCode);
+		param.put("matchNo", matchNo);
+		
+		int result = lightningService.deleteJoinCancle(param);
+		
+		if(result > 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
 }

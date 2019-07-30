@@ -20,5 +20,10 @@ public interface MapService {
 
 	int checkFriend(Map<String, String> param);
 
+	List<Integer> friendList(String memberCode);
+
+	List<Map<String, Object>> showMyFriend(List<String> list);
+
+	int deleteFriend(Map<String, String> param);
 
 }

@@ -8,7 +8,7 @@
 	
 	<!-- #2. welcome-file 추가 -->
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>randing.jsp</welcome-file>
 	</welcome-file-list>
  
 	<!-- #6.application컨텍스트 관련 설정 파일 위치 -->

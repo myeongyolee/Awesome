@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.awesome.member.model.vo.Member;
 import com.kh.awesome.socket.stomp.model.service.StompService;
 import com.kh.awesome.util.model.service.SocketService;
+import com.kh.awesome.util.model.vo.Alarm;
 import com.kh.awesome.util.model.vo.Chat;
 
 @Controller
@@ -65,6 +66,18 @@ public class SocketController {
 		
 		mav.addObject("receiveMember", codeToId(mCode));
 		mav.addObject("list", chat_log);
+		return mav;
+	}
+	
+	@RequestMapping("/sock/selectAlarm")
+	@ResponseBody
+	public ModelAndView selectAlarm(ModelAndView mav,
+						@RequestParam("mCode") String mCode) {
+		
+		List<Alarm> alarm_log = socketService.selectAlarm(mCode);
+		
+		mav.addObject("alarm", alarm_log);
+		
 		return mav;
 	}
 }

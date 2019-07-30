@@ -62,4 +62,29 @@ public class MapDAOImpl implements MapDAO {
 		return sqlSession.selectOne("map.checkFriend", param);
 	}
 
+	@Override
+	public List<Integer> friendList(String memberCode) {
+		
+		return sqlSession.selectList("map.friendList", memberCode);
+	}
+
+	@Override
+	public List<Integer> otherFriendList(Map param) {
+		
+		return sqlSession.selectList("map.otherFriendList", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> showMyFriend(List<String> list) {
+		
+		return sqlSession.selectList("map.showMyFriend", list);
+	}
+
+	@Override
+	public int deleteFriend(Map<String, String> param) {
+		
+		return sqlSession.delete("map.deleteFriend", param);
+	}
+
+
 }

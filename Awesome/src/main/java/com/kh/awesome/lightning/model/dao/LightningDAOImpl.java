@@ -8,8 +8,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.awesome.matchManager.model.vo.MatchManager;
-
 @Repository
 public class LightningDAOImpl implements LightningDAO {
 
@@ -111,9 +109,21 @@ public class LightningDAOImpl implements LightningDAO {
 	}
 
 	@Override
-	public int updatePermit(String nickName) {
+	public int updatePermit(Map map) {
 		// TODO Auto-generated method stub
-		return sqlSession.update("updatePermit", nickName);
+		return sqlSession.update("updatePermit", map);
+	}
+
+	@Override
+	public int deleteNoPermit(Map map) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete("deleteNoPermit", map);
+	}
+
+	@Override
+	public int deleteJoinCancle(Map<String, Integer> param) {
+		// TODO Auto-generated method stub
+		return sqlSession.delete("deleteJoinCancle", param);
 	}
 
 }

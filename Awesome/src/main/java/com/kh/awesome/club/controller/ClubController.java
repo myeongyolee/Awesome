@@ -2,6 +2,7 @@ package com.kh.awesome.club.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +37,9 @@ import com.kh.awesome.club.model.vo.Clubcomment;
 import com.kh.awesome.club.model.vo.Clubcontent;
 import com.kh.awesome.club.model.vo.Clubphoto;
 import com.kh.awesome.lightning.model.service.LightningService;
+import com.kh.awesome.matchManager.model.vo.MatchManager;
 
-
-
-
+import oracle.sql.converter.CharacterConverterFactoryOGS;
 
 @Controller
 @RequestMapping("/club")
@@ -63,10 +63,6 @@ public class ClubController {
 		List<Club> clubList = clubService.selectClubList(cPage,numPerPage);
 		
 		int totalContents = clubService.totalclubCount();
-		
-		System.out.println("clubList="+clubList);
-		System.out.println("club@totalContents="+totalContents);
-		
 		
 		//도시목록 가져오기
 		List<String> cityList = lightningService.selectCityList();
@@ -139,7 +135,6 @@ public class ClubController {
 		
 		int cityCode = Integer.parseInt(request.getParameter("cityName"));
 		int localCode = Integer.parseInt(request.getParameter("localCode"));
-		System.out.println("!!^"+cityCode+","+localCode);
 		club.setLocalCode(localCode);
 		
 		
@@ -184,8 +179,6 @@ public class ClubController {
 		List<Clubcontent> contentList = clubService.selectcontentList(clubCode,cPage,numPerPage);
 		int totalContents = clubService.totalclubCount();
 		
-		System.out.println("contentList="+contentList);
-		
 		mav.addObject("cPage",cPage);
 		mav.addObject("numPerPage", numPerPage);
 		mav.addObject("totalContents",totalContents);
@@ -195,7 +188,6 @@ public class ClubController {
 		
 		//club_photo테이블
 		List<Clubcontent> photocontentList = clubService.selectphotocontentList(clubCode);
-		System.out.println("club@photoList="+photocontentList);
 		mav.addObject("photoList",photocontentList);
 		
 		return mav;
@@ -292,9 +284,7 @@ public class ClubController {
 		clubcontent.setWriteLevel(Integer.parseInt(request.getParameter("writeLevel")));
 		
 		int result = clubService.insertclubContent2(clubcontent);
-		System.out.println("sijoon:"+clubcontent.getClubcontentCode());
-		
-		
+	
 		String picinfo1 = request.getParameter("content1");
 		String picinfo2 = request.getParameter("content2");
 		String picinfo3 = request.getParameter("content3");
@@ -431,4 +421,5 @@ public class ClubController {
 			return seephotoList;
 		}
 	
+
 }

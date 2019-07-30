@@ -49,7 +49,6 @@ public class LightningServiceImpl implements LightningService {
 	public List<String> selectInterestingList() {
 		// TODO Auto-generated method stub
 		return lightningDAO.selectInterestingList();
-
 	}
 
 	@Override
@@ -107,9 +106,21 @@ public class LightningServiceImpl implements LightningService {
 	}
 
 	@Override
-	public int updatePermit(String nickName) {
+	public int updatePermit(Map map) {
 		// TODO Auto-generated method stub
-		return lightningDAO.updatePermit(nickName);
+		return lightningDAO.updatePermit(map);
+	}
+
+	@Override
+	public int deleteNoPermit(Map map) {
+		// TODO Auto-generated method stub
+		return lightningDAO.deleteNoPermit(map);
+	}
+
+	@Override
+	public int deleteJoinCancle(Map<String, Integer> param) {
+		// TODO Auto-generated method stub
+		return lightningDAO.deleteJoinCancle(param);
 	}
 
 }
