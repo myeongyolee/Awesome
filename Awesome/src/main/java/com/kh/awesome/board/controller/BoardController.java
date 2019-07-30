@@ -229,6 +229,12 @@ public class BoardController {
 			
 			return "redirect:/questionBoard/questionBoard.do";
 		}
+	 @RequestMapping("/deleteCom.do")
+	 public String deleteCom(@RequestParam ("questionCommentNo") int questionCommentNo){
+		 logger.debug("질문 삭제");
+		  boardService.deleteCom(questionCommentNo);
+					 return "redirect:/questionBoard/questionBoard.do";
+	 }
 
 	 	@RequestMapping("/insertComment.do")
 		@ResponseBody

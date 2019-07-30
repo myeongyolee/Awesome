@@ -30,19 +30,17 @@ body {font-family: "Lato", sans-serif;}
 
 /* 메뉴버튼 */
 .tab button {
-  display: flex-box;
-  background-color: inherit;
   color: black;
   padding: 12px 10px;
   width: 100%;
   border: black;
   outline: none;
   text-align: left;
-  cursor: pointer;
   transition: 0.3s;
   font-size: 13px;
   border-radius:0 10px 10px 0;
   margin:5px;
+  position:relative;
 }
 .tab button img{
 	left-margin:0;
@@ -71,8 +69,11 @@ body {font-family: "Lato", sans-serif;}
 .tab button:nth-child(5){
 	background-color:#e0b0fd;
 }
-/* .tab button.tablinks{ */
+ .tab button.tablinks{ 
 	display:flex-box;	
+}
+.tab button .tablinks:{
+	width:80%;
 }
 /* Change background color of buttons on hover */
 .tab button .tablinks:hover{

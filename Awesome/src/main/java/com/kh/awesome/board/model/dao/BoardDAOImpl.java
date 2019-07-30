@@ -62,6 +62,11 @@ public class BoardDAOImpl implements BoardDAO {
 	public List<Map<String, String>> showCmt(int questionNo) {
 		return sqlSession.selectList("qBoard.showCmt", questionNo);
 	}
+
+	@Override
+	public int deleteCom(int questionCommentNo) {
+		return sqlSession.delete("qBoard.deleteCom", questionCommentNo);
+	}
 	
 	
 }

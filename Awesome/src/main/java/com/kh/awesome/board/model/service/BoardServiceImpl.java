@@ -71,5 +71,10 @@ public class BoardServiceImpl implements BoardService{
 	public List<Map<String, String>> showCmt(int questionNo) {
 		return boardDAO.showCmt(questionNo);
 	}
+
+	@Override
+	public int deleteCom(int questionCommentNo) {
+		return boardDAO.deleteCom(questionCommentNo);
+	}
 }
 

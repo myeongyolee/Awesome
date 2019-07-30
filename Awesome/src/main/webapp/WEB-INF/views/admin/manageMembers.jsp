@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="title"/>
+</jsp:include>
 <!-- 부트스트랩관련 라이브러리 -->
 <script  src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
 <script src="https://use.fontawesome.com/5a964364f0.js"></script>

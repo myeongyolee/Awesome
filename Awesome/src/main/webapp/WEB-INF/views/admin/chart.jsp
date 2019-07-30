@@ -196,7 +196,7 @@ function drawClubByCity() {
 </head>
 <body>
 	<div id="today_count">
-		<h4>오늘의 통계</h4>
+		<h2>오늘의 통계</h2>
 		<br/>
 	</div>
 <div id="chart-container">

@@ -24,5 +24,7 @@ public interface BoardService {
 
 	List<Map<String, String>> showCmt(int questionNo);
 
+	int deleteCom(int questionCommentNo);
+
 
 }

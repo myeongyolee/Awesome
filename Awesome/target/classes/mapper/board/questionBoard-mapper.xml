@@ -57,6 +57,9 @@
 	<delete id="deleteQuestion">
 	delete from question_board where question_no = #{no}
 	</delete>
+	<delete id="deleteCom">
+	delete from question_comment where question_comment_no = #{questionCommentNo}
+	</delete>
 	
 	<update id="updateQuestion">
 	update question_board set question_title = #{questionTitle},

@@ -62,6 +62,9 @@ $("#memberSecession").on("click",function(){
 		
 		var questionNo = $(this).attr("no");		
 		if(questionNo == undefined) return;
+		 var memberLoggedIn = ${memberLoggedIn.memberCode};
+		 if(memberLoggedIn == '361')
+ 		{
 		$.ajax({
 			data: param, 		
 			url:"${pageContext.request.contextPath}/questionBoard/boardView.do",
@@ -69,47 +72,70 @@ $("#memberSecession").on("click",function(){
 			dataType: "json",
 			success: function(data){				
 				/* 자기가 쓴글만 보여주기 */
- 				if(memberLoggedIn == data.memberCode)
- 				{
+				if(memberLoggedIn == data.memberCode){
+				console.log("data"+ data);
 				$("div#oneQ").toggle()
 				.html("제목:  "+data.questionTitle+"<br/>")
 				.append("작성자:  "+data.memberName+"<br/>")
 				.append("질문 내용:  "+data.questionContent+"<br/>")
 				.append(data.html + '<br/>');
-				
-// 					if(data.showCmt!= null){
+				console.log("커멘트: "+data.showCmt.length);
 						for(var i=0; i< data.showCmt.length;i++){							
 						console.log("댓글 내용"+data.showCmt[i].questionCommentContent);
 						$("div#oneQ").append('<p id="comToQ" style="position:inline-block"> 질문 답변: '  + data.showCmt[i].questionCommentContent +'<p/>');
 						
-						/*관리자 이면 댓글 수정 삭제 가능하게 함.   */
-						if(memberLoggedIn = '361'){
-						$("div#oneQ").append('<button type="button" class="btn btn-outline-info" >댓글 삭제</button> &nbsp&nbsp')
-						.append('<button type="button" class="btn btn-outline-info">댓글 수정</button><br/><br/><br/>');
-						$("div#oneQ").append('<form id="commentForm" name="commentForm" method="post">')
-						.append('<textarea style="width: 700px" rows="3" cols="30" id="commentContent" name="questionCommentContent" placeholder="댓글을 입력하세요"></textarea>')
-						.append('<input type="hidden" name="questionNo" value="'+data.question_No+'">')
-						.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글 저장')
-						.append("</button> &nbsp&nbsp")
-						.append('</form>')
-						.append('<br/><br/><button id="deleteButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="delete_validate('+data.question_No+');"> 삭제하기')
-						.append("</button> &nbsp&nbsp")
-						.append('<button id="modifyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="position:inline-block;" onclick="update_question('+data.question_No+');"> 수정하기')
-						.append("<br/></button>");				 
-						}
-						}
-				}
- 				else{
- 					$("div#oneQ").toggle()
- 					.html("언제든 질문해주세요~  ")
- 					}
+						$("div#oneQ").append('<button type="button" class="btn btn-outline-info" onclick="deleteCom('+data.showCmt[i].questionCommentNo+')">댓글 삭제</button> &nbsp&nbsp')
+						.append('<button type="button" class="btn btn-outline-info" onclick="updateCom('+data.showCmt[i].questionCommentNo+')">댓글 수정</button><br/><br/><br/>');}
+				}//if
+				 //success
 				},
 			error: function(jqxhr, textStatus, errorThrown){
 				console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
-			}
-		})
-	}); 
-});  
+			}//error
+			
+		}) //end of ajax
+		}//end of if
+	/*관리자 이면 모든 게시판 보여주기  */
+	else if(memberLoggedIn == '361')
+ 	{
+		$.ajax({
+		data: param, 		
+		url:"${pageContext.request.contextPath}/questionBoard/boardView.do",
+		type: "post", 
+		dataType: "json",
+		success: function(data){				
+			/* 자기가 쓴글만 보여주기 */
+			console.log("memberLoggedIn"+ memberLoggedIn);
+			$("div#oneQ").toggle()
+			.html("제목:  "+data.questionTitle+"<br/>")
+			.append("작성자:  "+data.memberName+"<br/>")
+			.append("질문 내용:  "+data.questionContent+"<br/>")
+			.append(data.html + '<br/>');
+			console.log("커멘트: "+data.showCmt.length);
+					for(var i=0; i< data.showCmt.length;i++){							
+					console.log("댓글 내용"+data.showCmt[i].questionCommentContent);
+					$("div#oneQ").append('<p id="comToQ" style="position:inline-block"> 질문 답변: '  + data.showCmt[i].questionCommentContent +'<p/>');
+					
+					$("div#oneQ").append('<button type="button" class="btn btn-outline-info" onclick="deleteCom('+data.showCmt[i].questionCommentNo+')">댓글 삭제</button> &nbsp&nbsp')
+					.append('<button type="button" class="btn btn-outline-info" onclick="updateCom('+data.showCmt[i].questionCommentNo+')">댓글 수정</button><br/><br/><br/>');}
+			$("div#oneQ").append('<form id="commentForm" name="commentForm" method="post">')
+			.append('<textarea style="width: 700px" rows="3" cols="30" id="commentContent" name="questionCommentContent" placeholder="댓글을 입력하세요"></textarea>')
+			.append('<input type="hidden" name="questionNo" value="'+data.question_No+'">')
+			.append('<br/><br/><button id="commentButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="insertComment();"> 답글 저장')
+			.append("</button> &nbsp&nbsp")
+			.append('</form>')
+			.append('<br/><br/><button id="deleteButton" type="button" class="btn btn-primary" style="position:inline-block;" onclick="delete_validate('+data.question_No+');"> 삭제하기')
+			.append("</button> &nbsp&nbsp")
+			.append('<button id="modifyButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="position:inline-block;" onclick="update_question('+data.question_No+');"> 수정하기')
+			.append("<br/></button>");			 
+			},//end of success
+		error: function(jqxhr, textStatus, errorThrown){
+			console.log("ajax 처리 실패 : ",jqxhr.status,textStatus,errorThrown);
+		}
+	})//end of ajax
+	}//end of if manager 게시판
+ 	});//end of click board 함수
+});  //end of onload 함수
   function insertComment(){
 	  var param = 
 		  {questionCommentContent: $("[name=questionCommentContent]").val(), 
@@ -140,12 +166,19 @@ $("#memberSecession").on("click",function(){
 		  }
 	  });
   };
+  
   function delete_validate(question_No){
 		if(!confirm("정말 삭제하시겠습니까?")) return;
 		location.href="${pageContext.request.contextPath}/questionBoard/deleteQuestion.do?questionNo="+question_No;
 	return true;
 	};
-	/* 수정하기 */
+	/* 댓글 삭제 */
+  function deleteCom(questionCommentNo){
+		if(!confirm("정말 삭제하시겠습니까?")) return;
+		location.href="${pageContext.request.contextPath}/questionBoard/deleteCom.do?questionCommentNo="+questionCommentNo;
+	return true;
+	};
+	/* 질문 수정하기 */
 	function update_question(question_No){
 		var param = {questionNo: question_No}
 		var boardTitle=$("#boardTitle").val();
@@ -197,7 +230,7 @@ $("#memberSecession").on("click",function(){
   	}
   	return true;
   }
-  $(function(){
+  /* $(function(){
    $("p1").html("공개 질문입니다. ");		
   		var privateQ= $(this).attr("value", 'N');  		
   		console.log("openQ: " + privateQ.val());
@@ -206,14 +239,14 @@ $("#memberSecession").on("click",function(){
   		var privateQ= $(this).attr("value", 'Y');  
   		console.log("checked: " + privateQ);
   		$("p1").html("비공개 질문입니다. ");
-  			});  
+  			});   */
   		
 	  /* $("#openCheck").on("click", function(){
   		var openQ= $(this).attr("value", 'N');  		
   		console.log("openQ: " + openQ.val());
 		$("p1").html("공개 질문입니다. ");		
   		});	  */
-  });
+//   });
   
  /*파일 올리기  */
  
@@ -410,8 +443,8 @@ $("#memberSecession").on("click",function(){
 		<div class="form-group row">
 	    <div class="col-sm-10">
 	      <div class="form-check">
-	        <input class="form-check-input" type="checkbox" 
-	         id="openCheck" checked
+	        <input class="form-check-input" type="hidden" 
+	         id="openCheck"
 	        value='N'
 	        name="questionOpen">
 	        <!-- <c:if test="[type=checkbox]:checked">

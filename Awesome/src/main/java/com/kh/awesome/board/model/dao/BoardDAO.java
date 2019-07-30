@@ -24,4 +24,6 @@ public interface BoardDAO {
 
 	List<Map<String, String>> showCmt(int questionNo);
 
+	int deleteCom(int questionCommentNo);
+
 }

@@ -3,9 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Awesome" name="title"/>
+</jsp:include>
 <!DOCTYPE html>
-<html>
-<head>
 <meta charset="UTF-8">
 <title>관리자페이지</title>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-3.4.0.js"></script>
